@@ -1,0 +1,101 @@
+<div class="container mt-5">
+  <div class="row mx-5">
+    <div class="card p-3">
+    <div class="col-6">
+
+      <form class="row g-3 mb-5" [formGroup]="registrationForm" (ngSubmit)="onSubmitCustomer()">
+        <h2>Add Customer</h2>
+        <div class="col-md-6">
+          <label  class="form-label">Name</label>
+          <input type="text" class="form-control"  formControlName="name">
+        </div>
+        <div formGroupName="address">
+        <div class="col-12">
+          <label  class="form-label">Address</label>
+          <input type="text" class="form-control" placeholder="1234 Main St" formControlName="addressLine1">
+        </div>
+        <div class="col-12">
+          <label class="form-label">Address 2</label>
+          <input type="text" class="form-control"  placeholder="Apartment, studio, or floor" formControlName="addressLine2">
+        </div>
+        <div class="col-md-6">
+          <label  class="form-label">City</label>
+          <input type="text" class="form-control" formControlName="city">
+        </div>
+
+        <div class="col-md-2">
+          <label class="form-label">Zip</label>
+          <input type="text" class="form-control" formControlName="zipcode">
+        </div>
+        </div>
+
+        <div class="col-12">
+          <button [disabled]='!registrationForm.valid' class="btn btn-large btn-primary" type="submit">
+            Register
+          </button>
+        </div>
+
+{{registrationForm.value | json}}
+
+      </form>
+    </div>
+    </div>
+  </div>
+
+  <div class="card p-3">
+
+  <h2>Customer Data</h2>
+  <div class="container">
+    <div class="row">
+      <div class="col-8">
+        <table class="table table-hover">
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Enabled</th>
+            <th></th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let customer of customerData">
+            <td>{{ customer.name }}</td>
+
+            <td>
+              <button class="btn btn-warning rounded-pill w-75"
+                      (click)="updateEnabled(customer.uuid)">  {{ customer.enabled=== 1 ? 'Enabled' : 'Disabled' }}</button>
+            </td>
+            <td><button type="button" class="btn btn-success rounded-pill w-75" (click)="fetchCustomerDetails(customer.uuid)">Details</button></td>
+
+          </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+
+
+    <div class="card p-3">
+      <div *ngIf="customerDetails">
+        <p>UUID: {{ customerDetails.uuid }}</p>
+        <p>Name: {{ customerDetails.name }}</p>
+        <!-- Display other customer details here -->
+
+        <h3>Address</h3>
+        <p>Address Line 1: {{ customerDetails.address.addressLine1 }}</p>
+        <p>Address Line 2: {{ customerDetails.address.addressLine2 }}</p>
+        <!-- Display other address details here -->
+
+        <h3>Contacts</h3>
+        <ul>
+          <li *ngFor="let contact of customerDetails.contacts">
+            <p>Email: {{ contact.email }}</p>
+            <p>Phone Number: {{ contact.phoneNumber }}</p>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  </div>
+</div>
+
+
