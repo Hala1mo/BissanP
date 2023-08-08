@@ -7,7 +7,9 @@ import { Observable } from 'rxjs';
 })
 export class RegistrationService {
 
-  private _users_url = 'http://10.10.33.91:8080/users'; // Update the URL to your server endpoint
+  private _users_url = 'http://10.10.33.91:8080/users';
+  private _customers_url = 'http://10.10.33.91:8080/customers';
+
 
   constructor(private _http: HttpClient) {}
 
@@ -24,8 +26,22 @@ export class RegistrationService {
       );
   }
 
+
+  registerCustomer(customerData: any){
+    return this._http.post<any>(this._customers_url,customerData)
+      .pipe(
+      );
+  }
+
   updateEnabledStatus(username: string): Observable<any> {
     const updateUrl = `${this._users_url}/${username}/endis`; // Adjust the URL endpoint as needed
+    const body = "";
+
+    return this._http.put<any>(updateUrl, body);
+  }
+
+  updateEnabledStatusCustomer(id:bigint): Observable<any> {
+    const updateUrl = `${this._customers_url}/${id}/endis`; // Adjust the URL endpoint as needed
     const body = "";
 
     return this._http.put<any>(updateUrl, body);
@@ -37,4 +53,15 @@ export class RegistrationService {
     return this._http.put<any>(updateUrl, updatedUserData);
   }
 
+
+  fetchCustomerData(): Observable<any> {
+    // Send a GET request to the server to fetch user data
+    return this._http.get<any>(this._customers_url);
+  }
+
+
+  fetchCustomerDetails(id:bigint):  Observable<any>{
+    const _urlDetails=`${this._customers_url}/${id}`;
+    return this._http.get<any>(_urlDetails);
+  }
 }

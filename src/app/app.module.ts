@@ -11,6 +11,7 @@ import {MatDialogModule} from "@angular/material/dialog";
 import {NgbAlertModule, NgbModule} from "@ng-bootstrap/ng-bootstrap";
 
 import {MatSnackBarModule} from "@angular/material/snack-bar";
+import { CustomerComponent } from './customer/customer.component';
 
 
 @NgModule({
@@ -18,6 +19,7 @@ import {MatSnackBarModule} from "@angular/material/snack-bar";
     AppComponent,
     HeaderComponent,
     UserComponent,
+    CustomerComponent,
 
   ],
   imports: [

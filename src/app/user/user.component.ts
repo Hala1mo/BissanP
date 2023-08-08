@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup } from "@angular/forms";
 import { RegistrationService } from '../registration.service';
 import { PasswordValidators} from "../shared/password.validators";
 import {MatSnackBar} from "@angular/material/snack-bar";
-import {config} from "rxjs";
+
 
 @Component({
   selector: 'app-user',
@@ -66,6 +66,7 @@ export class UserComponent implements OnInit {
     this._registrationService.registerUser(this.registrationForm.value).subscribe(
       (res) => {
         console.log('Registration successful:', res);
+        this.registrationForm.reset();
         this.fetchUserData();
       },
       (error) => {
@@ -139,6 +140,15 @@ export class UserComponent implements OnInit {
         },
         (error) => {
           console.error('Error updating user data:', error);
+          if (error.error && error.error.errors && error.error.errors.length > 0) {
+            const errorMessage = error.error.errors[0];
+            console.log('Error message:', errorMessage);
+            // this.toastService.show('Error', errorMessage);
+            this._snackBar.open(errorMessage, '', {
+              duration: 3000
+            });
+
+          }
         }
       );
     }
