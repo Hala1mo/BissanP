@@ -10,7 +10,11 @@ import { PasswordValidators} from "../shared/password.validators";
 })
 export class UserComponent implements OnInit {
   registrationForm!: FormGroup;
+  editForm!: FormGroup;
   userData: any[] = [];
+  selectedUser: any | null = null; // To store the selected user for editing
+  isEditMode = false; // Toggle between add and edit modes
+
 
   constructor(private _registrationService: RegistrationService, private fb: FormBuilder) {
   }
@@ -26,6 +30,13 @@ export class UserComponent implements OnInit {
       lastName: [''],
       accessLevel:['0']
     },{validator: PasswordValidators});
+
+
+    this.editForm = this.fb.group({
+     firstName:[''],
+      lastName:[''],
+      accessLevel:['']
+    });
   }
 
   fetchUserData() {
@@ -50,35 +61,54 @@ export class UserComponent implements OnInit {
         console.log('Registration successful:', res);
         this.fetchUserData();
 
-        // You can perform any additional actions upon success here
       },
       (error) => {
         console.error('Registration failed:', error);
-
-
-        // You can display an error message or perform other actions upon failure here
       }
     );
   }
 
   updateEnabled(username: string) {
-    // Implement logic to update the 'enabled' status in the database for the specific user
-    // You can call a service method to update the data
+
     this._registrationService.updateEnabledStatus(username).subscribe(
       (res: any) => {
         console.log('Enabled status updated successfully:', res);
 
-        // Fetch user data again to reflect the updated data
         this.fetchUserData();
 
-        // You can perform any additional actions upon success here
       },
       (error) => {
         console.error('Error updating enabled status:', error);
 
-        // You can display an error message or perform other actions upon failure here
       }
     );
+  }
+  populateEditForm(user: any) {
+    this.editForm.patchValue({
+      firstName: user.firstName,
+      lastName: user.lastName,
+      accessLevel:user.accessLevel
+    });
+  }
+  onEditUser(user: any) {
+    this.selectedUser = user;
+    this.isEditMode = true;
+    this.populateEditForm(user);
+    this.editForm.get('accessLevel')?.setValue(user.accessLevel === 1);
+  }
+
+  onSubmitEdit() {
+    // Handle edit form submission and update the user data
+    // ...
+
+    // Reset the selected user and toggle to add mode
+    this.selectedUser = null;
+    this.isEditMode = false;
+  }
+  cancelEdit() {
+    this.isEditMode = false;
+    this.selectedUser = null;
+    this.editForm.reset();
   }
 
 

@@ -11,6 +11,7 @@
             <th>First Name</th>
             <th>Access Level</th>
             <th>Enabled</th>
+            <th></th>
           </tr>
           </thead>
           <tbody>
@@ -18,11 +19,12 @@
             <td>{{ user.username }}</td>
             <td>{{ user.lastName }}</td>
             <td>{{ user.firstName }}</td>
-            <td>{{ user.accessLevel }}</td>
+            <td>{{ user.accessLevel===1 ? 'Admin' : 'Employee' }}</td>
             <td>
               <button class="btn btn-warning rounded-pill w-75"
-                      (click)="updateEnabled(user.username)">{{ user.enabled }}</button>
+                      (click)="updateEnabled(user.username)">  {{ user.enabled === 1 ? 'Enabled' : 'Disabled' }}</button>
             </td>
+            <td><button type="button" class="btn btn-success rounded-pill w-75" (click)="onEditUser(user)">Edit</button></td>
 
           </tr>
           </tbody>
@@ -31,6 +33,7 @@
       <div class="col-4">
         <div class="w-100 mx-2 p-1">
           <div class="container-fluid">
+           <div *ngIf="!isEditMode">
 
             <div class="card p-3">
               <h3 class="mb=2 card-title">Add New User</h3>
@@ -113,8 +116,56 @@
           </div>
 
 
+
+      <div *ngIf="isEditMode && selectedUser">
+
+        <div class="card p-3">
+          <h3 class="mb=2 card-title">Edit User</h3>
+          <div class="card-body">
+            <form class="form-group" [formGroup]="editForm" (ngSubmit)="onSubmitEdit()">
+
+              <div class="mb-3">
+                <label class="form-label">First Name</label>
+                <input
+                  type="text" formControlName="firstName" class="form-control">
+
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label">Last Name</label>
+                <input
+                  type="text" formControlName="lastName" class="form-control">
+              </div>
+
+<!--              <div class="mb-3">-->
+<!--                <label class="form-label">Access Level </label>-->
+<!--                <input-->
+<!--                  type="text" formControlName="accessLevel" class="form-control">-->
+
+<!--              </div>-->
+
+              <div class="mb-3 form-check">
+                <input class="form-check-input" type="checkbox" formControlName="accessLevel" [checked]="editForm.get('accessLevel')?.value" >
+                <label class="form-check-label" for="is-admin-check">Is Admin?</label>
+
+              </div>
+
+              <div class="mb-3">
+                <button [disabled]="!editForm.valid" class="btn btn-large btn-primary me-1" type="submit">
+                  Save Changes
+                </button>
+                <button class="btn btn-large btn-secondary ms-1" (click)="cancelEdit()">Cancel</button>
+              </div>
+
+            </form>
+          </div>
         </div>
       </div>
+          </div>
+        </div>
+      </div>
+
+
     </div>
   </div>
 </div>
