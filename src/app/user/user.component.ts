@@ -58,7 +58,6 @@ export class UserComponent implements OnInit {
   }
 
   onSubmit() {
-
     const registrationFormValue = this.registrationForm.value;
     registrationFormValue.accessLevel = registrationFormValue.accessLevel ? 1 : 0;
 
@@ -66,20 +65,25 @@ export class UserComponent implements OnInit {
 
     this._registrationService.registerUser(this.registrationForm.value).subscribe(
       (res) => {
-
+        this.toastService.show('Success', 'Registration successful');
         console.log('Registration successful:', res);
         this.fetchUserData();
 
       },
       (error) => {
-        console.error('Registration failed:', error);
         if (error.error && error.error.errors && error.error.errors.length > 0) {
-          const errorMessage = error.error.errors[0];
-          this.toastService.show('Registration Error', errorMessage);
+          const errorMessage = error.error.errors[0]; // Get the array of error messages
+          this.toastService.show('Error', errorMessage);
+
         }
+
+        console.error('Registration failed:', error);
+
+
       }
     );
   }
+
 
   updateEnabled(username: string) {
 
