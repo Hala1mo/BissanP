@@ -2,10 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { RegistrationService } from '../registration.service';
 import { PasswordValidators} from "../shared/password.validators";
-
-import {ToastServiceService} from "../toast-service.service";
-import {ErrorDialogComponent} from "../error-dialog/error-dialog.component";
-import {MatDialog} from "@angular/material/dialog";
+import {MatSnackBar} from "@angular/material/snack-bar";
+import {config} from "rxjs";
 
 @Component({
   selector: 'app-user',
@@ -21,7 +19,9 @@ export class UserComponent implements OnInit {
   editingUsername: string | null = null;
 
 
-  constructor(private _registrationService: RegistrationService, private fb: FormBuilder,private toastService: ToastServiceService,private dialog: MatDialog ) {
+  constructor(
+    private _snackBar: MatSnackBar,
+    private _registrationService: RegistrationService, private fb: FormBuilder) {
   }
 
   ngOnInit() {
@@ -65,21 +65,20 @@ export class UserComponent implements OnInit {
 
     this._registrationService.registerUser(this.registrationForm.value).subscribe(
       (res) => {
-        this.toastService.show('Success', 'Registration successful');
         console.log('Registration successful:', res);
         this.fetchUserData();
-
       },
       (error) => {
+        console.error('Registration failed:', error);
         if (error.error && error.error.errors && error.error.errors.length > 0) {
-          const errorMessage = error.error.errors[0]; // Get the array of error messages
-          this.toastService.show('Error', errorMessage);
+          const errorMessage = error.error.errors[0];
+          console.log('Error message:', errorMessage);
+          // this.toastService.show('Error', errorMessage);
+          this._snackBar.open(errorMessage, '', {
+            duration: 3000
+          });
 
         }
-
-        console.error('Registration failed:', error);
-
-
       }
     );
   }
@@ -149,16 +148,6 @@ export class UserComponent implements OnInit {
     this.isEditMode = false;
     this.selectedUser = null;
     this.editForm.reset();
-  }
-  openErrorDialog(title: string, message: string): void {
-    const dialogRef = this.dialog.open(ErrorDialogComponent, {
-      width: '300px',
-      data: { title, message }
-    });
-
-    dialogRef.afterClosed().subscribe(() => {
-      // Do something after the dialog is closed if needed
-    });
   }
 
 }

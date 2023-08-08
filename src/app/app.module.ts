@@ -9,19 +9,20 @@ import {ReactiveFormsModule} from "@angular/forms";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatDialogModule} from "@angular/material/dialog";
 import {NgbAlertModule, NgbModule} from "@ng-bootstrap/ng-bootstrap";
-import { ToastComponent } from './toast/toast.component';
-import { ErrorDialogComponent } from './error-dialog/error-dialog.component';
+
+import {MatSnackBarModule} from "@angular/material/snack-bar";
+
 
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
     UserComponent,
-    ToastComponent,
-    ErrorDialogComponent
+
   ],
   imports: [
     BrowserModule,
+    MatSnackBarModule,
     AppRoutingModule,HttpClientModule,ReactiveFormsModule, BrowserAnimationsModule,MatDialogModule,NgbAlertModule, NgbModule
 
   ],
