@@ -3,6 +3,10 @@ import { FormBuilder, FormGroup } from "@angular/forms";
 import { RegistrationService } from '../registration.service';
 import { PasswordValidators} from "../shared/password.validators";
 
+import {ToastServiceService} from "../toast-service.service";
+import {ErrorDialogComponent} from "../error-dialog/error-dialog.component";
+import {MatDialog} from "@angular/material/dialog";
+
 @Component({
   selector: 'app-user',
   templateUrl: './user.component.html',
@@ -14,9 +18,10 @@ export class UserComponent implements OnInit {
   userData: any[] = [];
   selectedUser: any | null = null; // To store the selected user for editing
   isEditMode = false; // Toggle between add and edit modes
+  editingUsername: string | null = null;
 
 
-  constructor(private _registrationService: RegistrationService, private fb: FormBuilder) {
+  constructor(private _registrationService: RegistrationService, private fb: FormBuilder,private toastService: ToastServiceService,private dialog: MatDialog ) {
   }
 
   ngOnInit() {
@@ -28,7 +33,7 @@ export class UserComponent implements OnInit {
       password: [''],
       confirmPassword:[''],
       lastName: [''],
-      accessLevel:['0']
+      accessLevel:['']
     },{validator: PasswordValidators});
 
 
@@ -53,6 +58,10 @@ export class UserComponent implements OnInit {
   }
 
   onSubmit() {
+
+    const registrationFormValue = this.registrationForm.value;
+    registrationFormValue.accessLevel = registrationFormValue.accessLevel ? 1 : 0;
+
     console.log(this.registrationForm.value);
 
     this._registrationService.registerUser(this.registrationForm.value).subscribe(
@@ -64,6 +73,10 @@ export class UserComponent implements OnInit {
       },
       (error) => {
         console.error('Registration failed:', error);
+        if (error.error && error.error.errors && error.error.errors.length > 0) {
+          const errorMessage = error.error.errors[0];
+          this.toastService.show('Registration Error', errorMessage);
+        }
       }
     );
   }
@@ -93,24 +106,55 @@ export class UserComponent implements OnInit {
   onEditUser(user: any) {
     this.selectedUser = user;
     this.isEditMode = true;
+    this.editingUsername = user.username;
     this.populateEditForm(user);
     this.editForm.get('accessLevel')?.setValue(user.accessLevel === 1);
   }
 
-  onSubmitEdit() {
-    // Handle edit form submission and update the user data
-    // ...
 
-    // Reset the selected user and toggle to add mode
-    this.selectedUser = null;
-    this.isEditMode = false;
+
+  onSubmitEdit() {
+    if (this.editForm.valid && this.editingUsername){
+
+      const editedUserData = this.editForm.value;
+
+      editedUserData.accessLevel = editedUserData.accessLevel ? 1 : 0;
+      this._registrationService.updateUserData(this.editingUsername, editedUserData).subscribe(
+        (response) => {
+          console.log('User data updated successfully:', response);
+
+          const editedUserIndex = this.userData.findIndex(user => user.username === editedUserData.username);
+          if (editedUserIndex !== -1) {
+            this.userData[editedUserIndex] = editedUserData;
+          }
+
+          // Reset the form and exit edit mode
+          this.editForm.reset();
+          this.isEditMode = false;
+          this.fetchUserData();
+
+        },
+        (error) => {
+          console.error('Error updating user data:', error);
+        }
+      );
+    }
   }
+
   cancelEdit() {
     this.isEditMode = false;
     this.selectedUser = null;
     this.editForm.reset();
   }
+  openErrorDialog(title: string, message: string): void {
+    const dialogRef = this.dialog.open(ErrorDialogComponent, {
+      width: '300px',
+      data: { title, message }
+    });
 
-
+    dialogRef.afterClosed().subscribe(() => {
+      // Do something after the dialog is closed if needed
+    });
+  }
 
 }

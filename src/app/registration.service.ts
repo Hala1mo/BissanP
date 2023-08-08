@@ -31,5 +31,10 @@ export class RegistrationService {
     return this._http.put<any>(updateUrl, body);
   }
 
+  updateUserData(username: string, updatedUserData: any): Observable<any> {
+    const updateUrl = `${this._users_url}/${username}`; // Adjust the URL endpoint as needed
+
+    return this._http.put<any>(updateUrl, updatedUserData);
+  }
 
 }

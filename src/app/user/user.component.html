@@ -93,8 +93,8 @@
 
 
                   <div class="mb-3 form-check">
-                    <input class="form-check-input" type="checkbox" id="is-admin-check">
-                    <label class="form-check-label" for="is-admin-check">Is Admin?</label>
+                    <input class="form-check-input" type="checkbox" formControlName="accessLevel">
+                    <label class="form-check-label" >Is Admin?</label>
 
                   </div>
 
@@ -137,16 +137,11 @@
                   type="text" formControlName="lastName" class="form-control">
               </div>
 
-<!--              <div class="mb-3">-->
-<!--                <label class="form-label">Access Level </label>-->
-<!--                <input-->
-<!--                  type="text" formControlName="accessLevel" class="form-control">-->
 
-<!--              </div>-->
 
               <div class="mb-3 form-check">
                 <input class="form-check-input" type="checkbox" formControlName="accessLevel" [checked]="editForm.get('accessLevel')?.value" >
-                <label class="form-check-label" for="is-admin-check">Is Admin?</label>
+                <label class="form-check-label" >Is Admin?</label>
 
               </div>
 

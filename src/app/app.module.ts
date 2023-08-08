@@ -6,16 +6,23 @@ import { HeaderComponent } from './header/header.component';
 import { UserComponent } from './user/user.component';
 import { HttpClientModule } from '@angular/common/http';
 import {ReactiveFormsModule} from "@angular/forms";
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {MatDialogModule} from "@angular/material/dialog";
+import {NgbAlertModule, NgbModule} from "@ng-bootstrap/ng-bootstrap";
+import { ToastComponent } from './toast/toast.component';
+import { ErrorDialogComponent } from './error-dialog/error-dialog.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
-    UserComponent
+    UserComponent,
+    ToastComponent,
+    ErrorDialogComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule,HttpClientModule,ReactiveFormsModule
+    AppRoutingModule,HttpClientModule,ReactiveFormsModule, BrowserAnimationsModule,MatDialogModule,NgbAlertModule, NgbModule
 
   ],
   providers: [],
