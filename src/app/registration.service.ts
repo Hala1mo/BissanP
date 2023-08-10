@@ -71,10 +71,6 @@ export class RegistrationService {
   }
 
 
-  fetchCustomerDetails(id:bigint):  Observable<any>{
-    const _urlDetails=`${this._customers_url}/${id}`;
-    return this._http.get<any>(_urlDetails);
-  }
 
   AddnewContact(id:bigint,contactDetails:any){
     const _urlDetails=`${this._customers_url}/${id}/contacts`;
@@ -94,4 +90,14 @@ export class RegistrationService {
 
     return this._http.put<any>(updateUrl, updatedCustomerData);
   }
+
+
+  fetchCustomerDetails(id:bigint):  Observable<any>{
+    const _urlDetails=`${this._customers_url}/${id}`;
+    return this._http.get<any>(_urlDetails);
+  }
+
+
+
+
 }

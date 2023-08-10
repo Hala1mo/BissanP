@@ -11,7 +11,7 @@ const routes: Routes = [
   { path: 'customer', component: CustomerComponent },
   {path: 'add',component:AddComponent},
   {path: 'details/:id',component:DetailsComponent},
-  {path: 'edit',component:EditComponent}
+  {path: 'edit/:id',component:EditComponent}
 
   // Add other routes as needed
 ];

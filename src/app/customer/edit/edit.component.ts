@@ -14,14 +14,25 @@ export class EditComponent implements OnInit {
 
   constructor(private _snackBar: MatSnackBar,private route: ActivatedRoute,private fb: FormBuilder, private _registrationService: RegistrationService,) {}
 
+
+
+
+
   ngOnInit() {
+    this.route.params.subscribe((params) => {
+      const id = params['id'];
+      if (id) {
+        this.fetchCustomerAddress(id);
+      }
+    });
 
     this.route.params.subscribe((params) => {
-      const id = params['customer'];
+      const id = params['uuid'];
       if (id) {
-        this.populateEditForm(id);
+        console.log("id", id);
       }
-    }),
+    });
+
     this.editForm = this.fb.group({
       name: [''],
       address: this.fb.group({
@@ -30,22 +41,37 @@ export class EditComponent implements OnInit {
         city: [''],
         zipcode: ['']
       }),
-
     });
   }
 
-  populateEditForm(customer:any) {
-    this.editForm.patchValue({
-      name: customer.name,
-      address: {
-        addressLine1: customer.address.addressLine1,
-        addressLine2: customer.address.addressLine2,
-        city: customer.address.city,
-        zipcode: customer.address.zipcode
+
+
+  fetchCustomerAddress(uuid: bigint) {
+    this._registrationService.fetchCustomerDetails(uuid).subscribe(
+      (data) => {
+        console.log('Fetched customer data:', data);
+
+        const customer = data; // Assuming data is an object containing customer details
+        const address = customer.address;
+
+        this.editForm.patchValue({
+          name: customer.name,
+          address: {
+            addressLine1: address.addressLine1,
+            addressLine2: address.addressLine2,
+            city: address.city,
+            zipcode: address.zipcode,
+          },
+        });
+
+        this._uuid = customer.uuid;
+      },
+      (error) => {
+        console.error('Error fetching customer data:', error);
       }
-    });
-    this._uuid=customer.uuid;
+    );
   }
+
   onUpdateCustomer(){
     if (this.editForm.valid){
 

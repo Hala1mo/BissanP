@@ -2,191 +2,231 @@
   <h2>Users</h2>
   <hr class="mb-3">
   <div class="row ">
+    <div class="row p-3 border-bottom mb-3">
+      <div class="col-4">
+        <ngb-pagination
+          [collectionSize]="userData.length"
+          [(page)]="page"
+          aria-label="Default pagination">
+        </ngb-pagination>
+      </div>
 
-    <div class="row">
       <div class="col-8">
-        <div class="row">
-          <div class="col-4">
-            <ngb-pagination
-              [collectionSize]="userData.length"
-              [(page)]="page"
-              aria-label="Default pagination">
-            </ngb-pagination>
+        <div class="btn-toolbar justify-content-between" role="toolbar" aria-label="Toolbar with button groups">
+          <div class="btn-group" role="group" aria-label="First group">
+            <div class="dropdown btn-group">
+              <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                      aria-expanded="false">
+                Enabled
+              </button>
+              <ul class="dropdown-menu">
+                <li class="dropdown-item" (click)="fetchUserData()">All</li>
+                <li class="dropdown-item" (click)="showEnables()">Show active users</li>
+                <li class="dropdown-item" (click)="showDisables()">Show inactive users</li>
+
+              </ul>
+            </div>
+
+            <div class="dropdown btn-group">
+              <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                      aria-expanded="false">
+                Access Level
+              </button>
+              <ul class="dropdown-menu">
+                <li class="dropdown-item" (click)="fetchUserData()">All</li>
+                <li class="dropdown-item" (click)="showAdmin()">Show Admins</li>
+                <li class="dropdown-item" (click)="showEmployee()">Show Employees</li>
+
+              </ul>
+            </div>
           </div>
-          <div class="col-4"></div>
-          <div class="col-4">
-            <form class="mb-3" role="search">
+          <form role="search">
+            <div class="input-group">
+              <select class="form-control" #user (change)="onSelected(user.value)">
+                <option>Select user by:</option>
+                <option>First Name</option>
+                <option>Last Name</option>
+                <option>User Name</option>
+              </select>
+
               <input type="search"
-                     class="form-control form-control-dark text-bg-dark"
+                     class="form-control"
                      placeholder="Search..."
-                     aria-label="Search">
-            </form>
+                     aria-label="Search"
+                     [(ngModel)]="searchInput"
+                     [ngModelOptions]="{ standalone: true }"
+                     (input)="applySearchFilter()">
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-8">
+
+      <div class="h-100">
+
+        <table class="table table-striped table-hover">
+          <thead>
+          <tr>
+            <th class="w-25">Username</th>
+            <th class="w-25">Full Name</th>
+            <th class="w-25">Access Level</th>
+            <th class="w-25">Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let user of userData | slice: (page-1) * pageSize  :page * pageSize">
+            <td>{{ user.username }}</td>
+            <td>{{ user.firstName }} {{ user.lastName }}</td>
+            <td>{{ user.accessLevel === 1 ? 'Admin' : 'Employee' }}</td>
+            <td>
+              <div class="row gap-3">
+
+                <button class="col-6 btn {{user.enabled === 1 ? 'btn-success' : 'btn-warning'}}"
+                        (click)="updateEnabled(user.username)">
+                  {{ user.enabled === 1 ? 'Enabled' : 'Disabled' }}
+                </button>
+
+                <button type="button"
+                        class="col-3 btn btn-info"
+                        (click)="onEditUser(user)">
+                  Edit
+                </button>
+
+              </div>
+
+            </td>
+          </tr>
+          </tbody>
+        </table>
+
+
+      </div>
+
+    </div>
+
+    <div class="col-4 h-100">
+      <div class="w-100 mx-2 p-1">
+        <div *ngIf="!isEditMode">
+          <div class="card p-3">
+            <h3 class="mb=2 card-title">Add New User</h3>
+            <div class="card-body">
+              <form class="form-group" [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
+
+                <div class="mb-3">
+                  <label class="form-label">First Name</label>
+                  <input
+                    [class.is-invalid]="registrationForm.get('firstName')?.invalid && registrationForm.get('firstName')?.touched"
+                    type="text" formControlName="firstName" class="form-control">
+                  <small
+                    [class.d-none]="registrationForm.get('firstName')?.valid ||registrationForm.get('firstName')?.untouched"
+                    class="text-danger">First Name is required</small>
+                </div>
+
+                <div class="mb-3">
+                  <label class="form-label">Last Name</label>
+                  <input
+                    [class.is-invalid]="registrationForm.get('lastName')?.invalid && registrationForm.get('lastName')?.touched"
+                    type="text" formControlName="lastName" class="form-control">
+                  <small
+                    [class.d-none]="registrationForm.get('lastName')?.valid ||registrationForm.get('lastName')?.untouched"
+                    class="text-danger">First Name is required</small>
+                </div>
+
+
+                <div class="mb-3">
+                  <label class="form-label">Username</label>
+                  <input [class.is-invalid]="registrationForm.get('username')?.invalid &&
+                registrationForm.get('username')?.touched"
+                         formControlName="username"
+                         type="text"
+                         class="form-control">
+                  <small
+                    [class.d-none]="registrationForm.get('username')?.valid || registrationForm.get('username')?.untouched"
+                    class="text-danger">Username is required</small>
+                </div>
+
+                <div class="mb-3">
+                  <label class="form-label">Password</label>
+                  <input
+                    [class.is-invalid]="registrationForm.get('password')?.invalid && registrationForm.get('password')?.touched"
+                    type="password" formControlName="password" class="form-control">
+                  <small
+                    [class.d-none]="registrationForm.get('password')?.valid ||registrationForm.get('password')?.untouched"
+                    class="text-danger">Password is required</small>
+                </div>
+
+                <div class="mb-3">
+                  <label class="form-label">Confirm Password</label>
+                  <input [class.is-invalid]="registrationForm.errors?.['misMatch']" type="password"
+                         formControlName="confirmPassword" class="form-control">
+                  <small class="text-danger" *ngIf="registrationForm.errors?.['misMatch']">Passwords do not
+                    match</small>
+                </div>
+
+
+                <div class="mb-3 form-check">
+                  <input class="form-check-input" type="checkbox" formControlName="accessLevel">
+                  <label class="form-check-label">Is Admin?</label>
+
+                </div>
+
+                <div class="mb-3">
+                  <button [disabled]='!registrationForm.valid' class="btn btn-large btn-primary" type="submit">
+                    Register
+                  </button>
+
+                </div>
+
+              </form>
+
+            </div>
+
+          </div>
+          <!--                         {{registrationForm.value | json}}-->
+        </div>
+
+        <div *ngIf="isEditMode && selectedUser">
+          <div class="card p-3">
+            <h3 class="mb=2 card-title">Edit User</h3>
+            <div class="card-body">
+              <form class="form-group" [formGroup]="editForm" (ngSubmit)="onSubmitEdit()">
+
+                <div class="mb-3">
+                  <label class="form-label">First Name</label>
+                  <input
+                    type="text" formControlName="firstName" class="form-control">
+
+                </div>
+
+                <div class="mb-3">
+                  <label class="form-label">Last Name</label>
+                  <input
+                    type="text" formControlName="lastName" class="form-control">
+                </div>
+
+
+                <div class="mb-3 form-check">
+                  <input class="form-check-input" type="checkbox" formControlName="accessLevel"
+                         [checked]="editForm.get('accessLevel')?.value">
+                  <label class="form-check-label">Is Admin?</label>
+
+                </div>
+
+                <div class="mb-3">
+                  <button [disabled]="!editForm.valid" class="btn btn-large btn-primary me-1" type="submit">
+                    Save Changes
+                  </button>
+                  <button class="btn btn-large btn-secondary ms-1" (click)="cancelEdit()">Cancel</button>
+                </div>
+
+              </form>
+            </div>
           </div>
         </div>
-        <div class="h-100">
-
-          <table class="table table-striped table-hover">
-            <thead >
-            <tr>
-              <th class="w-25">Username</th>
-              <th class="w-25">Full Name</th>
-              <th class="w-25">Access Level</th>
-              <th class="w-25">Actions</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr *ngFor="let user of userData | slice: (page-1) * pageSize  :page * pageSize">
-              <td>{{ user.username }}</td>
-              <td>{{ user.firstName }} {{ user.lastName }}</td>
-              <td>{{ user.accessLevel === 1 ? 'Admin' : 'Employee' }}</td>
-              <td>
-                <div class="row gap-3">
-
-                  <button class="col-6 btn {{user.enabled === 1 ? 'btn-success' : 'btn-warning'}}"
-                          (click)="updateEnabled(user.username)">
-                    {{ user.enabled === 1 ? 'Enabled' : 'Disabled' }}
-                  </button>
-
-                  <button type="button"
-                          class="col-3 btn btn-info"
-                          (click)="onEditUser(user)">
-                    Edit
-                  </button>
-
-                </div>
-
-              </td>
-            </tr>
-            </tbody>
-          </table>
-        </div>
-
 
       </div>
-      <div class="col-4 h-100">
-        <div class="w-100 mx-2 p-1">
-            <div *ngIf="!isEditMode">
-              <div class="card p-3">
-                <h3 class="mb=2 card-title">Add New User</h3>
-                <div class="card-body">
-                  <form class="form-group" [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
-
-                    <div class="mb-3">
-                      <label class="form-label">First Name</label>
-                      <input
-                        [class.is-invalid]="registrationForm.get('firstName')?.invalid && registrationForm.get('firstName')?.touched"
-                        type="text" formControlName="firstName" class="form-control">
-                      <small
-                        [class.d-none]="registrationForm.get('firstName')?.valid ||registrationForm.get('firstName')?.untouched"
-                        class="text-danger">First Name is required</small>
-                    </div>
-
-                    <div class="mb-3">
-                      <label class="form-label">Last Name</label>
-                      <input
-                        [class.is-invalid]="registrationForm.get('lastName')?.invalid && registrationForm.get('lastName')?.touched"
-                        type="text" formControlName="lastName" class="form-control">
-                      <small
-                        [class.d-none]="registrationForm.get('lastName')?.valid ||registrationForm.get('lastName')?.untouched"
-                        class="text-danger">First Name is required</small>
-                    </div>
-
-
-                    <div class="mb-3">
-                      <label class="form-label">Username</label>
-                      <input [class.is-invalid]="registrationForm.get('username')?.invalid &&
-                registrationForm.get('username')?.touched"
-                             formControlName="username"
-                             type="text"
-                             class="form-control">
-                      <small
-                        [class.d-none]="registrationForm.get('username')?.valid || registrationForm.get('username')?.untouched"
-                        class="text-danger">Username is required</small>
-                    </div>
-
-                    <div class="mb-3">
-                      <label class="form-label">Password</label>
-                      <input
-                        [class.is-invalid]="registrationForm.get('password')?.invalid && registrationForm.get('password')?.touched"
-                        type="password" formControlName="password" class="form-control">
-                      <small
-                        [class.d-none]="registrationForm.get('password')?.valid ||registrationForm.get('password')?.untouched"
-                        class="text-danger">Password is required</small>
-                    </div>
-
-                    <div class="mb-3">
-                      <label class="form-label">Confirm Password</label>
-                      <input [class.is-invalid]="registrationForm.errors?.['misMatch']" type="password"
-                             formControlName="confirmPassword" class="form-control">
-                      <small class="text-danger" *ngIf="registrationForm.errors?.['misMatch']">Passwords do not
-                        match</small>
-                    </div>
-
-
-                    <div class="mb-3 form-check">
-                      <input class="form-check-input" type="checkbox" formControlName="accessLevel">
-                      <label class="form-check-label">Is Admin?</label>
-
-                    </div>
-
-                    <div class="mb-3">
-                      <button [disabled]='!registrationForm.valid' class="btn btn-large btn-primary" type="submit">
-                        Register
-                      </button>
-
-                    </div>
-
-                  </form>
-
-                </div>
-
-              </div>
-              <!--            {{registrationForm.value | json}}-->
-            </div>
-
-            <div *ngIf="isEditMode && selectedUser">
-              <div class="card p-3">
-                <h3 class="mb=2 card-title">Edit User</h3>
-                <div class="card-body">
-                  <form class="form-group" [formGroup]="editForm" (ngSubmit)="onSubmitEdit()">
-
-                    <div class="mb-3">
-                      <label class="form-label">First Name</label>
-                      <input
-                        type="text" formControlName="firstName" class="form-control">
-
-                    </div>
-
-                    <div class="mb-3">
-                      <label class="form-label">Last Name</label>
-                      <input
-                        type="text" formControlName="lastName" class="form-control">
-                    </div>
-
-
-                    <div class="mb-3 form-check">
-                      <input class="form-check-input" type="checkbox" formControlName="accessLevel"
-                             [checked]="editForm.get('accessLevel')?.value">
-                      <label class="form-check-label">Is Admin?</label>
-
-                    </div>
-
-                    <div class="mb-3">
-                      <button [disabled]="!editForm.valid" class="btn btn-large btn-primary me-1" type="submit">
-                        Save Changes
-                      </button>
-                      <button class="btn btn-large btn-secondary ms-1" (click)="cancelEdit()">Cancel</button>
-                    </div>
-
-                  </form>
-                </div>
-              </div>
-            </div>
-
-        </div>
-      </div>
-
-
     </div>
 
   </div>

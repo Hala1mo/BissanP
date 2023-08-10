@@ -5,7 +5,7 @@ import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 import { UserComponent } from './user/user.component';
 import { HttpClientModule } from '@angular/common/http';
-import {ReactiveFormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatDialogModule} from "@angular/material/dialog";
 import {NgbAlertModule, NgbModule, NgbPaginationModule} from "@ng-bootstrap/ng-bootstrap";
@@ -16,8 +16,7 @@ import {NgOptimizedImage} from "@angular/common";
 import { AddComponent } from './customer/add/add.component';
 import { DetailsComponent } from './customer/details/details.component';
 import { EditComponent } from './customer/edit/edit.component';
-
-
+import {DropDownComponent} from "./user/drop-down/drop-down.component";
 
 @NgModule({
   declarations: [
@@ -28,13 +27,13 @@ import { EditComponent } from './customer/edit/edit.component';
     AddComponent,
     DetailsComponent,
     EditComponent,
-
+    DropDownComponent
   ],
   imports: [
     BrowserModule,
     MatSnackBarModule,
     AppRoutingModule, HttpClientModule, ReactiveFormsModule, BrowserAnimationsModule, MatDialogModule, NgbAlertModule, NgbModule
-    , NgbPaginationModule, NgOptimizedImage
+    , NgbPaginationModule, NgOptimizedImage, FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

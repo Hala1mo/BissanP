@@ -84,7 +84,8 @@ export class CustomerComponent implements OnInit {
     this.router.navigate(['/add']);
   }
 
-  openEditCustomer(customer:any){
-    this.router.navigate(['/edit'],customer);
+  openEditCustomer(uuid:bigint){
+
+    this.router.navigate(['/edit',uuid]);
   }
 }

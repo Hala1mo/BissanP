@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, PipeTransform} from '@angular/core';
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { RegistrationService } from '../registration.service';
 import { PasswordValidators} from "../shared/password.validators";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {filter} from "rxjs";
 
 
 @Component({
@@ -20,6 +21,17 @@ export class UserComponent implements OnInit {
   selectedUser: any | null = null; // To store the selected user for editing
   isEditMode = false; // Toggle between add and edit modes
   editingUsername: string | null = null;
+  originalUserData: any[] = [];
+  selectedSearchCriteria: string = "username";
+  searchInput: string = "";
+  onSelected(value:string): void {
+    if (value =="First Name"){
+    this.selectedSearchCriteria = "firstName";}
+    else if (value =="Last Name"){
+      this.selectedSearchCriteria = "lastName";}
+    else
+      this.selectedSearchCriteria = "username";
+  }
 
 
   constructor(
@@ -53,6 +65,7 @@ export class UserComponent implements OnInit {
         console.log('Fetched user data:', data);
 
         this.userData = data;
+        this.originalUserData = data;
       },
       error => {
         console.error('Error fetching user data:', error);
@@ -161,6 +174,45 @@ export class UserComponent implements OnInit {
     this.isEditMode = false;
     this.selectedUser = null;
     this.editForm.reset();
+  }
+
+
+  showEnables(){
+
+    const enabledUsers = this.originalUserData.filter(user => user.enabled === 1);
+    this.userData =enabledUsers;
+
+  }
+  showDisables(){
+
+    const disabledUsers = this.originalUserData.filter(user => user.enabled === 0);
+    this.userData =disabledUsers;
+
+  }
+
+  showAdmin(){
+
+    const enabledUsers = this.originalUserData.filter(user => user.accessLevel === 1);
+    this.userData =enabledUsers;
+
+  }
+  showEmployee(){
+
+    const disabledUsers = this.originalUserData.filter(user => user.accessLevel ===0);
+    this.userData =disabledUsers;
+
+  }
+
+
+  applySearchFilter() {
+    if (this.searchInput === "") {
+      this.userData = this.originalUserData;
+    } else {
+      this.userData = this.originalUserData.filter(user => {
+        const searchValue = user[this.selectedSearchCriteria].toLowerCase();
+        return searchValue.includes(this.searchInput.toLowerCase());
+      });
+    }
   }
 
 }

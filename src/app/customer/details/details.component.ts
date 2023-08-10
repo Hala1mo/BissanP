@@ -13,7 +13,7 @@ import { Customer } from '../../models/Customer';
 export class DetailsComponent implements OnInit {
   customerDetails: Customer | null = null;
   registrationForm!: FormGroup;
-  selectedContact: any | null = null; // To store the selected user for editing
+  selectedContact: any ;// To store the selected user for editing
   isEditMode = false; // Toggle between add and edit modes
 
   editForm!: FormGroup;

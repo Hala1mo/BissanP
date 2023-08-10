@@ -40,7 +40,7 @@
                 <div class="row gap-3">
 
                   <button class="col-6 btn {{contact.enabled === 1 ? 'btn-success' : 'btn-warning'}}"
-                          (click)="updateEnabled(customerDetails?.uuid,contact.uuid)">
+                          (click)="updateEnabled(customerDetails.uuid,contact.uuid)">
                     {{ contact.enabled === 1 ? 'Enabled' : 'Disabled' }}
                   </button>
 
