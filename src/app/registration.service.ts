@@ -97,7 +97,13 @@ export class RegistrationService {
     return this._http.get<any>(_urlDetails);
   }
 
-
-
+getCityData(city:string):  Observable<any>{
+  const _urlDetails=`${this._customers_url}/search?city=${city}`;
+  return this._http.get<any>(_urlDetails);
+}
+  getAddressData(address:string):  Observable<any>{
+    const _urlDetails=`${this._customers_url}/search?address=${address}`;
+    return this._http.get<any>(_urlDetails);
+  }
 
 }

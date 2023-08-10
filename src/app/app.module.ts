@@ -16,7 +16,6 @@ import {NgOptimizedImage} from "@angular/common";
 import { AddComponent } from './customer/add/add.component';
 import { DetailsComponent } from './customer/details/details.component';
 import { EditComponent } from './customer/edit/edit.component';
-import {DropDownComponent} from "./user/drop-down/drop-down.component";
 
 @NgModule({
   declarations: [
@@ -27,7 +26,7 @@ import {DropDownComponent} from "./user/drop-down/drop-down.component";
     AddComponent,
     DetailsComponent,
     EditComponent,
-    DropDownComponent
+
   ],
   imports: [
     BrowserModule,
