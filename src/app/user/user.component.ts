@@ -1,9 +1,9 @@
-import {Component, OnInit, PipeTransform} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { RegistrationService } from '../registration.service';
 import { PasswordValidators} from "../shared/password.validators";
 import {MatSnackBar} from "@angular/material/snack-bar";
-import {filter} from "rxjs";
+
 
 
 @Component({
@@ -192,14 +192,14 @@ export class UserComponent implements OnInit {
 
   showAdmin(){
 
-    const enabledUsers = this.originalUserData.filter(user => user.accessLevel === 1);
-    this.userData =enabledUsers;
+    const adminUsers = this.originalUserData.filter(user => user.accessLevel === 1);
+    this.userData ==adminUsers;
 
   }
   showEmployee(){
 
-    const disabledUsers = this.originalUserData.filter(user => user.accessLevel ===0);
-    this.userData =disabledUsers;
+    const employeeUsers = this.originalUserData.filter(user => user.accessLevel ===0);
+    this.userData =employeeUsers;
 
   }
 
