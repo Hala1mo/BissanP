@@ -11,6 +11,9 @@ import {MatSnackBar} from "@angular/material/snack-bar";
   styleUrls: ['./user.component.css']
 })
 export class UserComponent implements OnInit {
+  page=1;
+  pageSize=10;
+
   registrationForm!: FormGroup;
   editForm!: FormGroup;
   userData: any[] = [];

@@ -6,7 +6,7 @@ export class Customer {
   enabled: number;
   lastModifiedTime: string;
   name: string;
-  uuid: string;
+  uuid: bigint;
   contacts: Contact[]; // Array of Contact objects
   address: Address; // Address object
 

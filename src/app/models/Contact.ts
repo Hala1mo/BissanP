@@ -6,7 +6,7 @@ export class Contact {
   lastModifiedTime: string;
   lastName: string;
   phoneNumber: string;
-  uuid: string;
+  uuid: bigint;
 
   constructor(data: any) {
     this.createdTime = data.createdTime || '';

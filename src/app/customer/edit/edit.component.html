@@ -1,0 +1,44 @@
+
+<div class="container mt-1">
+  <h2>Edit Customer</h2>
+  <hr class="mb-3">
+  <div class="row">
+    <div class="card p-3">
+      <form class="row g-3 mb-5" [formGroup]="editForm" (ngSubmit)="onUpdateCustomer()">
+        <!--      <h3>Add Customer</h3>-->
+        <div class="col-md-6">
+          <label class="form-label">Name</label>
+          <input type="text" class="form-control" formControlName="name">
+        </div>
+        <div formGroupName="address">
+          <div class="col-12">
+            <label class="form-label">Address</label>
+            <input type="text" class="form-control" placeholder="1234 Main St" formControlName="addressLine1">
+          </div>
+          <div class="col-12">
+            <label class="form-label">Address 2</label>
+            <input type="text" class="form-control" placeholder="Apartment, studio, or floor"
+                   formControlName="addressLine2">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">City</label>
+            <input type="text" class="form-control" formControlName="city">
+          </div>
+
+          <div class="col-md-2">
+            <label class="form-label">Zip</label>
+            <input type="text" class="form-control" formControlName="zipcode">
+          </div>
+        </div>
+
+        <div class="col-12">
+          <button [disabled]='!editForm.valid' class="btn btn-large btn-primary" type="submit">
+            Register
+          </button>
+        </div>
+
+
+      </form>
+    </div>
+  </div>
+</div>
