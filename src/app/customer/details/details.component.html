@@ -115,12 +115,27 @@
                   class="text-danger">Email is required</small>
               </div>
 
+
+
+
+<!--              <div *ngFor="let type of types">-->
+<!--                <mat-checkbox [formControlName]="type.formControl" (change)="onCheckboxChange(type.uuid, $event)">{{ type.name }}</mat-checkbox>-->
+<!--              </div>-->
+              <div *ngFor="let type of TypesData">
+                <mat-checkbox [formControlName]="type.uuid" (change)="onCheckboxChange($event, type.uuid)">
+                  {{ type.name }}
+                </mat-checkbox>
+              </div>
+
               <div class="mb-3">
                 <button [disabled]='!registrationForm.valid' class="btn btn-large btn-primary" type="submit">
                   Register
                 </button>
 
               </div>
+
+
+
 
             </form>
 

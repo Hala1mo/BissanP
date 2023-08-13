@@ -10,6 +10,8 @@ export class RegistrationService {
   private _users_url = 'http://10.10.33.91:8080/users';
   private _customers_url = 'http://10.10.33.91:8080/customers';
   private _contacts_url = 'http://10.10.33.91:8080/contacts';
+  private _visitTypes='http://10.10.33.91:8080/visit_types';
+  private _visitDefinition='http://10.10.33.91:8080/visit_definitions';
 
 
 
@@ -55,7 +57,12 @@ export class RegistrationService {
 
     return this._http.put<any>(updateUrl, body);
   }
+  updateEnabledStatusDefinition(id:bigint): Observable<any> {
+    const updateUrl = `${this._visitDefinition}/${id}/endis`; // Adjust the URL endpoint as needed
+    const body = "";
 
+    return this._http.put<any>(updateUrl, body);
+  }
 
 
   updateUserData(username: string, updatedUserData: any): Observable<any> {
@@ -105,5 +112,11 @@ getCityData(city:string):  Observable<any>{
     const _urlDetails=`${this._customers_url}/search?address=${address}`;
     return this._http.get<any>(_urlDetails);
   }
+  fetchTypesData() :Observable<any>{
+     return this._http.get<any>(this._visitTypes);
+}
 
+  fetchDefinition():Observable<any>{
+    return this._http.get<any>(this._visitDefinition);
+  }
 }

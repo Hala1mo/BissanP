@@ -16,6 +16,11 @@ import {NgOptimizedImage} from "@angular/common";
 import { AddComponent } from './customer/add/add.component';
 import { DetailsComponent } from './customer/details/details.component';
 import { EditComponent } from './customer/edit/edit.component';
+import {MatCheckboxModule} from "@angular/material/checkbox";
+import { DefinitionComponent } from './definition/definition.component';
+import { DetailsDefComponent } from './definition/details-def/details-def.component';
+import { AddDefComponent } from './definition/add-def/add-def.component';
+
 
 @NgModule({
   declarations: [
@@ -26,14 +31,18 @@ import { EditComponent } from './customer/edit/edit.component';
     AddComponent,
     DetailsComponent,
     EditComponent,
+    DefinitionComponent,
+    DetailsDefComponent,
+    AddDefComponent,
+
 
   ],
-  imports: [
-    BrowserModule,
-    MatSnackBarModule,
-    AppRoutingModule, HttpClientModule, ReactiveFormsModule, BrowserAnimationsModule, MatDialogModule, NgbAlertModule, NgbModule
-    , NgbPaginationModule, NgOptimizedImage, FormsModule
-  ],
+    imports: [
+        BrowserModule,
+        MatSnackBarModule,
+        AppRoutingModule, HttpClientModule, ReactiveFormsModule, BrowserAnimationsModule, MatDialogModule, NgbAlertModule, NgbModule
+        , NgbPaginationModule, NgOptimizedImage, FormsModule, MatCheckboxModule
+    ],
   providers: [],
   bootstrap: [AppComponent]
 })

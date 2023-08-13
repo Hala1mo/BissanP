@@ -2,8 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router'; // Import ActivatedRoute
 import { RegistrationService } from '../../registration.service';
-import {FormBuilder, FormGroup} from '@angular/forms';
+import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import { Customer } from '../../models/Customer';
+import {MatCheckboxChange} from "@angular/material/checkbox";
 
 @Component({
   selector: 'app-details',
@@ -15,8 +16,18 @@ export class DetailsComponent implements OnInit {
   registrationForm!: FormGroup;
   selectedContact: any ;// To store the selected user for editing
   isEditMode = false; // Toggle between add and edit modes
-
+ TypesData: any[] = [];
+  types: any[] = [];
   editForm!: FormGroup;
+
+  // types = [
+  //   { name: 'Software Implementation Consultation', value: 'Software Implementation Consultation', formControl: 'si' },
+  //   { name: 'Training and Onboarding Session', value: 'Training and Onboarding Session', formControl: 'training' },
+  //   { name: 'Customization Workshop', value: 'Customization Workshop', formControl: 'cw' },
+  //   { name: 'Performance Review and Optimization', value: 'Performance Review and Optimization', formControl: 'pr' },
+  //   { name: 'Business Process Review', value: 'Business Process Review', formControl: 'br' }
+  // ];
+  private selectedUUIDs: string[] = [];
 
   constructor(
     private _snackBar: MatSnackBar,
@@ -31,7 +42,7 @@ export class DetailsComponent implements OnInit {
       if (id) {
         this.fetchCustomerDetails(id);
       }
-
+     this.fetchvisitTypes();
     });
 
 
@@ -40,7 +51,9 @@ export class DetailsComponent implements OnInit {
       firstName: [''],
       lastName: [''],
       phoneNumber:[''],
-      email:['']
+      email:[''],
+      Types: this.fb.group({
+      uuid:[''] }),
     });
 
     this.editForm = this.fb.group({
@@ -48,7 +61,9 @@ export class DetailsComponent implements OnInit {
       lastName:[''],
       phoneNumber:[''],
       email:['']
+
     });
+
   }
 
   fetchCustomerDetails(id: bigint) {
@@ -62,13 +77,31 @@ export class DetailsComponent implements OnInit {
       }
     );
   }
+
   onSubmit(uuid: any) {
-    console.log(this.registrationForm.value);
-    this._registrationService.AddnewContact(uuid,this.registrationForm.value).subscribe(
+    const formData = this.registrationForm.value;
+
+
+    const selectedTypes = this.selectedUUIDs.map((uuid: any) => ({ uuid }));
+    formData.types = selectedTypes;
+
+
+    formData.Types = selectedTypes;
+
+    // Delete unnecessary properties
+    delete formData.name;
+    delete formData.undefined;
+    delete formData.uuid;
+    delete formData.createdTime;
+    delete formData.lastModifiedTime;
+
+    console.log(formData);
+
+    this._registrationService.AddnewContact(uuid, formData).subscribe(
       (res) => {
         console.log('Registration successful:', res);
         this.registrationForm.reset();
-        this.fetchCustomerDetails(uuid);
+         this.fetchCustomerDetails(uuid);
 
       },
       (error) => {
@@ -76,15 +109,14 @@ export class DetailsComponent implements OnInit {
         if (error.error && error.error.errors && error.error.errors.length > 0) {
           const errorMessage = error.error.errors[0];
           console.log('Error message:', errorMessage);
-          // this.toastService.show('Error', errorMessage);
           this._snackBar.open(errorMessage, '', {
             duration: 3000
           });
-
         }
       }
     );
-}
+  }
+
 
 
   populateEditForm(contact: any) {
@@ -154,4 +186,54 @@ export class DetailsComponent implements OnInit {
       }
     );
   }
+
+  fetchvisitTypes() {
+    this._registrationService.fetchTypesData().subscribe(
+      (data) => {
+        console.log('Fetched types data:', data);
+        this.TypesData = data;
+        this.types = data;
+        this.updateFormControls();
+        this.populateCheckboxes();
+      },
+      (error) => {
+        console.error('Error fetching types data:', error);
+      }
+    );
+  }
+
+  updateFormControls() {
+    if (!this.registrationForm) return;
+
+    this.types.forEach((type) => {
+      const formControl = this.registrationForm.get(type.uuid);
+      if (formControl) {
+        formControl.setValue(false);
+      }
+    });
+  }
+
+  onCheckboxChange(event: MatCheckboxChange, uuid: string) {
+    if (event.checked) {
+      if (!this.selectedUUIDs.includes(uuid)) {
+        this.selectedUUIDs.push(uuid);
+      }
+    } else {
+      const index = this.selectedUUIDs.indexOf(uuid);
+      if (index >= 0) {
+        this.selectedUUIDs.splice(index, 1);
+      }
+    }
+  }
+  populateCheckboxes() {
+    console.log('Types:', this.types); // Check if the types array contains the correct data
+    console.log('TypesData:', this.TypesData); // Check the fetched types data
+
+    for (const type of this.types) {
+      console.log('Creating form control for UUID:', type.uuid);
+      const formControl = this.fb.control(false);
+      this.registrationForm.addControl(type.uuid, formControl);
+    }
+  }
+
 }

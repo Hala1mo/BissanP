@@ -1,21 +1,21 @@
 export class Contact {
-  createdTime: string;
+
   email: string;
   enabled: number;
   firstName: string;
-  lastModifiedTime: string;
   lastName: string;
   phoneNumber: string;
   uuid: bigint;
+  checkedVisits: string[]=[];
 
   constructor(data: any) {
-    this.createdTime = data.createdTime || '';
+    this.firstName = data.firstName || '';
+    this.lastName = data.lastName || '';
     this.email = data.email || '';
     this.enabled = data.enabled || 0;
-    this.firstName = data.firstName || '';
-    this.lastModifiedTime = data.lastModifiedTime || '';
-    this.lastName = data.lastName || '';
+
     this.phoneNumber = data.phoneNumber || '';
     this.uuid = data.uuid || '';
+    this.checkedVisits = data.checkedVisits;
   }
 }

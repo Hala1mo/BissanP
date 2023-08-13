@@ -5,13 +5,20 @@ import {CustomerComponent} from "./customer/customer.component";
 import {AddComponent} from "./customer/add/add.component";
 import {DetailsComponent} from "./customer/details/details.component";
 import {EditComponent} from "./customer/edit/edit.component";
+import {DefinitionComponent} from "./definition/definition.component";
+import {DetailsDefComponent} from "./definition/details-def/details-def.component";
+import {AddDefComponent} from "./definition/add-def/add-def.component";
 
 const routes: Routes = [
   { path: 'user', component: UserComponent },
   { path: 'customer', component: CustomerComponent },
   {path: 'add',component:AddComponent},
   {path: 'details/:id',component:DetailsComponent},
-  {path: 'edit/:id',component:EditComponent}
+  {path: 'details-def/:id',component:DetailsDefComponent},
+  {path: 'edit/:id',component:EditComponent},
+  {path: 'definition',component:DefinitionComponent},
+  {path: 'add-def',component:AddDefComponent},
+
 
   // Add other routes as needed
 ];
