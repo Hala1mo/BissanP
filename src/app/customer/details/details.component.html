@@ -117,10 +117,6 @@
 
 
 
-
-<!--              <div *ngFor="let type of types">-->
-<!--                <mat-checkbox [formControlName]="type.formControl" (change)="onCheckboxChange(type.uuid, $event)">{{ type.name }}</mat-checkbox>-->
-<!--              </div>-->
               <div *ngFor="let type of TypesData">
                 <mat-checkbox [formControlName]="type.uuid" (change)="onCheckboxChange($event, type.uuid)">
                   {{ type.name }}
@@ -187,23 +183,6 @@
           </div>
         </div>
       </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         <!--            {{registrationForm.value | json}}-->
       </div>

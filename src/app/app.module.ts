@@ -20,6 +20,8 @@ import {MatCheckboxModule} from "@angular/material/checkbox";
 import { DefinitionComponent } from './definition/definition.component';
 import { DetailsDefComponent } from './definition/details-def/details-def.component';
 import { AddDefComponent } from './definition/add-def/add-def.component';
+import {MatInputModule} from "@angular/material/input";
+import {MatSelectModule} from "@angular/material/select";
 
 
 @NgModule({
@@ -37,12 +39,12 @@ import { AddDefComponent } from './definition/add-def/add-def.component';
 
 
   ],
-    imports: [
-        BrowserModule,
-        MatSnackBarModule,
-        AppRoutingModule, HttpClientModule, ReactiveFormsModule, BrowserAnimationsModule, MatDialogModule, NgbAlertModule, NgbModule
-        , NgbPaginationModule, NgOptimizedImage, FormsModule, MatCheckboxModule
-    ],
+  imports: [
+    BrowserModule,
+    MatSnackBarModule,
+    AppRoutingModule, HttpClientModule, ReactiveFormsModule, BrowserAnimationsModule, MatDialogModule, NgbAlertModule, NgbModule
+    , NgbPaginationModule, NgOptimizedImage, FormsModule, MatCheckboxModule, MatInputModule, MatSelectModule
+  ],
   providers: [],
   bootstrap: [AppComponent]
 })

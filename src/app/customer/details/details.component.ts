@@ -20,13 +20,6 @@ export class DetailsComponent implements OnInit {
   types: any[] = [];
   editForm!: FormGroup;
 
-  // types = [
-  //   { name: 'Software Implementation Consultation', value: 'Software Implementation Consultation', formControl: 'si' },
-  //   { name: 'Training and Onboarding Session', value: 'Training and Onboarding Session', formControl: 'training' },
-  //   { name: 'Customization Workshop', value: 'Customization Workshop', formControl: 'cw' },
-  //   { name: 'Performance Review and Optimization', value: 'Performance Review and Optimization', formControl: 'pr' },
-  //   { name: 'Business Process Review', value: 'Business Process Review', formControl: 'br' }
-  // ];
   private selectedUUIDs: string[] = [];
 
   constructor(

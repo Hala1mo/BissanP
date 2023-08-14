@@ -119,4 +119,11 @@ getCityData(city:string):  Observable<any>{
   fetchDefinition():Observable<any>{
     return this._http.get<any>(this._visitDefinition);
   }
+
+
+  addDefinition(defData: any) {
+    return this._http.post<any>(this._visitDefinition, defData).pipe(
+      // Any additional operators or logic you want to apply after the POST request
+    );
+  }
 }
