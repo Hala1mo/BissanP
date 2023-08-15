@@ -23,6 +23,7 @@ import { AddDefComponent } from './components/definition/add-def/add-def.compone
 import {MatInputModule} from "@angular/material/input";
 import {MatSelectModule} from "@angular/material/select";
 import {MatTableModule} from "@angular/material/table";
+import { EditDefComponent } from './components/definition/edit-def/edit-def.component';
 
 
 @NgModule({
@@ -37,6 +38,7 @@ import {MatTableModule} from "@angular/material/table";
     DefinitionComponent,
     DetailsDefComponent,
     AddDefComponent,
+    EditDefComponent,
 
 
   ],
