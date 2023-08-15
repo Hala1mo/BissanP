@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {ActivatedRoute} from "@angular/router";
-import {RegistrationService} from "../../registration.service";
+import {RegistrationService} from "../../../services/registration.service";
 import {FormBuilder} from "@angular/forms";
 
 @Component({
@@ -20,6 +20,7 @@ export class DetailsDefComponent  implements OnInit {
   ngOnInit() {
     this.route.params.subscribe((params) => {
       const id = params['id'];
+      console.log("id:",id);
       // if (id) {
       //   this.fetchCustomerDetails(id);
       // }

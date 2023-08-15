@@ -1,9 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import { FormBuilder, FormGroup } from "@angular/forms";
-import { RegistrationService } from '../registration.service';
-import { PasswordValidators} from "../shared/password.validators";
+import {FormBuilder, FormGroup} from "@angular/forms";
+import {RegistrationService} from '../../services/registration.service';
+import {PasswordValidators} from "../../shared/password.validators";
 import {MatSnackBar} from "@angular/material/snack-bar";
-
 
 
 @Component({
@@ -12,8 +11,10 @@ import {MatSnackBar} from "@angular/material/snack-bar";
   styleUrls: ['./user.component.css']
 })
 export class UserComponent implements OnInit {
-  page=1;
-  pageSize=10;
+  page = 1;
+  pageSize = 10;
+
+  isSearchLoading = false;
 
   registrationForm!: FormGroup;
   editForm!: FormGroup;
@@ -24,12 +25,13 @@ export class UserComponent implements OnInit {
   originalUserData: any[] = [];
   selectedSearchCriteria: string = "username";
   searchInput: string = "";
-  onSelected(value:string): void {
-    if (value =="First Name"){
-    this.selectedSearchCriteria = "firstName";}
-    else if (value =="Last Name"){
-      this.selectedSearchCriteria = "lastName";}
-    else
+
+  onSelected(value: string): void {
+    if (value == "First Name") {
+      this.selectedSearchCriteria = "firstName";
+    } else if (value == "Last Name") {
+      this.selectedSearchCriteria = "lastName";
+    } else
       this.selectedSearchCriteria = "username";
   }
 
@@ -46,16 +48,16 @@ export class UserComponent implements OnInit {
       username: [''],
       firstName: [''],
       password: [''],
-      confirmPassword:[''],
+      confirmPassword: [''],
       lastName: [''],
-      accessLevel:['']
-    },{validator: PasswordValidators});
+      accessLevel: ['']
+    }, {validator: PasswordValidators});
 
 
     this.editForm = this.fb.group({
-     firstName:[''],
-      lastName:[''],
-      accessLevel:['']
+      firstName: [''],
+      lastName: [''],
+      accessLevel: ['']
     });
   }
 
@@ -116,13 +118,15 @@ export class UserComponent implements OnInit {
       }
     );
   }
+
   populateEditForm(user: any) {
     this.editForm.patchValue({
       firstName: user.firstName,
       lastName: user.lastName,
-      accessLevel:user.accessLevel
+      accessLevel: user.accessLevel
     });
   }
+
   onEditUser(user: any) {
     this.selectedUser = user;
     this.isEditMode = true;
@@ -132,9 +136,8 @@ export class UserComponent implements OnInit {
   }
 
 
-
   onSubmitEdit() {
-    if (this.editForm.valid && this.editingUsername){
+    if (this.editForm.valid && this.editingUsername) {
 
       const editedUserData = this.editForm.value;
 
@@ -177,29 +180,31 @@ export class UserComponent implements OnInit {
   }
 
 
-  showEnables(){
+  showEnables() {
 
     const enabledUsers = this.originalUserData.filter(user => user.enabled === 1);
-    this.userData =enabledUsers;
+    this.userData = enabledUsers;
 
   }
-  showDisables(){
+
+  showDisables() {
 
     const disabledUsers = this.originalUserData.filter(user => user.enabled === 0);
-    this.userData =disabledUsers;
+    this.userData = disabledUsers;
 
   }
 
-  showAdmin(){
+  showAdmin() {
 
     const adminUsers = this.originalUserData.filter(user => user.accessLevel === 1);
-    this.userData ==adminUsers;
+    this.userData = adminUsers;
 
   }
-  showEmployee(){
 
-    const employeeUsers = this.originalUserData.filter(user => user.accessLevel ===0);
-    this.userData =employeeUsers;
+  showEmployee() {
+
+    const employeeUsers = this.originalUserData.filter(user => user.accessLevel === 0);
+    this.userData = employeeUsers;
 
   }
 
@@ -208,11 +213,27 @@ export class UserComponent implements OnInit {
     if (this.searchInput === "") {
       this.userData = this.originalUserData;
     } else {
-      this.userData = this.originalUserData.filter(user => {
-        const searchValue = user[this.selectedSearchCriteria].toLowerCase();
-        return searchValue.includes(this.searchInput.toLowerCase());
-      });
+      this.searchUsers(this.searchInput.toLowerCase().trim());
     }
+
+  }
+
+  searchUsers(query: string) {
+    this.isSearchLoading = true;
+    this._registrationService.searchUsers(query).subscribe(
+      data => {
+        console.log('Data Fetched successfully:', data);
+
+        this.userData = data;
+        this.isSearchLoading = false;
+
+      },
+      (error) => {
+        console.error('Error fetching customer data by city:', error);
+        this.isSearchLoading = false;
+
+      }
+    )
   }
 
 }

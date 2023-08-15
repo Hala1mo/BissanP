@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router'; // Import ActivatedRoute
-import { RegistrationService } from '../../registration.service';
-import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
-import { Customer } from '../../models/Customer';
+import { RegistrationService } from '../../../services/registration.service';
+import {FormBuilder,FormGroup} from '@angular/forms';
+import { Customer } from '../../../models/Customer';
 import {MatCheckboxChange} from "@angular/material/checkbox";
 
 @Component({

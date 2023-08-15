@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {Router} from "@angular/router";
-import {RegistrationService} from "../../registration.service";
+import {RegistrationService} from "../../../services/registration.service";
 
 @Component({
   selector: 'app-add-def',

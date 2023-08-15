@@ -2,18 +2,16 @@
   <h2>Users</h2>
   <hr class="mb-3">
   <div class="row ">
-    <div class="row p-3 border-bottom mb-3">
-      <div class="col-4">
-        <ngb-pagination
-          [collectionSize]="userData.length"
-          [(page)]="page"
-          aria-label="Default pagination">
-        </ngb-pagination>
-      </div>
-
-      <div class="col-8">
+    <div class="row border-bottom my-3 py-3">
+      <div class="col-12">
         <div class="btn-toolbar justify-content-between" role="toolbar" aria-label="Toolbar with button groups">
-          <div class="btn-group" role="group" aria-label="First group">
+          <ngb-pagination
+            [collectionSize]="userData.length"
+            [(page)]="page"
+            aria-label="Default pagination">
+          </ngb-pagination>
+
+          <div class="btn-group mb-3">
             <div class="dropdown btn-group">
               <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
                       aria-expanded="false">
@@ -36,70 +34,74 @@
                 <li class="dropdown-item" (click)="fetchUserData()">All</li>
                 <li class="dropdown-item" (click)="showAdmin()">Show Admins</li>
                 <li class="dropdown-item" (click)="showEmployee()">Show Employees</li>
-
               </ul>
             </div>
           </div>
-          <form role="search">
-            <div class="input-group">
-              <select class="form-control" #user (change)="onSelected(user.value)">
-                <option>Select user by:</option>
-                <option>First Name</option>
-                <option>Last Name</option>
-                <option>User Name</option>
-              </select>
 
-              <input type="search"
-                     class="form-control"
-                     placeholder="Search..."
-                     aria-label="Search"
-                     [(ngModel)]="searchInput"
-                     [ngModelOptions]="{ standalone: true }"
-                     (input)="applySearchFilter()">
+          <form class="d-flex mb-3" role="search">
+            <input type="search"
+                   class="form-control me-2"
+                   placeholder="Search..."
+                   aria-label="Search"
+                   [(ngModel)]="searchInput"
+                   [ngModelOptions]="{ standalone: true }"
+                   (input)="applySearchFilter()">
+
+            <div>
+              <div class="spinner-border {{this.isSearchLoading ? '' : 'text-dark'}}" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
             </div>
+
           </form>
         </div>
       </div>
     </div>
 
     <div class="col-8">
-
       <div class="h-100">
+        <div class="table-responsive">
+          <table class="table table-striped table-hover">
+            <thead>
+            <tr>
+              <th class="w-25">Username</th>
+              <th>Full Name</th>
+              <th>Access Level</th>
+              <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let user of userData | slice: (page-1) * pageSize  :page * pageSize">
+              <td>{{ user.username }}</td>
+              <td>{{ user.firstName }} {{ user.lastName }}</td>
+              <td>{{ user.accessLevel === 1 ? 'Admin' : 'Employee' }}</td>
+              <td>
+                <div class="btn-group w-100">
 
-        <table class="table table-striped table-hover">
-          <thead>
-          <tr>
-            <th class="w-25">Username</th>
-            <th class="w-25">Full Name</th>
-            <th class="w-25">Access Level</th>
-            <th class="w-25">Actions</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr *ngFor="let user of userData | slice: (page-1) * pageSize  :page * pageSize">
-            <td>{{ user.username }}</td>
-            <td>{{ user.firstName }} {{ user.lastName }}</td>
-            <td>{{ user.accessLevel === 1 ? 'Admin' : 'Employee' }}</td>
-            <td>
-              <div class="row gap-3">
+                  <button type="button"
+                          class="btn btn-outline-primary"
+                          (click)="updateEnabled(user.username)">
+                    {{ user.enabled === 1 ? 'Enabled' : 'Disabled' }}
+                  </button>
 
-                <button class="col-6 btn {{user.enabled === 1 ? 'btn-success' : 'btn-warning'}}"
-                        (click)="updateEnabled(user.username)">
-                  {{ user.enabled === 1 ? 'Enabled' : 'Disabled' }}
-                </button>
+                  <button type="button"
+                          class="btn btn-outline-primary"
+                          (click)="onEditUser(user)">
+                    Edit
+                  </button>
 
-                <button type="button"
-                        class="col-3 btn btn-info"
-                        (click)="onEditUser(user)">
-                  Edit
-                </button>
+                </div>
 
-              </div>
+                <div class="row gap-3">
 
-            </td>
-          </tr>
-          </tbody>
-        </table>
+
+                </div>
+
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
 
 
       </div>

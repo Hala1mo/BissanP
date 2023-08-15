@@ -6,7 +6,7 @@ export class Contact {
   lastName: string;
   phoneNumber: string;
   uuid: bigint;
-  checkedVisits: string[]=[];
+  checkedVisits: string[] = [];
 
   constructor(data: any) {
     this.firstName = data.firstName || '';
