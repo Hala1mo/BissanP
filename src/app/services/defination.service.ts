@@ -43,4 +43,8 @@ export class DefinationService {
     console.error('An error occurred:', error);
     return throwError('Something went wrong. Please try again later.');
   }
+  fetchdef(id: bigint): Observable<any> {
+    const urlVisit = `${this.VistUrl}/${id}`;
+    return this.http.get<any>(urlVisit);
+  }
 }

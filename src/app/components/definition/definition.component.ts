@@ -72,6 +72,9 @@ export class DefinitionComponent implements OnInit {
     this.router.navigate(['/add-def']);
 
   }
+  openEditDefinition(id:bigint){
+      this.router.navigate(['/edit-def', id])
+  }
 
 
   showEnables() {

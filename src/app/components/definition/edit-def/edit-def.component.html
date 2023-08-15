@@ -1,1 +1,44 @@
-<p>edit-def works!</p>
+<div class="container mt-1">
+  <h2>Edit Visit Defination</h2>
+  <hr class="mb-3">
+  <div class="row">
+    <div class="card p-3">
+      <form class="row g-3 mb-5" [formGroup]="editForm"(ngSubmit)="SubmitUpdate()">
+        <div class="col-md-6">
+          <label class="form-label">Name</label>
+          <input type="text" class="form-control" formControlName="name">
+        </div>
+        <div class="col-12">
+          <label class="form-label">Description</label>
+          <input type="text" class="form-control" formControlName="description">
+        </div>
+        <div>
+          <label class="form-label">Select Type</label>
+          <select class="form-select" aria-label="Default select example" formControlName="typeUUID" (change)="onTypeSelect($event)">
+            <option value="">Select an option</option>
+            <option *ngFor="let type of TypesData" [value]="type.uuid">{{ type.name }}</option>
+          </select>
+        </div>
+
+        <div class="col-md-2">
+          <label class="form-label">Recurring</label>
+          <select class="form-control" formControlName="allowRecurring">
+            <option >True</option>
+            <option >False</option>
+          </select>
+        </div>
+
+        <div class="col-md-6">
+          <label class="form-label">Frequency</label>
+          <input type="number" class="form-control" formControlName="frequency">
+        </div>
+        <div class="col-12">
+          <button [disabled]='!editForm.valid' class="btn btn-large btn-primary" type="submit">
+           Update
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>

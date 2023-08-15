@@ -20,6 +20,7 @@ export class EditComponent implements OnInit {
 
   ngOnInit() {
     this.route.params.subscribe((params) => {
+     // console.log("params", params);
       const id = params['id'];
       if (id) {
         this.fetchCustomerAddress(id);

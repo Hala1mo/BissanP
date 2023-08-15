@@ -8,6 +8,7 @@ import {EditComponent} from "./components/customer/edit/edit.component";
 import {DefinitionComponent} from "./components/definition/definition.component";
 import {DetailsDefComponent} from "./components/definition/details-def/details-def.component";
 import {AddDefComponent} from "./components/definition/add-def/add-def.component";
+import {EditDefComponent} from "./components/definition/edit-def/edit-def.component";
 
 const routes: Routes = [
   { path: 'user', component: UserComponent },
@@ -18,6 +19,7 @@ const routes: Routes = [
   {path: 'edit/:id',component:EditComponent},
   {path: 'definition',component:DefinitionComponent},
   {path: 'add-def',component:AddDefComponent},
+  {path:'edit-def/:id',component:EditDefComponent}
 
 
   // Add other routes as needed

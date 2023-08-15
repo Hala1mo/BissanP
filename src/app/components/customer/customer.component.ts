@@ -10,6 +10,7 @@ import {Router} from "@angular/router";
   templateUrl: './customer.component.html',
   styleUrls: ['./customer.component.css']
 })
+
 export class CustomerComponent implements OnInit {
   page = 1;
   pageSize = 10;
