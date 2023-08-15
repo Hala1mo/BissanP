@@ -22,6 +22,7 @@ import { DetailsDefComponent } from './components/definition/details-def/details
 import { AddDefComponent } from './components/definition/add-def/add-def.component';
 import {MatInputModule} from "@angular/material/input";
 import {MatSelectModule} from "@angular/material/select";
+import {MatTableModule} from "@angular/material/table";
 
 
 @NgModule({
@@ -43,7 +44,7 @@ import {MatSelectModule} from "@angular/material/select";
     BrowserModule,
     MatSnackBarModule,
     AppRoutingModule, HttpClientModule, ReactiveFormsModule, BrowserAnimationsModule, MatDialogModule, NgbAlertModule, NgbModule
-    , NgbPaginationModule, NgOptimizedImage, FormsModule, MatCheckboxModule, MatInputModule, MatSelectModule
+    , NgbPaginationModule, NgOptimizedImage, FormsModule, MatCheckboxModule, MatInputModule, MatSelectModule, MatTableModule
   ],
   providers: [],
   bootstrap: [AppComponent]
