@@ -1,19 +1,19 @@
 import {Component, OnInit} from '@angular/core';
-import {Customer} from "../../models/Customer";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {ActivatedRoute, Router} from "@angular/router";
 import {RegistrationService} from "../../services/registration.service";
 import {FormBuilder} from "@angular/forms";
-
+import {Definiton} from "../../models/definiton";
+import {Type} from "../../models/type";
 @Component({
   selector: 'app-definition',
   templateUrl: './definition.component.html',
   styleUrls: ['./definition.component.css']
 })
 export class DefinitionComponent implements OnInit {
-  Data: any[] = [];
+  Data:Definiton[] = [];
   originalData: any[] = [];
-  TypesData: any[] = [];
+  TypesData: Type[] = [];
   types: any[] = [];
 
 
@@ -73,13 +73,13 @@ export class DefinitionComponent implements OnInit {
 
 
   showEnables() {
-    const enabledDef = this.originalData.filter((item: any) => item.enabled === 1);
+    const enabledDef:Definiton[] = this.originalData.filter((item: any) => item.enabled === 1);
     this.Data = enabledDef;
   }
 
 
   showDisables() {
-    const disabledDef = this.originalData.filter((item: any) => item.enabled === 0);
+    const disabledDef:Definiton[] = this.originalData.filter((item: any) => item.enabled === 0);
     this.Data = disabledDef;
   }
 

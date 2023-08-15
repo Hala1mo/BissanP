@@ -6,7 +6,8 @@ export class Definiton {
   enabled: number;
   frequency: number;
   description: string;
-  type:Type
+  type:Type;
+  allowRecurring:boolean
 
   constructor(data: any) {
     this.uuid = data.uuid || '';
@@ -15,6 +16,7 @@ export class Definiton {
     this.description = data.description || '';
     this.frequency = data.frequency || '';
 this.type=data.type;
+this.allowRecurring=data.allowRecurring;
   }
 }
 
