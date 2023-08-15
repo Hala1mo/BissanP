@@ -3,6 +3,7 @@ import {FormBuilder, FormGroup} from "@angular/forms";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {Router} from "@angular/router";
 import {RegistrationService} from "../../../services/registration.service";
+import {DefinationService} from "../../../services/defination.service";
 
 @Component({
   selector: 'app-add-def',
@@ -19,7 +20,7 @@ export class AddDefComponent implements OnInit {
 
 
   constructor(private _snackBar: MatSnackBar, private router: Router,
-              private _registrationService: RegistrationService, private fb: FormBuilder) {
+              private VistServices: DefinationService, private fb: FormBuilder) {
   }
 
   ngOnInit() {
@@ -38,7 +39,7 @@ export class AddDefComponent implements OnInit {
 
   fetchvisitTypes() {
 
-    this._registrationService.fetchTypesData().subscribe(
+    this.VistServices.fetchTypesData().subscribe(
       (data) => {
         console.log('Fetched types data:', data);
         this.TypesData = data;
@@ -57,7 +58,7 @@ export class AddDefComponent implements OnInit {
 
   onSubmit() {
     console.log(this.registrationForm.value);
-    this._registrationService.addDefinition(this.registrationForm.value).subscribe(
+    this.VistServices.addDefinition(this.registrationForm.value).subscribe(
       (res) => {
         console.log('Registration successful:', res);
         this.registrationForm.reset();
