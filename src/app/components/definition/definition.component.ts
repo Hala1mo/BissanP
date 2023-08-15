@@ -95,14 +95,14 @@ export class DefinitionComponent implements OnInit {
   }
 
   recurringData() {
-    const Def = this.originalData.filter((item: any) => item.allowRecurring === "True");
+    const Def = this.originalData.filter((item: any) => item.allowRecurring === "true");
     this.Data = Def;
 
 
   }
 
   NrecurringData() {
-    const Def = this.originalData.filter((item: any) => item.allowRecurring === "False");
+    const Def = this.originalData.filter((item: any) => item.allowRecurring === "false");
     this.Data = Def;
   }
 
