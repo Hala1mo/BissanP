@@ -20,11 +20,13 @@ import {MatCheckboxModule} from "@angular/material/checkbox";
 import { DefinitionComponent } from './components/definition/definition.component';
 import { DetailsDefComponent } from './components/definition/details-def/details-def.component';
 import { AddDefComponent } from './components/definition/add-def/add-def.component';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import {MatInputModule} from "@angular/material/input";
 import {MatSelectModule} from "@angular/material/select";
 import {MatTableModule} from "@angular/material/table";
 import { EditDefComponent } from './components/definition/edit-def/edit-def.component';
-
+import {MatDatepickerModule} from "@angular/material/datepicker";
+import { MatNativeDateModule } from '@angular/material/core';
 
 @NgModule({
   declarations: [
@@ -46,7 +48,7 @@ import { EditDefComponent } from './components/definition/edit-def/edit-def.comp
     BrowserModule,
     MatSnackBarModule,
     AppRoutingModule, HttpClientModule, ReactiveFormsModule, BrowserAnimationsModule, MatDialogModule, NgbAlertModule, NgbModule
-    , NgbPaginationModule, NgOptimizedImage, FormsModule, MatCheckboxModule, MatInputModule, MatSelectModule, MatTableModule
+    , NgbPaginationModule, NgOptimizedImage, FormsModule, MatCheckboxModule,MatFormFieldModule, MatInputModule, MatSelectModule, MatTableModule, MatDatepickerModule,MatNativeDateModule
   ],
   providers: [],
   bootstrap: [AppComponent]
