@@ -1,10 +1,9 @@
 import {Component, OnInit} from '@angular/core';
-import {MatSnackBar} from "@angular/material/snack-bar";
-import {ActivatedRoute, Router} from "@angular/router";
+import {Router} from "@angular/router";
 import {RegistrationService} from "../../services/registration.service";
-import {FormBuilder} from "@angular/forms";
 import {Definiton} from "../../models/definiton";
 import {Type} from "../../models/type";
+
 @Component({
   selector: 'app-definition',
   templateUrl: './definition.component.html',
@@ -12,16 +11,15 @@ import {Type} from "../../models/type";
 })
 export class DefinitionComponent implements OnInit {
   Data:Definiton[] = [];
-  originalData: any[] = [];
+  originalData: Definiton[] = [];
   TypesData: Type[] = [];
-  types: any[] = [];
+  types: Type[] = [];
 
 
   constructor(
-    private _snackBar: MatSnackBar,
-    private router: Router,// Use ActivatedRoute here
+    private router: Router,
     private _registrationService: RegistrationService,
-    private fb: FormBuilder
+
   ) {
   }
 
@@ -73,36 +71,33 @@ export class DefinitionComponent implements OnInit {
 
 
   showEnables() {
-    const enabledDef:Definiton[] = this.originalData.filter((item: any) => item.enabled === 1);
+    const enabledDef:Definiton[] = this.originalData.filter((item: Definiton) => item.enabled === 1);
     this.Data = enabledDef;
   }
 
 
   showDisables() {
-    const disabledDef:Definiton[] = this.originalData.filter((item: any) => item.enabled === 0);
-    this.Data = disabledDef;
+    this.Data = this.originalData.filter((item: Definiton) => item.enabled === 0);
   }
 
 
   applySearchFilter(event: any) {
     const searchValue = event.target.value;
     const lowerSearchValue = searchValue.toLowerCase();
-
-    const filteredData = this.originalData.filter((item: any) =>
+    this.Data = this.originalData.filter((item: Definiton) =>
       item.name.toLowerCase().includes(lowerSearchValue)
     );
-    this.Data = filteredData;
   }
 
   recurringData() {
-    const Def = this.originalData.filter((item: any) => item.allowRecurring === "true");
+    const Def = this.originalData.filter((item: Definiton) => item.allowRecurring === true);
     this.Data = Def;
 
 
   }
 
   NrecurringData() {
-    const Def = this.originalData.filter((item: any) => item.allowRecurring === "false");
+    const Def = this.originalData.filter((item: Definiton) => item.allowRecurring === false);
     this.Data = Def;
   }
 
@@ -121,7 +116,7 @@ export class DefinitionComponent implements OnInit {
   }
 
   onTypeSelect(selectedValue : string) {
-    const Def = this.originalData.filter((item: any) => item.type.name === selectedValue);
+    const Def :Definiton[] = this.originalData.filter((item: Definiton) => item.type.name === selectedValue);
     this.Data = Def;
   }
 }
