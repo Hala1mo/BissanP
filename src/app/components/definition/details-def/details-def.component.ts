@@ -7,16 +7,17 @@ import {Type} from "../../../models/type";
 import {AssignmentService} from "../../../services/assignment.service";
 import {Assignments} from "../../../models/Assignments";
 import {PasswordValidators} from "../../../shared/password.validators";
-
+import {Customer} from "../../../models/Customer";
 @Component({
   selector: 'app-details-def',
   templateUrl: './details-def.component.html',
   styleUrls: ['./details-def.component.css']
 })
 export class DetailsDefComponent  implements OnInit {
-  Data: Assignments[] = [];
+  definition: any;
+  assignments: Assignments[] = [];
   displayedColumns: string[] = ['Date', 'Comment'];
-  dataSource = this.Data;
+  dataSource = this.assignments;
   registrationForm!: FormGroup;
   isEditMode = false; // Toggle between add and edit modes
   id!: bigint;
@@ -28,10 +29,10 @@ export class DetailsDefComponent  implements OnInit {
   ) {}
   ngOnInit() {
     this.route.params.subscribe((params) => {
-      const id = params['id'];
-      console.log("id:",id);
-       if (id) {
-         this.fetchAssignemnts(id);
+      this.id = params['id'];
+      console.log("idqwer:",this.id);
+       if (this.id) {
+         this.fetchDefinitionDetails(this.id);
 
        }
       this.registrationForm = this.fb.group({
@@ -44,16 +45,16 @@ export class DetailsDefComponent  implements OnInit {
 
   }
 
-  fetchAssignemnts(defId: any) {
-    this.id=defId;
-    this.assignmentService.fetchAssignment(defId).subscribe(
+  fetchDefinitionDetails(defId: any) {
+    this.assignmentService.fetchDefinitionDetails(defId).subscribe(
       (data) => {
-        console.log('Fetched Assignments data:', data);
+        console.log('Fetched Definition data:', data);
+        this.definition = data;
 
         if (Array.isArray(data.visitAssignments)) {
           // Assuming that 'visitAssignments' is an array within the received data
-          this.Data = data.visitAssignments.map((assignmentData: any) => new Assignments(assignmentData));
-          console.log(this.Data);
+          this.assignments = [...data.visitAssignments];
+          console.log(this.assignments);
         } else {
           console.error('Invalid or missing visitAssignments data in the response:', data);
         }
@@ -64,13 +65,14 @@ export class DetailsDefComponent  implements OnInit {
     );
   }
   onSubmit() {
-    const registrationFormValue = this.registrationForm.value;
-
+    console.log("ffgbgf");
+    console.log(this.registrationForm);
+    console.log("id",this.id);
     this.assignmentService.AddAssignment(this.registrationForm.value,this.id).subscribe(
       (res) => {
         console.log('Registration successful:', res);
         this.registrationForm.reset();
-        this.fetchAssignemnts(this.id);
+        this.fetchDefinitionDetails(this.id);
       },
       (error) => {
         console.error('Registration failed:', error);

@@ -12,7 +12,7 @@ export class AssignmentService {
   constructor(private _http: HttpClient) {
   }
 
-  fetchAssignment(id: bigint): Observable<any> {
+  fetchDefinitionDetails(id: bigint): Observable<any> {
     const _urlDetails = `${this._visitDefinition}/${id}`;
     return this._http.get<any>(_urlDetails);
   }
