@@ -5,6 +5,7 @@ import { RegistrationService } from '../../../services/registration.service';
 import {FormBuilder,FormGroup} from '@angular/forms';
 import { Customer } from '../../../models/Customer';
 import {MatCheckboxChange} from "@angular/material/checkbox";
+import {DefinationService} from "../../../services/defination.service";
 
 @Component({
   selector: 'app-details',
@@ -25,7 +26,8 @@ export class DetailsComponent implements OnInit {
   constructor(
     private _snackBar: MatSnackBar,
     private route: ActivatedRoute, // Use ActivatedRoute here
-    private _registrationService: RegistrationService,
+    private VisitServices: DefinationService,
+    private _registrationService:RegistrationService,
     private fb: FormBuilder
   ) {}
 
@@ -181,7 +183,7 @@ export class DetailsComponent implements OnInit {
   }
 
   fetchvisitTypes() {
-    this._registrationService.fetchTypesData().subscribe(
+    this.VisitServices.fetchTypesData().subscribe(
       (data) => {
         console.log('Fetched types data:', data);
         this.TypesData = data;

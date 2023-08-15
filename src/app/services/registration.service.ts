@@ -72,6 +72,7 @@ export class RegistrationService {
   }
 
 
+
   fetchCustomerData(): Observable<any> {
     // Send a GET request to the server to fetch user data
     return this._http.get<any>(this._customers_url);
@@ -112,9 +113,9 @@ export class RegistrationService {
     return this._http.get<any>(_urlDetails);
   }
 
-  fetchTypesData(): Observable<any> {
-    return this._http.get<any>(this._visitTypes);
-  }
+  // fetchTypesData(): Observable<any> {
+  //   return this._http.get<any>(this._visitTypes);
+  // }
 
   fetchDefinition(): Observable<any> {
     return this._http.get<any>(this._visitDefinition);

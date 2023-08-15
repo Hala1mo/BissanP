@@ -3,6 +3,7 @@ import {Router} from "@angular/router";
 import {RegistrationService} from "../../services/registration.service";
 import {Definiton} from "../../models/definiton";
 import {Type} from "../../models/type";
+import {DefinationService} from "../../services/defination.service";
 
 @Component({
   selector: 'app-definition',
@@ -14,11 +15,13 @@ export class DefinitionComponent implements OnInit {
   originalData: Definiton[] = [];
   TypesData: Type[] = [];
   types: Type[] = [];
+  selectedEnabledOption = "Enabled"
+
 
 
   constructor(
     private router: Router,
-    private _registrationService: RegistrationService,
+    private VistServices:DefinationService,
 
   ) {
   }
@@ -31,10 +34,11 @@ export class DefinitionComponent implements OnInit {
 
 
   fetchDefinition() {
-    this._registrationService.fetchDefinition().subscribe(
+    this.selectedEnabledOption = "All"
+    this.VistServices.fetchDefinition().subscribe(
       (data) => {
         console.log('Fetched details data:', data);
-        this.Data = (data); // Create a new Customer object
+        this.originalData = this.Data = (data); // Create a new Customer object
       },
       (error) => {
         console.error('Error fetching customer data:', error);
@@ -45,7 +49,7 @@ export class DefinitionComponent implements OnInit {
 
   updateEnabled(defId: any) {
 
-    this._registrationService.updateEnabledStatusDefinition(defId).subscribe(
+    this.VistServices.updateEnabledStatusDefinition(defId).subscribe(
       (res: any) => {
         console.log('Enabled status updated successfully:', res);
 
@@ -71,13 +75,17 @@ export class DefinitionComponent implements OnInit {
 
 
   showEnables() {
+    this.selectedEnabledOption= "Enabled"
+    console.log(this.originalData);
     const enabledDef:Definiton[] = this.originalData.filter((item: Definiton) => item.enabled === 1);
     this.Data = enabledDef;
   }
 
 
   showDisables() {
+    this.selectedEnabledOption = "Disabled"
     this.Data = this.originalData.filter((item: Definiton) => item.enabled === 0);
+
   }
 
 
@@ -103,7 +111,7 @@ export class DefinitionComponent implements OnInit {
 
   fetchVisitTypes() {
 
-    this._registrationService.fetchTypesData().subscribe(
+    this.VistServices.fetchTypesData().subscribe(
       (data) => {
         console.log('Fetched types data:', data);
         this.TypesData = data;
