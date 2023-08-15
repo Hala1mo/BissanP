@@ -42,6 +42,7 @@
                 Visit Type
               </button>
               <ul class="dropdown-menu">
+                <li class="dropdown-item" (click)="fetchDefinition()">All</li>
                 <li *ngFor="let type of TypesData"
                     [value]="type.name" class="dropdown-item"
                     (click)="onTypeSelect(type.name)">

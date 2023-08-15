@@ -8,6 +8,7 @@ import { catchError, map } from 'rxjs/operators';
 })
 export class DefinationService {
   private VistUrl = 'http://10.10.33.91:8080/visit_definitions';
+  private TypeUrl='http://10.10.33.91:8080/visit_types';
 
   constructor(private http: HttpClient) {}
 
@@ -26,7 +27,7 @@ export class DefinationService {
   }
 
   fetchTypesData(): Observable<any> {
-    const typesUrl = `${this.VistUrl}/types`; // Assuming you have a separate URL for fetching types
+    const typesUrl = `${this.TypeUrl}`; // Assuming you have a separate URL for fetching types
     return this.http.get<any>(typesUrl).pipe(
       catchError(this.handleError) // Handle errors
     );

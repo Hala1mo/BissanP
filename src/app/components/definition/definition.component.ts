@@ -115,7 +115,7 @@ export class DefinitionComponent implements OnInit {
       (data) => {
         console.log('Fetched types data:', data);
         this.TypesData = data;
-        this.types = data;
+       this.types = data;
       },
       (error) => {
         console.error('Error fetching types data:', error);
