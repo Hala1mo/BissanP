@@ -11,7 +11,7 @@
           <div *ngIf="registrationForm.controls['name']?.invalid && registrationForm.controls['name'].touched"
                class="text-danger">
             <div *ngIf="registrationForm.controls['name'].hasError('required')">Name is required.</div>
-            <div *ngIf="registrationForm.controls['name'].hasError('invalidName')">Invalid name.</div>
+            <div *ngIf="registrationForm.controls['name'].hasError('invalidName')">Invalid name it must contain(A-Z,a-z).</div>
           </div>
         </div>
         <hr>
@@ -48,7 +48,7 @@
                   *ngIf="registrationForm.get('address.city')?.invalid && registrationForm.get('address.city')?.touched"
                   class="text-danger">
                   <div *ngIf="registrationForm.get('address.city')?.hasError('required')">City is required.</div>
-                  <div *ngIf="registrationForm.get('address.city')?.hasError('invalidName')">Invalid City name.</div>
+                  <div *ngIf="registrationForm.get('address.city')?.hasError('invalidName')">Invalid City name it must contain(A-Z,a-z).</div>
                 </div>
               </div>
 

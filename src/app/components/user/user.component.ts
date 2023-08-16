@@ -1,8 +1,9 @@
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup} from "@angular/forms";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {RegistrationService} from '../../services/registration.service';
 import {PasswordValidators} from "../../shared/password.validators";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {nameValidator} from "../../shared/Name.validators";
 
 
 @Component({
@@ -45,18 +46,18 @@ export class UserComponent implements OnInit {
     this.fetchUserData();
 
     this.registrationForm = this.fb.group({
-      username: [''],
-      firstName: [''],
-      password: [''],
+      username: ['',Validators.required],
+      firstName: ['',[Validators.required, nameValidator]],
+      password: ['',Validators.required],
       confirmPassword: [''],
-      lastName: [''],
+      lastName: ['',[Validators.required, nameValidator]],
       accessLevel: ['']
     }, {validator: PasswordValidators});
 
 
     this.editForm = this.fb.group({
-      firstName: [''],
-      lastName: [''],
+      firstName: ['',[Validators.required, nameValidator]],
+      lastName: ['',[Validators.required, nameValidator]],
       accessLevel: ['']
     });
   }
@@ -76,6 +77,7 @@ export class UserComponent implements OnInit {
   }
 
   onSubmit() {
+
     const registrationFormValue = this.registrationForm.value;
     registrationFormValue.accessLevel = registrationFormValue.accessLevel ? 1 : 0;
 
@@ -105,19 +107,20 @@ export class UserComponent implements OnInit {
 
   updateEnabled(username: string) {
 
-    this._registrationService.updateEnabledStatus(username).subscribe(
-      (res: any) => {
-        console.log('Enabled status updated successfully:', res);
+      this._registrationService.updateEnabledStatus(username).subscribe(
+        (res: any) => {
+          console.log('Enabled status updated successfully:', res);
 
-        this.fetchUserData();
+          this.fetchUserData();
 
-      },
-      (error) => {
-        console.error('Error updating enabled status:', error);
+        },
+        (error) => {
+          console.error('Error updating enabled status:', error);
 
-      }
-    );
-  }
+        }
+      );
+    }
+
 
   populateEditForm(user: any) {
     this.editForm.patchValue({
