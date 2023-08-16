@@ -180,7 +180,7 @@
                 <label class="form-label">Phone Number</label>
                 <input
                   type="text" formControlName="phoneNumber" class="form-control">
-                <div *ngIf="editForm.get('phoneNumber')?.invalid && editForm.get('phoneNumber')?.touched" class="text-danger">
+                  <div *ngIf="editForm.get('phoneNumber')?.invalid" class="text-danger">
                   <div *ngIf="editForm.get('phoneNumber')?.hasError('required')">Phone number is required.</div>
                   <div *ngIf="editForm.get('phoneNumber')?.hasError('phoneNumberInvalid')">Invalid phone number. Only digits are allowed.</div>
                 </div>

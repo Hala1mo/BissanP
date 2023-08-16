@@ -6,7 +6,7 @@ import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {Customer} from '../../../models/Customer';
 import {MatCheckboxChange} from "@angular/material/checkbox";
 import {DefinationService} from "../../../services/defination.service";
-import {nameValidator} from "../../../shared/Name.validators";
+import {nameValidator, telValidator} from "../../../shared/Name.validators";
 import {phoneNumberValidator} from "../../../shared/PhoneNumber.validators";
 
 @Component({
@@ -44,7 +44,7 @@ export class DetailsComponent implements OnInit {
     this.registrationForm = this.fb.group({
       firstName: ['',[Validators.required, nameValidator]],
       lastName: ['',[Validators.required, nameValidator]],
-      phoneNumber:['',[Validators.required, phoneNumberValidator]],
+      phoneNumber:['',[Validators.required, telValidator]],
       email:['', [Validators.required, Validators.email]],
       Types: this.fb.group({
       uuid:[''] }),
@@ -156,7 +156,7 @@ export class DetailsComponent implements OnInit {
     this.editForm = this.fb.group({
       firstName:['',[Validators.required, nameValidator]],
       lastName:['',[Validators.required, nameValidator]],
-      phoneNumber:['',[Validators.required, phoneNumberValidator]],
+      phoneNumber:['',[Validators.required, telValidator]],
       email:['',[Validators.required, Validators.email]],
       uuid:[''],
       Types: this.buildTypesForm(),
