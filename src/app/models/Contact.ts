@@ -16,6 +16,6 @@ export class Contact {
 
     this.phoneNumber = data.phoneNumber || '';
     this.uuid = data.uuid || '';
-    this.checkedVisits = data.checkedVisits;
+    this.checkedVisits = data.visitTypes;
   }
 }

@@ -54,17 +54,15 @@
     </div>
 
     <div class="row">
-
+      <div class="col-md-5">
+        <div class="card p-3">
           <div *ngIf="definition">
             <h3>Name: {{ definition.name }}</h3>
             <p>Description: {{ definition.description }}</p>
             <p>Type Name: {{ definition.type.name }}</p>
             <p>Frequency: {{ definition.frequency}}</p>
-
-
-
             <h2>Assignments</h2>
-      <div class="col-8">
+      <div class="col-10">
         <div class="h-100">
 
           <table mat-table [dataSource]="assignments" class="mat-elevation-z8">
@@ -83,8 +81,12 @@
           </table>
         </div>
       </div>
+          </div>
 
-      <div class="col-4 h-100">
+        </div>
+      </div>
+
+      <div class="col-9 h-100">
         <div class="w-100 mx-2 p-1">
           <div *ngIf="!isEditMode">
             <div class="card p-3">
@@ -156,8 +158,9 @@
           <!--        </div>-->
 
         </div>
-      </div>
+
     </div>
 
   </div>
+</div>
 </div>
