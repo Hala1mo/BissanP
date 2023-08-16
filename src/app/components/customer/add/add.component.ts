@@ -1,32 +1,37 @@
 import {Component, OnInit} from '@angular/core';
-import { RegistrationService} from "../../../services/registration.service";
+import {RegistrationService} from "../../../services/registration.service";
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {Customer} from "../../../models/Customer";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {Router} from "@angular/router";
+
 @Component({
   selector: 'app-add',
   templateUrl: './add.component.html',
   styleUrls: ['./add.component.css']
 })
-export class AddComponent implements OnInit{
+export class AddComponent implements OnInit {
   registrationForm!: FormGroup;
-  customerData: any[] = [];
+  customerData: Customer[] = [];
   customerDetails: Customer | null = null;
+  preciseLocationCheck: boolean = false;
 
-  constructor(private _snackBar: MatSnackBar,private router: Router,
+  constructor(private _snackBar: MatSnackBar, private router: Router,
               private _registrationService: RegistrationService, private fb: FormBuilder) {
   }
 
   ngOnInit() {
 
 
-
     this.registrationForm = this.fb.group({
       name: [''],
       address: this.fb.group({
         addressLine1: [''],
-        addressLine2:[''],
+        addressLine2: [''],
+        longitude: [],
+        latitude: [],
+        precise
+          : [],
         zipcode: [''],
         city: [''],
       }),
@@ -34,6 +39,7 @@ export class AddComponent implements OnInit{
     });
 
   }
+
   fetchCustomerData() {
     this._registrationService.fetchCustomerData().subscribe(
       data => {
@@ -48,7 +54,7 @@ export class AddComponent implements OnInit{
   }
 
 
-  fetchCustomerDetails(id:bigint){
+  fetchCustomerDetails(id: bigint) {
     this._registrationService.fetchCustomerDetails(id).subscribe(
       data => {
         console.log('Fetched details data:', data);
@@ -85,5 +91,15 @@ export class AddComponent implements OnInit{
         }
       }
     );
+  }
+  togglePreciseLocation() {
+    this.preciseLocationCheck = !this.preciseLocationCheck;
+  }
+  get latitudeControl() {
+    return this.registrationForm.get('address.latitude');
+  }
+
+  get longitudeControl() {
+    return this.registrationForm.get('address.longitude');
   }
 }

@@ -1,45 +1,81 @@
-
 <div class="container mt-1">
   <h2>Add new Customer</h2>
   <hr class="mb-3">
-  <div class="row">
-  <div class="card p-3">
-    <form class="row g-3 mb-5" [formGroup]="registrationForm" (ngSubmit)="onSubmitCustomer()">
-<!--      <h3>Add Customer</h3>-->
-      <div class="col-md-6">
-        <label class="form-label">Name</label>
-        <input type="text" class="form-control" formControlName="name">
-      </div>
-      <div formGroupName="address">
-        <div class="col-12">
-          <label class="form-label">Address</label>
-          <input type="text" class="form-control" placeholder="1234 Main St" formControlName="addressLine1">
+  <div class="row justify-content-center">
+    <div class="col-8 card py-3">
+      <form class="row g-3" [formGroup]="registrationForm" (ngSubmit)="onSubmitCustomer()">
+        <h3 class="mt-3">Customer Information</h3>
+        <div class="col-6">
+          <label class="form-label">Name</label>
+          <input type="text" class="form-control" formControlName="name">
         </div>
-        <div class="col-12">
-          <label class="form-label">Address 2</label>
-          <input type="text" class="form-control" placeholder="Apartment, studio, or floor"
-                 formControlName="addressLine2">
-        </div>
-        <div class="col-md-6">
-          <label class="form-label">City</label>
-          <input type="text" class="form-control" formControlName="city">
+        <hr>
+        <h4>Customer Address</h4>
+        <div formGroupName="address">
+          <div class="row mb-3">
+            <div class="col-auto">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="autoSizingCheck"
+                       formControlName="precise" (change)="togglePreciseLocation()">
+                <label class="form-check-label" for="autoSizingCheck">
+                  Precise Location?
+                </label>
+              </div>
+            </div>
+          </div>
+            <div class="row mb-3">
+              <div class="col-6">
+                <label class="form-label">Address</label>
+                <input type="text" class="form-control" placeholder="1234 Main St"
+                       formControlName="addressLine1">
+              </div>
+              <div class="col-6">
+                <label class="form-label">Address 2</label>
+                <input type="text" class="form-control" placeholder="Apartment, studio, or floor"
+                       formControlName="addressLine2">
+              </div>
+            <div class="row mb-3">
+              <div class="col-6">
+                <label class="form-label">City</label>
+                <input type="text" class="form-control" placeholder="Ramallah"
+                       formControlName="city">
+              </div>
+
+              <div class="col-4">
+                <label class="form-label">Zip</label>
+                <input type="text" class="form-control" placeholder="1234"
+                       formControlName="zipcode">
+              </div>
+            </div>
+          </div>
+          <div *ngIf="preciseLocationCheck">
+            <div class="row mb-3">
+              <div class="col-6">
+                <label class="form-label">Latitude</label>
+                <input type="number" class="form-control"
+                       formControlName="latitude" min="-90" max="90">
+                <div class="text-danger" *ngIf="latitudeControl?.hasError('min') || latitudeControl?.hasError('max')">
+                  Latitude must be between -90 and 90 degrees.
+                </div>
+              </div>
+              <div class="col-6">
+                <label class="form-label">Longitude</label>
+                <input type="number" class="form-control"
+                       formControlName="longitude" min="-180" max="180">
+                <div class="text-danger" *ngIf="longitudeControl?.hasError('min') || longitudeControl?.hasError('max')">
+                  Longitude must be between -180 and 180 degrees.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <button [disabled]='!registrationForm.valid' class="btn btn-large btn-primary" type="submit">
+            Save New Customer
+          </button>
         </div>
 
-        <div class="col-md-2">
-          <label class="form-label">Zip</label>
-          <input type="text" class="form-control" formControlName="zipcode">
-        </div>
-      </div>
-
-      <div class="col-12">
-        <button [disabled]='!registrationForm.valid' class="btn btn-large btn-primary" type="submit">
-          Register
-        </button>
-      </div>
-
-
-    </form>
+      </form>
+    </div>
   </div>
-</div>
 </div>
 
