@@ -27,6 +27,8 @@ import {MatTableModule} from "@angular/material/table";
 import { EditDefComponent } from './components/definition/edit-def/edit-def.component';
 import {MatDatepickerModule} from "@angular/material/datepicker";
 import { MatNativeDateModule } from '@angular/material/core';
+import { AssignmentsComponent } from './components/assignments/assignments.component';
+import {MatAutocompleteModule} from "@angular/material/autocomplete";
 
 @NgModule({
   declarations: [
@@ -41,6 +43,7 @@ import { MatNativeDateModule } from '@angular/material/core';
     DetailsDefComponent,
     AddDefComponent,
     EditDefComponent,
+    AssignmentsComponent,
 
 
   ],
@@ -48,7 +51,7 @@ import { MatNativeDateModule } from '@angular/material/core';
     BrowserModule,
     MatSnackBarModule,
     AppRoutingModule, HttpClientModule, ReactiveFormsModule, BrowserAnimationsModule, MatDialogModule, NgbAlertModule, NgbModule
-    , NgbPaginationModule, NgOptimizedImage, FormsModule, MatCheckboxModule,MatFormFieldModule, MatInputModule, MatSelectModule, MatTableModule, MatDatepickerModule,MatNativeDateModule
+    , NgbPaginationModule, NgOptimizedImage, FormsModule, MatCheckboxModule, MatFormFieldModule, MatInputModule, MatSelectModule, MatTableModule, MatDatepickerModule, MatNativeDateModule, MatAutocompleteModule
   ],
   providers: [],
   bootstrap: [AppComponent]

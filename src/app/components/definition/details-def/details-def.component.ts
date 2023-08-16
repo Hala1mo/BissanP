@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {MatSnackBar} from "@angular/material/snack-bar";
-import {ActivatedRoute} from "@angular/router";
-import {DefinitionService} from "../../../services/definition.service";
+import {ActivatedRoute, Router} from "@angular/router";
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {Type} from "../../../models/type";
 import {AssignmentService} from "../../../services/assignment.service";
@@ -16,21 +15,21 @@ import {Customer} from "../../../models/Customer";
 export class DetailsDefComponent  implements OnInit {
   definition: any;
   assignments: Assignments[] = [];
-  displayedColumns: string[] = ['Date', 'Comment'];
+  displayedColumns: string[] = ['Date', 'Comment','Action'];
   dataSource = this.assignments;
   registrationForm!: FormGroup;
   isEditMode = false; // Toggle between add and edit modes
   id!: bigint;
   constructor(
     private _snackBar: MatSnackBar,
-    private route: ActivatedRoute, // Use ActivatedRoute here
+    private route: ActivatedRoute,
+    private router: Router,
     private assignmentService: AssignmentService,
     private fb: FormBuilder
   ) {}
   ngOnInit() {
     this.route.params.subscribe((params) => {
       this.id = params['id'];
-      console.log("idqwer:",this.id);
        if (this.id) {
          this.fetchDefinitionDetails(this.id);
 
@@ -52,7 +51,6 @@ export class DetailsDefComponent  implements OnInit {
         this.definition = data;
 
         if (Array.isArray(data.visitAssignments)) {
-          // Assuming that 'visitAssignments' is an array within the received data
           this.assignments = [...data.visitAssignments];
           console.log(this.assignments);
         } else {
@@ -65,7 +63,6 @@ export class DetailsDefComponent  implements OnInit {
     );
   }
   onSubmit() {
-    console.log("ffgbgf");
     console.log(this.registrationForm);
     console.log("id",this.id);
     this.assignmentService.AddAssignment(this.registrationForm.value,this.id).subscribe(
@@ -87,6 +84,11 @@ export class DetailsDefComponent  implements OnInit {
         }
       }
     );
+  }
+  openAssignmentsDetails(id: bigint) {
+    console.log("jnjnsjndks",id);
+    this.router.navigate(['../../assignment', id]);
+
   }
 
 

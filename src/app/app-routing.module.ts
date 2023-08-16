@@ -1,6 +1,6 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
-import { UserComponent } from './components/user/user.component'; // Import your UserComponent
+import {NgModule} from '@angular/core';
+import {RouterModule, Routes} from '@angular/router';
+import {UserComponent} from './components/user/user.component'; // Import your UserComponent
 import {CustomerComponent} from "./components/customer/customer.component";
 import {AddComponent} from "./components/customer/add/add.component";
 import {DetailsComponent} from "./components/customer/details/details.component";
@@ -9,24 +9,25 @@ import {DefinitionComponent} from "./components/definition/definition.component"
 import {DetailsDefComponent} from "./components/definition/details-def/details-def.component";
 import {AddDefComponent} from "./components/definition/add-def/add-def.component";
 import {EditDefComponent} from "./components/definition/edit-def/edit-def.component";
+import {AssignmentsComponent} from "./components/assignments/assignments.component";
 
 const routes: Routes = [
-  { path: 'user', component: UserComponent },
-  { path: 'customer', component: CustomerComponent },
-  {path: 'add',component:AddComponent},
-  {path: 'details/:id',component:DetailsComponent},
-  {path: 'details-def/:id',component:DetailsDefComponent},
-  {path: 'edit/:id',component:EditComponent},
-  {path: 'definition',component:DefinitionComponent},
-  {path: 'add-def',component:AddDefComponent},
-  {path:'edit-def/:id',component:EditDefComponent}
+  {path: 'user', component: UserComponent},
+  {path: 'customer', component: CustomerComponent},
+  {path: 'add', component: AddComponent},
+  {path: 'details/:id', component: DetailsComponent},
+  {path: 'details-def/:id', component: DetailsDefComponent},
+  {path: 'edit/:id', component: EditComponent},
+  {path: 'definition', component: DefinitionComponent},
+  {path: 'add-def', component: AddDefComponent},
+  {path: 'edit-def/:id', component: EditDefComponent},
+  {path: 'assignment/:id', component: AssignmentsComponent}
 
-
-  // Add other routes as needed
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
-export class AppRoutingModule {}
+export class AppRoutingModule {
+}
