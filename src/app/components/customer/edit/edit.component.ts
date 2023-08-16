@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import { ActivatedRoute } from '@angular/router'; // Import ActivatedRoute
 import { MatSnackBar } from '@angular/material/snack-bar';
 import {RegistrationService} from "../../../services/registration.service";
+import {nameValidator} from "../../../shared/Name.validators";
 @Component({
   selector: 'app-edit',
   templateUrl: './edit.component.html',
@@ -35,11 +36,11 @@ export class EditComponent implements OnInit {
     });
 
     this.editForm = this.fb.group({
-      name: [''],
+      name: ['',[Validators.required, nameValidator]],
       address: this.fb.group({
         addressLine1: [''],
         addressLine2: [''],
-        city: [''],
+        city: ['',[Validators.required, nameValidator]],
         zipcode: ['']
       }),
     });

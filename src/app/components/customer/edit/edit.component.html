@@ -9,6 +9,11 @@
         <div class="col-md-6">
           <label class="form-label">Name</label>
           <input type="text" class="form-control" formControlName="name">
+          <div *ngIf="editForm.controls['name']?.invalid && editForm.controls['name'].touched"
+               class="text-danger">
+            <div *ngIf="editForm.controls['name'].hasError('required')">Name is required.</div>
+            <div *ngIf="editForm.controls['name'].hasError('invalidName')">Invalid name.</div>
+          </div>
         </div>
         <div formGroupName="address">
           <div class="col-12">
@@ -23,11 +28,17 @@
           <div class="col-md-6">
             <label class="form-label">City</label>
             <input type="text" class="form-control" formControlName="city">
+            <div
+              *ngIf="editForm.get('address.city')?.invalid && editForm.get('address.city')?.touched"
+              class="text-danger">
+              <div *ngIf="editForm.get('address.city')?.hasError('required')">City is required.</div>
+              <div *ngIf="editForm.get('address.city')?.hasError('invalidName')">Invalid City name.</div>
+            </div>
           </div>
 
           <div class="col-md-2">
             <label class="form-label">Zip</label>
-            <input type="text" class="form-control" formControlName="zipcode">
+            <input type="text" class="form-control" formControlName="zipcode" maxlength="5">
           </div>
         </div>
 

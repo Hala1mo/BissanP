@@ -8,6 +8,11 @@
         <div class="col-6">
           <label class="form-label">Name</label>
           <input type="text" class="form-control" formControlName="name">
+          <div *ngIf="registrationForm.controls['name']?.invalid && registrationForm.controls['name'].touched"
+               class="text-danger">
+            <div *ngIf="registrationForm.controls['name'].hasError('required')">Name is required.</div>
+            <div *ngIf="registrationForm.controls['name'].hasError('invalidName')">Invalid name.</div>
+          </div>
         </div>
         <hr>
         <h4>Customer Address</h4>
@@ -23,28 +28,34 @@
               </div>
             </div>
           </div>
-            <div class="row mb-3">
-              <div class="col-6">
-                <label class="form-label">Address</label>
-                <input type="text" class="form-control" placeholder="1234 Main St"
-                       formControlName="addressLine1">
-              </div>
-              <div class="col-6">
-                <label class="form-label">Address 2</label>
-                <input type="text" class="form-control" placeholder="Apartment, studio, or floor"
-                       formControlName="addressLine2">
-              </div>
+          <div class="row mb-3">
+            <div class="col-6">
+              <label class="form-label">Address</label>
+              <input type="text" class="form-control" placeholder="1234 Main St"
+                     formControlName="addressLine1">
+            </div>
+            <div class="col-6">
+              <label class="form-label">Address 2</label>
+              <input type="text" class="form-control" placeholder="Apartment, studio, or floor"
+                     formControlName="addressLine2">
+            </div>
             <div class="row mb-3">
               <div class="col-6">
                 <label class="form-label">City</label>
                 <input type="text" class="form-control" placeholder="Ramallah"
                        formControlName="city">
+                <div
+                  *ngIf="registrationForm.get('address.city')?.invalid && registrationForm.get('address.city')?.touched"
+                  class="text-danger">
+                  <div *ngIf="registrationForm.get('address.city')?.hasError('required')">City is required.</div>
+                  <div *ngIf="registrationForm.get('address.city')?.hasError('invalidName')">Invalid City name.</div>
+                </div>
               </div>
 
               <div class="col-4">
                 <label class="form-label">Zip</label>
                 <input type="text" class="form-control" placeholder="1234"
-                       formControlName="zipcode">
+                       formControlName="zipcode" maxlength="5">
               </div>
             </div>
           </div>

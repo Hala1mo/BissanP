@@ -1,9 +1,11 @@
 import {Component, OnInit} from '@angular/core';
 import {RegistrationService} from "../../../services/registration.service";
-import {FormBuilder, FormGroup} from "@angular/forms";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Customer} from "../../../models/Customer";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {Router} from "@angular/router";
+import {nameValidator} from "../../../shared/Name.validators";
+import {cityValidator} from "../../../shared/City.validators";
 
 @Component({
   selector: 'app-add',
@@ -18,13 +20,18 @@ export class AddComponent implements OnInit {
 
   constructor(private _snackBar: MatSnackBar, private router: Router,
               private _registrationService: RegistrationService, private fb: FormBuilder) {
+
+
+
+
   }
 
   ngOnInit() {
 
 
     this.registrationForm = this.fb.group({
-      name: [''],
+      name: ['', [Validators.required, nameValidator]],
+
       address: this.fb.group({
         addressLine1: [''],
         addressLine2: [''],
@@ -33,11 +40,17 @@ export class AddComponent implements OnInit {
         precise
           : [],
         zipcode: [''],
-        city: [''],
+        city: ['',[Validators.required, nameValidator]],
+
       }),
 
     });
 
+    console.log("this.registrationForm", this.registrationForm);
+
+  }
+  get firstName() {
+    return this.registrationForm.get('name');
   }
 
   fetchCustomerData() {
@@ -69,28 +82,31 @@ export class AddComponent implements OnInit {
 
 
   onSubmitCustomer() {
-    console.log(this.registrationForm.value);
-    this._registrationService.registerCustomer(this.registrationForm.value).subscribe(
-      (res) => {
-        console.log('Registration successful:', res);
-        this.registrationForm.reset();
-        this.fetchCustomerData();
+    if (this.registrationForm.valid) {
+      console.log(this.registrationForm.value);
+      this._registrationService.registerCustomer(this.registrationForm.value).subscribe(
+        (res) => {
+          console.log('Registration successful:', res);
+          this.registrationForm.reset();
+          this.fetchCustomerData();
 
-        this.router.navigate(['/customer']);
-      },
-      (error) => {
-        console.error('Registration failed:', error);
-        if (error.error && error.error.errors && error.error.errors.length > 0) {
-          const errorMessage = error.error.errors[0];
-          console.log('Error message:', errorMessage);
-          // this.toastService.show('Error', errorMessage);
-          this._snackBar.open(errorMessage, '', {
-            duration: 3000
-          });
+          this.router.navigate(['/customer']);
 
+        },
+        (error) => {
+          console.error('Registration failed:', error);
+          if (error.error && error.error.errors && error.error.errors.length > 0) {
+            const errorMessage = error.error.errors[0];
+            console.log('Error message:', errorMessage);
+            // this.toastService.show('Error', errorMessage);
+            this._snackBar.open(errorMessage, '', {
+              duration: 3000
+            });
+
+          }
         }
-      }
-    );
+      );
+    }
   }
   togglePreciseLocation() {
     this.preciseLocationCheck = !this.preciseLocationCheck;
@@ -102,4 +118,6 @@ export class AddComponent implements OnInit {
   get longitudeControl() {
     return this.registrationForm.get('address.longitude');
   }
+
+  protected readonly name = name;
 }

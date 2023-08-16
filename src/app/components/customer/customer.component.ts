@@ -1,8 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {RegistrationService} from '../../services/registration.service';
 import {Customer} from "../../models/Customer";
-import {FormBuilder, FormGroup} from "@angular/forms";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
+
 
 
 @Component({
@@ -55,6 +56,7 @@ export class CustomerComponent implements OnInit {
         addressLine2: [''],
         zipcode: [''],
         city: [''],
+
       }),
 
     });
