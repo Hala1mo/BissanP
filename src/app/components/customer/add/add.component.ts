@@ -33,7 +33,7 @@ export class AddComponent implements OnInit {
       name: ['', [Validators.required, nameValidator]],
 
       address: this.fb.group({
-        addressLine1: [''],
+        addressLine1: ['',Validators.required],
         addressLine2: [''],
         longitude: [],
         latitude: [],

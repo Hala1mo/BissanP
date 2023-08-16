@@ -2,10 +2,12 @@ import {Component, OnInit} from '@angular/core';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {ActivatedRoute} from '@angular/router'; // Import ActivatedRoute
 import {RegistrationService} from '../../../services/registration.service';
-import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {Customer} from '../../../models/Customer';
 import {MatCheckboxChange} from "@angular/material/checkbox";
 import {DefinationService} from "../../../services/defination.service";
+import {nameValidator} from "../../../shared/Name.validators";
+import {phoneNumberValidator} from "../../../shared/PhoneNumber.validators";
 
 @Component({
   selector: 'app-details',
@@ -40,10 +42,10 @@ export class DetailsComponent implements OnInit {
      this.fetchvisitTypes();
     });
     this.registrationForm = this.fb.group({
-      firstName: [''],
-      lastName: [''],
-      phoneNumber:[''],
-      email:[''],
+      firstName: ['',[Validators.required, nameValidator]],
+      lastName: ['',[Validators.required, nameValidator]],
+      phoneNumber:['',[Validators.required, phoneNumberValidator]],
+      email:['', [Validators.required, Validators.email]],
       Types: this.fb.group({
       uuid:[''] }),
     });
@@ -152,10 +154,10 @@ export class DetailsComponent implements OnInit {
     this.isEditMode = true;
 
     this.editForm = this.fb.group({
-      firstName:[''],
-      lastName:[''],
-      phoneNumber:[''],
-      email:[''],
+      firstName:['',[Validators.required, nameValidator]],
+      lastName:['',[Validators.required, nameValidator]],
+      phoneNumber:['',[Validators.required, phoneNumberValidator]],
+      email:['',[Validators.required, Validators.email]],
       uuid:[''],
       Types: this.buildTypesForm(),
     });
