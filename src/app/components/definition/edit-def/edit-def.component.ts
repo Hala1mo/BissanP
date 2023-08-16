@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {DefinationService} from "../../../services/defination.service";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {MatSnackBar} from "@angular/material/snack-bar";
 
 
@@ -16,7 +16,7 @@ export class EditDefComponent implements OnInit {
   TypesData: any[] = [];
   types: any[] = [];
 
-  constructor(private definationServices: DefinationService, private fb: FormBuilder, private route: ActivatedRoute, SnackBar: MatSnackBar) {
+  constructor(private definationServices: DefinationService, private fb: FormBuilder, private route: ActivatedRoute, private SnackBar: MatSnackBar,private routes:Router) {
   }
 
   ngOnInit(): void {
@@ -71,7 +71,26 @@ export class EditDefComponent implements OnInit {
     );
   }
     SubmitUpdate(){
+        if(this.editForm.valid){
+          const editVisitData=this.editForm.value;
+          this.definationServices.updateVisitData(this.uuid,editVisitData).subscribe((response)=> {
+            console.log('User data updated successfully:', response);
+              this.routes.navigate(['/definition'])
+          },
+            (error) => {
+              console.error('Error updating user data:', error);
+              if (error.error && error.error.errors && error.error.errors.length > 0) {
+                const errorMessage = error.error.errors[0];
+                console.log('Error message:', errorMessage);
+                // this.toastService.show('Error', errorMessage);
+                this.SnackBar.open(errorMessage, '', {
+                  duration: 3000
+                });
 
+              }
+
+          });
+        }
     }
 
   onTypeSelect(event: any) {

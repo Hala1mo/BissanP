@@ -47,4 +47,9 @@ export class DefinationService {
     const urlVisit = `${this.VistUrl}/${id}`;
     return this.http.get<any>(urlVisit);
   }
+  updateVisitData(uuid: bigint, updatedVisitData: any): Observable<any> {
+    const updateUrl = `${this.VistUrl}/${uuid}`; // Adjust the URL endpoint as needed
+
+    return this.http.put<any>(updateUrl, updatedVisitData);
+  }
 }
