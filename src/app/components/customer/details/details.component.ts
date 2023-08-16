@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { ActivatedRoute } from '@angular/router'; // Import ActivatedRoute
-import { RegistrationService } from '../../../services/registration.service';
-import {FormBuilder,FormGroup} from '@angular/forms';
-import { Customer } from '../../../models/Customer';
+import {Component, OnInit} from '@angular/core';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {ActivatedRoute} from '@angular/router'; // Import ActivatedRoute
+import {RegistrationService} from '../../../services/registration.service';
+import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
+import {Customer} from '../../../models/Customer';
 import {MatCheckboxChange} from "@angular/material/checkbox";
 import {DefinationService} from "../../../services/defination.service";
 
@@ -39,9 +39,6 @@ export class DetailsComponent implements OnInit {
       }
      this.fetchvisitTypes();
     });
-
-
-
     this.registrationForm = this.fb.group({
       firstName: [''],
       lastName: [''],
@@ -50,22 +47,29 @@ export class DetailsComponent implements OnInit {
       Types: this.fb.group({
       uuid:[''] }),
     });
+  }
 
-    this.editForm = this.fb.group({
-      firstName:[''],
-      lastName:[''],
-      phoneNumber:[''],
-      email:['']
 
+
+  buildTypesForm() {
+    const typesForm = this.fb.group({});
+
+    console.log("this.TypesData", this.selectedContact);
+    this.TypesData.forEach(type => {
+      typesForm.addControl(type.uuid, new FormControl(false));
     });
 
+    console.log("typesForm",typesForm);
+    return typesForm;
   }
+
 
   fetchCustomerDetails(id: bigint) {
     this._registrationService.fetchCustomerDetails(id).subscribe(
       (data) => {
         console.log('Fetched details data:', data);
         this.customerDetails = new Customer(data); // Create a new Customer object
+        console.log("this.customerDetails", this.customerDetails);
       },
       (error) => {
         console.error('Error fetching customer data:', error);
@@ -75,15 +79,10 @@ export class DetailsComponent implements OnInit {
 
   onSubmit(uuid: any) {
     const formData = this.registrationForm.value;
-
-
     const selectedTypes = this.selectedUUIDs.map((uuid: any) => ({ uuid }));
     formData.types = selectedTypes;
-
-
     formData.Types = selectedTypes;
 
-    // Delete unnecessary properties
     delete formData.name;
     delete formData.undefined;
     delete formData.uuid;
@@ -113,18 +112,54 @@ export class DetailsComponent implements OnInit {
   }
 
 
-
   populateEditForm(contact: any) {
+    console.log("jmdcksdcksdc",contact.checkedVisits);
     this.editForm.patchValue({
       firstName: contact.firstName,
       lastName: contact.lastName,
       phoneNumber:contact.phoneNumber,
-      email:contact.email
+      email:contact.email,
+      Types: this.buildTypesFormArray()
     });
+    console.log(">>>>", contact);
+    console.log("this.TypesData", this.TypesData);
+    this.TypesData.forEach(type => {
+      debugger
+        const typeControl = this.editForm.get(['Types', type.uuid]) as FormControl;
+        const isSelected = contact.checkedVisits.some((contactType: { uuid: any; }) => contactType.uuid === type.uuid);
+        typeControl.setValue(isSelected);
+      });
+    }
+  buildTypesFormArray() {
+
+    const group: any = {}; // Use a more specific type if available
+
+    this.TypesData.forEach(type => {
+      group[type.uuid] = [false]; // Initialize the checkbox value to false
+    });
+
+    return this.fb.group(group);
   }
+
+
+
+
+
+
   onEditContact(contact: any) {
+    console.log("contact", contact);
     this.selectedContact = contact;
     this.isEditMode = true;
+
+    this.editForm = this.fb.group({
+      firstName:[''],
+      lastName:[''],
+      phoneNumber:[''],
+      email:[''],
+      uuid:[''],
+      Types: this.buildTypesForm(),
+    });
+
     this.populateEditForm(contact);
 
   }
@@ -133,6 +168,7 @@ export class DetailsComponent implements OnInit {
     if (this.editForm.valid ){
 
       const editedUserData = this.editForm.value;
+      editedUserData.Types = this.TypesData.filter(type => editedUserData.Types[type.uuid]);
       this._registrationService.updateContactData(this.selectedContact.uuid, editedUserData).subscribe(
         (response) => {
           console.log('User data updated successfully:', response);
