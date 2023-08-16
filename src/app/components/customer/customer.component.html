@@ -56,11 +56,11 @@
           <tbody>
           <tr *ngFor="let customer of customerData  | slice: (page-1) * pageSize  :page * pageSize">
 
-            <td>{{customer.name }}</td>
+            <td class="text-capitalize">{{customer.name }}</td>
 
-            <td>{{customer.address.city}}</td>
+            <td class="text-capitalize">{{customer.address.city}}</td>
 
-            <td>{{customer.address.addressLine1}}, {{customer.address.addressLine2}}</td>
+            <td class="text-capitalize">{{customer.address.addressLine1}}, {{customer.address.addressLine2}}</td>
 
             <td>
               <div class="btn-group w-100">

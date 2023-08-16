@@ -5,7 +5,6 @@ import {Customer} from "../../../models/Customer";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {Router} from "@angular/router";
 import {nameValidator} from "../../../shared/Name.validators";
-import {cityValidator} from "../../../shared/City.validators";
 
 @Component({
   selector: 'app-add',
@@ -37,8 +36,7 @@ export class AddComponent implements OnInit {
         addressLine2: [''],
         longitude: [],
         latitude: [],
-        precise
-          : [],
+        precise: [false],
         zipcode: [''],
         city: ['',[Validators.required, nameValidator]],
 
