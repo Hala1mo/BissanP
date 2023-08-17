@@ -1,3 +1,73 @@
+<div class="container mt-2">
+  <div class="row border-bottom mb-3">
+    <h1>Users</h1>
+  </div>
+
+  <div class="row mb-3 g-2">
+    <div class="col-12">
+      <div class="row">
+        <div class="col-4">
+          <button mat-raised-button color="primary">
+            Add New User
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="col-4 g-3">
+      <button mat-raised-button [matMenuTriggerFor]="enabledMenu" aria-label="Filter Users by active">
+        Show Enabled
+        <mat-icon>more_vert</mat-icon>
+      </button>
+      <mat-menu #enabledMenu="matMenu">
+        <button mat-menu-item (click)="fetchUserData()">
+          <mat-icon>star</mat-icon>
+          <span>All Users</span>
+        </button>
+        <button mat-menu-item (click)="showEnables()">
+          <mat-icon>toggle_on</mat-icon>
+          <span>Active Users</span>
+        </button>
+        <button mat-menu-item (click)="showDisables()">
+          <mat-icon>toggle_off</mat-icon>
+          <span>Inactive Users</span>
+        </button>
+      </mat-menu>
+
+      <button mat-raised-button [matMenuTriggerFor]="accessLevelMenu" aria-label="Filter Users by Access Level">
+        Access Level
+        <mat-icon>more_vert</mat-icon>
+      </button>
+      <mat-menu #accessLevelMenu="matMenu">
+        <button mat-menu-item>
+          <mat-icon>star</mat-icon>
+          <span>All Users</span>
+        </button>
+        <button mat-menu-item>
+          <mat-icon>toggle_on</mat-icon>
+          <span>Active Users</span>
+        </button>
+        <button mat-menu-item>
+          <mat-icon>toggle_off</mat-icon>
+          <span>Inactive Users</span>
+        </button>
+      </mat-menu>
+
+    </div>
+    `
+    <div class="col-4">
+
+    </div>
+    <div class="col-4">
+
+    </div>
+  </div>
+
+  <div class="row mb-3">
+
+  </div>
+</div>
+
+
 <div class="container mt-1">
   <h2>Users</h2>
   <hr class="mb-3">
@@ -121,10 +191,14 @@
                     <label class="form-label">First Name</label>
                     <input
                       type="text" formControlName="firstName" class="form-control">
-                    <div *ngIf="registrationForm.controls['firstName']?.invalid && registrationForm.controls['firstName'].touched"
-                         class="text-danger">
-                      <div *ngIf="registrationForm.controls['firstName'].hasError('required')">First Name is required.</div>
-                      <div *ngIf="registrationForm.controls['firstName'].hasError('invalidName')">Invalid name it must contain(A-Z,a-z).</div>
+                    <div
+                      *ngIf="registrationForm.controls['firstName']?.invalid && registrationForm.controls['firstName'].touched"
+                      class="text-danger">
+                      <div *ngIf="registrationForm.controls['firstName'].hasError('required')">First Name is required.
+                      </div>
+                      <div *ngIf="registrationForm.controls['firstName'].hasError('invalidName')">Invalid name it must
+                        contain(A-Z,a-z).
+                      </div>
                     </div>
 
                   </div>
@@ -133,10 +207,14 @@
                     <label class="form-label">Last Name</label>
                     <input
                       type="text" formControlName="lastName" class="form-control">
-                    <div *ngIf="registrationForm.controls['lastName']?.invalid && registrationForm.controls['lastName'].touched"
-                         class="text-danger">
-                      <div *ngIf="registrationForm.controls['lastName'].hasError('required')">Last Name is required.</div>
-                      <div *ngIf="registrationForm.controls['lastName'].hasError('invalidName')">Invalid name it must contain(A-Z,a-z).</div>
+                    <div
+                      *ngIf="registrationForm.controls['lastName']?.invalid && registrationForm.controls['lastName'].touched"
+                      class="text-danger">
+                      <div *ngIf="registrationForm.controls['lastName'].hasError('required')">Last Name is required.
+                      </div>
+                      <div *ngIf="registrationForm.controls['lastName'].hasError('invalidName')">Invalid name it must
+                        contain(A-Z,a-z).
+                      </div>
                     </div>
 
                   </div>
@@ -146,10 +224,11 @@
                     <label class="form-label">Username</label>
                     <input
 
-                           formControlName="username"
-                           type="text"
-                           class="form-control">
-                    <div *ngIf="registrationForm.get('username')?.invalid && registrationForm.get('username')?.touched" class="text-danger">
+                      formControlName="username"
+                      type="text"
+                      class="form-control">
+                    <div *ngIf="registrationForm.get('username')?.invalid && registrationForm.get('username')?.touched"
+                         class="text-danger">
                       <div *ngIf="registrationForm.get('username')?.hasError('required')">Username is required.</div>
                     </div>
 
@@ -159,7 +238,8 @@
                     <label class="form-label">Password</label>
                     <input
                       type="password" formControlName="password" class="form-control">
-                    <div *ngIf="registrationForm.get('password')?.invalid && registrationForm.get('password')?.touched" class="text-danger">
+                    <div *ngIf="registrationForm.get('password')?.invalid && registrationForm.get('password')?.touched"
+                         class="text-danger">
                       <div *ngIf="registrationForm.get('password')?.hasError('required')">Password is required.</div>
                     </div>
 
@@ -208,7 +288,9 @@
                     <div *ngIf="editForm.controls['firstName']?.invalid && editForm.controls['firstName'].touched"
                          class="text-danger">
                       <div *ngIf="editForm.controls['firstName'].hasError('required')">First Name is required.</div>
-                      <div *ngIf="editForm.controls['firstName'].hasError('invalidName')">Invalid name it must contain(A-Z,a-z).</div>
+                      <div *ngIf="editForm.controls['firstName'].hasError('invalidName')">Invalid name it must
+                        contain(A-Z,a-z).
+                      </div>
                     </div>
 
                   </div>
@@ -220,7 +302,9 @@
                     <div *ngIf="editForm.controls['lastName']?.invalid && editForm.controls['lastName'].touched"
                          class="text-danger">
                       <div *ngIf="editForm.controls['lastName'].hasError('required')">First Name is required.</div>
-                      <div *ngIf="editForm.controls['lastName'].hasError('invalidName')">Invalid name it must contain(A-Z,a-z).</div>
+                      <div *ngIf="editForm.controls['lastName'].hasError('invalidName')">Invalid name it must
+                        contain(A-Z,a-z).
+                      </div>
                     </div>
 
 

@@ -10,7 +10,7 @@
             <div class="dropdown btn-group">
               <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
                       aria-expanded="false">
-                Enabled
+                Filtering
               </button>
               <ul class="dropdown-menu">
                 <!--                <li class="dropdown-item" (click)="fetchUserData()">All</li>-->
@@ -23,7 +23,7 @@
             <div class="dropdown btn-group">
               <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
                       aria-expanded="false">
-                Access Level
+                 Sort by Date
               </button>
               <ul class="dropdown-menu">
                 <!--                <li class="dropdown-item" (click)="fetchUserData()">All</li>-->
@@ -65,12 +65,13 @@
             <div class="col-10">
               <div class="h-100">
 
-                <table mat-table [dataSource]="assignments" class="mat-elevation-z8">
+                <table mat-table  [dataSource]="assignments" class="mat-elevation-z8">
+<!--                  matSort (matSortChange)="announceSortChange($event)-->
                   <ng-container matColumnDef="Date">
                     <th mat-header-cell *matHeaderCellDef> Date</th>
                     <td mat-cell *matCellDef="let element"> {{element.date }} </td>
                   </ng-container>
-
+<!--                  mat-sort-header-->
                   <ng-container matColumnDef="Comment">
                     <th mat-header-cell *matHeaderCellDef> Comment</th>
                     <td mat-cell *matCellDef="let element"> {{element.comment}} </td>

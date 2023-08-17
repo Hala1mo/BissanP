@@ -46,18 +46,18 @@ export class UserComponent implements OnInit {
     this.fetchUserData();
 
     this.registrationForm = this.fb.group({
-      username: ['',Validators.required],
-      firstName: ['',[Validators.required, nameValidator]],
-      password: ['',Validators.required],
+      username: ['', Validators.required],
+      firstName: ['', [Validators.required, nameValidator]],
+      password: ['', Validators.required],
       confirmPassword: [''],
-      lastName: ['',[Validators.required, nameValidator]],
+      lastName: ['', [Validators.required, nameValidator]],
       accessLevel: ['']
     }, {validator: PasswordValidators});
 
 
     this.editForm = this.fb.group({
-      firstName: ['',[Validators.required, nameValidator]],
-      lastName: ['',[Validators.required, nameValidator]],
+      firstName: ['', [Validators.required, nameValidator]],
+      lastName: ['', [Validators.required, nameValidator]],
       accessLevel: ['']
     });
   }
@@ -107,19 +107,19 @@ export class UserComponent implements OnInit {
 
   updateEnabled(username: string) {
 
-      this._registrationService.updateEnabledStatus(username).subscribe(
-        (res: any) => {
-          console.log('Enabled status updated successfully:', res);
+    this._registrationService.updateEnabledStatus(username).subscribe(
+      (res: any) => {
+        console.log('Enabled status updated successfully:', res);
 
-          this.fetchUserData();
+        this.fetchUserData();
 
-        },
-        (error) => {
-          console.error('Error updating enabled status:', error);
+      },
+      (error) => {
+        console.error('Error updating enabled status:', error);
 
-        }
-      );
-    }
+      }
+    );
+  }
 
 
   populateEditForm(user: any) {

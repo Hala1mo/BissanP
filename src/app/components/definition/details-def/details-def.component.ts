@@ -7,6 +7,7 @@ import {AssignmentService} from "../../../services/assignment.service";
 import {Assignments} from "../../../models/Assignments";
 import {PasswordValidators} from "../../../shared/password.validators";
 import {Customer} from "../../../models/Customer";
+import {Sort} from "@angular/material/sort";
 @Component({
   selector: 'app-details-def',
   templateUrl: './details-def.component.html',
@@ -92,5 +93,12 @@ export class DetailsDefComponent  implements OnInit {
   }
 
 
-
+  // announceSortChange($event: Sort) {
+  //     if (sortState.direction) {
+  //       this._liveAnnouncer.announce(`Sorted ${sortState.direction}ending`);
+  //     } else {
+  //       this._liveAnnouncer.announce('Sorting cleared');
+  //     }
+  //
+  // }
 }
