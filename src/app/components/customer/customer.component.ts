@@ -5,7 +5,7 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
 import {MatPaginator} from "@angular/material/paginator";
 import {MatTableDataSource} from "@angular/material/table";
-import {Sort} from "@angular/material/sort";
+import {MatSort, Sort} from "@angular/material/sort";
 import {LiveAnnouncer} from "@angular/cdk/a11y";
 
 
@@ -34,6 +34,7 @@ export class CustomerComponent implements OnInit {
   searchInput: string = "";
   dataSource = new MatTableDataSource(this.customerData);
   @ViewChild('customerTablePaginator') paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
   onSelected(value: string): void {
     if (value == "Name") {
       this.selectedSearchCriteria = "name";
@@ -53,6 +54,11 @@ export class CustomerComponent implements OnInit {
   ngOnInit() {
     this.fetchCustomerData();
 
+    this.dataSource.filterPredicate = function (customer, filter) {
+      return customer.name.toLocaleLowerCase().includes(filter.toLocaleLowerCase())||customer.address.city.toLocaleLowerCase()
+        .includes(filter.toLocaleLowerCase())||customer.address.addressLine1.toLocaleLowerCase().includes(filter.toLocaleLowerCase())
+    }
+
 
     this.registrationForm = this.fb.group({
       name: [''],
@@ -66,6 +72,11 @@ export class CustomerComponent implements OnInit {
 
     });
 
+  }
+
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
   }
 
   announceSortChange(sortState: Sort) {
