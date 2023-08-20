@@ -1,14 +1,13 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {RegistrationService} from '../../services/registration.service';
-import {PasswordValidators} from "../../shared/password.validators";
 import {MatSnackBar} from "@angular/material/snack-bar";
-import {nameValidator} from "../../shared/Name.validators";
 import {MatTableDataSource} from "@angular/material/table";
 import {User} from "../../models/User";
 import {MatPaginator} from "@angular/material/paginator";
-import {MatSort, Sort} from "@angular/material/sort";
-import {LiveAnnouncer} from "@angular/cdk/a11y";
+import {MatSort} from "@angular/material/sort";
+import {MatDialog} from "@angular/material/dialog";
+import {AddUserComponent} from "./add/add-user.component";
+import {UserService} from "../../services/user.service";
+import {EditUserComponent} from "./edit-user/edit-user.component";
 
 
 @Component({
@@ -25,57 +24,26 @@ export class UserComponent implements OnInit, AfterViewInit {
   selectedRoleOption: string = "";
   selectedEnabledOption: string = "";
 
-  displayedColumns: string[] = ['username', 'firstName', 'lastName', 'accessLevel', 'enabled']
+  displayedColumns: string[] = ['username', 'firstName', 'lastName', 'accessLevel', 'actions']
   dataSource = new MatTableDataSource(this.userData);
 
   @ViewChild('userTablePaginator') paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  isSearchLoading = false;
-
-  registrationForm!: FormGroup;
-  editForm!: FormGroup;
-  selectedUser: any | null = null; // To store the selected user for editing
-  isEditMode = false; // Toggle between add and edit modes
-  editingUsername: string | null = null;
-
   constructor(
-    private _snackBar: MatSnackBar,
-    private _registrationService: RegistrationService,
-    private _liveAnnouncer: LiveAnnouncer,
-    private fb: FormBuilder
+    private snackBar: MatSnackBar,
+    private userService: UserService,
+    private matDialog: MatDialog
   ) {
 
   }
 
   ngOnInit() {
-    this.fetchUserData();
+    this.fetchAllUserData();
 
-    this.registrationForm = this.fb.group({
-      username: ['', Validators.required],
-      firstName: ['', [Validators.required, nameValidator]],
-      password: ['', Validators.required],
-      confirmPassword: [''],
-      lastName: ['', [Validators.required, nameValidator]],
-      accessLevel: ['']
-    }, {validator: PasswordValidators});
-
-    this.editForm = this.fb.group({
-      firstName: ['', [Validators.required, nameValidator]],
-      lastName: ['', [Validators.required, nameValidator]],
-      accessLevel: ['']
-    });
-
-
-  }
-
-  announceSortChange(sortState: Sort) {
-    if (sortState.direction) {
-      this._liveAnnouncer.announce(`Sorted ${sortState.direction}ending`);
-    } else {
-      this._liveAnnouncer.announce('Sorting cleared');
+    this.dataSource.filterPredicate = function (user, filter) {
+      return user.username.toLocaleLowerCase().includes(filter.toLocaleLowerCase()) || user.firstName.toLocaleLowerCase().includes(filter.toLocaleLowerCase()) || user.lastName.toLocaleLowerCase().includes(filter.toLocaleLowerCase());
     }
-    console.log(this.dataSource.sort?.active);
   }
 
   ngAfterViewInit() {
@@ -83,175 +51,114 @@ export class UserComponent implements OnInit, AfterViewInit {
     this.dataSource.sort = this.sort;
   }
 
-  fetchUserData() {
-    this._registrationService.fetchUserData().subscribe(
-      data => {
-        console.log('Fetched user data:', data);
+  fetchAllUserData() {
+    this.userService.getAllUsers().subscribe({
+      next: response => {
+        console.log('Fetched user data:', response);
+        this.originalUserData = response;
 
-        this.userData = data;
-        this.originalUserData = data;
-
-        this.dataSource.data = data
+        this.resetFilters();
       },
-      error => {
-        console.error('Error fetching user data:', error);
-      }
-    );
-  }
-
-  onSubmit() {
-
-    const registrationFormValue = this.registrationForm.value;
-    registrationFormValue.accessLevel = registrationFormValue.accessLevel ? 1 : 0;
-
-    console.log(this.registrationForm.value);
-
-    this._registrationService.registerUser(this.registrationForm.value).subscribe(
-      (res) => {
-        console.log('Registration successful:', res);
-        this.registrationForm.reset();
-        this.fetchUserData();
-      },
-      (error) => {
-        console.error('Registration failed:', error);
-        if (error.error && error.error.errors && error.error.errors.length > 0) {
-          const errorMessage = error.error.errors[0];
+      error: error => {
+        console.error('Error fetching users:', error);
+        if (error.message) {
+          let errorMessage = error.message;
           console.log('Error message:', errorMessage);
-          // this.toastService.show('Error', errorMessage);
-          this._snackBar.open(errorMessage, '', {
+
+          this.snackBar.open(errorMessage, '', {
             duration: 3000
           });
 
         }
-      }
-    );
-  }
-
-
-  updateEnabled(username: string) {
-
-    this._registrationService.updateEnabledStatus(username).subscribe(
-      (res: any) => {
-        console.log('Enabled status updated successfully:', res);
-
-        this.fetchUserData();
-
-      },
-      (error) => {
-        console.error('Error updating enabled status:', error);
 
       }
-    );
-  }
-
-
-  populateEditForm(user: any) {
-    this.editForm.patchValue({
-      firstName: user.firstName,
-      lastName: user.lastName,
-      accessLevel: user.accessLevel
     });
   }
 
-  onEditUser(user: any) {
-    this.selectedUser = user;
-    this.isEditMode = true;
-    this.editingUsername = user.username;
-    this.populateEditForm(user);
-    this.editForm.get('accessLevel')?.setValue(user.accessLevel === 1);
-  }
+  updateUserStatus(user: User) {
+    user.enabled = user.enabled == 1 ? 0 : 1;
+    this.userService.updateUserStatus(user.username).subscribe(
+      {
+        next: response => {
+          console.log('Enabled status updated successfully:', response);
 
-
-  onSubmitEdit() {
-    if (this.editForm.valid && this.editingUsername) {
-
-      const editedUserData = this.editForm.value;
-
-      editedUserData.accessLevel = editedUserData.accessLevel ? 1 : 0;
-      this._registrationService.updateUserData(this.editingUsername, editedUserData).subscribe(
-        (response) => {
-          console.log('User data updated successfully:', response);
-
-          const editedUserIndex = this.userData.findIndex(user => user.username === editedUserData.username);
-          if (editedUserIndex !== -1) {
-            this.userData[editedUserIndex] = editedUserData;
-          }
-
-          // Reset the form and exit edit mode
-          this.editForm.reset();
-          this.isEditMode = false;
-          this.fetchUserData();
-
+          user.enabled = response.enabled;
         },
-        (error) => {
-          console.error('Error updating user data:', error);
-          if (error.error && error.error.errors && error.error.errors.length > 0) {
-            const errorMessage = error.error.errors[0];
+        error: error => {
+          console.error('Error updating enabled status:', error);
+          if (error.message) {
+            let errorMessage = error.message;
             console.log('Error message:', errorMessage);
-            // this.toastService.show('Error', errorMessage);
-            this._snackBar.open(errorMessage, '', {
+
+            this.snackBar.open(errorMessage, '', {
               duration: 3000
             });
 
           }
+          user.enabled = user.enabled == 1 ? 0 : 1;
         }
-      );
-    }
+      }
+    );
   }
 
-  cancelEdit() {
-    this.isEditMode = false;
-    this.selectedUser = null;
-    this.editForm.reset();
-  }
+  updateUser(user : User) {
+    this.matDialog.open(EditUserComponent, {
+      data: user,}).afterClosed().subscribe({
+      next: response => {
+        if (response === undefined) return;
 
+        if (response.firstName && response.lastName && response.accessLevel){
+          user.firstName = response.firstName;
+          user.lastName = response.lastName;
+          user.accessLevel = response.accessLevel;
+        }
+      }
+    })
+  }
 
   showEnabledUsers() {
     this.selectedEnabledOption = "Active"
     this.userData = this.originalUserData.filter(user => user.enabled === 1);
+
+    this.dataSource.data = this.userData;
   }
 
   showDisabledUsers() {
     this.selectedEnabledOption = "Inactive"
     this.userData = this.originalUserData.filter(user => user.enabled === 0);
+
+    this.dataSource.data = this.userData;
   }
 
   showAdminUsers() {
     this.selectedRoleOption = "Supervisors"
     this.userData = this.originalUserData.filter(user => user.accessLevel === 1);
+
+    this.dataSource.data = this.userData;
   }
 
   showEmployeeUsers() {
     this.selectedRoleOption = "Employees"
     this.userData = this.originalUserData.filter(user => user.accessLevel === 0);
+
+    this.dataSource.data = this.userData;
   }
 
-  applySearchFilter() {
-    if (this.searchInput === "") {
-      this.userData = this.originalUserData;
-    } else {
-      this.searchUsers(this.searchInput.toLowerCase().trim());
-    }
+  resetFilters() {
+    this.userData = this.originalUserData;
 
+    this.dataSource.data = this.userData;
   }
 
-  searchUsers(query: string) {
-    this.isSearchLoading = true;
-    this._registrationService.searchUsers(query).subscribe(
-      data => {
-        console.log('Data Fetched successfully:', data);
-
-        this.userData = data;
-        this.isSearchLoading = false;
-
-      },
-      (error) => {
-        console.error('Error fetching customer data by city:', error);
-        this.isSearchLoading = false;
-
-      }
-    )
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  protected readonly console = console;
+  openAddDialog() {
+    this.matDialog.open(AddUserComponent).afterClosed().subscribe(() => {
+      this.fetchAllUserData();
+    });
+  }
+
 }
