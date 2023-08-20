@@ -3,7 +3,7 @@
   <hr class="mb-3">
   <div class="row">
     <div class="card p-3">
-      <form class="row g-3 mb-5" [formGroup]="editForm"(ngSubmit)="SubmitUpdate()">
+      <form class="row g-3 mb-5" [formGroup]="editForm" (ngSubmit)="SubmitUpdate()">
         <div class="col-md-6">
           <label class="form-label">Name</label>
           <input type="text" class="form-control" formControlName="name">
@@ -13,7 +13,7 @@
           <input type="text" class="form-control" formControlName="description">
         </div>
         <div>
-          <label class="form-label">Select Type</label>
+          <label class="form-label">Select VisitType</label>
           <select class="form-select" aria-label="Default select example" formControlName="typeUUID" (change)="onTypeSelect($event)">
             <option value="">Select an option</option>
             <option *ngFor="let type of TypesData" [value]="type.uuid">{{ type.name }}</option>

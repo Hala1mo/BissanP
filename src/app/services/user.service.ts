@@ -7,35 +7,35 @@ import {HttpClient} from "@angular/common/http";
 })
 export class UserService {
 
-  private _users_url = 'http://10.10.33.91:8080/users';
+  private usersUrl = 'http://192.168.1.62:8080/users';
 
   constructor(private _http: HttpClient) {
   }
 
   getAllUsers(): Observable<any> {
     // Send a GET request to the server to fetch user data
-    return this._http.get<any>(this._users_url);
+    return this._http.get<any>(this.usersUrl);
   }
 
   saveNewUser(userJson: any) {
     // Sends a POST request to the server to save a new user
-    return this._http.post<any>(this._users_url, userJson);
+    return this._http.post<any>(this.usersUrl, userJson);
   }
 
   updateUserStatus(username: string): Observable<any> {
-    const updateUrl = `${this._users_url}/${username}/endis`;
+    const updateUrl = `${this.usersUrl}/${username}/endis`;
 
     return this._http.put<any>(updateUrl, '');
   }
 
   updateUser(username: string, updatedUserData: any): Observable<any> {
-    const updateUrl = `${this._users_url}/${username}`;
+    const updateUrl = `${this.usersUrl}/${username}`;
 
     return this._http.put<any>(updateUrl, updatedUserData);
   }
 
   searchUsers(query: string): Observable<any> {
-    const _urlDetails = `${this._users_url}/search?query=${query}`;
+    const _urlDetails = `${this.usersUrl}/search?query=${query}`;
     return this._http.get<any>(_urlDetails);
   }
 }

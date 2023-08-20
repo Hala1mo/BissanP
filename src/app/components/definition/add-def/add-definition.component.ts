@@ -2,7 +2,6 @@ import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {Router} from "@angular/router";
-import {RegistrationService} from "../../../services/registration.service";
 import {DefinitionService} from "../../../services/definition.service";
 
 @Component({
@@ -58,7 +57,7 @@ export class AddDefinitionComponent implements OnInit {
 
   onSubmit() {
     console.log(this.registrationForm.value);
-    this.VistServices.addDefinition(this.registrationForm.value).subscribe(
+    this.VistServices.saveNewDefinition(this.registrationForm.value).subscribe(
       (res) => {
         console.log('Registration successful:', res);
         this.registrationForm.reset();

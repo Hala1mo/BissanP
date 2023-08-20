@@ -1,7 +1,6 @@
-import {Contact} from "./Contact";
 import {Customer} from "./Customer";
 
-export class Assignments{
+export class VisitAssignment {
 
   comment: string ;
   uuid: bigint;

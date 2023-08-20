@@ -1,5 +1,5 @@
 
-export class Type{
+export class VisitType {
 name: string ;
 uuid: bigint;
 constructor(data: any) {

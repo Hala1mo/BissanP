@@ -1,130 +1,190 @@
-import {Component, OnInit} from '@angular/core';
-import {Router} from "@angular/router";
-import {RegistrationService} from "../../services/registration.service";
-import {Definiton} from "../../models/definiton";
-import {Type} from "../../models/type";
+import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
+import {VisitDefinition} from "../../models/VisitDefinition";
+import {VisitType} from "../../models/VisitType";
 import {DefinitionService} from "../../services/definition.service";
+import {MatTableDataSource} from "@angular/material/table";
+import {MatDialog} from "@angular/material/dialog";
+import {MatSnackBar} from "@angular/material/snack-bar";
+import {MatPaginator} from "@angular/material/paginator";
+import {MatSort} from "@angular/material/sort";
+import {DefinitionDialogComponent} from "./definition-dialog/definition-dialog.component";
 
 @Component({
     selector: 'app-definition',
     templateUrl: './definition.component.html',
     styleUrls: ['./definition.component.css']
 })
-export class DefinitionComponent implements OnInit {
-    Data: Definiton[] = [];
-    originalData: Definiton[] = [];
-    TypesData: Type[] = [];
-    types: Type[] = [];
-    selectedEnabledOption = "Enabled"
+export class DefinitionComponent implements OnInit, AfterViewInit {
+    visitDefinitionData: VisitDefinition[] = [];
+    originalVisitDefinitionData: VisitDefinition[] = [];
+
+    visitTypesData: VisitType[] = [];
+
+    searchInput: string = "";
+
+    displayedColumns: string[] = ['name', 'description', 'frequency', 'allowRecurring', 'type', 'actions'];
+    dataSource = new MatTableDataSource(this.visitDefinitionData);
+
+    @ViewChild('definitionTablePaginator') paginator!: MatPaginator;
+    @ViewChild(MatSort) sort!: MatSort;
 
 
     constructor(
-        private router: Router,
         private definitionService: DefinitionService,
+        private matDialog: MatDialog,
+        private snackBar: MatSnackBar,
     ) {
     }
 
 
     ngOnInit() {
-        this.fetchDefinition();
+        this.fetchAllDefinitions();
         this.fetchVisitTypes();
+
+        this.dataSource.filterPredicate = function (definition, filter) {
+            return definition.name.toLocaleLowerCase().includes(filter.toLocaleLowerCase()) || definition.description.toLocaleLowerCase().includes(filter.toLocaleLowerCase());
+        }
+    }
+
+    ngAfterViewInit() {
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
     }
 
 
-    fetchDefinition() {
-        this.selectedEnabledOption = "All"
-        this.definitionService.fetchDefinition().subscribe(
-            (data) => {
-                console.log('Fetched details data:', data);
-                this.originalData = this.Data = (data); // Create a new Customer object
+    fetchAllDefinitions() {
+        this.definitionService.fetchDefinition().subscribe({
+            next: response => {
+                console.log('Fetched definitions data:', response);
+                this.originalVisitDefinitionData = response;
+
+                this.resetFilters();
             },
-            (error) => {
-                console.error('Error fetching customer data:', error);
+            error: error => {
+                console.error('Error fetching definitions:', error);
+                if (error.message) {
+                    let errorMessage = error.message;
+                    console.log('Error message:', errorMessage);
+
+                    this.snackBar.open(errorMessage, '', {
+                        duration: 3000
+                    });
+                }
             }
-        );
-    }
-
-
-    updateEnabled(defId: any) {
-
-        this.definitionService.updateEnabledStatusDefinition(defId).subscribe(
-            (res: any) => {
-                console.log('Enabled status updated successfully:', res);
-
-                this.fetchDefinition();
-
-            },
-            (error) => {
-                console.error('Error updating enabled status:', error);
-
-            }
-        );
-    }
-
-    openDefinitionDetails(id: bigint) {
-        this.router.navigate(['/definitions', id]);
-    }
-
-    openAddDefinition() {
-        this.router.navigate(['/definitions/add']);
-    }
-
-    openEditDefinition(id: bigint) {
-        this.router.navigate(['/definitions/edit', id])
-    }
-
-
-    showEnables() {
-        this.selectedEnabledOption = "Enabled"
-        console.log(this.originalData);
-        const enabledDef: Definiton[] = this.originalData.filter((item: Definiton) => item.enabled === 1);
-        this.Data = enabledDef;
-    }
-
-
-    showDisables() {
-        this.selectedEnabledOption = "Disabled"
-        this.Data = this.originalData.filter((item: Definiton) => item.enabled === 0);
-
-    }
-
-
-    applySearchFilter(event: any) {
-        const searchValue = event.target.value;
-        const lowerSearchValue = searchValue.toLowerCase();
-        this.Data = this.originalData.filter((item: Definiton) =>
-            item.name.toLowerCase().includes(lowerSearchValue)
-        );
-    }
-
-    recurringData() {
-        const Def = this.originalData.filter((item: Definiton) => item.allowRecurring);
-        this.Data = Def;
-
-
-    }
-
-    NrecurringData() {
-        const Def = this.originalData.filter((item: Definiton) => !item.allowRecurring);
-        this.Data = Def;
+        });
     }
 
     fetchVisitTypes() {
-
-        this.definitionService.fetchTypesData().subscribe(
-            (data) => {
-                console.log('Fetched types data:', data);
-                this.TypesData = data;
-                this.types = data;
+        this.definitionService.fetchTypesData().subscribe({
+            next: response => {
+                console.log('Fetched types data:', response);
+                this.visitTypesData = response;
             },
-            (error) => {
-                console.error('Error fetching types data:', error);
+            error: error => {
+                console.error('Error fetching visit types:', error);
+                if (error.message) {
+                    let errorMessage = error.message;
+                    console.log('Error message:', errorMessage);
+
+                    this.snackBar.open(errorMessage, '', {
+                        duration: 3000
+                    });
+                }
+            }
+        });
+    }
+
+    openCreateDialog() {
+        this.matDialog.open(DefinitionDialogComponent, {
+            width: '40%',
+            data: {
+                'mode' : 0,
+                'types' : this.visitTypesData
+            }
+        }).afterClosed().subscribe(() => {
+            this.fetchAllDefinitions();
+        });
+    }
+
+    openEditDialog(definition: VisitDefinition) {
+        this.matDialog.open(DefinitionDialogComponent, {
+            width: '40%',
+            data: {
+                'mode' : 1,
+                'definition' : definition,
+                'types' : this.visitTypesData
+            }
+        }).afterClosed().subscribe(() => {
+            this.fetchAllDefinitions();
+        });
+    }
+
+    updateDefinitionStatus(definition: VisitDefinition) {
+        definition.enabled = definition.enabled == 1 ? 0 : 1;
+        this.definitionService.updateEnabledStatusDefinition(definition.uuid).subscribe(
+            {
+                next: response => {
+                    console.log('Enabled status updated successfully:', response);
+
+                    definition.enabled = response.enabled;
+                },
+                error: error => {
+                    console.error('Error updating enabled status:', error);
+                    if (error.message) {
+                        let errorMessage = error.message;
+                        console.log('Error message:', errorMessage);
+
+                        this.snackBar.open(errorMessage, '', {
+                            duration: 3000
+                        });
+
+                    }
+                    definition.enabled = definition.enabled == 1 ? 0 : 1;
+                }
             }
         );
     }
 
-    onTypeSelect(selectedValue: string) {
-        const Def: Definiton[] = this.originalData.filter((item: Definiton) => item.type.name === selectedValue);
-        this.Data = Def;
+    applyFilter($event: Event) {
+        const filterValue = ($event.target as HTMLInputElement).value;
+        this.dataSource.filter = filterValue.trim().toLowerCase();
     }
+
+    resetFilters() {
+        this.visitDefinitionData = this.originalVisitDefinitionData;
+
+        this.dataSource.data = this.visitDefinitionData;
+    }
+
+    showEnabledDefinitions() {
+        this.visitDefinitionData = this.originalVisitDefinitionData.filter(def => def.enabled === 1);
+
+        this.dataSource.data = this.visitDefinitionData;
+    }
+
+    showDisabledDefinitions() {
+        this.visitDefinitionData = this.originalVisitDefinitionData.filter(def => def.enabled === 0);
+
+        this.dataSource.data = this.visitDefinitionData;
+    }
+
+    showRecurringDefinitions() {
+        this.visitDefinitionData = this.originalVisitDefinitionData.filter(def => def.allowRecurring);
+
+        this.dataSource.data = this.visitDefinitionData;
+    }
+
+    showNonRecurringDefinitions() {
+        this.visitDefinitionData = this.originalVisitDefinitionData.filter(def => !def.allowRecurring);
+
+        this.dataSource.data = this.visitDefinitionData;
+    }
+
+    showTypeDefinitions(typeId: bigint) {
+        this.visitDefinitionData = this.originalVisitDefinitionData.filter(def => def.type.uuid == typeId);
+
+        this.dataSource.data = this.visitDefinitionData;
+    }
+
+
 }

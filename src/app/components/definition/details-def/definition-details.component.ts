@@ -2,12 +2,9 @@ import {Component, OnInit} from '@angular/core';
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {ActivatedRoute, Router} from "@angular/router";
 import {FormBuilder, FormGroup} from "@angular/forms";
-import {Type} from "../../../models/type";
 import {AssignmentService} from "../../../services/assignment.service";
-import {Assignments} from "../../../models/Assignments";
-import {PasswordValidators} from "../../../shared/password.validators";
-import {Customer} from "../../../models/Customer";
-import {Sort} from "@angular/material/sort";
+import {VisitAssignment} from "../../../models/VisitAssignment";
+
 @Component({
   selector: 'app-details-def',
   templateUrl: './definition-details.component.html',
@@ -16,7 +13,7 @@ import {Sort} from "@angular/material/sort";
 
 export class DefinitionDetailsComponent implements OnInit {
   definition: any;
-  assignments: Assignments[] = [];
+  assignments: VisitAssignment[] = [];
   displayedColumns: string[] = ['Date', 'Comment','Action'];
   dataSource = this.assignments;
   registrationForm!: FormGroup;
@@ -49,7 +46,7 @@ export class DefinitionDetailsComponent implements OnInit {
   fetchDefinitionDetails(defId: any) {
     this.assignmentService.fetchDefinitionDetails(defId).subscribe(
       (data) => {
-        console.log('Fetched Definition data:', data);
+        console.log('Fetched VisitDefinition data:', data);
         this.definition = data;
 
         if (Array.isArray(data.visitAssignments)) {
@@ -60,7 +57,7 @@ export class DefinitionDetailsComponent implements OnInit {
         }
       },
       (error) => {
-        console.error('Error fetching Assignments data:', error);
+        console.error('Error fetching VisitAssignment data:', error);
       }
     );
   }

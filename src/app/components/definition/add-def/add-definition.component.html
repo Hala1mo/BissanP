@@ -1,6 +1,6 @@
 
 <div class="container mt-1">
-    <h2>Add new Definition</h2>
+    <h2>Add new VisitDefinition</h2>
     <hr class="mb-3">
     <div class="row">
         <div class="card p-3">
@@ -31,7 +31,7 @@
                     </div>
 
               <div>
-                <label  class="form-label">Select Type</label>
+                <label  class="form-label">Select VisitType</label>
                 <select class="form-select" aria-label="Default select example" formControlName="typeUUID" (change)="onTypeSelect($event)">
                   <option value="">Select an option</option>
                   <option *ngFor="let type of TypesData" [value]="type.uuid">{{ type.name }}</option>

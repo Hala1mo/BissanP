@@ -48,7 +48,7 @@ export class EditDefinitionComponent implements OnInit {
   }
 
   fetchDefinationData(uuid: bigint) {
-    this.definationServices.fetchdef(uuid).subscribe(
+    this.definationServices.fetchDefinitionById(uuid).subscribe(
       (data) => {
         console.log('Fetched VisitDef data:', data);
         const visit = data;
@@ -73,7 +73,7 @@ export class EditDefinitionComponent implements OnInit {
     SubmitUpdate(){
         if(this.editForm.valid){
           const editVisitData=this.editForm.value;
-          this.definationServices.updateVisitData(this.uuid,editVisitData).subscribe((response)=> {
+          this.definationServices.updateVisitDefinition(this.uuid,editVisitData).subscribe((response)=> {
             console.log('User data updated successfully:', response);
               this.routes.navigate(['/definitions', editVisitData.id])
           },
