@@ -1,0 +1,42 @@
+<h1 mat-dialog-title>Editing {{selectedUser?.username}}</h1>
+<form [formGroup]="editUserForm">
+  <mat-dialog-content>
+    <div class="row mb-1">
+      <div class="col-6">
+        <mat-form-field>
+          <mat-label>First Name</mat-label>
+          <input matInput type="text" placeholder="John" formControlName="firstName" required>
+          <mat-error *ngIf="editUserForm.controls['firstName'].invalid">{{getFirstNameErrorMessage()}}</mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col-6">
+        <mat-form-field>
+          <mat-label>Last Name</mat-label>
+          <input matInput type="text" placeholder="Doe" formControlName="lastName" required>
+          <mat-error *ngIf="editUserForm.controls['lastName'].invalid">{{getLastNameErrorMessage()}}</mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="row mb-1">
+      <mat-form-field>
+        <mat-label>Access Level</mat-label>
+        <mat-select formControlName="accessLevel" required>
+          <mat-option [value]="1">
+            <mat-icon>supervised_user_circle</mat-icon>
+            <span>Supervisor</span>
+          </mat-option>
+          <mat-option [value]="0">
+            <mat-icon>account_circle</mat-icon>
+            <span>Employee</span>
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="editUserForm.controls['accessLevel'].invalid">{{getAccessLevelErrorMessage()}}</mat-error>
+      </mat-form-field>
+    </div>
+    <mat-dialog-actions>
+      <button mat-raised-button (click)="submitEditUser()" color="primary">Save</button>
+      <button mat-raised-button color="warn" mat-dialog-close>Cancel</button>
+    </mat-dialog-actions>
+  </mat-dialog-content>
+</form>
+
