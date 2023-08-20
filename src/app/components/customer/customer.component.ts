@@ -1,8 +1,12 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {RegistrationService} from '../../services/registration.service';
 import {Customer} from "../../models/Customer";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
+import {MatPaginator} from "@angular/material/paginator";
+import {MatTableDataSource} from "@angular/material/table";
+import {Sort} from "@angular/material/sort";
+import {LiveAnnouncer} from "@angular/cdk/a11y";
 
 
 
@@ -18,7 +22,7 @@ export class CustomerComponent implements OnInit {
 
   isSearchLoading = false;
   selectedEnabledOption = "Enabled"
-
+  displayedColumns: string[] = ['name', 'address.city', 'address.addressLine1','enabled']
   customerData: Customer[] = [];
   originalCustomerData: Customer[] = [];
 
@@ -28,7 +32,8 @@ export class CustomerComponent implements OnInit {
 
   selectedSearchCriteria: string = "name";
   searchInput: string = "";
-
+  dataSource = new MatTableDataSource(this.customerData);
+  @ViewChild('customerTablePaginator') paginator!: MatPaginator;
   onSelected(value: string): void {
     if (value == "Name") {
       this.selectedSearchCriteria = "name";
@@ -42,7 +47,7 @@ export class CustomerComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private _registrationService: RegistrationService, private fb: FormBuilder) {
+    private _registrationService: RegistrationService, private fb: FormBuilder,private _liveAnnouncer: LiveAnnouncer) {
   }
 
   ngOnInit() {
@@ -61,6 +66,15 @@ export class CustomerComponent implements OnInit {
 
     });
 
+  }
+
+  announceSortChange(sortState: Sort) {
+    if (sortState.direction) {
+      this._liveAnnouncer.announce(`Sorted ${sortState.direction}ending`);
+    } else {
+      this._liveAnnouncer.announce('Sorting cleared');
+    }
+    console.log(this.dataSource.sort?.active);
   }
 
   fetchCustomerData() {
@@ -149,4 +163,6 @@ export class CustomerComponent implements OnInit {
       }
     )
   }
+
+  protected readonly console = console;
 }

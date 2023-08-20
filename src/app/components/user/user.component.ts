@@ -75,6 +75,7 @@ export class UserComponent implements OnInit, AfterViewInit {
     this.dataSource.sort = this.sort;
   }
 
+
   announceSortChange(sortState: Sort) {
     if (sortState.direction) {
       this._liveAnnouncer.announce(`Sorted ${sortState.direction}ending`);
