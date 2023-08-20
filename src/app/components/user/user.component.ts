@@ -101,7 +101,13 @@ export class UserComponent implements OnInit, AfterViewInit {
     );
   }
 
-  updateUser(user : User) {
+  openAddDialog() {
+    this.matDialog.open(AddUserComponent).afterClosed().subscribe(() => {
+      this.fetchAllUserData();
+    });
+  }
+
+  openEditDialog(user : User) {
     this.matDialog.open(EditUserComponent, {
       data: user,}).afterClosed().subscribe({
       next: response => {
@@ -155,10 +161,5 @@ export class UserComponent implements OnInit, AfterViewInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  openAddDialog() {
-    this.matDialog.open(AddUserComponent).afterClosed().subscribe(() => {
-      this.fetchAllUserData();
-    });
-  }
 
 }

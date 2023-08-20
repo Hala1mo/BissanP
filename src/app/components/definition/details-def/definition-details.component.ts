@@ -13,6 +13,7 @@ import {Sort} from "@angular/material/sort";
   templateUrl: './definition-details.component.html',
   styleUrls: ['./definition-details.component.css']
 })
+
 export class DefinitionDetailsComponent implements OnInit {
   definition: any;
   assignments: Assignments[] = [];

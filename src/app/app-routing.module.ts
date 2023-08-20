@@ -14,7 +14,6 @@ import {AddUserComponent} from "./components/user/add/add-user.component";
 import {ReportsComponent} from "./components/reports/reports.component";
 import {StatusComponent} from "./components/reports/status/status.component";
 import {DateComponent} from "./components/reports/date/date.component";
-import {}
 
 const routes: Routes = [
     {path: 'users', component: UserComponent},

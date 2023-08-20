@@ -38,9 +38,9 @@ import {MatPaginatorModule} from "@angular/material/paginator";
 import {MatSlideToggleModule} from "@angular/material/slide-toggle";
 import {MatCardModule} from "@angular/material/card";
 import {ReportsComponent} from "./components/reports/reports.component";
-import { StatusComponent } from './components/reports/status/status.component';
-import { DateComponent} from "./components/reports/date/date.component";
+import {StatusComponent} from './components/reports/status/status.component';
 import {EditUserComponent} from "./components/user/edit-user/edit-user.component";
+import {DateComponent} from "./components/reports/date/date.component";
 
 @NgModule({
     declarations: [
@@ -57,10 +57,11 @@ import {EditUserComponent} from "./components/user/edit-user/edit-user.component
         EditDefinitionComponent,
         AssignmentDetailsComponent,
         AddUserComponent,
+        EditUserComponent,
         ReportsComponent,
         StatusComponent,
         DateComponent,
-      EditUserComponent
+        EditUserComponent
 
 
     ],
