@@ -60,7 +60,6 @@ export class AddUserComponent implements OnInit {
     const newUserJson = this.addNewUserForm.value;
     console.log(newUserJson);
 
-    console.log(this.addNewUserForm.valid)
     if (this.addNewUserForm.invalid) return;
 
     this.userService.saveNewUser(this.addNewUserForm.value).subscribe(
@@ -77,10 +76,8 @@ export class AddUserComponent implements OnInit {
             this.snackBar.open(errorMessage, '', {
               duration: 3000
             });
-
           }
         }
-
       }
     )
   }

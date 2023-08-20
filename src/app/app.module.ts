@@ -39,6 +39,7 @@ import {MatSlideToggleModule} from "@angular/material/slide-toggle";
 import {MatCardModule} from "@angular/material/card";
 import {ReportsComponent} from "./components/reports/reports.component";
 import { StatusComponent } from './components/reports/status/status.component';
+import { EditUserComponent } from './components/user/edit-user/edit-user.component';
 
 
 @NgModule({
@@ -57,7 +58,8 @@ import { StatusComponent } from './components/reports/status/status.component';
         AssignmentDetailsComponent,
         AddUserComponent,
         ReportsComponent,
-        StatusComponent
+        StatusComponent,
+        EditUserComponent
 
 
     ],
