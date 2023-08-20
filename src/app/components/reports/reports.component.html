@@ -1,0 +1,63 @@
+<table mat-table [dataSource]="dataSource" matSort (matSortChange)="announceSortChange($event)"
+
+       class="mat-elevation-z8">
+
+  <!-- Name Column -->
+  <ng-container matColumnDef="Name">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name">
+      Name
+    </th>
+    <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+  </ng-container>
+
+  <!-- Address Column -->
+  <ng-container matColumnDef="Address">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by address">
+      Address
+    </th>
+    <td mat-cell *matCellDef="let element"> {{element.address}} </td>
+  </ng-container>
+
+  <!-- Date Column -->
+  <ng-container matColumnDef="Date">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by date">
+      Date
+    </th>
+    <td mat-cell *matCellDef="let element"> {{element.date | date:'short'}}</td>
+  </ng-container>
+
+  <!-- Type Column -->
+  <ng-container matColumnDef="Type">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by type">
+      Type
+    </th>
+    <td mat-cell *matCellDef="let element"> {{element.type}} </td>
+  </ng-container>
+
+  <!-- State Column -->
+  <ng-container matColumnDef="State">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by state">
+      State
+    </th>
+    <td mat-cell *matCellDef="let element"> {{element.status}} </td>
+  </ng-container>
+
+  <!-- Start Time Column -->
+  <ng-container matColumnDef="Start Time">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by start time">
+      Start Time
+    </th>
+    <td mat-cell *matCellDef="let element"> {{element.startTime}} </td>
+  </ng-container>
+
+  <!-- End Time Column -->
+  <ng-container matColumnDef="End Time">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by end time">
+      End Time
+    </th>
+    <td mat-cell *matCellDef="let element"> {{element.endTime}} </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>
