@@ -3,6 +3,8 @@ import { ReportsService } from '../../services/reports.service';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
+import {MatPaginator} from "@angular/material/paginator";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-reports',
@@ -11,10 +13,17 @@ import { LiveAnnouncer } from '@angular/cdk/a11y';
 })
 export class ReportsComponent implements OnInit, AfterViewInit {
   Data: any[] = [];
+  originalData: any[] = [];
   displayedColumns: string[] = ['Name', 'Address', 'Date', 'Type', 'State', 'Start Time', 'End Time'];
   dataSource = new MatTableDataSource(this.Data);
+  searchInput: string = "";
+  isSearchLoading = false;
+  selectedEnabledOption: string = "";
 
-  constructor(
+
+  @ViewChild(MatSort) sort!: MatSort;
+  @ViewChild('reportsTablePaginator') paginator!: MatPaginator;
+  constructor(    private router: Router,
     private _liveAnnouncer: LiveAnnouncer,
     private _reportsService: ReportsService
   ) {}
@@ -23,9 +32,9 @@ export class ReportsComponent implements OnInit, AfterViewInit {
     this.fetchAllData();
   }
 
-  @ViewChild(MatSort) sort!: MatSort;
 
   ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
 
@@ -34,7 +43,7 @@ export class ReportsComponent implements OnInit, AfterViewInit {
       data => {
         console.log('Fetched Reports data:', data);
         this.Data = data;
-        this.dataSource.data = this.Data;
+        this.dataSource.data = data;
       },
       error => {
         console.error('Error fetching Reports data:', error);
@@ -42,11 +51,68 @@ export class ReportsComponent implements OnInit, AfterViewInit {
     );
   }
 
+  showCompleted() {
+    this._reportsService.Completed().subscribe(
+        data => {
+          console.log('Fetched Reports data:', data);
+          this.Data = data;
+          this.dataSource.data = data;
+        },
+        error => {
+          console.error('Error fetching Reports data:', error);
+        }
+    );
+  }
+
+
+  showunderGoing() {
+    this._reportsService.underGoing().subscribe(
+        data => {
+          console.log('Fetched Reports data:', data);
+          this.Data = data;
+          this.dataSource.data = data;
+        },
+        error => {
+          console.error('Error fetching Reports data:', error);
+        }
+    );
+  }
+
+  shownotStarted() {
+    this._reportsService.notStarted().subscribe(
+        data => {
+          console.log('Fetched Reports data:', data);
+          this.Data = data;
+          this.dataSource.data = data;
+        },
+        error => {
+          console.error('Error fetching Reports data:', error);
+        }
+    );
+  }
+
+
   announceSortChange(sortState: Sort) {
     if (sortState.direction) {
       this._liveAnnouncer.announce(`Sorted ${sortState.direction}ending`);
     } else {
       this._liveAnnouncer.announce('Sorting cleared');
     }
+    console.log(this.dataSource.sort?.active);
   }
+
+  protected readonly console = console;
+
+    showStatus() {
+        console.log("oooo");
+        this.router.navigate(['reports/status']);
+    }
+
+    showCustomerById() {
+
+    }
+
+    showByDate() {
+
+    }
 }
