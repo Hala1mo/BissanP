@@ -1,0 +1,49 @@
+<div class="container">
+    <div class="row border-bottom mb-5">
+        <div class="d-flex justify-content-between">
+            <h1>Add New User</h1>
+            <button mat-raised-button color="primary"
+                    (click)="goBackToUsersPage()">
+                Go Back
+                <mat-icon>arrow_back</mat-icon>
+            </button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <mat-card>
+                <mat-card-header>
+                    <mat-card-title>
+                        Create New User Account
+                    </mat-card-title>
+                </mat-card-header>
+                <mat-card-content>
+                    <form>
+                        <div class="row mt-1">
+                            <mat-form-field>
+                                <mat-label>Username</mat-label>
+                                <input matInput placeholder="johndoe23" [formControl]="username" required>
+                                <!--                        <mat-error *ngIf="email.invalid">{{getErrorMessage()}}</mat-error>-->
+                            </mat-form-field>
+                        </div>
+                        <div class="row">
+                            <mat-form-field>
+                                <mat-label>First Name</mat-label>
+                                <input matInput placeholder="John" [formControl]="firstName" required>
+                                <!--                        <mat-error *ngIf="email.invalid">{{getErrorMessage()}}</mat-error>-->
+                            </mat-form-field>
+                        </div>
+                        <div class="row">
+                            <mat-form-field>
+                                <mat-label>Last Name</mat-label>
+                                <input matInput placeholder="Doe" [formControl]="lastName" required>
+                                <!--                        <mat-error *ngIf="email.invalid">{{getErrorMessage()}}</mat-error>-->
+                            </mat-form-field>
+                        </div>
+                    </form>
+                </mat-card-content>
+            </mat-card>
+        </div>
+
+    </div>
+</div>

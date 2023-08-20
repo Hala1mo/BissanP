@@ -5,16 +5,16 @@ import {RegistrationService} from '../../../services/registration.service';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {Customer} from '../../../models/Customer';
 import {MatCheckboxChange} from "@angular/material/checkbox";
-import {DefinationService} from "../../../services/defination.service";
+import {DefinitionService} from "../../../services/definition.service";
 import {nameValidator, telValidator} from "../../../shared/Name.validators";
 import {phoneNumberValidator} from "../../../shared/PhoneNumber.validators";
 
 @Component({
   selector: 'app-details',
-  templateUrl: './details.component.html',
-  styleUrls: ['./details.component.css'],
+  templateUrl: './customer-details.component.html',
+  styleUrls: ['./customer-details.component.css'],
 })
-export class DetailsComponent implements OnInit {
+export class CustomerDetailsComponent implements OnInit {
   customerDetails: Customer | null = null;
   registrationForm!: FormGroup;
   selectedContact: any ;// To store the selected user for editing
@@ -28,7 +28,7 @@ export class DetailsComponent implements OnInit {
   constructor(
     private _snackBar: MatSnackBar,
     private route: ActivatedRoute, // Use ActivatedRoute here
-    private VisitServices: DefinationService,
+    private VisitServices: DefinitionService,
     private _registrationService:RegistrationService,
     private fb: FormBuilder
   ) {}

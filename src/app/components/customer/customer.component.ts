@@ -79,7 +79,7 @@ export class CustomerComponent implements OnInit {
 
 
   openCustomerDetails(id: bigint) {
-    this.router.navigate(['/details', id]);
+    this.router.navigate(['/customers', id]);
     //this.router.navigate(['/details']);
   }
 
@@ -105,12 +105,12 @@ export class CustomerComponent implements OnInit {
 
 
   openAddCustomer() {
-    this.router.navigate(['/add']);
+    this.router.navigate(['/customers/add']);
   }
 
   openEditCustomer(uuid: bigint) {
 
-    this.router.navigate(['/edit', uuid]);
+    this.router.navigate(['customers/edit', uuid]);
   }
 
 

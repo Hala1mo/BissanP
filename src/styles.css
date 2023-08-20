@@ -7,4 +7,12 @@ body {
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
+.mat-mdc-row .mat-mdc-cell {
+  cursor: pointer;
+}
+
+.mat-mdc-row:hover .mat-mdc-cell {
+  background-color: var(--mat-option-hover-state-layer-color);
+}
+
 

@@ -3,14 +3,14 @@ import {FormBuilder, FormGroup} from "@angular/forms";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {Router} from "@angular/router";
 import {RegistrationService} from "../../../services/registration.service";
-import {DefinationService} from "../../../services/defination.service";
+import {DefinitionService} from "../../../services/definition.service";
 
 @Component({
   selector: 'app-add-def',
-  templateUrl: './add-def.component.html',
-  styleUrls: ['./add-def.component.css']
+  templateUrl: './add-definition.component.html',
+  styleUrls: ['./add-definition.component.css']
 })
-export class AddDefComponent implements OnInit {
+export class AddDefinitionComponent implements OnInit {
 
 
   registrationForm!: FormGroup;
@@ -20,7 +20,7 @@ export class AddDefComponent implements OnInit {
 
 
   constructor(private _snackBar: MatSnackBar, private router: Router,
-              private VistServices: DefinationService, private fb: FormBuilder) {
+              private VistServices: DefinitionService, private fb: FormBuilder) {
   }
 
   ngOnInit() {

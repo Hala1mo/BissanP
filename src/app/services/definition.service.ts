@@ -6,7 +6,7 @@ import { catchError, map } from 'rxjs/operators';
 @Injectable({
   providedIn: 'root'
 })
-export class DefinationService {
+export class DefinitionService {
   private VistUrl = 'http://10.10.33.91:8080/visit_definitions';
   private TypeUrl='http://10.10.33.91:8080/visit_types';
 

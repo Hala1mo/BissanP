@@ -6,10 +6,10 @@ import {RegistrationService} from "../../../services/registration.service";
 import {nameValidator} from "../../../shared/Name.validators";
 @Component({
   selector: 'app-edit',
-  templateUrl: './edit.component.html',
-  styleUrls: ['./edit.component.css']
+  templateUrl: './edit-customer.component.html',
+  styleUrls: ['./edit-customer.component.css']
 })
-export class EditComponent implements OnInit {
+export class EditCustomerComponent implements OnInit {
   editForm!: FormGroup;
   _uuid: bigint = BigInt(0);
 
@@ -83,7 +83,7 @@ export class EditComponent implements OnInit {
           console.log('User data updated successfully:', response);
 
           //this.fetchUserData();
-
+          //TODO ADD ROUTING BACK TO DETAILED PAGE
         },
         (error) => {
           console.error('Error updating user data:', error);

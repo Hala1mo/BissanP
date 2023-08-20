@@ -87,23 +87,23 @@
             <td>{{ def.frequency }}</td>
             <td>{{ def.allowRecurring }}</td>
             <td>
-            <div class="btn-group w-100">
+              <div class="btn-group w-100">
 
-              <button class="btn btn-outline-primary w-100"
-                      (click)="updateEnabled(def.uuid)">  {{ def.enabled === 1 ? 'Enabled' : 'Disabled' }}</button>
-
+                <button class="btn btn-outline-primary w-100"
+                        (click)="updateEnabled(def.uuid)">  {{ def.enabled === 1 ? 'Enabled' : 'Disabled' }}</button>
 
 
                 <button type="button" class="btn btn-outline-primary w-100"
                         (click)="openDefinitionDetails(def.uuid)">Details
                 </button>
-              <button type="button" class="btn btn-outline-primary w-100" (click)="openEditDefinition(def.uuid)"
-              >Edit</button>
+                <button type="button" class="btn btn-outline-primary w-100" (click)="openEditDefinition(def.uuid)"
+                >Edit
+                </button>
 
                 <!--                <button type="button" class=" col-3 btn btn-info" (click)="openEditCustomer(customer.uuid)">Edit</button>-->
 
 
-            </div>
+              </div>
             </td>
 
           </tr>

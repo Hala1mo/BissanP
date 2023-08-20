@@ -12,74 +12,83 @@ import {NgbAlertModule, NgbModule, NgbPaginationModule} from "@ng-bootstrap/ng-b
 import {MatSnackBarModule} from "@angular/material/snack-bar";
 import {CustomerComponent} from './components/customer/customer.component';
 import {NgOptimizedImage} from "@angular/common";
-import {AddComponent} from './components/customer/add/add.component';
-import {DetailsComponent} from './components/customer/details/details.component';
-import {EditComponent} from './components/customer/edit/edit.component';
+import {AddCustomerComponent} from './components/customer/add/add-customer.component';
+import {CustomerDetailsComponent} from './components/customer/details/customer-details.component';
+import {EditCustomerComponent} from './components/customer/edit/edit-customer.component';
+import {AddUserComponent} from "./components/user/add/add-user.component";
 import {MatCheckboxModule} from "@angular/material/checkbox";
 import {DefinitionComponent} from './components/definition/definition.component';
-import {DetailsDefComponent} from './components/definition/details-def/details-def.component';
-import {AddDefComponent} from './components/definition/add-def/add-def.component';
+import {DefinitionDetailsComponent} from './components/definition/details-def/definition-details.component';
+import {AddDefinitionComponent} from './components/definition/add-def/add-definition.component';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from "@angular/material/input";
 import {MatSelectModule} from "@angular/material/select";
 import {MatTableModule} from "@angular/material/table";
-import {EditDefComponent} from './components/definition/edit-def/edit-def.component';
+import {EditDefinitionComponent} from './components/definition/edit-def/edit-definition.component';
 import {MatDatepickerModule} from "@angular/material/datepicker";
 import {MatNativeDateModule} from '@angular/material/core';
-import {AssignmentsComponent} from './components/assignments/assignments.component';
+import {AssignmentDetailsComponent} from './components/assignments/assignment-details.component';
 import {MatAutocompleteModule} from "@angular/material/autocomplete";
 import {MatSortModule} from "@angular/material/sort";
 import {MatToolbarModule} from "@angular/material/toolbar";
 import {MatButtonModule} from "@angular/material/button";
 import {MatMenuModule} from "@angular/material/menu";
 import {MatIconModule} from "@angular/material/icon";
+import {MatPaginatorModule} from "@angular/material/paginator";
+import {MatSlideToggleModule} from "@angular/material/slide-toggle";
+import {MatCardModule} from "@angular/material/card";
+
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    HeaderComponent,
-    UserComponent,
-    CustomerComponent,
-    AddComponent,
-    DetailsComponent,
-    EditComponent,
-    DefinitionComponent,
-    DetailsDefComponent,
-    AddDefComponent,
-    EditDefComponent,
-    AssignmentsComponent,
+    declarations: [
+        AppComponent,
+        HeaderComponent,
+        UserComponent,
+        CustomerComponent,
+        AddCustomerComponent,
+        CustomerDetailsComponent,
+        EditCustomerComponent,
+        DefinitionComponent,
+        DefinitionDetailsComponent,
+        AddDefinitionComponent,
+        EditDefinitionComponent,
+        AssignmentDetailsComponent,
+        AddUserComponent,
 
 
-  ],
-  imports: [
-    BrowserModule,
-    MatSnackBarModule,
-    AppRoutingModule,
-    HttpClientModule,
-    ReactiveFormsModule,
-    BrowserAnimationsModule,
-    MatDialogModule,
-    NgbAlertModule,
-    NgbModule,
-    NgbPaginationModule,
-    NgOptimizedImage,
-    FormsModule,
-    MatCheckboxModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatSelectModule,
-    MatTableModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
-    MatAutocompleteModule,
-    MatSortModule,
-    MatToolbarModule,
-    MatButtonModule,
-    MatMenuModule,
-    MatIconModule,
-  ],
-  providers: [],
-  bootstrap: [AppComponent]
+    ],
+    imports: [
+        BrowserModule,
+        MatSnackBarModule,
+        AppRoutingModule,
+        HttpClientModule,
+        ReactiveFormsModule,
+        BrowserAnimationsModule,
+        MatDialogModule,
+        NgbAlertModule,
+        NgbModule,
+        NgbPaginationModule,
+        NgOptimizedImage,
+        FormsModule,
+        MatCheckboxModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatSelectModule,
+        MatTableModule,
+        MatDatepickerModule,
+        MatNativeDateModule,
+        MatAutocompleteModule,
+        MatSortModule,
+        MatToolbarModule,
+        MatButtonModule,
+        MatMenuModule,
+        MatIconModule,
+        MatPaginatorModule,
+        MatSlideToggleModule,
+        MatCardModule,
+    ],
+    providers: [],
+    bootstrap: [AppComponent]
 })
 export class AppModule {
 }

@@ -8,10 +8,10 @@ import {nameValidator} from "../../../shared/Name.validators";
 
 @Component({
   selector: 'app-add',
-  templateUrl: './add.component.html',
-  styleUrls: ['./add.component.css']
+  templateUrl: './add-customer.component.html',
+  styleUrls: ['./add-customer.component.css']
 })
-export class AddComponent implements OnInit {
+export class AddCustomerComponent implements OnInit {
   registrationForm!: FormGroup;
   customerData: Customer[] = [];
   customerDetails: Customer | null = null;
@@ -88,7 +88,7 @@ export class AddComponent implements OnInit {
           this.registrationForm.reset();
           this.fetchCustomerData();
 
-          this.router.navigate(['/customer']);
+          this.router.navigate(['/customers']);
 
         },
         (error) => {

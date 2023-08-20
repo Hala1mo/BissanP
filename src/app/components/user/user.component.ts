@@ -1,45 +1,51 @@
-import {Component, OnInit} from '@angular/core';
+import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {RegistrationService} from '../../services/registration.service';
 import {PasswordValidators} from "../../shared/password.validators";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {nameValidator} from "../../shared/Name.validators";
+import {MatTableDataSource} from "@angular/material/table";
+import {User} from "../../models/User";
+import {MatPaginator} from "@angular/material/paginator";
+import {MatSort, Sort} from "@angular/material/sort";
+import {LiveAnnouncer} from "@angular/cdk/a11y";
 
 
 @Component({
   selector: 'app-user',
   templateUrl: './user.component.html',
-  styleUrls: ['./user.component.css']
+  styleUrls: ['./user.component.css'],
 })
-export class UserComponent implements OnInit {
-  page = 1;
-  pageSize = 10;
+
+export class UserComponent implements OnInit, AfterViewInit {
+  userData: User[] = [];
+  originalUserData: User[] = [];
+
+  searchInput: string = "";
+  selectedRoleOption: string = "";
+  selectedEnabledOption: string = "";
+
+  displayedColumns: string[] = ['username', 'firstName', 'lastName', 'accessLevel', 'enabled']
+  dataSource = new MatTableDataSource(this.userData);
+
+  @ViewChild('userTablePaginator') paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
 
   isSearchLoading = false;
 
   registrationForm!: FormGroup;
   editForm!: FormGroup;
-  userData: any[] = [];
   selectedUser: any | null = null; // To store the selected user for editing
   isEditMode = false; // Toggle between add and edit modes
   editingUsername: string | null = null;
-  originalUserData: any[] = [];
-  selectedSearchCriteria: string = "username";
-  searchInput: string = "";
-
-  onSelected(value: string): void {
-    if (value == "First Name") {
-      this.selectedSearchCriteria = "firstName";
-    } else if (value == "Last Name") {
-      this.selectedSearchCriteria = "lastName";
-    } else
-      this.selectedSearchCriteria = "username";
-  }
-
 
   constructor(
     private _snackBar: MatSnackBar,
-    private _registrationService: RegistrationService, private fb: FormBuilder) {
+    private _registrationService: RegistrationService,
+    private _liveAnnouncer: LiveAnnouncer,
+    private fb: FormBuilder
+  ) {
+
   }
 
   ngOnInit() {
@@ -54,12 +60,27 @@ export class UserComponent implements OnInit {
       accessLevel: ['']
     }, {validator: PasswordValidators});
 
-
     this.editForm = this.fb.group({
       firstName: ['', [Validators.required, nameValidator]],
       lastName: ['', [Validators.required, nameValidator]],
       accessLevel: ['']
     });
+
+
+  }
+
+  announceSortChange(sortState: Sort) {
+    if (sortState.direction) {
+      this._liveAnnouncer.announce(`Sorted ${sortState.direction}ending`);
+    } else {
+      this._liveAnnouncer.announce('Sorting cleared');
+    }
+    console.log(this.dataSource.sort?.active);
+  }
+
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
   }
 
   fetchUserData() {
@@ -69,6 +90,8 @@ export class UserComponent implements OnInit {
 
         this.userData = data;
         this.originalUserData = data;
+
+        this.dataSource.data = data
       },
       error => {
         console.error('Error fetching user data:', error);
@@ -183,34 +206,25 @@ export class UserComponent implements OnInit {
   }
 
 
-  showEnables() {
-
-    const enabledUsers = this.originalUserData.filter(user => user.enabled === 1);
-    this.userData = enabledUsers;
-
+  showEnabledUsers() {
+    this.selectedEnabledOption = "Active"
+    this.userData = this.originalUserData.filter(user => user.enabled === 1);
   }
 
-  showDisables() {
-
-    const disabledUsers = this.originalUserData.filter(user => user.enabled === 0);
-    this.userData = disabledUsers;
-
+  showDisabledUsers() {
+    this.selectedEnabledOption = "Inactive"
+    this.userData = this.originalUserData.filter(user => user.enabled === 0);
   }
 
-  showAdmin() {
-
-    const adminUsers = this.originalUserData.filter(user => user.accessLevel === 1);
-    this.userData = adminUsers;
-
+  showAdminUsers() {
+    this.selectedRoleOption = "Supervisors"
+    this.userData = this.originalUserData.filter(user => user.accessLevel === 1);
   }
 
-  showEmployee() {
-
-    const employeeUsers = this.originalUserData.filter(user => user.accessLevel === 0);
-    this.userData = employeeUsers;
-
+  showEmployeeUsers() {
+    this.selectedRoleOption = "Employees"
+    this.userData = this.originalUserData.filter(user => user.accessLevel === 0);
   }
-
 
   applySearchFilter() {
     if (this.searchInput === "") {
@@ -239,4 +253,5 @@ export class UserComponent implements OnInit {
     )
   }
 
+  protected readonly console = console;
 }

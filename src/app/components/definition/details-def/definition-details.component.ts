@@ -10,10 +10,10 @@ import {Customer} from "../../../models/Customer";
 import {Sort} from "@angular/material/sort";
 @Component({
   selector: 'app-details-def',
-  templateUrl: './details-def.component.html',
-  styleUrls: ['./details-def.component.css']
+  templateUrl: './definition-details.component.html',
+  styleUrls: ['./definition-details.component.css']
 })
-export class DetailsDefComponent  implements OnInit {
+export class DefinitionDetailsComponent implements OnInit {
   definition: any;
   assignments: Assignments[] = [];
   displayedColumns: string[] = ['Date', 'Comment','Action'];
@@ -88,7 +88,7 @@ export class DetailsDefComponent  implements OnInit {
   }
   openAssignmentsDetails(id: bigint) {
     console.log("jnjnsjndks",id);
-    this.router.navigate(['../../assignment', id]);
+    this.router.navigate(['../../assignments', id]);
 
   }
 

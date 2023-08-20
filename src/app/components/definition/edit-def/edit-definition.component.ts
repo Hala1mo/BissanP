@@ -1,22 +1,22 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup} from "@angular/forms";
-import {DefinationService} from "../../../services/defination.service";
+import {DefinitionService} from "../../../services/definition.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {MatSnackBar} from "@angular/material/snack-bar";
 
 
 @Component({
   selector: 'app-edit-def',
-  templateUrl: './edit-def.component.html',
-  styleUrls: ['./edit-def.component.css']
+  templateUrl: './edit-definition.component.html',
+  styleUrls: ['./edit-definition.component.css']
 })
-export class EditDefComponent implements OnInit {
+export class EditDefinitionComponent implements OnInit {
   editForm!: FormGroup;
   uuid: bigint = BigInt(0);
   TypesData: any[] = [];
   types: any[] = [];
 
-  constructor(private definationServices: DefinationService, private fb: FormBuilder, private route: ActivatedRoute, private SnackBar: MatSnackBar,private routes:Router) {
+  constructor(private definationServices: DefinitionService, private fb: FormBuilder, private route: ActivatedRoute, private SnackBar: MatSnackBar, private routes:Router) {
   }
 
   ngOnInit(): void {
@@ -75,7 +75,7 @@ export class EditDefComponent implements OnInit {
           const editVisitData=this.editForm.value;
           this.definationServices.updateVisitData(this.uuid,editVisitData).subscribe((response)=> {
             console.log('User data updated successfully:', response);
-              this.routes.navigate(['/definition'])
+              this.routes.navigate(['/definitions', editVisitData.id])
           },
             (error) => {
               console.error('Error updating user data:', error);

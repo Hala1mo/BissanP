@@ -1,338 +1,302 @@
-<div class="container mt-2">
-  <div class="row border-bottom mb-3">
-    <h1>Users</h1>
-  </div>
-
-  <div class="row mb-3 g-2">
-    <div class="col-12">
-      <div class="row">
-        <div class="col-4">
-          <button mat-raised-button color="primary">
-            Add New User
-          </button>
+<div class="container">
+    <div class="row border-bottom mb-5">
+        <div class="d-flex justify-content-between">
+            <h1>Users</h1>
+            <button mat-raised-button color="primary"
+                    [routerLink]="['/users/add']">
+                Add New User
+                <mat-icon>add</mat-icon>
+            </button>
         </div>
-      </div>
     </div>
-    <div class="col-4 g-3">
-      <button mat-raised-button [matMenuTriggerFor]="enabledMenu" aria-label="Filter Users by active">
-        Show Enabled
-        <mat-icon>more_vert</mat-icon>
-      </button>
-      <mat-menu #enabledMenu="matMenu">
-        <button mat-menu-item (click)="fetchUserData()">
-          <mat-icon>star</mat-icon>
-          <span>All Users</span>
-        </button>
-        <button mat-menu-item (click)="showEnables()">
-          <mat-icon>toggle_on</mat-icon>
-          <span>Active Users</span>
-        </button>
-        <button mat-menu-item (click)="showDisables()">
-          <mat-icon>toggle_off</mat-icon>
-          <span>Inactive Users</span>
-        </button>
-      </mat-menu>
-
-      <button mat-raised-button [matMenuTriggerFor]="accessLevelMenu" aria-label="Filter Users by Access Level">
-        Access Level
-        <mat-icon>more_vert</mat-icon>
-      </button>
-      <mat-menu #accessLevelMenu="matMenu">
-        <button mat-menu-item>
-          <mat-icon>star</mat-icon>
-          <span>All Users</span>
-        </button>
-        <button mat-menu-item>
-          <mat-icon>toggle_on</mat-icon>
-          <span>Active Users</span>
-        </button>
-        <button mat-menu-item>
-          <mat-icon>toggle_off</mat-icon>
-          <span>Inactive Users</span>
-        </button>
-      </mat-menu>
-
+    <div class="row border-bottom mb-3">
+        <div class="col-8">
+            <form>
+                <mat-form-field [style.width.%]="100">
+                    <mat-label>What are you looking for?</mat-label>
+                    <input matInput matNativeControl placeholder="search for username, first name, or last name"
+                           [(ngModel)]="searchInput"
+                           [ngModelOptions]="{ standalone: true }"
+                           (input)="applySearchFilter()">
+                    <mat-icon matSuffix>search</mat-icon>
+                </mat-form-field>
+            </form>
+        </div>
+        <div class="col-4">
+            <div class="d-flex gap-1 justify-content-between">
+                <mat-form-field>
+                    <mat-label>Show Active Users</mat-label>
+                    <mat-select [(value)]="selectedEnabledOption">
+                        <mat-option (click)="fetchUserData()">
+                            <mat-icon>star</mat-icon>
+                            <span>All Users</span>
+                        </mat-option>
+                        <mat-option (click)="showEnabledUsers()">
+                            <mat-icon>toggle_on</mat-icon>
+                            <span>Active Users</span>
+                        </mat-option>
+                        <mat-option (click)="showDisabledUsers()">
+                            <mat-icon>toggle_off</mat-icon>
+                            <span>Inactive Users</span>
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Access Level</mat-label>
+                    <mat-select [(value)]="selectedRoleOption">
+                        <mat-option (click)="fetchUserData()">
+                            <mat-icon>star</mat-icon>
+                            <span>All Users</span>
+                        </mat-option>
+                        <mat-option (click)="showAdminUsers()">
+                            <mat-icon>supervised_user_circle</mat-icon>
+                            <span>Supervisors</span>
+                        </mat-option>
+                        <mat-option (click)="showEmployeeUsers()">
+                            <mat-icon>account_circle</mat-icon>
+                            <span>Employees</span>
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+        </div>
     </div>
-    `
-    <div class="col-4">
+    <div class="row mb-3">
+        <div class="mat-elevation-z4">
+            <mat-paginator [pageSizeOptions]="[5,10,20]"
+                           #userTablePaginator
+                           showFirstLastButtons
+                           aria-label="Select page of users">
+            </mat-paginator>
 
+            <table mat-table [dataSource]="dataSource" matSort (matSortChange)="announceSortChange($event)">
+                <ng-container matColumnDef="username">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by username">
+                        Username
+                    </th>
+                    <td mat-cell *matCellDef="let user"> {{user.username}} </td>
+                </ng-container>
+                <ng-container matColumnDef="firstName">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by first name">
+                        First Name
+                    </th>
+                    <td mat-cell *matCellDef="let user"> {{user.firstName}} </td>
+                </ng-container>
+                <ng-container matColumnDef="lastName">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by last name">
+                        Last Name
+                    </th>
+                    <td mat-cell *matCellDef="let user"> {{user.lastName}} </td>
+                </ng-container>
+                <ng-container matColumnDef="accessLevel">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by access level">
+                        Access Level
+                    </th>
+                    <td mat-cell *matCellDef="let user">
+                        {{user.accessLevel === 1 ? 'Supervisor' : 'Employee'}}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="enabled">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by activity">
+                        Actions
+                    </th>
+                    <td mat-cell *matCellDef="let user">
+                        <mat-slide-toggle
+                                (click)="updateEnabled(user.username)"
+                                checked="{{user.enabled === 1 ? 'true' : 'false'}}"
+                        >
+                            {{user.enabled === 1 ? 'Active' : 'Inactive'}}
+                        </mat-slide-toggle>
+                    </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row
+                    (click)="console.log('clicked on ', row.username)"
+                    *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+        </div>
     </div>
-    <div class="col-4">
-
-    </div>
-  </div>
-
-  <div class="row mb-3">
-
-  </div>
 </div>
 
+<div class="mt-5 visually-hidden"></div>
+<div class="container mt-5 visually-hidden">
+    <h2>Users</h2>
+    <hr class="mb-3">
+    <div class="row ">
+        <div class="row">
+            <div class="col-4 h-100">
+                <div class="w-100 mx-2 p-1">
+                    <div *ngIf="!isEditMode">
+                        <div class="card p-3">
+                            <h3 class="mb=2 card-title">Add New User</h3>
+                            <div class="card-body">
+                                <form class="form-group" [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
 
-<div class="container mt-1">
-  <h2>Users</h2>
-  <hr class="mb-3">
-  <div class="row ">
-    <div class="row border-bottom my-3 py-3">
-      <div class="col-12">
-        <div class="btn-toolbar justify-content-between" role="toolbar" aria-label="Toolbar with button groups">
-          <ngb-pagination
-            [collectionSize]="userData.length"
-            [(page)]="page"
-            aria-label="Default pagination">
-          </ngb-pagination>
+                                    <div class="mb-3">
+                                        <label class="form-label">First Name</label>
+                                        <input
+                                                type="text" formControlName="firstName" class="form-control">
+                                        <div
+                                                *ngIf="registrationForm.controls['firstName']?.invalid && registrationForm.controls['firstName'].touched"
+                                                class="text-danger">
+                                            <div *ngIf="registrationForm.controls['firstName'].hasError('required')">
+                                                First Name is required.
+                                            </div>
+                                            <div *ngIf="registrationForm.controls['firstName'].hasError('invalidName')">
+                                                Invalid name it must
+                                                contain(A-Z,a-z).
+                                            </div>
+                                        </div>
 
-          <div class="btn-group mb-3">
-            <div class="dropdown btn-group">
-              <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
-                      aria-expanded="false">
-                Enabled
-              </button>
-              <ul class="dropdown-menu">
-                <li class="dropdown-item" (click)="fetchUserData()">All</li>
-                <li class="dropdown-item" (click)="showEnables()">Show active users</li>
-                <li class="dropdown-item" (click)="showDisables()">Show inactive users</li>
+                                    </div>
 
-              </ul>
+                                    <div class="mb-3">
+                                        <label class="form-label">Last Name</label>
+                                        <input
+                                                type="text" formControlName="lastName" class="form-control">
+                                        <div
+                                                *ngIf="registrationForm.controls['lastName']?.invalid && registrationForm.controls['lastName'].touched"
+                                                class="text-danger">
+                                            <div *ngIf="registrationForm.controls['lastName'].hasError('required')">Last
+                                                Name is required.
+                                            </div>
+                                            <div *ngIf="registrationForm.controls['lastName'].hasError('invalidName')">
+                                                Invalid name it must
+                                                contain(A-Z,a-z).
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+
+                                    <div class="mb-3">
+                                        <label class="form-label">Username</label>
+                                        <input
+
+                                                formControlName="username"
+                                                type="text"
+                                                class="form-control">
+                                        <div *ngIf="registrationForm.get('username')?.invalid && registrationForm.get('username')?.touched"
+                                             class="text-danger">
+                                            <div *ngIf="registrationForm.get('username')?.hasError('required')">Username
+                                                is required.
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label">Password</label>
+                                        <input
+                                                type="password" formControlName="password" class="form-control">
+                                        <div *ngIf="registrationForm.get('password')?.invalid && registrationForm.get('password')?.touched"
+                                             class="text-danger">
+                                            <div *ngIf="registrationForm.get('password')?.hasError('required')">Password
+                                                is required.
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label">Confirm Password</label>
+                                        <input [class.is-invalid]="registrationForm.errors?.['misMatch']"
+                                               type="password"
+                                               formControlName="confirmPassword" class="form-control">
+                                        <small class="text-danger" *ngIf="registrationForm.errors?.['misMatch']">Passwords
+                                            do not
+                                            match</small>
+                                    </div>
+
+
+                                    <div class="mb-3 form-check">
+                                        <input class="form-check-input" type="checkbox" formControlName="accessLevel">
+                                        <label class="form-check-label">Is Admin?</label>
+
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <button [disabled]='!registrationForm.valid' class="btn btn-large btn-primary"
+                                                type="submit">
+                                            Register
+                                        </button>
+
+                                    </div>
+
+                                </form>
+
+                            </div>
+
+                        </div>
+                        <!--                         {{registrationForm.value | json}}-->
+                    </div>
+
+                    <div *ngIf="isEditMode && selectedUser">
+                        <div class="card p-3">
+                            <h3 class="mb=2 card-title">Edit User</h3>
+                            <div class="card-body">
+                                <form class="form-group" [formGroup]="editForm" (ngSubmit)="onSubmitEdit()">
+
+                                    <div class="mb-3">
+                                        <label class="form-label">First Name</label>
+                                        <input
+                                                type="text" formControlName="firstName" class="form-control">
+                                        <div *ngIf="editForm.controls['firstName']?.invalid && editForm.controls['firstName'].touched"
+                                             class="text-danger">
+                                            <div *ngIf="editForm.controls['firstName'].hasError('required')">First Name
+                                                is required.
+                                            </div>
+                                            <div *ngIf="editForm.controls['firstName'].hasError('invalidName')">Invalid
+                                                name it must
+                                                contain(A-Z,a-z).
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label">Last Name</label>
+                                        <input
+                                                type="text" formControlName="lastName" class="form-control">
+                                        <div *ngIf="editForm.controls['lastName']?.invalid && editForm.controls['lastName'].touched"
+                                             class="text-danger">
+                                            <div *ngIf="editForm.controls['lastName'].hasError('required')">First Name
+                                                is required.
+                                            </div>
+                                            <div *ngIf="editForm.controls['lastName'].hasError('invalidName')">Invalid
+                                                name it must
+                                                contain(A-Z,a-z).
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+
+
+                                    <div class="mb-3 form-check">
+                                        <input class="form-check-input" type="checkbox" formControlName="accessLevel"
+                                               [checked]="editForm.get('accessLevel')?.value">
+                                        <label class="form-check-label">Is Admin?</label>
+
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <button [disabled]="!editForm.valid" class="btn btn-large btn-primary me-1"
+                                                type="submit">
+                                            Save Changes
+                                        </button>
+                                        <button class="btn btn-large btn-secondary ms-1" (click)="cancelEdit()">Cancel
+                                        </button>
+                                    </div>
+
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
             </div>
-
-            <div class="dropdown btn-group">
-              <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
-                      aria-expanded="false">
-                Access Level
-              </button>
-              <ul class="dropdown-menu">
-                <li class="dropdown-item" (click)="fetchUserData()">All</li>
-                <li class="dropdown-item" (click)="showAdmin()">Show Admins</li>
-                <li class="dropdown-item" (click)="showEmployee()">Show Employees</li>
-              </ul>
-            </div>
-          </div>
-
-          <form class="d-flex mb-3" role="search">
-            <input type="search"
-                   class="form-control me-2"
-                   placeholder="Search..."
-                   aria-label="Search"
-                   [(ngModel)]="searchInput"
-                   [ngModelOptions]="{ standalone: true }"
-                   (input)="applySearchFilter()">
-
-            <div>
-              <div class="spinner-border {{this.isSearchLoading ? '' : 'text-dark'}}" role="status">
-                <span class="visually-hidden">Loading...</span>
-              </div>
-            </div>
-
-          </form>
         </div>
-      </div>
+
     </div>
-
-    <div class="row">
-      <div class="col-8">
-        <div class="h-100">
-          <div class="table-responsive">
-            <table class="table table-striped table-hover">
-              <thead>
-              <tr>
-                <th class="w-25">Username</th>
-                <th>Full Name</th>
-                <th>Access Level</th>
-                <th>Actions</th>
-              </tr>
-              </thead>
-              <tbody>
-              <tr *ngFor="let user of userData | slice: (page-1) * pageSize  :page * pageSize">
-                <td>{{ user.username }}</td>
-                <td>{{ user.firstName }} {{ user.lastName }}</td>
-                <td>{{ user.accessLevel === 1 ? 'Admin' : 'Employee' }}</td>
-                <td>
-                  <div class="btn-group w-100">
-
-                    <button type="button"
-                            class="btn btn-outline-primary"
-                            (click)="updateEnabled(user.username)">
-                      {{ user.enabled === 1 ? 'Enabled' : 'Disabled' }}
-                    </button>
-
-                    <button type="button"
-                            class="btn btn-outline-primary"
-                            (click)="onEditUser(user)">
-                      Edit
-                    </button>
-
-                  </div>
-
-                  <div class="row gap-3">
-
-
-                  </div>
-
-                </td>
-              </tr>
-              </tbody>
-            </table>
-          </div>
-
-
-        </div>
-
-      </div>
-
-      <div class="col-4 h-100">
-        <div class="w-100 mx-2 p-1">
-          <div *ngIf="!isEditMode">
-            <div class="card p-3">
-              <h3 class="mb=2 card-title">Add New User</h3>
-              <div class="card-body">
-                <form class="form-group" [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
-
-                  <div class="mb-3">
-                    <label class="form-label">First Name</label>
-                    <input
-                      type="text" formControlName="firstName" class="form-control">
-                    <div
-                      *ngIf="registrationForm.controls['firstName']?.invalid && registrationForm.controls['firstName'].touched"
-                      class="text-danger">
-                      <div *ngIf="registrationForm.controls['firstName'].hasError('required')">First Name is required.
-                      </div>
-                      <div *ngIf="registrationForm.controls['firstName'].hasError('invalidName')">Invalid name it must
-                        contain(A-Z,a-z).
-                      </div>
-                    </div>
-
-                  </div>
-
-                  <div class="mb-3">
-                    <label class="form-label">Last Name</label>
-                    <input
-                      type="text" formControlName="lastName" class="form-control">
-                    <div
-                      *ngIf="registrationForm.controls['lastName']?.invalid && registrationForm.controls['lastName'].touched"
-                      class="text-danger">
-                      <div *ngIf="registrationForm.controls['lastName'].hasError('required')">Last Name is required.
-                      </div>
-                      <div *ngIf="registrationForm.controls['lastName'].hasError('invalidName')">Invalid name it must
-                        contain(A-Z,a-z).
-                      </div>
-                    </div>
-
-                  </div>
-
-
-                  <div class="mb-3">
-                    <label class="form-label">Username</label>
-                    <input
-
-                      formControlName="username"
-                      type="text"
-                      class="form-control">
-                    <div *ngIf="registrationForm.get('username')?.invalid && registrationForm.get('username')?.touched"
-                         class="text-danger">
-                      <div *ngIf="registrationForm.get('username')?.hasError('required')">Username is required.</div>
-                    </div>
-
-                  </div>
-
-                  <div class="mb-3">
-                    <label class="form-label">Password</label>
-                    <input
-                      type="password" formControlName="password" class="form-control">
-                    <div *ngIf="registrationForm.get('password')?.invalid && registrationForm.get('password')?.touched"
-                         class="text-danger">
-                      <div *ngIf="registrationForm.get('password')?.hasError('required')">Password is required.</div>
-                    </div>
-
-                  </div>
-
-                  <div class="mb-3">
-                    <label class="form-label">Confirm Password</label>
-                    <input [class.is-invalid]="registrationForm.errors?.['misMatch']" type="password"
-                           formControlName="confirmPassword" class="form-control">
-                    <small class="text-danger" *ngIf="registrationForm.errors?.['misMatch']">Passwords do not
-                      match</small>
-                  </div>
-
-
-                  <div class="mb-3 form-check">
-                    <input class="form-check-input" type="checkbox" formControlName="accessLevel">
-                    <label class="form-check-label">Is Admin?</label>
-
-                  </div>
-
-                  <div class="mb-3">
-                    <button [disabled]='!registrationForm.valid' class="btn btn-large btn-primary" type="submit">
-                      Register
-                    </button>
-
-                  </div>
-
-                </form>
-
-              </div>
-
-            </div>
-            <!--                         {{registrationForm.value | json}}-->
-          </div>
-
-          <div *ngIf="isEditMode && selectedUser">
-            <div class="card p-3">
-              <h3 class="mb=2 card-title">Edit User</h3>
-              <div class="card-body">
-                <form class="form-group" [formGroup]="editForm" (ngSubmit)="onSubmitEdit()">
-
-                  <div class="mb-3">
-                    <label class="form-label">First Name</label>
-                    <input
-                      type="text" formControlName="firstName" class="form-control">
-                    <div *ngIf="editForm.controls['firstName']?.invalid && editForm.controls['firstName'].touched"
-                         class="text-danger">
-                      <div *ngIf="editForm.controls['firstName'].hasError('required')">First Name is required.</div>
-                      <div *ngIf="editForm.controls['firstName'].hasError('invalidName')">Invalid name it must
-                        contain(A-Z,a-z).
-                      </div>
-                    </div>
-
-                  </div>
-
-                  <div class="mb-3">
-                    <label class="form-label">Last Name</label>
-                    <input
-                      type="text" formControlName="lastName" class="form-control">
-                    <div *ngIf="editForm.controls['lastName']?.invalid && editForm.controls['lastName'].touched"
-                         class="text-danger">
-                      <div *ngIf="editForm.controls['lastName'].hasError('required')">First Name is required.</div>
-                      <div *ngIf="editForm.controls['lastName'].hasError('invalidName')">Invalid name it must
-                        contain(A-Z,a-z).
-                      </div>
-                    </div>
-
-
-                  </div>
-
-
-                  <div class="mb-3 form-check">
-                    <input class="form-check-input" type="checkbox" formControlName="accessLevel"
-                           [checked]="editForm.get('accessLevel')?.value">
-                    <label class="form-check-label">Is Admin?</label>
-
-                  </div>
-
-                  <div class="mb-3">
-                    <button [disabled]="!editForm.valid" class="btn btn-large btn-primary me-1" type="submit">
-                      Save Changes
-                    </button>
-                    <button class="btn btn-large btn-secondary ms-1" (click)="cancelEdit()">Cancel</button>
-                  </div>
-
-                </form>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </div>
-
-  </div>
 </div>
