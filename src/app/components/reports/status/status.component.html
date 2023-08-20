@@ -1,0 +1,118 @@
+<div class="container">
+    <div class="row border-bottom mb-5">
+        <div class="d-flex justify-content-between">
+            <h1>Reports</h1>
+        </div>
+    </div>
+    <div class="row border-bottom mb-3">
+        <div class="col-4">
+            <div class="d-flex gap-1 justify-content-between">
+                <mat-form-field>
+                    <mat-label>Show Routes</mat-label>
+                    <mat-select [(value)]="selectedEnabledOption">
+                        <mat-option (click)="fetchAllData()">
+                            <mat-icon>star</mat-icon>
+                            <span>All Routes</span>
+                        </mat-option>
+                        <mat-option (click)="showCompleted()">
+                            <mat-icon>toggle_on</mat-icon>
+                            <span>Completed </span>
+                        </mat-option>
+                        <mat-option (click)="showunderGoing()">
+                            <mat-icon>toggle_off</mat-icon>
+                            <span>Under going </span>
+                        </mat-option>
+                        <mat-option (click)="shownotStarted()">
+                            <mat-icon>toggle_off</mat-icon>
+                            <span>not Started </span>
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <!--      <mat-form-field>-->
+            <!--        <mat-label>Access Level</mat-label>-->
+            <!--        <mat-select [(value)]="selectedRoleOption">-->
+            <!--          <mat-option (click)="fetchUserData()">-->
+            <!--            <mat-icon>star</mat-icon>-->
+            <!--            <span>All Users</span>-->
+            <!--          </mat-option>-->
+            <!--          <mat-option (click)="showAdminUsers()">-->
+            <!--            <mat-icon>supervised_user_circle</mat-icon>-->
+            <!--            <span>Supervisors</span>-->
+            <!--          </mat-option>-->
+            <!--          <mat-option (click)="showEmployeeUsers()">-->
+            <!--            <mat-icon>account_circle</mat-icon>-->
+            <!--            <span>Employees</span>-->
+            <!--          </mat-option>-->
+            <!--        </mat-select>-->
+            <!--      </mat-form-field>-->
+            <!--    </div>-->
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="mat-elevation-z0">
+            <mat-paginator [pageSizeOptions]="[5,10,20]"
+                           #reportsTablePaginator
+                           showFirstLastButtons
+                           aria-label="Select page of reports">
+            </mat-paginator>
+            <table mat-table [dataSource]="dataSource" matSort (matSortChange)="announceSortChange($event)"
+
+                   class="mat-elevation-z8">
+                <ng-container matColumnDef="Name">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name">
+                        Name
+                    </th>
+                    <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="Address">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by address">
+                        Address
+                    </th>
+                    <td mat-cell *matCellDef="let element"> {{element.address}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="Date">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by date">
+                        Date
+                    </th>
+                    <td mat-cell *matCellDef="let element"> {{element.date | date:'short'}}</td>
+                </ng-container>
+
+
+                <ng-container matColumnDef="Type">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by type">
+                        Type
+                    </th>
+                    <td mat-cell *matCellDef="let element"> {{element.type}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="State">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by state">
+                        State
+                    </th>
+                    <td mat-cell *matCellDef="let element"> {{element.status}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="Start Time">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by start time">
+                        Start Time
+                    </th>
+                    <td mat-cell *matCellDef="let element"> {{element.startTime}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="End Time">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by end time">
+                        End Time
+                    </th>
+                    <td mat-cell *matCellDef="let element"> {{element.endTime}} </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row  (click)="console.log('clicked on ', row.username)" *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+        </div>
+    </div>
+</div>
