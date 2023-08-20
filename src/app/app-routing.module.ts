@@ -11,6 +11,8 @@ import {AddDefinitionComponent} from "./components/definition/add-def/add-defini
 import {EditDefinitionComponent} from "./components/definition/edit-def/edit-definition.component";
 import {AssignmentDetailsComponent} from "./components/assignments/assignment-details.component";
 import {AddUserComponent} from "./components/user/add/add-user.component";
+import {ReportsComponent} from "./components/reports/reports.component";
+import {StatusComponent} from "./components/reports/status/status.component";
 
 const routes: Routes = [
     {path: 'users', component: UserComponent},
@@ -27,6 +29,9 @@ const routes: Routes = [
 
     {path: 'customers/edit/:id', component: EditCustomerComponent},
     {path: 'definitions/edit/:id', component: EditDefinitionComponent},
+
+    {path:'reports',component:ReportsComponent },
+    {path:'reports/status',component:StatusComponent}
 
 ];
 

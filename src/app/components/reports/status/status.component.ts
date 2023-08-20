@@ -1,17 +1,15 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { ReportsService } from '../../services/reports.service';
+import { ReportsService} from "../../../services/reports.service";
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import {MatPaginator} from "@angular/material/paginator";
-import {Router} from "@angular/router";
-
 @Component({
-  selector: 'app-reports',
-  templateUrl: './reports.component.html',
-  styleUrls: ['./reports.component.css']
+  selector: 'app-status',
+  templateUrl: './status.component.html',
+  styleUrls: ['./status.component.css']
 })
-export class ReportsComponent implements OnInit, AfterViewInit {
+export class StatusComponent  implements OnInit, AfterViewInit {
   Data: any[] = [];
   originalData: any[] = [];
   displayedColumns: string[] = ['Name', 'Address', 'Date', 'Type', 'State', 'Start Time', 'End Time'];
@@ -23,9 +21,9 @@ export class ReportsComponent implements OnInit, AfterViewInit {
 
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild('reportsTablePaginator') paginator!: MatPaginator;
-  constructor(    private router: Router,
-    private _liveAnnouncer: LiveAnnouncer,
-    private _reportsService: ReportsService
+  constructor(
+      private _liveAnnouncer: LiveAnnouncer,
+      private _reportsService: ReportsService
   ) {}
 
   ngOnInit(): void {
@@ -40,14 +38,14 @@ export class ReportsComponent implements OnInit, AfterViewInit {
 
   fetchAllData() {
     this._reportsService.fetchReports().subscribe(
-      data => {
-        console.log('Fetched Reports data:', data);
-        this.Data = data;
-        this.dataSource.data = data;
-      },
-      error => {
-        console.error('Error fetching Reports data:', error);
-      }
+        data => {
+          console.log('Fetched Reports data:', data);
+          this.Data = data;
+          this.dataSource.data = data;
+        },
+        error => {
+          console.error('Error fetching Reports data:', error);
+        }
     );
   }
 
@@ -91,6 +89,24 @@ export class ReportsComponent implements OnInit, AfterViewInit {
     );
   }
 
+  // searchUsers(query: string) {
+  //   this.isSearchLoading = true;
+  //   this._reportsService.search(query).subscribe(
+  //       data => {
+  //         console.log('Data Fetched successfully:', data);
+  //
+  //         this.Data = data;
+  //         this.isSearchLoading = false;
+  //
+  //       },
+  //       (error) => {
+  //         console.error('Error fetching customer data by city:', error);
+  //         this.isSearchLoading = false;
+  //
+  //       }
+  //   )
+  // }
+
 
   announceSortChange(sortState: Sort) {
     if (sortState.direction) {
@@ -101,18 +117,15 @@ export class ReportsComponent implements OnInit, AfterViewInit {
     console.log(this.dataSource.sort?.active);
   }
 
+
+  // applySearchFilter() {
+  //   if (this.searchInput === "") {
+  //     this.Data = this.originalData;
+  //   } else {
+  //     this.searchCustomers(this.searchInput.toLowerCase().trim());
+  //   }
+  // }
+
   protected readonly console = console;
 
-    showStatus() {
-        console.log("oooo");
-        this.router.navigate(['reports/status']);
-    }
-
-    showCustomerById() {
-
-    }
-
-    showByDate() {
-
-    }
 }

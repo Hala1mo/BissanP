@@ -37,6 +37,8 @@ import {MatIconModule} from "@angular/material/icon";
 import {MatPaginatorModule} from "@angular/material/paginator";
 import {MatSlideToggleModule} from "@angular/material/slide-toggle";
 import {MatCardModule} from "@angular/material/card";
+import {ReportsComponent} from "./components/reports/reports.component";
+import { StatusComponent } from './components/reports/status/status.component';
 
 
 @NgModule({
@@ -54,6 +56,8 @@ import {MatCardModule} from "@angular/material/card";
         EditDefinitionComponent,
         AssignmentDetailsComponent,
         AddUserComponent,
+        ReportsComponent,
+        StatusComponent
 
 
     ],

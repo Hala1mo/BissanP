@@ -7,8 +7,8 @@ import {Observable} from "rxjs";
 })
 export class ReportsService {
   private reports = 'http://10.10.33.91:8080/reports/forms/all';
-  private notStarted = 'http://10.10.33.91:8080/reports/forms/not_started';
-  private underGoing = 'http://10.10.33.91:8080/reports/forms/under_going';
+  private notstarted = 'http://10.10.33.91:8080/reports/forms/not_started';
+  private undergoing = 'http://10.10.33.91:8080/reports/forms/under_going';
   private completed = 'http://10.10.33.91:8080/reports/forms/completed';
 
 
@@ -22,6 +22,19 @@ export class ReportsService {
   }
 
 
+  notStarted(): Observable<any> {
+    const _urlDetails = `${this.notstarted}`;
+    return this._http.get<any>(_urlDetails);
+  }
 
+  underGoing(): Observable<any> {
+    const _urlDetails = `${this.undergoing}`;
+    return this._http.get<any>(_urlDetails);
+  }
+
+  Completed(): Observable<any> {
+    const _urlDetails = `${this.undergoing}`;
+    return this._http.get<any>(_urlDetails);
+  }
 }
 
