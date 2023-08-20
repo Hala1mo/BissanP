@@ -17,14 +17,14 @@
           <input matInput matNativeControl placeholder="search for name, city, or address"
                  [(ngModel)]="searchInput"
                  [ngModelOptions]="{standalone: true}"
-                 (input)="applySearchFilter()">
+                 (input)="applySearchFilter($event)">
           <mat-icon matSuffix>search</mat-icon>
         </mat-form-field>
       </form>
     </div>
     <div class="col-4">
       <div class="d-flex gap-1 justify-content-between">
-        <mat-form-field>
+        <mat-form-field [style.width.%]="60">
           <mat-label>Show Active Customers</mat-label>
           <mat-select [(value)]="selectedEnabledOption">
             <mat-option (click)="fetchCustomerData()">
