@@ -6,7 +6,7 @@ import {AddCustomerComponent} from "./components/customer/add/add-customer.compo
 import {CustomerDetailsComponent} from "./components/customer/details/customer-details.component";
 import {EditCustomerComponent} from "./components/customer/edit/edit-customer.component";
 import {DefinitionComponent} from "./components/definition/definition.component";
-import {DefinitionDetailsComponent} from "./components/definition/details-def/definition-details.component";
+import {DefinitionDetailsComponent} from "./components/definition/definition-details/definition-details.component";
 import {AddDefinitionComponent} from "./components/definition/add-def/add-definition.component";
 import {EditDefinitionComponent} from "./components/definition/edit-def/edit-definition.component";
 import {AssignmentDetailsComponent} from "./components/assignments/assignment-details.component";

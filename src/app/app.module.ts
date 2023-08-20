@@ -18,13 +18,11 @@ import {EditCustomerComponent} from './components/customer/edit/edit-customer.co
 import {AddUserComponent} from "./components/user/add/add-user.component";
 import {MatCheckboxModule} from "@angular/material/checkbox";
 import {DefinitionComponent} from './components/definition/definition.component';
-import {DefinitionDetailsComponent} from './components/definition/details-def/definition-details.component';
-import {AddDefinitionComponent} from './components/definition/add-def/add-definition.component';
+import {DefinitionDetailsComponent} from './components/definition/definition-details/definition-details.component';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from "@angular/material/input";
 import {MatSelectModule} from "@angular/material/select";
 import {MatTableModule} from "@angular/material/table";
-import {EditDefinitionComponent} from './components/definition/edit-def/edit-definition.component';
 import {MatDatepickerModule} from "@angular/material/datepicker";
 import {MatNativeDateModule} from '@angular/material/core';
 import {AssignmentDetailsComponent} from './components/assignments/assignment-details.component';
@@ -41,9 +39,9 @@ import {ReportsComponent} from "./components/reports/reports.component";
 import {StatusComponent} from './components/reports/status/status.component';
 import {EditUserComponent} from "./components/user/edit-user/edit-user.component";
 import {DateComponent} from "./components/reports/date/date.component";
-import { DefinitionDialogComponent } from './components/definition/definition-dialog/definition-dialog.component';
-import { FilterCusComponent } from './components/reports/filter-cus/filter-cus.component';
-import { TypesComponent } from './components/reports/types/types.component';
+import {DefinitionDialogComponent} from './components/definition/definition-dialog/definition-dialog.component';
+import {FilterCusComponent} from './components/reports/filter-cus/filter-cus.component';
+import {TypesComponent} from './components/reports/types/types.component';
 
 @NgModule({
     declarations: [
@@ -56,8 +54,6 @@ import { TypesComponent } from './components/reports/types/types.component';
         EditCustomerComponent,
         DefinitionComponent,
         DefinitionDetailsComponent,
-        AddDefinitionComponent,
-        EditDefinitionComponent,
         AssignmentDetailsComponent,
         AddUserComponent,
         EditUserComponent,
