@@ -83,7 +83,7 @@ export class ReportsComponent implements OnInit{
     }
   }
   onOptionSelected(event: MatAutocompleteSelectedEvent) {
-    this.myControl.setValue(event.option.value.name);
+    this.router.navigate(['/reports',this.myControl.setValue(event.option.value.name)]);
   }
 
 }
