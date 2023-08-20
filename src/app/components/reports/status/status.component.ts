@@ -89,23 +89,6 @@ export class StatusComponent  implements OnInit, AfterViewInit {
     );
   }
 
-  // searchUsers(query: string) {
-  //   this.isSearchLoading = true;
-  //   this._reportsService.search(query).subscribe(
-  //       data => {
-  //         console.log('Data Fetched successfully:', data);
-  //
-  //         this.Data = data;
-  //         this.isSearchLoading = false;
-  //
-  //       },
-  //       (error) => {
-  //         console.error('Error fetching customer data by city:', error);
-  //         this.isSearchLoading = false;
-  //
-  //       }
-  //   )
-  // }
 
 
   announceSortChange(sortState: Sort) {
@@ -117,14 +100,6 @@ export class StatusComponent  implements OnInit, AfterViewInit {
     console.log(this.dataSource.sort?.active);
   }
 
-
-  // applySearchFilter() {
-  //   if (this.searchInput === "") {
-  //     this.Data = this.originalData;
-  //   } else {
-  //     this.searchCustomers(this.searchInput.toLowerCase().trim());
-  //   }
-  // }
 
   protected readonly console = console;
 

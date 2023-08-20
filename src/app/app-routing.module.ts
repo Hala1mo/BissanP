@@ -13,6 +13,7 @@ import {AssignmentDetailsComponent} from "./components/assignments/assignment-de
 import {AddUserComponent} from "./components/user/add/add-user.component";
 import {ReportsComponent} from "./components/reports/reports.component";
 import {StatusComponent} from "./components/reports/status/status.component";
+import {DateComponent} from "./components/reports/date/date.component";
 
 const routes: Routes = [
     {path: 'users', component: UserComponent},
@@ -31,7 +32,8 @@ const routes: Routes = [
     {path: 'definitions/edit/:id', component: EditDefinitionComponent},
 
     {path:'reports',component:ReportsComponent },
-    {path:'reports/status',component:StatusComponent}
+    {path:'reports/status',component:StatusComponent},
+    {path:'reports/:date',component:DateComponent}
 
 ];
 

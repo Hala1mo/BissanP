@@ -80,7 +80,7 @@ export class CustomerComponent implements OnInit {
 
   openCustomerDetails(id: bigint) {
     this.router.navigate(['/customers', id]);
-    //this.router.navigate(['/details']);
+
   }
 
   updateEnabled(id: bigint) {

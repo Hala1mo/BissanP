@@ -7,24 +7,47 @@
 <div class="row border-bottom mb-3">
   <div class="col-8">
     <div class="d-flex gap-1 justify-content-between">
-      <mat-form-field>
-        <mat-label>Show Routes</mat-label>
-        <mat-select [(value)]="selectedEnabledOption">
-          <mat-option (click)="showStatus()">
-            <mat-icon>star</mat-icon>
-            <span>Show by status</span>
-          </mat-option>
-          <mat-option (click)="showCustomerById()">
-            <mat-icon>toggle_on</mat-icon>
-            <span>Show by customer id </span>
-          </mat-option>
-          <mat-option (click)="showByDate()">
-            <mat-icon>toggle_off</mat-icon>
-            <span>Show by date </span>
-          </mat-option>
-        </mat-select>
+      <button mat-raised-button color="primary"
+              [routerLink]="['/reports/status']">
+       Show by status
+      </button>
+
+
+<!--      <div class="dropdown btn-group">-->
+<!--        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"-->
+<!--                aria-expanded="false">-->
+<!--          Visit Type-->
+<!--        </button>-->
+<!--        <ul class="dropdown-menu">-->
+<!--          <li *ngFor="let date of uniqueDates"-->
+<!--              [value]="date" class="dropdown-item"-->
+<!--              (click)="onTypeSelect(date)">-->
+<!--            {{date}}-->
+<!--          </li>-->
+<!--        </ul>-->
+
+<!--      </div>-->
+     <div>
+      <mat-form-field color="accent">
+        <mat-label>From:</mat-label>
+        <input matInput [matDatepicker]="picker1">
+        <mat-datepicker-toggle matIconSuffix [for]="picker1"></mat-datepicker-toggle>
+        <mat-datepicker #picker1></mat-datepicker>
       </mat-form-field>
-      </div>
+
+      <mat-form-field color="accent">
+        <mat-label>To:</mat-label>
+        <input matInput [matDatepicker]="picker2">
+        <mat-datepicker-toggle matIconSuffix [for]="picker2"></mat-datepicker-toggle>
+        <mat-datepicker #picker2 color="primary"></mat-datepicker>
+      </mat-form-field>
+       <button mat-raised-button color="primary"
+               (click)="onTypeSelect(picker1,picker2)" >
+         Show by status
+       </button>
+
+     </div>
+    </div>
 
   </div>
 </div>

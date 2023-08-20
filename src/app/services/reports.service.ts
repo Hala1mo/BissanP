@@ -6,11 +6,12 @@ import {Observable} from "rxjs";
   providedIn: 'root'
 })
 export class ReportsService {
+  private reportss = 'http://10.10.33.91:8080/reports';
   private reports = 'http://10.10.33.91:8080/reports/forms/all';
   private notstarted = 'http://10.10.33.91:8080/reports/forms/not_started';
   private undergoing = 'http://10.10.33.91:8080/reports/forms/under_going';
   private completed = 'http://10.10.33.91:8080/reports/forms/completed';
-
+  private _visitAssignment = 'http://10.10.33.91:8080/visit_assignments';
 
   constructor(private _http: HttpClient) {
   }
@@ -33,8 +34,26 @@ export class ReportsService {
   }
 
   Completed(): Observable<any> {
-    const _urlDetails = `${this.undergoing}`;
+    const _urlDetails = `${this.completed}`;
     return this._http.get<any>(_urlDetails);
   }
+
+
+  getDate(): Observable<any> {
+    const _urlDetails = `${this._visitAssignment}`;
+    return this._http.get<any>(_urlDetails);
+  }
+
+  // getCustomer(): Observable<any> {
+  //   const _urlDetails = `${this._visitAssignment}/AllDistinctAssignment}`;
+  //   return this._http.get<any>(_urlDetails);
+  // }
+
+  fetchDateData(from: string,to:string): Observable<any> {
+
+    const _urlDetails = `${this.reportss}/visit_assignment/(${from}/${to})`;
+    return this._http.get<any>(_urlDetails);
+  }
+
 }
 
