@@ -84,6 +84,7 @@ export class CustomerComponent implements OnInit {
         console.log('Fetched customer data:', data);
         this.originalCustomerData = data;
         this.customerData = data;
+        this.dataSource=data;
       },
       error => {
         console.error('Error fetching customer data:', error);
