@@ -14,6 +14,8 @@ export class ReportsService {
   private _visitAssignment = 'http://10.10.33.91:8080/visit_assignments';
   private _customers_url = 'http://10.10.33.91:8080/customers';
 
+  private customers = 'http://10.10.33.91:8080/reports/customers';
+
   constructor(private _http: HttpClient) {
   }
 
@@ -55,10 +57,14 @@ export class ReportsService {
     return this._http.get<any>(_urlDetails);
   }
 
-  getCustomerDate(): Observable<any> {
+  getCustomers(): Observable<any> {
     const _urlDetails = `${this._customers_url}/assignment`;
     return this._http.get<any>(_urlDetails);
   }
 
+  getCustomerDate(id:bigint): Observable<any> {
+    const _urlDetails = `${this.customers}/${id}`;
+    return this._http.get<any>(_urlDetails);
+  }
 }
 

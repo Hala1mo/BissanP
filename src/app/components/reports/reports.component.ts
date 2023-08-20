@@ -56,7 +56,7 @@ export class ReportsComponent implements OnInit{
 
 
   fetchCustomer() {
-    this._reportsService.getCustomerDate().subscribe(
+    this._reportsService.getCustomers().subscribe(
       data => {
         console.log('Fetched assignments data:', data);
 
@@ -83,7 +83,14 @@ export class ReportsComponent implements OnInit{
     }
   }
   onOptionSelected(event: MatAutocompleteSelectedEvent) {
-    this.router.navigate(['/reports',this.myControl.setValue(event.option.value.name)]);
+    console.log("Selected option:", event.option.value);
+    if (event.option.value && event.option.value.name) {
+      console.log("Selected name:", event.option.value.name);
+      console.log("Selected id:", event.option.value.uuid);
+      this.router.navigate(['/reports', event.option.value.uuid]);
+    } else {
+      console.error("Invalid option or name");
+    }
   }
 
 }

@@ -14,6 +14,7 @@ import {AddUserComponent} from "./components/user/add/add-user.component";
 import {ReportsComponent} from "./components/reports/reports.component";
 import {StatusComponent} from "./components/reports/status/status.component";
 import {DateComponent} from "./components/reports/date/date.component";
+import {FilterCusComponent} from "./components/reports/filter-cus/filter-cus.component";
 
 const routes: Routes = [
     {path: 'users', component: UserComponent},
@@ -33,7 +34,8 @@ const routes: Routes = [
 
     {path:'reports',component:ReportsComponent },
     {path:'reports/status',component:StatusComponent},
-    {path:'reports/:from/:to',component:DateComponent}
+    {path:'reports/:from/:to',component:DateComponent},
+  {path:'reports/:id',component:FilterCusComponent},
 
 ];
 
