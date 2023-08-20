@@ -1,49 +1,71 @@
-<div class="container">
-    <div class="row border-bottom mb-5">
-        <div class="d-flex justify-content-between">
-            <h1>Add New User</h1>
-            <button mat-raised-button color="primary"
-                    (click)="goBackToUsersPage()">
-                Go Back
-                <mat-icon>arrow_back</mat-icon>
-            </button>
-        </div>
+<h1 mat-dialog-title>Add new user</h1>
+<form [formGroup]="addNewUserForm">
+  <mat-dialog-content>
+    <div class="row mb-1">
+      <mat-form-field>
+        <mat-label>Username</mat-label>
+        <input matInput type="text" placeholder="johndoe23" formControlName="username" required>
+        <mat-error *ngIf="addNewUserForm.controls['username'].invalid">{{getUsernameErrorMessage()}}</mat-error>
+      </mat-form-field>
     </div>
-    <div class="row">
-        <div class="col-6">
-            <mat-card>
-                <mat-card-header>
-                    <mat-card-title>
-                        Create New User Account
-                    </mat-card-title>
-                </mat-card-header>
-                <mat-card-content>
-                    <form>
-                        <div class="row mt-1">
-                            <mat-form-field>
-                                <mat-label>Username</mat-label>
-                                <input matInput placeholder="johndoe23" [formControl]="username" required>
-                                <!--                        <mat-error *ngIf="email.invalid">{{getErrorMessage()}}</mat-error>-->
-                            </mat-form-field>
-                        </div>
-                        <div class="row">
-                            <mat-form-field>
-                                <mat-label>First Name</mat-label>
-                                <input matInput placeholder="John" [formControl]="firstName" required>
-                                <!--                        <mat-error *ngIf="email.invalid">{{getErrorMessage()}}</mat-error>-->
-                            </mat-form-field>
-                        </div>
-                        <div class="row">
-                            <mat-form-field>
-                                <mat-label>Last Name</mat-label>
-                                <input matInput placeholder="Doe" [formControl]="lastName" required>
-                                <!--                        <mat-error *ngIf="email.invalid">{{getErrorMessage()}}</mat-error>-->
-                            </mat-form-field>
-                        </div>
-                    </form>
-                </mat-card-content>
-            </mat-card>
-        </div>
+    <div class="row mb-1">
+      <div class="col-6">
+        <mat-form-field>
+          <mat-label>First Name</mat-label>
+          <input matInput type="text" placeholder="John" formControlName="firstName" required>
+          <mat-error *ngIf="addNewUserForm.controls['firstName'].invalid">{{getFirstNameErrorMessage()}}</mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col-6">
+        <mat-form-field>
+          <mat-label>Last Name</mat-label>
+          <input matInput type="text" placeholder="Doe" formControlName="lastName" required>
+          <mat-error *ngIf="addNewUserForm.controls['lastName'].invalid">{{getLastNameErrorMessage()}}</mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="row mb-1">
+      <mat-form-field>
+        <mat-label>Password</mat-label>
+        <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password" required>
+        <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" [attr.aria-label]="'Hide password'"
+                [attr.aria-pressed]="hidePassword">
+          <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+        </button>
+        <mat-error *ngIf="addNewUserForm.controls['password'].invalid">{{getPasswordErrorMessage()}}</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="row mb-1">
+      <mat-form-field>
+        <mat-label>Confirm Password</mat-label>
+        <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="confirmPassword" required>
+        <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" [attr.aria-label]="'Hide password'"
+                [attr.aria-pressed]="hidePassword">
+          <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+        </button>
+        <mat-error *ngIf="addNewUserForm.controls['confirmPassword'].invalid">{{getConfirmPasswordErrorMessage()}}</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="row mb-1">
+      <mat-form-field>
+        <mat-label>Access Level</mat-label>
+        <mat-select formControlName="accessLevel" required>
+          <mat-option [value]="1">
+            <mat-icon>supervised_user_circle</mat-icon>
+            <span>Supervisor</span>
+          </mat-option>
+          <mat-option [value]="0">
+            <mat-icon>account_circle</mat-icon>
+            <span>Employee</span>
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="addNewUserForm.controls['accessLevel'].invalid">{{getAccessLevelErrorMessage()}}</mat-error>
+      </mat-form-field>
+    </div>
+    <mat-dialog-actions>
+      <button mat-raised-button (click)="submitNewUser()" color="primary">Save</button>
+      <button mat-raised-button color="warn" mat-dialog-close>Cancel</button>
+    </mat-dialog-actions>
+  </mat-dialog-content>
+</form>
 
-    </div>
-</div>

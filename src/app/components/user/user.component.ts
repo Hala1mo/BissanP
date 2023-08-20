@@ -1,6 +1,5 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {RegistrationService} from '../../services/registration.service';
 import {PasswordValidators} from "../../shared/password.validators";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {nameValidator} from "../../shared/Name.validators";
@@ -8,7 +7,10 @@ import {MatTableDataSource} from "@angular/material/table";
 import {User} from "../../models/User";
 import {MatPaginator} from "@angular/material/paginator";
 import {MatSort, Sort} from "@angular/material/sort";
+import {MatDialog, MAT_DIALOG_DATA} from "@angular/material/dialog";
 import {LiveAnnouncer} from "@angular/cdk/a11y";
+import {AddUserComponent} from "./add/add-user.component";
+import {UserService} from "../../services/user.service";
 
 
 @Component({
@@ -41,15 +43,16 @@ export class UserComponent implements OnInit, AfterViewInit {
 
   constructor(
     private _snackBar: MatSnackBar,
-    private _registrationService: RegistrationService,
+    private userService: UserService,
     private _liveAnnouncer: LiveAnnouncer,
+    private _dialog: MatDialog,
     private fb: FormBuilder
   ) {
 
   }
 
   ngOnInit() {
-    this.fetchUserData();
+    this.fetchAllUserData();
 
     this.registrationForm = this.fb.group({
       username: ['', Validators.required],
@@ -65,8 +68,11 @@ export class UserComponent implements OnInit, AfterViewInit {
       lastName: ['', [Validators.required, nameValidator]],
       accessLevel: ['']
     });
+  }
 
-
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
   }
 
   announceSortChange(sortState: Sort) {
@@ -78,13 +84,8 @@ export class UserComponent implements OnInit, AfterViewInit {
     console.log(this.dataSource.sort?.active);
   }
 
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
-  }
-
-  fetchUserData() {
-    this._registrationService.fetchUserData().subscribe(
+  fetchAllUserData() {
+    this.userService.getAllUsers().subscribe(
       data => {
         console.log('Fetched user data:', data);
 
@@ -100,17 +101,16 @@ export class UserComponent implements OnInit, AfterViewInit {
   }
 
   onSubmit() {
-
     const registrationFormValue = this.registrationForm.value;
     registrationFormValue.accessLevel = registrationFormValue.accessLevel ? 1 : 0;
 
     console.log(this.registrationForm.value);
 
-    this._registrationService.registerUser(this.registrationForm.value).subscribe(
+    this.userService.saveNewUser(this.registrationForm.value).subscribe(
       (res) => {
         console.log('Registration successful:', res);
         this.registrationForm.reset();
-        this.fetchUserData();
+        this.fetchAllUserData();
       },
       (error) => {
         console.error('Registration failed:', error);
@@ -128,14 +128,12 @@ export class UserComponent implements OnInit, AfterViewInit {
   }
 
 
-  updateEnabled(username: string) {
-
-    this._registrationService.updateEnabledStatus(username).subscribe(
+  updateUserStatus(username: string) {
+    this.userService.updateUserStatus(username).subscribe(
       (res: any) => {
         console.log('Enabled status updated successfully:', res);
 
-        this.fetchUserData();
-
+        this.fetchAllUserData();
       },
       (error) => {
         console.error('Error updating enabled status:', error);
@@ -161,14 +159,13 @@ export class UserComponent implements OnInit, AfterViewInit {
     this.editForm.get('accessLevel')?.setValue(user.accessLevel === 1);
   }
 
-
   onSubmitEdit() {
     if (this.editForm.valid && this.editingUsername) {
 
       const editedUserData = this.editForm.value;
 
       editedUserData.accessLevel = editedUserData.accessLevel ? 1 : 0;
-      this._registrationService.updateUserData(this.editingUsername, editedUserData).subscribe(
+      this.userService.updateUser(this.editingUsername, editedUserData).subscribe(
         (response) => {
           console.log('User data updated successfully:', response);
 
@@ -180,7 +177,7 @@ export class UserComponent implements OnInit, AfterViewInit {
           // Reset the form and exit edit mode
           this.editForm.reset();
           this.isEditMode = false;
-          this.fetchUserData();
+          this.fetchAllUserData();
 
         },
         (error) => {
@@ -237,7 +234,7 @@ export class UserComponent implements OnInit, AfterViewInit {
 
   searchUsers(query: string) {
     this.isSearchLoading = true;
-    this._registrationService.searchUsers(query).subscribe(
+    this.userService.searchUsers(query).subscribe(
       data => {
         console.log('Data Fetched successfully:', data);
 
@@ -254,4 +251,10 @@ export class UserComponent implements OnInit, AfterViewInit {
   }
 
   protected readonly console = console;
+
+  openAddDialog() {
+    this._dialog.open(AddUserComponent).afterClosed().subscribe(() => {
+      this.fetchAllUserData();
+    });
+  }
 }
