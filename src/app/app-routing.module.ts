@@ -33,7 +33,7 @@ const routes: Routes = [
 
     {path:'reports',component:ReportsComponent },
     {path:'reports/status',component:StatusComponent},
-    {path:'reports/:date',component:DateComponent}
+    {path:'reports/:from/:to',component:DateComponent}
 
 ];
 

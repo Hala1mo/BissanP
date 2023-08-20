@@ -12,6 +12,7 @@ export class ReportsService {
   private undergoing = 'http://10.10.33.91:8080/reports/forms/under_going';
   private completed = 'http://10.10.33.91:8080/reports/forms/completed';
   private _visitAssignment = 'http://10.10.33.91:8080/visit_assignments';
+  private _customers_url = 'http://10.10.33.91:8080/customers';
 
   constructor(private _http: HttpClient) {
   }
@@ -50,8 +51,12 @@ export class ReportsService {
   // }
 
   fetchDateData(from: string,to:string): Observable<any> {
+    const _urlDetails = `${this.reportss}/visit_assignments?from=${from}&to=${to}`;
+    return this._http.get<any>(_urlDetails);
+  }
 
-    const _urlDetails = `${this.reportss}/visit_assignment/(${from}/${to})`;
+  getCustomerDate(): Observable<any> {
+    const _urlDetails = `${this._customers_url}/assignment`;
     return this._http.get<any>(_urlDetails);
   }
 

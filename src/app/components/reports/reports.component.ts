@@ -6,6 +6,10 @@ import { LiveAnnouncer } from '@angular/cdk/a11y';
 import {MatPaginator} from "@angular/material/paginator";
 import {Router} from "@angular/router";
 import {Definiton} from "../../models/definiton";
+import {formatDate} from "@angular/common";
+import {MatDatepicker} from "@angular/material/datepicker";
+import {FormControl} from "@angular/forms";
+import {MatAutocompleteSelectedEvent} from "@angular/material/autocomplete";
 
 @Component({
   selector: 'app-reports',
@@ -14,8 +18,11 @@ import {Definiton} from "../../models/definiton";
 })
 export class ReportsComponent implements OnInit{
     Date: any[] = [];
+  cusData:any[]=[];
     uniqueDates: string[] = [];
-
+  fromDate: Date | null = null;
+  toDate: Date | null = null;
+  myControl = new FormControl();
 
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild('reportsTablePaginator') paginator!: MatPaginator;
@@ -27,21 +34,10 @@ export class ReportsComponent implements OnInit{
   ngOnInit(): void {
     // this.fetchAllData();
     this.fetchDate();
+    this.fetchCustomer();
 
   }
 
-  // fetchAllData() {
-  //   this._reportsService.fetchReports().subscribe(
-  //     data => {
-  //       console.log('Fetched Reports data:', data);
-  //       this.Data = data;
-  //       this.dataSource.data = data;
-  //     },
-  //     error => {
-  //       console.error('Error fetching Reports data:', error);
-  //     }
-  //   );
-  // }
 
     fetchDate() {
         this._reportsService.getDate().subscribe(
@@ -58,26 +54,36 @@ export class ReportsComponent implements OnInit{
 
     }
 
+
+  fetchCustomer() {
+    this._reportsService.getCustomerDate().subscribe(
+      data => {
+        console.log('Fetched assignments data:', data);
+
+        this.cusData = data;
+
+      },
+      error => {
+        console.error('Error fetching assignments data:', error);
+      }
+    );
+
+  }
+
   protected readonly console = console;
+  onTypeSelect() {
+    if (this.fromDate && this.toDate) {
+      const fromDateString = formatDate(this.fromDate, 'yyyy-MM-dd', 'en');
+      const toDateString = formatDate(this.toDate, 'yyyy-MM-dd', 'en');
 
-    onTypeSelect(from: any,to:any) {
+      console.log('From Date:', fromDateString);
+      console.log('To Date:', toDateString);
 
-        this.router.navigate(['/reports',from,to]);
+      this.router.navigate(['/reports', fromDateString, toDateString]);
     }
-
-    // getUniqueDates(): string[] {
-    //     const dateSet = new Set<string>(); // Using a set to ensure uniqueness
-    //
-    //     for (const item of this.Date) {
-    //         if (item.date) {
-    //             dateSet.add(item.date);
-    //         }
-    //     }
-    //
-    //     const sortedDates = Array.from(dateSet).sort();
-    //     return sortedDates;
-    // }
-
-
+  }
+  onOptionSelected(event: MatAutocompleteSelectedEvent) {
+    this.myControl.setValue(event.option.value.name);
+  }
 
 }

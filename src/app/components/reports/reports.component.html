@@ -5,7 +5,7 @@
     </div>
   </div>
 <div class="row border-bottom mb-3">
-  <div class="col-8">
+  <div class="col-12">
     <div class="d-flex gap-1 justify-content-between">
       <button mat-raised-button color="primary"
               [routerLink]="['/reports/status']">
@@ -13,43 +13,47 @@
       </button>
 
 
-<!--      <div class="dropdown btn-group">-->
-<!--        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"-->
-<!--                aria-expanded="false">-->
-<!--          Visit Type-->
-<!--        </button>-->
-<!--        <ul class="dropdown-menu">-->
-<!--          <li *ngFor="let date of uniqueDates"-->
-<!--              [value]="date" class="dropdown-item"-->
-<!--              (click)="onTypeSelect(date)">-->
-<!--            {{date}}-->
-<!--          </li>-->
-<!--        </ul>-->
+      <form class="example-form">
+        <mat-form-field class="example-full-width">
+          <input type="text"
+                 placeholder="Assign Customer"
+                 aria-label="Number"
+                 matInput
+                 [formControl]="myControl"
+                 [matAutocomplete]="auto">
+          <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" (optionSelected)="onOptionSelected($event)">
+            <mat-option *ngFor="let option of cusData" [value]="option">
+              {{ option.name }}
+            </mat-option>
+          </mat-autocomplete>
 
-<!--      </div>-->
+        </mat-form-field>
+      </form>
+
      <div>
-      <mat-form-field color="accent">
-        <mat-label>From:</mat-label>
-        <input matInput [matDatepicker]="picker1">
-        <mat-datepicker-toggle matIconSuffix [for]="picker1"></mat-datepicker-toggle>
-        <mat-datepicker #picker1></mat-datepicker>
-      </mat-form-field>
+       <div>
+         <mat-form-field color="accent">
+           <mat-label>From:</mat-label>
+           <input matInput [matDatepicker]="picker1" [(ngModel)]="fromDate">
+           <mat-datepicker-toggle matIconSuffix [for]="picker1"></mat-datepicker-toggle>
+           <mat-datepicker #picker1></mat-datepicker>
+         </mat-form-field>
 
-      <mat-form-field color="accent">
-        <mat-label>To:</mat-label>
-        <input matInput [matDatepicker]="picker2">
-        <mat-datepicker-toggle matIconSuffix [for]="picker2"></mat-datepicker-toggle>
-        <mat-datepicker #picker2 color="primary"></mat-datepicker>
-      </mat-form-field>
-       <button mat-raised-button color="primary"
-               (click)="onTypeSelect(picker1,picker2)" >
-         Show by status
-       </button>
+         <mat-form-field color="accent">
+           <mat-label>To:</mat-label>
+           <input matInput [matDatepicker]="picker2" [(ngModel)]="toDate">
+           <mat-datepicker-toggle matIconSuffix [for]="picker2"></mat-datepicker-toggle>
+           <mat-datepicker #picker2 color="primary"></mat-datepicker>
+         </mat-form-field>
+
+         <button mat-raised-button color="primary" (click)="onTypeSelect()" >
+           Show by date
+         </button>
+       </div>
 
      </div>
-    </div>
 
   </div>
 </div>
-
+</div>
 </div>
