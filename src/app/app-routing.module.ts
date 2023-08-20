@@ -7,8 +7,6 @@ import {CustomerDetailsComponent} from "./components/customer/details/customer-d
 import {EditCustomerComponent} from "./components/customer/edit/edit-customer.component";
 import {DefinitionComponent} from "./components/definition/definition.component";
 import {DefinitionDetailsComponent} from "./components/definition/definition-details/definition-details.component";
-import {AddDefinitionComponent} from "./components/definition/add-def/add-definition.component";
-import {EditDefinitionComponent} from "./components/definition/edit-def/edit-definition.component";
 import {AssignmentDetailsComponent} from "./components/assignments/assignment-details.component";
 import {AddUserComponent} from "./components/user/add/add-user.component";
 import {ReportsComponent} from "./components/reports/reports.component";
@@ -22,7 +20,6 @@ const routes: Routes = [
     {path: 'definitions', component: DefinitionComponent},
 
     {path: 'customers/add', component: AddCustomerComponent},
-    {path: 'definitions/add', component: AddDefinitionComponent},
     {path: 'users/add', component: AddUserComponent},
 
     {path: 'customers/:id', component: CustomerDetailsComponent},
@@ -30,7 +27,6 @@ const routes: Routes = [
     {path: 'assignments/:id', component: AssignmentDetailsComponent},
 
     {path: 'customers/edit/:id', component: EditCustomerComponent},
-    {path: 'definitions/edit/:id', component: EditDefinitionComponent},
 
     {path:'reports',component:ReportsComponent },
     {path:'reports/status',component:StatusComponent},
