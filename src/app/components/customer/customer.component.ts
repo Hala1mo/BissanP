@@ -133,23 +133,32 @@ export class CustomerComponent implements OnInit {
     this.selectedEnabledOption = "Enabled"
     const enabledCustomers = this.originalCustomerData.filter(customer => customer.enabled === 1);
     this.customerData = enabledCustomers;
+    this.dataSource=new MatTableDataSource(this.customerData);
+
   }
 
   showDisabledCustomers() {
     this.selectedEnabledOption = "Disabled"
     const disabledCustomers = this.originalCustomerData.filter(customer => customer.enabled === 0);
     this.customerData = disabledCustomers;
+    // this.dataSource.data = this.customerData;
+    console.log("this.dataSource.data", this.dataSource.data);
+    this.dataSource=new MatTableDataSource(this.customerData);
+
   }
 
-  applySearchFilter() {
+  applySearchFilter(event: Event) {
     if (this.searchInput === "") {
       this.customerData = this.originalCustomerData;
     } else {
       this.searchCustomers(this.searchInput.toLowerCase().trim());
+      const filterValue = (event.target as HTMLInputElement).value;
+      this.dataSource.filter=filterValue.trim()
     }
   }
 
   searchCustomers(query: string) {
+    this.dataSource.filter = query.trim().toLowerCase();
     this.isSearchLoading = true;
     this._registrationService.searchCustomers(query).subscribe(
       data => {
@@ -157,6 +166,7 @@ export class CustomerComponent implements OnInit {
 
         this.customerData = data;
         this.isSearchLoading = false;
+        this.dataSource=data
       },
       (error) => {
         console.error('Error fetching customer data by city:', error);
