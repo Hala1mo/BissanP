@@ -83,9 +83,6 @@ export class AddUserComponent implements OnInit {
 
       }
     )
-
-
-    console.log("Register New User")
   }
 
   getUsernameErrorMessage() {

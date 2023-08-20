@@ -54,6 +54,10 @@ export class UserComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     this.fetchAllUserData();
 
+    this.dataSource.filterPredicate = function (user, filter) {
+      return user.username.toLocaleLowerCase().includes(filter.toLocaleLowerCase()) || user.firstName.toLocaleLowerCase().includes(filter.toLocaleLowerCase()) || user.lastName.toLocaleLowerCase().includes(filter.toLocaleLowerCase());
+    }
+
     this.registrationForm = this.fb.group({
       username: ['', Validators.required],
       firstName: ['', [Validators.required, nameValidator]],
@@ -85,64 +89,35 @@ export class UserComponent implements OnInit, AfterViewInit {
     console.log(this.dataSource.sort?.active);
   }
 
+
   fetchAllUserData() {
-    this.userService.getAllUsers().subscribe(
-      data => {
-        console.log('Fetched user data:', data);
+    this.userService.getAllUsers().subscribe({
+      next: response => {
+        console.log('Fetched user data:', response);
+        this.originalUserData = response;
 
-        this.userData = data;
-        this.originalUserData = data;
-
-        this.dataSource.data = data
+        this.resetFilters();
       },
-      error => {
+      error: error => {
         console.error('Error fetching user data:', error);
+
       }
-    );
+    });
   }
-
-  onSubmit() {
-    const registrationFormValue = this.registrationForm.value;
-    registrationFormValue.accessLevel = registrationFormValue.accessLevel ? 1 : 0;
-
-    console.log(this.registrationForm.value);
-
-    this.userService.saveNewUser(this.registrationForm.value).subscribe(
-      (res) => {
-        console.log('Registration successful:', res);
-        this.registrationForm.reset();
-        this.fetchAllUserData();
-      },
-      (error) => {
-        console.error('Registration failed:', error);
-        if (error.error && error.error.errors && error.error.errors.length > 0) {
-          const errorMessage = error.error.errors[0];
-          console.log('Error message:', errorMessage);
-          // this.toastService.show('Error', errorMessage);
-          this._snackBar.open(errorMessage, '', {
-            duration: 3000
-          });
-
-        }
-      }
-    );
-  }
-
 
   updateUserStatus(username: string) {
     this.userService.updateUserStatus(username).subscribe(
       (res: any) => {
         console.log('Enabled status updated successfully:', res);
-
         this.fetchAllUserData();
       },
       (error) => {
         console.error('Error updating enabled status:', error);
-
       }
     );
   }
 
+  // TO REMOVE START
 
   populateEditForm(user: any) {
     this.editForm.patchValue({
@@ -203,52 +178,65 @@ export class UserComponent implements OnInit, AfterViewInit {
     this.editForm.reset();
   }
 
+  // TO MOVE END
 
   showEnabledUsers() {
     this.selectedEnabledOption = "Active"
     this.userData = this.originalUserData.filter(user => user.enabled === 1);
+
+    this.dataSource.data = this.userData;
   }
 
   showDisabledUsers() {
     this.selectedEnabledOption = "Inactive"
     this.userData = this.originalUserData.filter(user => user.enabled === 0);
+
+    this.dataSource.data = this.userData;
   }
 
   showAdminUsers() {
     this.selectedRoleOption = "Supervisors"
     this.userData = this.originalUserData.filter(user => user.accessLevel === 1);
+
+    this.dataSource.data = this.userData;
   }
 
   showEmployeeUsers() {
     this.selectedRoleOption = "Employees"
     this.userData = this.originalUserData.filter(user => user.accessLevel === 0);
+
+    this.dataSource.data = this.userData;
   }
 
-  applySearchFilter() {
-    if (this.searchInput === "") {
-      this.userData = this.originalUserData;
-    } else {
-      this.searchUsers(this.searchInput.toLowerCase().trim());
-    }
+  resetFilters() {
+    this.userData = this.originalUserData;
 
+    this.dataSource.data = this.userData;
+  }
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
   searchUsers(query: string) {
-    this.isSearchLoading = true;
-    this.userService.searchUsers(query).subscribe(
-      data => {
-        console.log('Data Fetched successfully:', data);
-
-        this.userData = data;
-        this.isSearchLoading = false;
-
-      },
-      (error) => {
-        console.error('Error fetching customer data by city:', error);
-        this.isSearchLoading = false;
-
-      }
-    )
+    this.dataSource.filter = query.trim().toLowerCase();
+    //
+    // this.isSearchLoading = true;
+    // this.userService.searchUsers(query).subscribe({
+    //   next: response => {
+    //     console.log('Data Fetched successfully:', response);
+    //
+    //     this.userData = response;
+    //     this.dataSource.data = this.userData;
+    //
+    //     this.isSearchLoading = false;
+    //   },
+    //   error: error => {
+    //     console.error('Error fetching customer data by city:', error);
+    //     this.isSearchLoading = false;
+    //   }
+    // });
   }
 
   protected readonly console = console;

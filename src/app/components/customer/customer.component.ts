@@ -22,7 +22,7 @@ export class CustomerComponent implements OnInit {
 
   isSearchLoading = false;
   selectedEnabledOption = "Enabled"
-  displayedColumns: string[] = ['name', 'address.city', 'address.addressLine1','enabled']
+  displayedColumns: string[] = ['name', 'city', 'addressLine','enabled']
   customerData: Customer[] = [];
   originalCustomerData: Customer[] = [];
 
