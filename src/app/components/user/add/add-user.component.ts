@@ -77,7 +77,6 @@ export class AddUserComponent implements OnInit {
             this.snackBar.open(errorMessage, '', {
               duration: 3000
             });
-
           }
         }
 

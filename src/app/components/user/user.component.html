@@ -95,17 +95,23 @@
             {{user.accessLevel === 1 ? 'Supervisor' : 'Employee'}}
           </td>
         </ng-container>
-        <ng-container matColumnDef="enabled">
+        <ng-container matColumnDef="actions">
           <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by activity">
             Actions
           </th>
           <td mat-cell *matCellDef="let user">
-            <mat-slide-toggle
-              (click)="updateUserStatus(user.username)"
-              checked="{{user.enabled === 1 ? 'true' : 'false'}}"
-            >
-              {{user.enabled === 1 ? 'Active' : 'Inactive'}}
-            </mat-slide-toggle>
+            <div class="d-flex justify-content-between align-items-center">
+              <mat-slide-toggle
+                (click)="updateUserStatus(user)"
+                checked="{{user.enabled === 1 ? 'true' : 'false'}}"
+              >
+                {{user.enabled === 1 ? 'Active' : 'Inactive'}}
+              </mat-slide-toggle>
+
+              <button mat-icon-button color="primary"
+              (click)="updateUser(user)"><mat-icon>edit</mat-icon></button>
+            </div>
+
           </td>
         </ng-container>
 

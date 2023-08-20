@@ -27,7 +27,7 @@ export class UserComponent implements OnInit, AfterViewInit {
   selectedRoleOption: string = "";
   selectedEnabledOption: string = "";
 
-  displayedColumns: string[] = ['username', 'firstName', 'lastName', 'accessLevel', 'enabled']
+  displayedColumns: string[] = ['username', 'firstName', 'lastName', 'accessLevel', 'actions']
   dataSource = new MatTableDataSource(this.userData);
 
   @ViewChild('userTablePaginator') paginator!: MatPaginator;
@@ -42,7 +42,7 @@ export class UserComponent implements OnInit, AfterViewInit {
   editingUsername: string | null = null;
 
   constructor(
-    private _snackBar: MatSnackBar,
+    private snackBar: MatSnackBar,
     private userService: UserService,
     private _liveAnnouncer: LiveAnnouncer,
     private _dialog: MatDialog,
@@ -99,22 +99,49 @@ export class UserComponent implements OnInit, AfterViewInit {
         this.resetFilters();
       },
       error: error => {
-        console.error('Error fetching user data:', error);
+        console.error('Error fetching users:', error);
+        if (error.message) {
+          let errorMessage = error.message;
+          console.log('Error message:', errorMessage);
+
+          this.snackBar.open(errorMessage, '', {
+            duration: 3000
+          });
+
+        }
 
       }
     });
   }
 
-  updateUserStatus(username: string) {
-    this.userService.updateUserStatus(username).subscribe(
-      (res: any) => {
-        console.log('Enabled status updated successfully:', res);
-        this.fetchAllUserData();
-      },
-      (error) => {
-        console.error('Error updating enabled status:', error);
+  updateUserStatus(user: User) {
+    user.enabled = user.enabled == 1 ? 0 : 1;
+    this.userService.updateUserStatus(user.username).subscribe(
+      {
+        next: response => {
+          console.log('Enabled status updated successfully:', response);
+
+          user.enabled = response.enabled;
+        },
+        error: error => {
+          console.error('Error updating enabled status:', error);
+          if (error.message) {
+            let errorMessage = error.message;
+            console.log('Error message:', errorMessage);
+
+            this.snackBar.open(errorMessage, '', {
+              duration: 3000
+            });
+
+          }
+          user.enabled = user.enabled == 1 ? 0 : 1;
+        }
       }
     );
+  }
+
+  updateUser(user : User) {
+
   }
 
   // TO REMOVE START
@@ -162,7 +189,7 @@ export class UserComponent implements OnInit, AfterViewInit {
             const errorMessage = error.error.errors[0];
             console.log('Error message:', errorMessage);
             // this.toastService.show('Error', errorMessage);
-            this._snackBar.open(errorMessage, '', {
+            this.snackBar.open(errorMessage, '', {
               duration: 3000
             });
 
@@ -219,26 +246,6 @@ export class UserComponent implements OnInit, AfterViewInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  searchUsers(query: string) {
-    this.dataSource.filter = query.trim().toLowerCase();
-    //
-    // this.isSearchLoading = true;
-    // this.userService.searchUsers(query).subscribe({
-    //   next: response => {
-    //     console.log('Data Fetched successfully:', response);
-    //
-    //     this.userData = response;
-    //     this.dataSource.data = this.userData;
-    //
-    //     this.isSearchLoading = false;
-    //   },
-    //   error: error => {
-    //     console.error('Error fetching customer data by city:', error);
-    //     this.isSearchLoading = false;
-    //   }
-    // });
-  }
-
   protected readonly console = console;
 
   openAddDialog() {
@@ -246,4 +253,5 @@ export class UserComponent implements OnInit, AfterViewInit {
       this.fetchAllUserData();
     });
   }
+
 }
