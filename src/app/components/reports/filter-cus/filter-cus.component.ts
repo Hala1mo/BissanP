@@ -14,6 +14,7 @@ import {LiveAnnouncer} from "@angular/cdk/a11y";
 })
 export class FilterCusComponent implements OnInit,AfterViewInit{
   Data: any[] = [];
+  searchInput!: string ;
   from!: string;
   to!:string;
   displayedColumns: string[] = ['Date', 'userName', 'FullName', 'Type'];
@@ -44,12 +45,12 @@ id!:bigint;
   fetchData(id:bigint) {
     this._reportsService.getCustomerDate(id).subscribe(
       (data) => {
-        console.log('Fetched Date data:', data);
+        console.log('Fetched customer data:', data);
         this.Data = data;
         this.dataSource=data;
       },
       (error) => {
-        console.error('Error fetching Date data:', error);
+        console.error('Error fetching customer data:', error);
       }
     );
   }

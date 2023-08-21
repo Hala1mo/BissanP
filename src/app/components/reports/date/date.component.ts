@@ -5,6 +5,9 @@ import {MatTableDataSource} from "@angular/material/table";
 import {MatSort, Sort} from "@angular/material/sort";
 import {MatPaginator} from "@angular/material/paginator";
 import {LiveAnnouncer} from "@angular/cdk/a11y";
+import {User} from "../../../models/User";
+import {CusComponent} from "./cus/cus.component";
+import {MatDialog} from "@angular/material/dialog";
 
 @Component({
   selector: 'app-date',
@@ -15,7 +18,7 @@ export class DateComponent implements OnInit,AfterViewInit {
   Data: any[] = [];
   from!: string;
   to!:string;
-  displayedColumns: string[] = ['Date', 'userName', 'FullName', 'Comment'];
+  displayedColumns: string[] = ['Date', 'userName', 'FullName', 'Comment','Customer'];
   dataSource = new MatTableDataSource(this.Data);
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild('reportsTablePaginator') paginator!: MatPaginator;
@@ -23,6 +26,7 @@ export class DateComponent implements OnInit,AfterViewInit {
       private route: ActivatedRoute,
       private _reportsService: ReportsService,
       private _liveAnnouncer: LiveAnnouncer,
+      private matDialog: MatDialog
   ) {}
 
   ngOnInit() {
@@ -65,4 +69,22 @@ export class DateComponent implements OnInit,AfterViewInit {
   }
 
   protected readonly console = console;
+
+
+  openDialog(customer: any[]) {
+    console.log("dsdc",customer);
+    this.matDialog.open(CusComponent, {
+      width: '50%',
+      data: customer
+
+    }).afterClosed().subscribe(
+      response => {
+        if (response === undefined) return;
+        // if (response.id && response.name ){
+        //   customer.id = response.id;
+        //   customer.name = response.name;
+        //
+        // }
+      })
+  }
 }
