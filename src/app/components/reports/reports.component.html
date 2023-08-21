@@ -4,55 +4,51 @@
       <h1>Reports</h1>
     </div>
   </div>
-  <div class="col-12">
-    <div class="d-flex gap-1 justify-content-between">
-      <button mat-raised-button color="primary"
-              [routerLink]="['/reports/status']">
-       Show by status
+  <div class="col">
+
+    <!-- Button for Show by Status -->
+    <button mat-stroked-button class="mb-4"
+            [routerLink]="['/reports/status']">
+      Show by Status
+    </button>
+
+    <!-- Customer Autocomplete Input -->
+    <form class="example-form">
+      <mat-form-field class="example-full-width">
+        <input type="text"
+               placeholder="Assign Customer"
+               aria-label="Number"
+               matInput
+               [formControl]="myControl"
+               [matAutocomplete]="auto">
+        <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" (optionSelected)="onOptionSelected($event)">
+          <mat-option *ngFor="let option of cusData" [value]="option">
+            {{ option.name }}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+    </form>
+
+    <!-- Date Range Selection -->
+    <div class="date-range">
+      <mat-form-field class="date-field" color="accent">
+        <mat-label>From:</mat-label>
+        <input matInput [matDatepicker]="picker1" [(ngModel)]="fromDate">
+        <mat-datepicker-toggle matIconSuffix [for]="picker1"></mat-datepicker-toggle>
+        <mat-datepicker #picker1></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field class="date-field" color="accent">
+        <mat-label>To:</mat-label>
+        <input matInput [matDatepicker]="picker2" [(ngModel)]="toDate">
+        <mat-datepicker-toggle matIconSuffix [for]="picker2"></mat-datepicker-toggle>
+        <mat-datepicker #picker2 color="primary"></mat-datepicker>
+      </mat-form-field>
+
+      <button mat-stroked-button class="show-by-date-button" (click)="onTypeSelect()">
+        Show by Date
       </button>
-
-
-      <form class="example-form">
-        <mat-form-field class="example-full-width">
-          <input type="text"
-                 placeholder="Assign Customer"
-                 aria-label="Number"
-                 matInput
-                 [formControl]="myControl"
-                 [matAutocomplete]="auto">
-          <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" (optionSelected)="onOptionSelected($event)">
-            <mat-option *ngFor="let option of cusData" [value]="option">
-              {{ option.name }}
-            </mat-option>
-          </mat-autocomplete>
-
-        </mat-form-field>
-      </form>
-
-     <div>
-       <div>
-         <mat-form-field color="accent">
-           <mat-label>From:</mat-label>
-           <input matInput [matDatepicker]="picker1" [(ngModel)]="fromDate">
-           <mat-datepicker-toggle matIconSuffix [for]="picker1"></mat-datepicker-toggle>
-           <mat-datepicker #picker1></mat-datepicker>
-         </mat-form-field>
-
-         <mat-form-field color="accent">
-           <mat-label>To:</mat-label>
-           <input matInput [matDatepicker]="picker2" [(ngModel)]="toDate">
-           <mat-datepicker-toggle matIconSuffix [for]="picker2"></mat-datepicker-toggle>
-           <mat-datepicker #picker2 color="primary"></mat-datepicker>
-         </mat-form-field>
-
-         <button mat-raised-button color="primary" (click)="onTypeSelect()" >
-           Show by date
-         </button>
-       </div>
-
-     </div>
+    </div>
 
   </div>
 </div>
-</div>
-

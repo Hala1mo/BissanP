@@ -93,7 +93,7 @@ export class CustomerDetailsComponent implements OnInit {
 
         console.log(formData);
 
-        this._registrationService.addNewContact(uuid, formData).subscribe(
+        this._registrationService.AddnewContact(uuid, formData).subscribe(
             (res) => {
                 console.log('Registration successful:', res);
                 this.registrationForm.reset();

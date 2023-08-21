@@ -1,13 +1,10 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { ReportsService } from '../../services/reports.service';
 import { MatSort, Sort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import {MatPaginator} from "@angular/material/paginator";
 import {Router} from "@angular/router";
-import {Definiton} from "../../models/definiton";
 import {formatDate} from "@angular/common";
-import {MatDatepicker} from "@angular/material/datepicker";
 import {FormControl} from "@angular/forms";
 import {MatAutocompleteSelectedEvent} from "@angular/material/autocomplete";
 

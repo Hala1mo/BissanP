@@ -1,0 +1,26 @@
+/* Center align the heading */
+.row.border-bottom.mb-5 h1 {
+  text-align: center;
+}
+
+/* Give some spacing to the "Show by Status" button */
+.mb-4 {
+  margin-bottom: 1rem;
+}
+
+/* Date range section styles */
+.date-range {
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Give space between date fields and date picker */
+.date-field {
+  flex: 1;
+  margin-right: 10px;
+}
+
+/* Style the "Show by Date" button */
+.show-by-date-button {
+  margin-top: 1rem;
+}

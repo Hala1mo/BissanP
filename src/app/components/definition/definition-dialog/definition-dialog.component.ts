@@ -74,7 +74,7 @@ export class DefinitionDialogComponent implements OnInit {
     }
 
     private updateDefinition(currentDefinition: VisitDefinition, formJson: any) {
-        this.definitionService.updateVisitDefinition(currentDefinition.uuid, formJson).subscribe({
+        this.definitionService.updateVisitData(currentDefinition.uuid, formJson).subscribe({
             next: response => {
                 console.log("Updated VisitDefinition: ", response)
                 this.matDialogRef.close(response);
