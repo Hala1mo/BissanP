@@ -1,102 +1,164 @@
-<div class="container mt-1">
-  <h2>Add new Customer</h2>
-  <hr class="mb-3">
-  <div class="row justify-content-center">
-    <div class="col-8 card py-3">
-      <form class="row g-3" [formGroup]="registrationForm" (ngSubmit)="onSubmitCustomer()">
-        <h3 class="mt-3">Customer Information</h3>
-        <div class="col-6">
-          <label class="form-label">Name</label>
-          <input type="text" class="form-control" formControlName="name">
-          <div *ngIf="registrationForm.controls['name']?.invalid && registrationForm.controls['name'].touched"
-               class="text-danger">
-            <div *ngIf="registrationForm.controls['name'].hasError('required')">Name is required.</div>
-            <div *ngIf="registrationForm.controls['name'].hasError('invalidName')">Invalid name it must
-              contain(A-Z,a-z).
-            </div>
-          </div>
-        </div>
-        <hr>
-        <h4>Customer Address</h4>
-        <div formGroupName="address">
-          <div class="row mb-3">
-            <div class="col-auto">
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="autoSizingCheck"
-                       formControlName="precise" (change)="togglePreciseLocation()">
-                <label class="form-check-label" for="autoSizingCheck">
-                  Precise Location?
-                </label>
-              </div>
-            </div>
-          </div>
-          <div class="row mb-3">
-            <div class="col-6">
-              <label class="form-label">Address</label>
-              <input type="text" class="form-control" placeholder="1234 Main St"
-                     formControlName="addressLine1">
-              <div
-                *ngIf="registrationForm.get('address.addressLine1')?.invalid && registrationForm.get('address.addressLine1')?.touched"
-                class="text-danger">
-                <div *ngIf="registrationForm.get('address.addressLine1')?.hasError('required')">Address is required.
-                </div>
-              </div>
-            </div>
-            <div class="col-6">
-              <label class="form-label">Address 2</label>
-              <input type="text" class="form-control" placeholder="Apartment, studio, or floor"
-                     formControlName="addressLine2">
-            </div>
-          </div>
-          <div class="row mb-3">
-            <div class="col-6">
-              <label class="form-label">City</label>
-              <input type="text" class="form-control" placeholder="Ramallah"
-                     formControlName="city">
-              <div
-                *ngIf="registrationForm.get('address.city')?.invalid && registrationForm.get('address.city')?.touched"
-                class="text-danger">
-                <div *ngIf="registrationForm.get('address.city')?.hasError('required')">City is required.</div>
-                <div *ngIf="registrationForm.get('address.city')?.hasError('invalidName')">Invalid City name it must
-                  contain(A-Z,a-z).
-                </div>
-              </div>
-            </div>
-
-            <div class="col-6">
-              <label class="form-label">Zip</label>
-              <input type="text" class="form-control" placeholder="1234"
-                     formControlName="zipcode" maxlength="5">
-            </div>
-          </div>
-          <div *ngIf="preciseLocationCheck">
-            <div class="row mb-3">
-              <div class="col-6">
-                <label class="form-label">Latitude</label>
-                <input type="number" class="form-control"
-                       formControlName="latitude" min="-90" max="90">
-                <div class="text-danger" *ngIf="latitudeControl?.hasError('min') || latitudeControl?.hasError('max')">
-                  Latitude must be between -90 and 90 degrees.
-                </div>
-              </div>
-              <div class="col-6">
-                <label class="form-label">Longitude</label>
-                <input type="number" class="form-control"
-                       formControlName="longitude" min="-180" max="180">
-                <div class="text-danger" *ngIf="longitudeControl?.hasError('min') || longitudeControl?.hasError('max')">
-                  Longitude must be between -180 and 180 degrees.
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <button [disabled]='!registrationForm.valid' class="btn btn-large btn-primary" type="submit">
-            Save New Customer
-          </button>
-        </div>
-
-      </form>
+<h1 mat-dialog-title>Add New Customer</h1>
+<form [formGroup]="registrationForm">
+  <mat-dialog-content>
+    <div class="row mb-1">
+      <mat-form-field>
+        <mat-label>Name</mat-label>
+        <input matInput type="text" formControlName="name" required>
+        <mat-error *ngIf="registrationForm.controls['name'].invalid">{{getNameErrorMessage()}}</mat-error>
+      </mat-form-field>
     </div>
-  </div>
-</div>
+    <hr>
+    <h4>Customer Address</h4>
+      <div formGroupName="address">
+       <mat-checkbox formControlName="address.precise" (click)="togglePreciseLocation()"> Precise Location?</mat-checkbox>
+      </div>
+        <div class="row mb-1">
+          <div class="col-6">
+            <mat-form-field [style.width.%]="100">
+                  <mat-label>Address</mat-label>
+              <input matInput type="text" formControlName="address.addressLine1" required>
+              <mat-error *ngIf="registrationForm.get('address.addressLine1')?.invalid">{{getAddressErrorMessage()}}</mat-error>
+
+            </mat-form-field>
+          </div>
+                <div class="col-6">
+            <mat-form-field [style.width.%]="100">
+              <mat-label>Address 2</mat-label>
+              <input matInput type="text" formControlName="address.addressLine2">
+            </mat-form-field>
+                </div>
+        </div>
+    <div class="row mb-1">
+      <div class="col-6">
+<!--        <mat-form-field>-->
+<!--          <mat-label>city</mat-label>-->
+<!--        </mat-form-field>-->
+      </div>
+      <div class="col-6">
+        <mat-form-field [style.width.%]="100">
+          <mat-label>Zip Code</mat-label>
+          <input matInput type="text" formControlName="address.zipcode" required>
+          <mat-error *ngIf="registrationForm.get('address.zipcode')?.invalid">{{getZipCodeErrorMessage()}}</mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+
+
+  </mat-dialog-content>
+</form>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--<div class="container mt-1">-->
+<!--  <h2>Add new Customer</h2>-->
+<!--  <hr class="mb-3">-->
+<!--  <div class="row justify-content-center">-->
+<!--    <div class="col-8 card py-3">-->
+<!--      <form class="row g-3" [formGroup]="registrationForm" (ngSubmit)="onSubmitCustomer()">-->
+<!--        <h3 class="mt-3">Customer Information</h3>-->
+<!--        <div class="col-6">-->
+<!--          <label class="form-label">Name</label>-->
+<!--          <input type="text" class="form-control" formControlName="name">-->
+<!--          <div *ngIf="registrationForm.controls['name']?.invalid && registrationForm.controls['name'].touched"-->
+<!--               class="text-danger">-->
+<!--            <div *ngIf="registrationForm.controls['name'].hasError('required')">Name is required.</div>-->
+<!--            <div *ngIf="registrationForm.controls['name'].hasError('invalidName')">Invalid name it must-->
+<!--              contain(A-Z,a-z).-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--        <hr>-->
+<!--        <h4>Customer Address</h4>-->
+<!--        <div formGroupName="address">-->
+<!--          <div class="row mb-3">-->
+<!--            <div class="col-auto">-->
+<!--              <div class="form-check">-->
+<!--                <input class="form-check-input" type="checkbox" id="autoSizingCheck"-->
+<!--                       formControlName="precise" (change)="togglePreciseLocation()">-->
+<!--                <label class="form-check-label" for="autoSizingCheck">-->
+<!--                  Precise Location?-->
+<!--                </label>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--          <div class="row mb-3">-->
+<!--            <div class="col-6">-->
+<!--              <label class="form-label">Address</label>-->
+<!--              <input type="text" class="form-control" placeholder="1234 Main St"-->
+<!--                     formControlName="addressLine1">-->
+<!--              <div-->
+<!--                *ngIf="registrationForm.get('address.addressLine1')?.invalid && registrationForm.get('address.addressLine1')?.touched"-->
+<!--                class="text-danger">-->
+<!--                <div *ngIf="registrationForm.get('address.addressLine1')?.hasError('required')">Address is required.-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--            <div class="col-6">-->
+<!--              <label class="form-label">Address 2</label>-->
+<!--              <input type="text" class="form-control" placeholder="Apartment, studio, or floor"-->
+<!--                     formControlName="addressLine2">-->
+<!--            </div>-->
+<!--          </div>-->
+<!--          <div class="row mb-3">-->
+<!--            <div class="col-6">-->
+<!--              <label class="form-label">City</label>-->
+<!--              <input type="text" class="form-control" placeholder="Ramallah"-->
+<!--                     formControlName="city">-->
+<!--              <div-->
+<!--                *ngIf="registrationForm.get('address.city')?.invalid && registrationForm.get('address.city')?.touched"-->
+<!--                class="text-danger">-->
+<!--                <div *ngIf="registrationForm.get('address.city')?.hasError('required')">City is required.</div>-->
+<!--                <div *ngIf="registrationForm.get('address.city')?.hasError('invalidName')">Invalid City name it must-->
+<!--                  contain(A-Z,a-z).-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </div>-->
+
+<!--            <div class="col-6">-->
+<!--              <label class="form-label">Zip</label>-->
+<!--              <input type="text" class="form-control" placeholder="1234"-->
+<!--                     formControlName="zipcode" maxlength="5">-->
+<!--            </div>-->
+<!--          </div>-->
+<!--          <div *ngIf="preciseLocationCheck">-->
+<!--            <div class="row mb-3">-->
+<!--              <div class="col-6">-->
+<!--                <label class="form-label">Latitude</label>-->
+<!--                <input type="number" class="form-control"-->
+<!--                       formControlName="latitude" min="-90" max="90">-->
+<!--                <div class="text-danger" *ngIf="latitudeControl?.hasError('min') || latitudeControl?.hasError('max')">-->
+<!--                  Latitude must be between -90 and 90 degrees.-->
+<!--                </div>-->
+<!--              </div>-->
+<!--              <div class="col-6">-->
+<!--                <label class="form-label">Longitude</label>-->
+<!--                <input type="number" class="form-control"-->
+<!--                       formControlName="longitude" min="-180" max="180">-->
+<!--                <div class="text-danger" *ngIf="longitudeControl?.hasError('min') || longitudeControl?.hasError('max')">-->
+<!--                  Longitude must be between -180 and 180 degrees.-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+
+<!--          <button [disabled]='!registrationForm.valid' class="btn btn-large btn-primary" type="submit">-->
+<!--            Save New Customer-->
+<!--          </button>-->
+<!--        </div>-->
+
+<!--      </form>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</div>-->
 

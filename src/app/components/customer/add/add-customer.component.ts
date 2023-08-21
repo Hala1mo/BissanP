@@ -29,15 +29,17 @@ export class AddCustomerComponent implements OnInit {
 
 
     this.registrationForm = this.fb.group({
-      name: ['', [Validators.required, nameValidator]],
+      name: ['', [Validators.required,Validators.minLength(3),
+      Validators.maxLength(30)]],
 
       address: this.fb.group({
-        addressLine1: ['',Validators.required],
+        addressLine1: ['',Validators.required,Validators.minLength(3),
+        Validators.maxLength(30)],
         addressLine2: [''],
         longitude: [],
         latitude: [],
         precise: [false],
-        zipcode: [''],
+        zipcode: ['',Validators.required,Validators.maxLength(5)],
         city: ['',[Validators.required, nameValidator]],
 
       }),
@@ -117,5 +119,52 @@ export class AddCustomerComponent implements OnInit {
     return this.registrationForm.get('address.longitude');
   }
 
-  protected readonly name = name;
+  getNameErrorMessage(){
+    let nameControl=this.registrationForm.controls['name'];
+    if (nameControl.hasError('required'))
+      return 'Name is required';
+    if (nameControl.hasError('maxLength'))
+      return 'Name is too long';
+    if (nameControl.hasError('minLength'))
+      return 'Name is too short';
+
+
+    return '';
+  }
+
+  getAddressErrorMessage(){
+   let addressControl=this.registrationForm.get('address.addressLine1');
+    if (addressControl?.hasError('required'))
+      return 'Address is required';
+    if (addressControl?.hasError('maxLength'))
+      return 'Address is too long';
+    if (addressControl?.hasError('minLength'))
+      return 'Address is too short';
+
+    return'';
+  }
+
+  getZipCodeErrorMessage(){
+    let zipCodeControl=this.registrationForm.get('address.zipcode');
+    if (zipCodeControl?.hasError('required'))
+      return 'Zip Code is required';
+    if (zipCodeControl?.hasError('maxLength'))
+      return 'Zip Code is too long';
+
+    return '';
+  }
+
+
+  // getAddressErrorMessage() {
+  //   const addressLine1Control = this.registrationForm.get('address.addressLine1');
+  //
+  //   if (addressControl.hasError('required'))
+  //     return 'Address is required';
+  //   if (addressControl.hasError('maxLength'))
+  //     return 'Address is too long';
+  //   if (addressControl.hasError('minLength'))
+  //     return 'Address is too short';
+  //
+  //   return ''; // Return an empty string if no error is found
+  // }
 }

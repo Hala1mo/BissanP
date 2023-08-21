@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {RegistrationService} from '../../services/registration.service';
 import {Customer} from "../../models/Customer";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
@@ -7,7 +7,9 @@ import {MatPaginator} from "@angular/material/paginator";
 import {MatTableDataSource} from "@angular/material/table";
 import {MatSort, Sort} from "@angular/material/sort";
 import {LiveAnnouncer} from "@angular/cdk/a11y";
-
+import {MatDialog} from "@angular/material/dialog";
+import {AddCustomerComponent} from "./add/add-customer.component";
+import {CusDetailsComponent} from "./cus-details/cus-details.component";
 
 
 @Component({
@@ -16,9 +18,7 @@ import {LiveAnnouncer} from "@angular/cdk/a11y";
   styleUrls: ['./customer.component.css']
 })
 
-export class CustomerComponent implements OnInit {
-  page = 1;
-  pageSize = 10;
+export class CustomerComponent implements OnInit,AfterViewInit {
 
   isSearchLoading = false;
   selectedEnabledOption = "Enabled"
@@ -48,7 +48,7 @@ export class CustomerComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private _registrationService: RegistrationService, private fb: FormBuilder,private _liveAnnouncer: LiveAnnouncer) {
+    private _registrationService: RegistrationService, private fb: FormBuilder,private _liveAnnouncer: LiveAnnouncer,private matDialog: MatDialog) {
   }
 
   ngOnInit() {
@@ -184,6 +184,25 @@ export class CustomerComponent implements OnInit {
         this.isSearchLoading = false;
       }
     )
+  }
+
+  openAddDialog(){
+    this.matDialog.open(AddCustomerComponent,{
+      width:'40%'
+
+    }).afterClosed().subscribe(() => {
+      this.fetchCustomerData();
+
+    })
+  }
+
+
+  openCustomerDetailDialog(customerId: bigint) {
+    this.matDialog.closeAll();
+    this.matDialog.open(CusDetailsComponent, {
+      width: '50%',
+      data: customerId
+    });
   }
 
   protected readonly console = console;

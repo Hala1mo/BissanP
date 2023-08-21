@@ -2,7 +2,7 @@
   <div class="row border-bottom mb-5">
     <div class="d-flex justify-content-between">
       <h1>Customers</h1>
-      <button mat-raised-button color="primary" [routerLink]="['/customers/add']">
+      <button mat-raised-button color="primary" (click)="openAddDialog()">
         <mat-icon>add</mat-icon>
         Add New Customer
       </button>
@@ -46,8 +46,8 @@
   </div>
   <div class="row mb-3">
     <div class="mat-elevation-z4">
-      <mat-paginator [pageSizeOptions]="[5,10,20]" #customerTablePaginator
-                     showFirstLastButtons aria-label="Select page of Customers"></mat-paginator>
+      <mat-paginator [pageSizeOptions]="[5,10,20]" #customerTablePaginator showFirstLastButtons aria-label="Select page of Customers">
+      </mat-paginator>
 
       <table mat-table [dataSource]="dataSource" matSort >
         <ng-container matColumnDef="name">
@@ -79,6 +79,12 @@
                               checked="{{customer.enabled===1 ?'true':'false'}}">
               {{customer.enabled === 1 ? 'Active' : 'Inactive'}}
             </mat-slide-toggle>
+            <button mat-icon-button color="primary"></button>
+
+            <button mat-icon-button color="primary"
+                    (click)="openCustomerDetailDialog(customer.uuid)">
+              <mat-icon>perm_identity</mat-icon>
+            </button>
           </td>
         </ng-container>
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

@@ -45,6 +45,7 @@ import {TypesComponent} from './components/reports/types/types.component';
 import { CusComponent } from './components/reports/date/cus/cus.component';
 
 import { DetailsCusComponent } from './components/reports/date/details-cus/details-cus.component';
+import { CusDetailsComponent } from './components/customer/cus-details/cus-details.component';
 
 @NgModule({
     declarations: [
@@ -69,7 +70,8 @@ import { DetailsCusComponent } from './components/reports/date/details-cus/detai
         FilterCusComponent,
         TypesComponent,
         CusComponent,
-        DetailsCusComponent
+        DetailsCusComponent,
+        CusDetailsComponent
 
 
     ],
