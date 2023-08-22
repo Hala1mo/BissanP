@@ -83,8 +83,8 @@ export class ReportsComponent implements OnInit{
     console.log("Selected option:", event.option.value);
     if (event.option.value && event.option.value.name) {
       console.log("Selected name:", event.option.value.name);
-      console.log("Selected id:", event.option.value.uuid);
-      this.router.navigate(['/reports', event.option.value.uuid]);
+      console.log("Selected id:", event.option.value.id);
+      this.router.navigate(['/reports', event.option.value.id]);
     } else {
       console.error("Invalid option or name");
     }

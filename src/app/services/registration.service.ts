@@ -92,8 +92,8 @@ export class RegistrationService {
     return this._http.put<any>(updateUrl, updatedUserData);
   }
 
-  updateCustomerData(uuid: bigint, updatedCustomerData: any): Observable<any> {
-    const updateUrl = `${this._customers_url}/${uuid}`; // Adjust the URL endpoint as needed
+  updateCustomerData(id: bigint, updatedCustomerData: any): Observable<any> {
+    const updateUrl = `${this._customers_url}/${id}`; // Adjust the URL endpoint as needed
 
     return this._http.put<any>(updateUrl, updatedCustomerData);
   }

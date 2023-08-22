@@ -22,7 +22,7 @@ export class CustomerDetailsComponent implements OnInit {
     types: any[] = [];
     editForm!: FormGroup;
 
-    private selectedUUIDs: string[] = [];
+    private selectedids: string[] = [];
 
     constructor(
         private _snackBar: MatSnackBar,
@@ -47,7 +47,7 @@ export class CustomerDetailsComponent implements OnInit {
             phoneNumber: ['', [Validators.required, telValidator]],
             email: ['', [Validators.required, Validators.email]],
             Types: this.fb.group({
-                uuid: ['']
+                id: ['']
             }),
         });
     }
@@ -58,7 +58,7 @@ export class CustomerDetailsComponent implements OnInit {
 
         console.log("this.TypesData", this.selectedContact);
         this.TypesData.forEach(type => {
-            typesForm.addControl(type.uuid, new FormControl(false));
+            typesForm.addControl(type.id, new FormControl(false));
         });
 
         console.log("typesForm", typesForm);
@@ -79,25 +79,25 @@ export class CustomerDetailsComponent implements OnInit {
         );
     }
 
-    onSubmit(uuid: any) {
+    onSubmit(id: any) {
         const formData = this.registrationForm.value;
-        const selectedTypes = this.selectedUUIDs.map((uuid: any) => ({uuid}));
+        const selectedTypes = this.selectedids.map((id: any) => ({id}));
         formData.types = selectedTypes;
         formData.Types = selectedTypes;
 
         delete formData.name;
         delete formData.undefined;
-        delete formData.uuid;
+        delete formData.id;
         delete formData.createdTime;
         delete formData.lastModifiedTime;
 
         console.log(formData);
 
-        this._registrationService.AddnewContact(uuid, formData).subscribe(
+        this._registrationService.AddnewContact(id, formData).subscribe(
             (res) => {
                 console.log('Registration successful:', res);
                 this.registrationForm.reset();
-                this.fetchCustomerDetails(uuid);
+                this.fetchCustomerDetails(id);
 
             },
             (error) => {
@@ -127,8 +127,8 @@ export class CustomerDetailsComponent implements OnInit {
         console.log("this.TypesData", this.TypesData);
         this.TypesData.forEach(type => {
             debugger
-            const typeControl = this.editForm.get(['Types', type.uuid]) as FormControl;
-            const isSelected = contact.checkedVisits.some((contactType: { uuid: any; }) => contactType.uuid === type.uuid);
+            const typeControl = this.editForm.get(['Types', type.id]) as FormControl;
+            const isSelected = contact.checkedVisits.some((contactType: { id: any; }) => contactType.id === type.id);
             typeControl.setValue(isSelected);
         });
     }
@@ -138,7 +138,7 @@ export class CustomerDetailsComponent implements OnInit {
         const group: any = {}; // Use a more specific type if available
 
         this.TypesData.forEach(type => {
-            group[type.uuid] = [false]; // Initialize the checkbox value to false
+            group[type.id] = [false]; // Initialize the checkbox value to false
         });
 
         return this.fb.group(group);
@@ -155,7 +155,7 @@ export class CustomerDetailsComponent implements OnInit {
             lastName: ['', [Validators.required, nameValidator]],
             phoneNumber: ['', [Validators.required, telValidator]],
             email: ['', [Validators.required, Validators.email]],
-            uuid: [''],
+            id: [''],
             Types: this.buildTypesForm(),
         });
 
@@ -167,8 +167,8 @@ export class CustomerDetailsComponent implements OnInit {
         if (this.editForm.valid) {
 
             const editedUserData = this.editForm.value;
-            editedUserData.Types = this.TypesData.filter(type => editedUserData.Types[type.uuid]);
-            this._registrationService.updateContactData(this.selectedContact.uuid, editedUserData).subscribe(
+            editedUserData.Types = this.TypesData.filter(type => editedUserData.Types[type.id]);
+            this._registrationService.updateContactData(this.selectedContact.id, editedUserData).subscribe(
                 (response) => {
                     console.log('User data updated successfully:', response);
 
@@ -236,22 +236,22 @@ export class CustomerDetailsComponent implements OnInit {
         if (!this.registrationForm) return;
 
         this.types.forEach((type) => {
-            const formControl = this.registrationForm.get(type.uuid);
+            const formControl = this.registrationForm.get(type.id);
             if (formControl) {
                 formControl.setValue(false);
             }
         });
     }
 
-    onCheckboxChange(event: MatCheckboxChange, uuid: string) {
+    onCheckboxChange(event: MatCheckboxChange, id: string) {
         if (event.checked) {
-            if (!this.selectedUUIDs.includes(uuid)) {
-                this.selectedUUIDs.push(uuid);
+            if (!this.selectedids.includes(id)) {
+                this.selectedids.push(id);
             }
         } else {
-            const index = this.selectedUUIDs.indexOf(uuid);
+            const index = this.selectedids.indexOf(id);
             if (index >= 0) {
-                this.selectedUUIDs.splice(index, 1);
+                this.selectedids.splice(index, 1);
             }
         }
     }
@@ -261,9 +261,9 @@ export class CustomerDetailsComponent implements OnInit {
         console.log('TypesData:', this.TypesData); // Check the fetched types data
 
         for (const type of this.types) {
-            console.log('Creating form control for UUID:', type.uuid);
+            console.log('Creating form control for id:', type.id);
             const formControl = this.fb.control(false);
-            this.registrationForm.addControl(type.uuid, formControl);
+            this.registrationForm.addControl(type.id, formControl);
         }
     }
 

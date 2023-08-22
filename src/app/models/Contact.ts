@@ -5,7 +5,7 @@ export class Contact {
   firstName: string;
   lastName: string;
   phoneNumber: string;
-  uuid: bigint;
+  id: bigint;
   checkedVisits: string[] = [];
 
   constructor(data: any) {
@@ -15,7 +15,7 @@ export class Contact {
     this.enabled = data.enabled || 0;
 
     this.phoneNumber = data.phoneNumber || '';
-    this.uuid = data.uuid || '';
+    this.id = data.id || '';
     this.checkedVisits = data.visitTypes;
   }
 }

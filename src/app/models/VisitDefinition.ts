@@ -1,7 +1,7 @@
 import {VisitType} from "./VisitType";
 
 export class VisitDefinition {
-    uuid: bigint;
+    id: bigint;
     name: string;
     enabled: number;
     frequency: number;
@@ -10,7 +10,7 @@ export class VisitDefinition {
     allowRecurring: boolean
 
     constructor(data: any) {
-        this.uuid = data.uuid || '';
+        this.id = data.id || '';
         this.enabled = data.enabled || 0;
         this.name = data.name || '';
         this.description = data.description || '';

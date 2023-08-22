@@ -6,7 +6,7 @@ export class Address {
   lastModifiedTime: string;
   latitude: number;
   longitude: number;
-  uuid: string;
+  id: string;
   zipcode: string;
 
   constructor(data: any) {
@@ -17,7 +17,7 @@ export class Address {
     this.lastModifiedTime = data.lastModifiedTime || '';
     this.latitude = data.latitude || 0;
     this.longitude = data.longitude || 0;
-    this.uuid = data.uuid || '';
+    this.id = data.id || '';
     this.zipcode = data.zipcode || '';
   }
 }

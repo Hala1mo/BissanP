@@ -2,10 +2,10 @@
 
 export class City {
   name: string;
-  uuid: bigint;
+  id: bigint;
 
   constructor(data: any) {
-    this.uuid = data.uuid || '';
+    this.id = data.id || '';
     this.name = data.name || '';
   }
 }

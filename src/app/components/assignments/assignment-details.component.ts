@@ -104,13 +104,13 @@ export class AssignmentDetailsComponent implements OnInit {
     addCustomer(selectedCustomerName: string) {
         if (selectedCustomerName) {
             const selectedCustomer = this.customerData.find(customer => customer.name === selectedCustomerName);
-            if (selectedCustomer && selectedCustomer.uuid) {
-                const customerId = selectedCustomer.uuid;
+            if (selectedCustomer && selectedCustomer.id) {
+                const customerId = selectedCustomer.id;
                 // Now you can use the customerId in your logic to add the customer
                 console.log('Selected Customer ID:', customerId);
 
                 var customerDTO = {
-                    "uuid": customerId
+                    "id": customerId
                 }
                 this._assignmentService.AddCustomer(customerDTO, this.AssignmentId).subscribe(
                     data => {

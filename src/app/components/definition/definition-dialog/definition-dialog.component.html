@@ -1,5 +1,5 @@
 <h1 mat-dialog-title>
-    {{editMode ? 'Editing "' + currentDefinition?.name + '"' : 'Create new Visit Definition'}}
+    {{editMode ? 'Editing "' + currentDefinition.name + '"' : 'Create new Visit Definition'}}
 </h1>
 <form [formGroup]="definitionForm">
     <mat-dialog-content>
@@ -32,8 +32,8 @@
         <div class="row mb-1">
             <mat-form-field>
                 <mat-label>Visit Type</mat-label>
-                <mat-select formControlName="typeUUID">
-                    <mat-option *ngFor="let type of types" [value]="type.uuid">{{type.name}}</mat-option>
+                <mat-select formControlName="typeid">
+                    <mat-option *ngFor="let type of types" [value]="type.id">{{type.name}}</mat-option>
                 </mat-select>
             </mat-form-field>
         </div>

@@ -3,13 +3,13 @@ import {Customer} from "./Customer";
 export class VisitAssignment {
 
   comment: string ;
-  uuid: bigint;
+  id: bigint;
   date:string;
   enabled: number;
   customer: Customer[];
 
   constructor(data: any) {
-    this.uuid = data.uuid || '';
+    this.id = data.id || '';
     this.comment = data.name || '';
     this.date=data.date;
     this.enabled=data.enabled;

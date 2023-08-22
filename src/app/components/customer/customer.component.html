@@ -76,14 +76,16 @@
             Actions
           </th>
           <td mat-cell *matCellDef="let customer">
-            <mat-slide-toggle (click)="updateEnabled(customer.uuid)"
+            <mat-slide-toggle (click)="updateEnabled(customer.id)"
                               checked="{{customer.enabled===1 ?'true':'false'}}">
               {{customer.enabled === 1 ? 'Active' : 'Inactive'}}
             </mat-slide-toggle>
-<!--            <button mat-icon-button color="primary"></button>-->
+            <button mat-icon-button color="primary"></button>
+            <button mat-icon-button color="primary"
+                    (click)="openEditDialog(customer)"><mat-icon>edit</mat-icon></button>
 
             <button mat-icon-button color="primary"
-                    (click)="openCustomerDetailDialog(customer.uuid)">
+                    (click)="openCustomerDetailDialog(customer.id)">
               <mat-icon>perm_identity</mat-icon>
             </button>
           </td>
@@ -168,15 +170,15 @@
 <!--              <div class="btn-group w-100">-->
 
 <!--                <button type="button" class="btn btn-outline-primary w-100"-->
-<!--                        (click)="updateEnabled(customer.uuid)">  {{ customer.enabled === 1 ? 'Enabled' : 'Disabled' }}-->
+<!--                        (click)="updateEnabled(customer.id)">  {{ customer.enabled === 1 ? 'Enabled' : 'Disabled' }}-->
 <!--                </button>-->
 
 <!--                <button type="button" class="btn btn-outline-primary w-100"-->
-<!--                        (click)="openCustomerDetails(customer.uuid)">Details-->
+<!--                        (click)="openCustomerDetails(customer.id)">Details-->
 <!--                </button>-->
 
 <!--                <button type="button" class="btn btn-outline-primary w-100"-->
-<!--                        (click)="openEditCustomer(customer.uuid)">Edit-->
+<!--                        (click)="openEditCustomer(customer.id)">Edit-->
 <!--                </button>-->
 
 <!--              </div>-->

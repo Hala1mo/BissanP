@@ -46,7 +46,7 @@ export class DefinitionDialogComponent implements OnInit {
 
             allowRecurring: ['false', [Validators.required]],
 
-            typeUUID: ['', [Validators.required]]
+            typeid: ['', [Validators.required]]
         })
     }
 
@@ -59,7 +59,7 @@ export class DefinitionDialogComponent implements OnInit {
                 description: this.currentDefinition.description,
                 frequency: this.currentDefinition.frequency,
                 allowRecurring: this.currentDefinition.allowRecurring,
-                typeUUID : this.currentDefinition.type.uuid
+                typeid : this.currentDefinition.type.id
             });
         }
     }
@@ -74,7 +74,7 @@ export class DefinitionDialogComponent implements OnInit {
     }
 
     private updateDefinition(currentDefinition: VisitDefinition, formJson: any) {
-        this.definitionService.updateVisitData(currentDefinition.uuid, formJson).subscribe({
+        this.definitionService.updateVisitData(currentDefinition.id, formJson).subscribe({
             next: response => {
                 console.log("Updated VisitDefinition: ", response)
                 this.matDialogRef.close(response);

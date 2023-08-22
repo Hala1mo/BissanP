@@ -47,7 +47,7 @@
               <mat-icon>star</mat-icon>
               <span>All Definitions</span>
             </mat-option>
-            <mat-option *ngFor="let type of visitTypesData" (click)="showTypeDefinitions(type.uuid)">{{type.name}}</mat-option>
+            <mat-option *ngFor="let type of visitTypesData" (click)="showTypeDefinitions(type.id)">{{type.name}}</mat-option>
           </mat-select>
         </mat-form-field>
         <mat-form-field>

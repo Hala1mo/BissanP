@@ -16,16 +16,14 @@ import {MatSelectChange} from "@angular/material/select";
 export class AddCustomerComponent implements OnInit {
   registrationForm!: FormGroup;
   customerData: Customer[] = [];
-  cityData:City[]=[];
-  customerDetails: Customer | null = null;
+  cityData: City[] = [];
   preciseLocationCheck: boolean = false;
-  selectedCityUuid: string | null = null; // Initialize to null
+  selectedCityid: string | null = null; // Initialize to null
 
-  constructor(private _snackBar: MatSnackBar, private router: Router,
-
-              private _registrationService: RegistrationService, private fb: FormBuilder) {
-
-
+  constructor(private _snackBar: MatSnackBar,
+              private router: Router,
+              private _registrationService: RegistrationService,
+              private fb: FormBuilder) {
 
   }
 
@@ -46,12 +44,13 @@ export class AddCustomerComponent implements OnInit {
 
     // Listen for value changes in the city dropdown
     this.registrationForm.get('address.city')?.valueChanges.subscribe((value) => {
-      this.selectedCityUuid = value; // Update selectedCityUuid with the selected city UUID
+      this.selectedCityid = value; // Update selectedCityid with the selected city id
     });
 
     console.log("this.registrationForm", this.registrationForm);
 
   }
+
   get firstName() {
     return this.registrationForm.get('name');
   }
@@ -78,9 +77,7 @@ export class AddCustomerComponent implements OnInit {
   }
 
 
-
-
-  fetchCityData(){
+  fetchCityData() {
     this._registrationService.fetchCityData().subscribe(
       data => {
         console.log('Fetched city data:', data);
@@ -93,19 +90,6 @@ export class AddCustomerComponent implements OnInit {
     );
 
   }
-  fetchCustomerDetails(id: bigint) {
-    this._registrationService.fetchCustomerDetails(id).subscribe(
-      data => {
-        console.log('Fetched details data:', data);
-        this.customerDetails = new Customer(data); // Create a new Customer object
-
-      },
-      error => {
-        console.error('Error fetching customer data:', error);
-      }
-    );
-  }
-
 
   onSubmitCustomer() {
     if (this.registrationForm.valid) {
@@ -134,9 +118,11 @@ export class AddCustomerComponent implements OnInit {
       );
     }
   }
+
   togglePreciseLocation() {
     this.preciseLocationCheck = !this.preciseLocationCheck;
   }
+
   get latitudeControl() {
     return this.registrationForm.get('address.latitude');
   }
@@ -145,8 +131,8 @@ export class AddCustomerComponent implements OnInit {
     return this.registrationForm.get('address.longitude');
   }
 
-  getNameErrorMessage(){
-    let nameControl=this.registrationForm.controls['name'];
+  getNameErrorMessage() {
+    let nameControl = this.registrationForm.controls['name'];
     if (nameControl.hasError('required'))
       return 'Name is required';
     if (nameControl.hasError('maxLength'))
@@ -158,8 +144,8 @@ export class AddCustomerComponent implements OnInit {
     return '';
   }
 
-  getAddressErrorMessage(){
-   let addressControl=this.registrationForm.get('address.addressLine1');
+  getAddressErrorMessage() {
+    let addressControl = this.registrationForm.get('address.addressLine1');
     if (addressControl?.hasError('required'))
       return 'Address is required';
     if (addressControl?.hasError('maxLength'))
@@ -167,11 +153,22 @@ export class AddCustomerComponent implements OnInit {
     if (addressControl?.hasError('minLength'))
       return 'Address is too short';
 
-    return'';
+    return '';
   }
 
-  getZipCodeErrorMessage(){
-    let zipCodeControl=this.registrationForm.get('address.zipcode');
+  getAddress2ErrorMessage() {
+    let addressControl = this.registrationForm.get('address.addressLine2');
+
+    if (addressControl?.hasError('maxLength'))
+      return 'Address is too long';
+    if (addressControl?.hasError('minLength'))
+      return 'Address is too short';
+
+    return '';
+  }
+
+  getZipCodeErrorMessage() {
+    let zipCodeControl = this.registrationForm.get('address.zipcode');
     if (zipCodeControl?.hasError('required'))
       return 'Zip Code is required';
     if (zipCodeControl?.hasError('maxLength'))
@@ -182,9 +179,9 @@ export class AddCustomerComponent implements OnInit {
 
 
   showCity(event: MatSelectChange) {
-    const selectedCityUuid = event.value;
-    const selectedCity = this.cityData.find(city => city.uuid === selectedCityUuid);
-    this.registrationForm.get('address.city')?.setValue(selectedCityUuid);
+    const selectedCityid = event.value;
+    const selectedCity = this.cityData.find(city => city.id === selectedCityid);
+    this.registrationForm.get('address.city')?.setValue(selectedCityid);
   }
 
 

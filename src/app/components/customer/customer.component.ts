@@ -10,7 +10,7 @@ import {LiveAnnouncer} from "@angular/cdk/a11y";
 import {AddCustomerComponent} from "./add/add-customer.component";
 import {CusDetailsComponent} from "./cus-details/cus-details.component";
 import {MatDialog} from "@angular/material/dialog";
-
+import {EditCustomerComponent} from "./edit/edit-customer.component";
 
 
 @Component({
@@ -137,9 +137,9 @@ export class CustomerComponent implements OnInit,AfterViewInit {
     this.router.navigate(['/customers/add']);
   }
 
-  openEditCustomer(uuid: bigint) {
+  openEditCustomer(id: bigint) {
 
-    this.router.navigate(['customers/edit', uuid]);
+    this.router.navigate(['customers/edit', id]);
   }
 
 
@@ -208,5 +208,21 @@ export class CustomerComponent implements OnInit,AfterViewInit {
       width: '50%',
       data: customerId
     });
+  }
+
+  openEditDialog(customer: Customer) {
+    this.matDialog.open(EditCustomerComponent, {
+      width: '40%',
+      data: customer
+    }).afterClosed().subscribe(
+      response => {
+        if (response === undefined) return;
+
+        if (response.name && response.address ) {
+          customer.name = response.name;
+          customer.address = response.address;
+
+        }
+      })
   }
 }

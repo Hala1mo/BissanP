@@ -40,7 +40,7 @@
                 <div class="row gap-3">
 
                   <button class="col-6 btn {{contact.enabled === 1 ? 'btn-success' : 'btn-warning'}}"
-                          (click)="updateEnabled(customerDetails.uuid,contact.uuid)">
+                          (click)="updateEnabled(customerDetails.id,contact.id)">
                     {{ contact.enabled === 1 ? 'Enabled' : 'Disabled' }}
                   </button>
 
@@ -70,7 +70,7 @@
         <div class="card p-3">
           <h3 class="mb=2 card-title">Add New Contact</h3>
           <div class="card-body">
-            <form class="form-group" [formGroup]="registrationForm" (ngSubmit)="onSubmit(customerDetails?.uuid)">
+            <form class="form-group" [formGroup]="registrationForm" (ngSubmit)="onSubmit(customerDetails?.id)">
 
               <div class="mb-3">
                 <label class="form-label">First Name</label>
@@ -125,7 +125,7 @@
 
 
               <div *ngFor="let type of TypesData">
-                <mat-checkbox [formControlName]="type.uuid" (change)="onCheckboxChange($event, type.uuid)">
+                <mat-checkbox [formControlName]="type.id" (change)="onCheckboxChange($event, type.id)">
                   {{ type.name }}
                 </mat-checkbox>
               </div>
@@ -151,7 +151,7 @@
         <div class="card p-3">
           <h3 class="mb=2 card-title">Edit Contact</h3>
           <div class="card-body">
-            <form class="form-group" [formGroup]="editForm"   (ngSubmit)="onSubmitEdit(customerDetails?.uuid)" >
+            <form class="form-group" [formGroup]="editForm"   (ngSubmit)="onSubmitEdit(customerDetails?.id)" >
 
               <div class="mb-3">
                 <label class="form-label">First Name</label>
@@ -199,7 +199,7 @@
               </div>
               <div formGroupName="Types">
                 <div *ngFor="let type of TypesData">
-                  <mat-checkbox [formControlName]="type.uuid">{{ type.name }}</mat-checkbox>
+                  <mat-checkbox [formControlName]="type.id">{{ type.name }}</mat-checkbox>
                 </div>
               </div>
 
