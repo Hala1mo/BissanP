@@ -1,4 +1,4 @@
-import {Component, Inject} from '@angular/core';
+import {Component, Inject,OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Customer} from "../../../models/Customer";
 import {City} from "../../../models/City";
@@ -12,7 +12,7 @@ import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
   templateUrl: './customer-dialogue.component.html',
   styleUrls: ['./customer-dialogue.component.css']
 })
-export class CustomerDialogueComponent {
+export class CustomerDialogueComponent implements OnInit{
   registrationForm!: FormGroup;
   editMode: boolean;
   customerData: Customer[] = [];

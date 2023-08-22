@@ -41,11 +41,11 @@ import {DefinitionDialogComponent} from './components/definition/definition-dial
 import {FilterCusComponent} from './components/reports/filter-cus/filter-cus.component';
 import {CusComponent} from './components/reports/date/cus/cus.component';
 import {DetailsCusComponent} from './components/reports/date/details-cus/details-cus.component';
-import {CusDetailsComponent} from "./components/customer/cus-details/cus-details.component";
 import {CustomerDialogueComponent} from './components/customer/customer-dialogue/customer-dialogue.component';
 import {MatChipsModule} from "@angular/material/chips";
 import {MatBadgeModule} from "@angular/material/badge";
 import {MatTabsModule} from "@angular/material/tabs";
+import {ContactDialogueComponent} from './components/customer/details/contact-dialogue/contact-dialogue.component';
 
 import {CanvasJSAngularChartsModule} from '@canvasjs/angular-charts';
 import {TypesChartComponent} from './components/reports/types-chart/types-chart.component';
@@ -71,9 +71,9 @@ import {TypesChartComponent} from './components/reports/types-chart/types-chart.
     FilterCusComponent,
     CusComponent,
     DetailsCusComponent,
-    CusDetailsComponent,
     CustomerDialogueComponent,
-    TypesChartComponent
+    TypesChartComponent,
+    ContactDialogueComponent
 
 
   ],
