@@ -12,10 +12,17 @@
           <mat-chip>{{definition.type.name}}</mat-chip>
         </mat-chip-set>
       </div>
-      <button mat-raised-button color="primary" (click)="openCreateAssignmentDialog()">
-        Add Assignment
-        <mat-icon>add</mat-icon>
-      </button>
+      <div class="d-flex gap-1">
+        <button mat-raised-button color="primary" (click)="openCreateAssignmentDialog(definition)">
+          Add Assignment
+          <mat-icon>add</mat-icon>
+        </button>
+        <button mat-raised-button color="accent" (click)="openEditDialog(definition)">
+          Edit Definition
+          <mat-icon>edit</mat-icon>
+        </button>
+      </div>
+
     </div>
   </div>
   <div class="row mb-1 py-1 border-bottom">

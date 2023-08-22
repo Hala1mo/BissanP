@@ -5,6 +5,10 @@ import {FormBuilder, FormGroup} from "@angular/forms";
 import {AssignmentService} from "../../../services/assignment.service";
 import {VisitAssignment} from "../../../models/VisitAssignment";
 import {VisitDefinition} from "../../../models/VisitDefinition";
+import {MatDialog} from "@angular/material/dialog";
+import {DefinitionDialogComponent} from "../definition-dialog/definition-dialog.component";
+import {DefinitionService} from "../../../services/definition.service";
+import {VisitType} from "../../../models/VisitType";
 
 @Component({
   selector: 'app-details-def',
@@ -15,6 +19,8 @@ import {VisitDefinition} from "../../../models/VisitDefinition";
 export class DefinitionDetailsComponent implements OnInit {
   definition: VisitDefinition | undefined;
   assignments: VisitAssignment[] = [];
+
+  visitTypes: VisitType[] = [];
   displayedColumns: string[] = ['Date', 'Comment', 'Action'];
   dataSource = this.assignments;
   registrationForm!: FormGroup;
@@ -24,6 +30,8 @@ export class DefinitionDetailsComponent implements OnInit {
   constructor(
     private snackBar: MatSnackBar,
     private activatedRoute: ActivatedRoute,
+    private definitionService: DefinitionService,
+    private matDialog: MatDialog,
     private router: Router,
     private assignmentService: AssignmentService,
     private formBuilder: FormBuilder
@@ -36,6 +44,7 @@ export class DefinitionDetailsComponent implements OnInit {
       this.id = params['id'];
       if (this.id) {
         this.fetchDefinitionDetails(this.id);
+        this.fetchVisitTypes();
       }
       this.registrationForm = this.formBuilder.group({
         date: [''],
@@ -98,7 +107,7 @@ export class DefinitionDetailsComponent implements OnInit {
     this.router.navigate(['../../assignments', id]);
   }
 
-  openCreateAssignmentDialog() {
+  openCreateAssignmentDialog(definition: VisitDefinition) {
     console.log("OPENING ASSIGNMENT DIALOG")
   }
 
@@ -107,4 +116,39 @@ export class DefinitionDetailsComponent implements OnInit {
 
     return date.toLocaleDateString() + " " + date.toLocaleTimeString();
   }
+
+  fetchVisitTypes() {
+    this.definitionService.fetchTypesData().subscribe({
+      next: response => {
+        console.log('Fetched types data:', response);
+        this.visitTypes = response;
+      },
+      error: error => {
+        console.error('Error fetching visit types:', error);
+        if (error.message) {
+          let errorMessage = error.message;
+          console.log('Error message:', errorMessage);
+
+          this.snackBar.open(errorMessage, '', {
+            duration: 3000
+          });
+        }
+      }
+    });
+  }
+
+  openEditDialog(definition: VisitDefinition) {
+    this.matDialog.open(DefinitionDialogComponent, {
+      width: '40%',
+      data: {
+        'mode': 1,
+        'definition': definition,
+        'types': this.visitTypes
+      }
+    }).afterClosed().subscribe(() => {
+
+
+    });
+  }
+
 }
