@@ -1,7 +1,6 @@
 <h1 mat-dialog-title>
   {{editMode ? 'Editing "' + selectedCustomer.name + '"' : 'Add new Customer'}}
 </h1>
-<h1 mat-dialog-title>Add New Customer</h1>
 <form [formGroup]="registrationForm">
   <mat-dialog-content>
     <div class="row mb-1">
@@ -29,13 +28,13 @@
             <mat-label>Address 2</mat-label>
             <input matInput type="text" formControlName="addressLine2">
             <mat-error
-              *ngIf="registrationForm.controls['address.addressLine1']?.invalid">{{getAddress2ErrorMessage()}}</mat-error>
+              *ngIf="registrationForm.controls['address.addressLine2']?.invalid">{{getAddress2ErrorMessage()}}</mat-error>
           </mat-form-field>
         </div>
       </div>
       <div class="row mb-1">
         <div class="col-6">
-          <mat-form-field>
+          <mat-form-field [style.width.%]="100">
             <mat-label>City</mat-label>
             <mat-select formControlName="cityId" required>
               <mat-option *ngFor="let city of cityData" [value]="city.id">{{ city.name }}</mat-option>

@@ -7,10 +7,8 @@ import {MatPaginator} from "@angular/material/paginator";
 import {MatTableDataSource} from "@angular/material/table";
 import {MatSort, Sort} from "@angular/material/sort";
 import {LiveAnnouncer} from "@angular/cdk/a11y";
-import {AddCustomerComponent} from "./add/add-customer.component";
 import {CusDetailsComponent} from "./cus-details/cus-details.component";
 import {MatDialog} from "@angular/material/dialog";
-import {EditCustomerComponent} from "./edit/edit-customer.component";
 import {City} from "../../models/City";
 import {CustomerDialogueComponent} from "./customer-dialogue/customer-dialogue.component";
 
@@ -61,7 +59,7 @@ export class CustomerComponent implements OnInit,AfterViewInit {
     this.fetchCustomerData();
 
     this.dataSource.filterPredicate = function (customer, filter) {
-      return customer.name.toLocaleLowerCase().includes(filter.toLocaleLowerCase())||customer.address.city.toLocaleLowerCase()
+      return customer.name.toLocaleLowerCase().includes(filter.toLocaleLowerCase())||customer.address.city.name.toLocaleLowerCase()
         .includes(filter.toLocaleLowerCase())||customer.address.addressLine1.toLocaleLowerCase().includes(filter.toLocaleLowerCase())
     }
 

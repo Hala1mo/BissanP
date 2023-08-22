@@ -5,8 +5,6 @@ import {City} from "../../../models/City";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {Router} from "@angular/router";
 import {RegistrationService} from "../../../services/registration.service";
-import {nameValidator} from "../../../shared/Name.validators";
-import {MatSelectChange} from "@angular/material/select";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 
 @Component({
@@ -16,12 +14,12 @@ import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 })
 export class CustomerDialogueComponent {
   registrationForm!: FormGroup;
-  editMode:boolean;
+  editMode: boolean;
   customerData: Customer[] = [];
   cityData: City[] = [];
   preciseLocationCheck: boolean = false;
-  selectedCityid: string | null = null; // Initialize to null
-  selectedCustomer: Customer;
+  selectedCustomer: any;
+
   constructor(private _snackBar: MatSnackBar,
               private router: Router,
               private _registrationService: RegistrationService,
@@ -29,9 +27,13 @@ export class CustomerDialogueComponent {
               public matDialogRef: MatDialogRef<CustomerDialogueComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any) {
 
-    this.editMode=data.mode===1;
-    this.cityData=data.cityData;
-    this.selectedCustomer=data.customer;
+    this.editMode = data.mode === 1;
+    this.cityData = data.cityData;
+    this.selectedCustomer = data.customer;
+
+
+    console.log("zip" + data.customer.address.zipcode);
+    console.log("zip" + data.customer.address.precise);
 
     this.registrationForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(30)]],
@@ -40,7 +42,7 @@ export class CustomerDialogueComponent {
         addressLine2: [''],
         latitude: [null, [Validators.min(-90), Validators.max(90)]],
         longitude: [null, [Validators.min(-180), Validators.max(180)]],
-        precise: [false],
+        precise: [false, [Validators.required]],
         zipcode: ['', [Validators.required, Validators.maxLength(5)]],
         cityId: [null],
       }),
@@ -49,24 +51,20 @@ export class CustomerDialogueComponent {
   }
 
   ngOnInit() {
-
-    this.registrationForm.get('address.city')?.valueChanges.subscribe((value) => {
-      this.selectedCityid = value;
-    });
-
     console.log("this.registrationForm", this.registrationForm);
 
-    if(this.editMode){
+    if (this.editMode) {
+
       this.registrationForm.patchValue({
 
         name: this.selectedCustomer.name,
         address: {
           addressLine1: this.selectedCustomer.address.addressLine1,
           addressLine2: this.selectedCustomer.address.addressLine2,
-          longitude:this.selectedCustomer.address.longitude,
-          latitude:this.selectedCustomer.address.latitude,
+          longitude: this.selectedCustomer.address.longitude,
+          latitude: this.selectedCustomer.address.latitude,
           precise: this.selectedCustomer.address.precise,
-          city: this.selectedCustomer.address.city,
+          cityId: this.selectedCustomer.address.cityId,
           zipcode: this.selectedCustomer.address.zipcode,
         },
       });
@@ -98,9 +96,44 @@ export class CustomerDialogueComponent {
       }
     );
   }
+
   onSubmitCustomer() {
+    if (this.editMode) {
+      this.onUpdateCustomer();
+    } else
+      this.saveNewCustomer();
+  }
+
+
+  onUpdateCustomer() {
+    const editedCustomerData = this.registrationForm.value;
+    console.log(this.registrationForm.value);
+    this._registrationService.updateCustomerData(this.selectedCustomer.id, editedCustomerData).subscribe({
+        next: response => {
+          this.matDialogRef.close(response);
+          console.log('User data updated successfully:', response);
+
+        },
+        error: error => {
+          console.error('Error updating user data:', error);
+          if (error.error && error.error.errors && error.error.errors.length > 0) {
+            const errorMessage = error.error.errors[0];
+            console.log('Error message:', errorMessage);
+            // this.toastService.show('Error', errorMessage);
+            this._snackBar.open(errorMessage, '', {
+              duration: 3000
+            });
+
+          }
+        }
+      }
+    );
+  }
+
+  saveNewCustomer() {
     if (this.registrationForm.valid) {
       console.log(this.registrationForm.value);
+
       this._registrationService.registerCustomer(this.registrationForm.value).subscribe(
         (res) => {
           console.log('Registration successful:', res);
