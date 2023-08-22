@@ -12,6 +12,7 @@ export class RegistrationService {
   private _contacts_url = 'http://10.10.33.91:8080/contacts';
   private _visitTypes = 'http://10.10.33.91:8080/visit_types';
   private _visitDefinition = 'http://10.10.33.91:8080/visit_definitions';
+  private _city_url = 'http://10.10.33.91:8080/city';
 
 
   constructor(private _http: HttpClient) {
@@ -72,7 +73,6 @@ export class RegistrationService {
   }
 
 
-
   fetchCustomerData(): Observable<any> {
     // Send a GET request to the server to fetch user data
     return this._http.get<any>(this._customers_url);
@@ -113,9 +113,6 @@ export class RegistrationService {
     return this._http.get<any>(_urlDetails);
   }
 
-  // fetchTypesData(): Observable<any> {
-  //   return this._http.get<any>(this._visitTypes);
-  // }
 
   fetchDefinition(): Observable<any> {
     return this._http.get<any>(this._visitDefinition);
@@ -126,5 +123,9 @@ export class RegistrationService {
     return this._http.post<any>(this._visitDefinition, defData).pipe(
       // Any additional operators or logic you want to apply after the POST request
     );
+  }
+
+  fetchCityData(): Observable<any> {
+    return this._http.get<any>(this._city_url);
   }
 }

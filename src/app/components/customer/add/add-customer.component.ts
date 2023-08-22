@@ -5,6 +5,7 @@ import {Customer} from "../../../models/Customer";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {Router} from "@angular/router";
 import {nameValidator} from "../../../shared/Name.validators";
+import {City} from "../../../models/City";
 
 @Component({
   selector: 'app-add',
@@ -14,36 +15,37 @@ import {nameValidator} from "../../../shared/Name.validators";
 export class AddCustomerComponent implements OnInit {
   registrationForm!: FormGroup;
   customerData: Customer[] = [];
+  cityData:City[]=[];
   customerDetails: Customer | null = null;
   preciseLocationCheck: boolean = false;
+  selectedCityUuid: string | null = null; // Initialize to null
 
   constructor(private _snackBar: MatSnackBar, private router: Router,
-              private _registrationService: RegistrationService, private fb: FormBuilder) {
 
+              private _registrationService: RegistrationService, private fb: FormBuilder) {
 
 
 
   }
 
   ngOnInit() {
-
-
+    this.fetchCityData();
     this.registrationForm = this.fb.group({
-      name: ['', [Validators.required,Validators.minLength(3),
-      Validators.maxLength(30)]],
-
+      name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(30)]],
       address: this.fb.group({
-        addressLine1: ['',Validators.required,Validators.minLength(3),
-        Validators.maxLength(30)],
+        addressLine1: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(30)]],
         addressLine2: [''],
-        longitude: [],
-        latitude: [],
+        latitude: [null, [Validators.min(-90), Validators.max(90)]],
+        longitude: [null, [Validators.min(-180), Validators.max(180)]],
         precise: [false],
-        zipcode: ['',Validators.required,Validators.maxLength(5)],
-        city: ['',[Validators.required, nameValidator]],
-
+        zipcode: ['', [Validators.required, Validators.maxLength(5)]],
+        city: [null, [Validators.required, nameValidator]],
       }),
+    });
 
+    // Listen for value changes in the city dropdown
+    this.registrationForm.get('address.city')?.valueChanges.subscribe((value) => {
+      this.selectedCityUuid = value; // Update selectedCityUuid with the selected city UUID
     });
 
     console.log("this.registrationForm", this.registrationForm);
@@ -61,12 +63,35 @@ export class AddCustomerComponent implements OnInit {
         this.customerData = data;
       },
       error => {
-        console.error('Error fetching customer data:', error);
+        console.error('Error fetching visit types:', error);
+        if (error.message) {
+          let errorMessage = error.message;
+          console.log('Error message:', errorMessage);
+
+          this._snackBar.open(errorMessage, '', {
+            duration: 3000
+          });
+        }
       }
     );
   }
 
 
+
+
+  fetchCityData(){
+    this._registrationService.fetchCityData().subscribe(
+      data => {
+        console.log('Fetched city data:', data);
+
+        this.cityData = data;
+      },
+      error => {
+        console.error('Error fetching city data:', error);
+      }
+    );
+
+  }
   fetchCustomerDetails(id: bigint) {
     this._registrationService.fetchCustomerDetails(id).subscribe(
       data => {
