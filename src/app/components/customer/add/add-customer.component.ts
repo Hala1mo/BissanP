@@ -38,14 +38,14 @@ export class AddCustomerComponent implements OnInit {
         longitude: [null, [Validators.min(-180), Validators.max(180)]],
         precise: [false],
         zipcode: ['', [Validators.required, Validators.maxLength(5)]],
-        city: [null, [Validators.required, nameValidator]],
+        cityId: ['', [Validators.required]],
       }),
     });
-
-    // Listen for value changes in the city dropdown
-    this.registrationForm.get('address.city')?.valueChanges.subscribe((value) => {
-      this.selectedCityid = value; // Update selectedCityid with the selected city id
-    });
+    //
+    // // Listen for value changes in the city dropdown
+    // this.registrationForm.get('address.city')?.valueChanges.subscribe((value) => {
+    //   this.selectedCityid = value; // Update selectedCityid with the selected city id
+    // });
 
     console.log("this.registrationForm", this.registrationForm);
 
@@ -92,6 +92,7 @@ export class AddCustomerComponent implements OnInit {
   }
 
   onSubmitCustomer() {
+    console.log(this.registrationForm.value);
     if (this.registrationForm.valid) {
       console.log(this.registrationForm.value);
       this._registrationService.registerCustomer(this.registrationForm.value).subscribe(

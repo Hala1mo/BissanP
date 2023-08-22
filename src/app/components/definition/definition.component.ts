@@ -8,6 +8,8 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 import {MatPaginator} from "@angular/material/paginator";
 import {MatSort} from "@angular/material/sort";
 import {DefinitionDialogComponent} from "./definition-dialog/definition-dialog.component";
+import {Router} from "@angular/router";
+import {identity} from "rxjs";
 
 @Component({
   selector: 'app-definition',
@@ -31,6 +33,7 @@ export class DefinitionComponent implements OnInit, AfterViewInit {
 
   constructor(
     private definitionService: DefinitionService,
+    private router: Router,
     private matDialog: MatDialog,
     private snackBar: MatSnackBar,
   ) {
@@ -187,4 +190,7 @@ export class DefinitionComponent implements OnInit, AfterViewInit {
   }
 
 
+  openDetailsPage(definition: any) {
+    this.router.navigate(['/definitions', definition.id])
+  }
 }

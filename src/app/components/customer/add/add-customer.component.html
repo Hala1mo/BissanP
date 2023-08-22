@@ -34,8 +34,9 @@
         <div class="col-6">
           <mat-form-field>
             <mat-label>City</mat-label>
-            <mat-select formControlName="city" (selectionChange)="showCity($event)">
+            <mat-select formControlName="cityId" required>
               <mat-option *ngFor="let city of cityData" [value]="city.id">{{ city.name }}</mat-option>
+
             </mat-select>
           </mat-form-field>
         </div>
@@ -43,6 +44,7 @@
           <mat-form-field [style.width.%]="100">
             <mat-label>Zip Code</mat-label>
             <input matInput type="text" formControlName="zipcode" required>
+
             <mat-error *ngIf="registrationForm.get('address.zipcode')?.invalid">{{getZipCodeErrorMessage()}}</mat-error>
           </mat-form-field>
         </div>

@@ -32,7 +32,7 @@
         <div class="row mb-1">
             <mat-form-field>
                 <mat-label>Visit Type</mat-label>
-                <mat-select formControlName="typeid">
+                <mat-select formControlName="typeId">
                     <mat-option *ngFor="let type of types" [value]="type.id">{{type.name}}</mat-option>
                 </mat-select>
             </mat-form-field>
