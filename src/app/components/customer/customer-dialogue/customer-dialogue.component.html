@@ -37,7 +37,7 @@
         <div class="col-6">
           <mat-form-field>
             <mat-label>City</mat-label>
-            <mat-select formControlName="city" required>
+            <mat-select formControlName="cityId" required>
               <mat-option *ngFor="let city of cityData" [value]="city.id">{{ city.name }}</mat-option>
 
             </mat-select>

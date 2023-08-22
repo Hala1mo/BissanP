@@ -42,7 +42,7 @@ export class CustomerDialogueComponent {
         longitude: [null, [Validators.min(-180), Validators.max(180)]],
         precise: [false],
         zipcode: ['', [Validators.required, Validators.maxLength(5)]],
-        city: [null, [Validators.required, nameValidator]],
+        cityId: [null],
       }),
     });
 
@@ -51,7 +51,7 @@ export class CustomerDialogueComponent {
   ngOnInit() {
 
     this.registrationForm.get('address.city')?.valueChanges.subscribe((value) => {
-      this.selectedCityid = value; // Update selectedCityid with the selected city id
+      this.selectedCityid = value;
     });
 
     console.log("this.registrationForm", this.registrationForm);
@@ -185,11 +185,5 @@ export class CustomerDialogueComponent {
     return '';
   }
 
-
-  showCity(event: MatSelectChange) {
-    const selectedCityid = event.value;
-    const selectedCity = this.cityData.find(city => city.id === selectedCityid);
-    this.registrationForm.get('address.city')?.setValue(selectedCityid);
-  }
 
 }
