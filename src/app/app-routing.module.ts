@@ -11,6 +11,7 @@ import {ReportsComponent} from "./components/reports/reports.component";
 import {StatusComponent} from "./components/reports/status/status.component";
 import {DateComponent} from "./components/reports/date/date.component";
 import {FilterCusComponent} from "./components/reports/filter-cus/filter-cus.component";
+import {TypesChartComponent} from "./components/reports/types-chart/types-chart.component";
 
 const routes: Routes = [
     {path: 'users', component: UserComponent},
@@ -24,8 +25,10 @@ const routes: Routes = [
 
     {path:'reports',component:ReportsComponent },
     {path:'reports/status',component:StatusComponent},
+  {path:'reports/types-chart',component:TypesChartComponent},
     {path:'reports/:from/:to',component:DateComponent},
-  {path:'reports/:id',component:FilterCusComponent},
+    {path:'reports/:id',component:FilterCusComponent},
+
 
 ];
 

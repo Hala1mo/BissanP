@@ -39,12 +39,12 @@ import {EditUserComponent} from "./components/user/edit-user/edit-user.component
 import {DateComponent} from "./components/reports/date/date.component";
 import {DefinitionDialogComponent} from './components/definition/definition-dialog/definition-dialog.component';
 import {FilterCusComponent} from './components/reports/filter-cus/filter-cus.component';
-import {TypesComponent} from './components/reports/types/types.component';
 import { CusComponent } from './components/reports/date/cus/cus.component';
 import { DetailsCusComponent } from './components/reports/date/details-cus/details-cus.component';
 import {CusDetailsComponent} from "./components/customer/cus-details/cus-details.component";
 import { CustomerDialogueComponent } from './components/customer/customer-dialogue/customer-dialogue.component';
-
+import { CanvasJSAngularChartsModule } from '@canvasjs/angular-charts';
+import { TypesChartComponent } from './components/reports/types-chart/types-chart.component';
 
 @NgModule({
     declarations: [
@@ -65,11 +65,11 @@ import { CustomerDialogueComponent } from './components/customer/customer-dialog
         DefinitionDialogComponent,
         EditUserComponent,
         FilterCusComponent,
-        TypesComponent,
         CusComponent,
         DetailsCusComponent,
         CusDetailsComponent,
-        CustomerDialogueComponent
+        CustomerDialogueComponent,
+        TypesChartComponent
 
 
     ],
@@ -102,6 +102,7 @@ import { CustomerDialogueComponent } from './components/customer/customer-dialog
         MatPaginatorModule,
         MatSlideToggleModule,
         MatCardModule,
+      CanvasJSAngularChartsModule
     ],
     providers: [],
     bootstrap: [AppComponent]

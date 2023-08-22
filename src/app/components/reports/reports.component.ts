@@ -34,15 +34,12 @@ export class ReportsComponent implements OnInit{
     this.fetchCustomer();
 
   }
-
-
     fetchDate() {
         this._reportsService.getDate().subscribe(
             data => {
                 console.log('Fetched assignments data:', data);
 
                 this.Date = data;
-
             },
             error => {
                 console.error('Error fetching assignments data:', error);
@@ -56,7 +53,6 @@ export class ReportsComponent implements OnInit{
     this._reportsService.getCustomers().subscribe(
       data => {
         console.log('Fetched assignments data:', data);
-
         this.cusData = data;
 
       },
@@ -89,5 +85,4 @@ export class ReportsComponent implements OnInit{
       console.error("Invalid option or name");
     }
   }
-
 }

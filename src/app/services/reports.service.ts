@@ -13,6 +13,8 @@ export class ReportsService {
   private completed = 'http://10.10.33.91:8080/reports/forms/completed';
   private _visitAssignment = 'http://10.10.33.91:8080/visit_assignments';
   private _customers_url = 'http://10.10.33.91:8080/customers';
+  private types_url='http://10.10.33.91:8080/reports/customers/countByType';
+  private areas_url='http://10.10.33.91:8080/reports/customers/countByArea';
 
   private customers = 'http://10.10.33.91:8080/reports/customers';
 
@@ -47,10 +49,7 @@ export class ReportsService {
     return this._http.get<any>(_urlDetails);
   }
 
-  // getCustomer(): Observable<any> {
-  //   const _urlDetails = `${this._visitAssignment}/AllDistinctAssignment}`;
-  //   return this._http.get<any>(_urlDetails);
-  // }
+
 
   fetchDateData(from: string,to:string): Observable<any> {
     const _urlDetails = `${this.reportss}/visit_assignments?from=${from}&to=${to}`;
@@ -66,5 +65,18 @@ export class ReportsService {
     const _urlDetails = `${this.customers}/${id}`;
     return this._http.get<any>(_urlDetails);
   }
+
+
+  fetchTypeChart(): Observable<any> {
+    const _urlDetails = `${this.types_url}`;
+    return this._http.get<any>(_urlDetails);
+  }
+
+
+  fetchAreaChart(): Observable<any> {
+    const _urlDetails = `${this.areas_url}`;
+    return this._http.get<any>(_urlDetails);
+  }
+
 }
 

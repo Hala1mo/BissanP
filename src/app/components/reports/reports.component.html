@@ -6,13 +6,18 @@
   </div>
   <div class="col">
 
-    <!-- Button for Show by Status -->
     <button mat-stroked-button class="mb-4"
             [routerLink]="['/reports/status']">
       Show by Status
     </button>
 
-    <!-- Customer Autocomplete Input -->
+    <button mat-stroked-button class="mb-4"
+            [routerLink]="['/reports/types-chart']">
+      Show by Types
+    </button>
+
+
+
     <form class="example-form">
       <mat-form-field class="example-full-width">
         <input type="text"
@@ -28,8 +33,6 @@
         </mat-autocomplete>
       </mat-form-field>
     </form>
-
-    <!-- Date Range Selection -->
     <div class="date-range">
       <mat-form-field class="date-field" color="accent">
         <mat-label>From:</mat-label>
@@ -49,6 +52,11 @@
         Show by Date
       </button>
     </div>
+
+
+
+
+
 
   </div>
 </div>

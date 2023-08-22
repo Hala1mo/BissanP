@@ -32,21 +32,10 @@ export class CustomerComponent implements OnInit,AfterViewInit {
   name: String = '';
   registrationForm!: FormGroup;
 
-
-  selectedSearchCriteria: string = "name";
   searchInput: string = "";
   dataSource = new MatTableDataSource(this.customerData);
   @ViewChild('customerTablePaginator') paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
-  onSelected(value: string): void {
-    if (value == "Name") {
-      this.selectedSearchCriteria = "name";
-    } else if (value == "City") {
-      this.selectedSearchCriteria = "city";
-    } else if (value == "Address") {
-      this.selectedSearchCriteria = "address";
-    }
-  }
 
 
   constructor(
