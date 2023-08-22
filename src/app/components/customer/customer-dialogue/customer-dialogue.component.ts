@@ -1,33 +1,38 @@
-import {Component, OnInit} from '@angular/core';
-import {RegistrationService} from "../../../services/registration.service";
+import {Component, Inject} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Customer} from "../../../models/Customer";
+import {City} from "../../../models/City";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {Router} from "@angular/router";
+import {RegistrationService} from "../../../services/registration.service";
 import {nameValidator} from "../../../shared/Name.validators";
-import {City} from "../../../models/City";
 import {MatSelectChange} from "@angular/material/select";
+import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 
 @Component({
-  selector: 'app-add',
-  templateUrl: './add-customer.component.html',
-  styleUrls: ['./add-customer.component.css']
+  selector: 'app-customer-dialogue',
+  templateUrl: './customer-dialogue.component.html',
+  styleUrls: ['./customer-dialogue.component.css']
 })
-export class AddCustomerComponent implements OnInit {
+export class CustomerDialogueComponent {
   registrationForm!: FormGroup;
+  editMode:boolean;
   customerData: Customer[] = [];
   cityData: City[] = [];
   preciseLocationCheck: boolean = false;
   selectedCityid: string | null = null; // Initialize to null
-
+  selectedCustomer: Customer;
   constructor(private _snackBar: MatSnackBar,
               private router: Router,
               private _registrationService: RegistrationService,
-              private fb: FormBuilder) {
+              private fb: FormBuilder,
+              public matDialogRef: MatDialogRef<CustomerDialogueComponent>,
+              @Inject(MAT_DIALOG_DATA) public data: any) {
 
-  }
+    this.editMode=data.mode===1;
+    this.cityData=data.cityData;
+    this.selectedCustomer=data.customer;
 
-  ngOnInit() {
     this.registrationForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(30)]],
       address: this.fb.group({
@@ -37,16 +42,35 @@ export class AddCustomerComponent implements OnInit {
         longitude: [null, [Validators.min(-180), Validators.max(180)]],
         precise: [false],
         zipcode: ['', [Validators.required, Validators.maxLength(5)]],
-        cityId: ['', [Validators.required]],
+        city: [null, [Validators.required, nameValidator]],
       }),
     });
-    //
-    // // Listen for value changes in the city dropdown
-    // this.registrationForm.get('address.city')?.valueChanges.subscribe((value) => {
-    //   this.selectedCityid = value; // Update selectedCityid with the selected city id
-    // });
+
+  }
+
+  ngOnInit() {
+
+    this.registrationForm.get('address.city')?.valueChanges.subscribe((value) => {
+      this.selectedCityid = value; // Update selectedCityid with the selected city id
+    });
 
     console.log("this.registrationForm", this.registrationForm);
+
+    if(this.editMode){
+      this.registrationForm.patchValue({
+
+        name: this.selectedCustomer.name,
+        address: {
+          addressLine1: this.selectedCustomer.address.addressLine1,
+          addressLine2: this.selectedCustomer.address.addressLine2,
+          longitude:this.selectedCustomer.address.longitude,
+          latitude:this.selectedCustomer.address.latitude,
+          precise: this.selectedCustomer.address.precise,
+          city: this.selectedCustomer.address.city,
+          zipcode: this.selectedCustomer.address.zipcode,
+        },
+      });
+    }
 
   }
 
@@ -74,12 +98,7 @@ export class AddCustomerComponent implements OnInit {
       }
     );
   }
-
-
-
-
   onSubmitCustomer() {
-    console.log(this.registrationForm.value);
     if (this.registrationForm.valid) {
       console.log(this.registrationForm.value);
       this._registrationService.registerCustomer(this.registrationForm.value).subscribe(
@@ -87,6 +106,7 @@ export class AddCustomerComponent implements OnInit {
           console.log('Registration successful:', res);
           this.registrationForm.reset();
           this.fetchCustomerData();
+          this.matDialogRef.close(res);
 
           this.router.navigate(['/customers']);
 
@@ -171,6 +191,5 @@ export class AddCustomerComponent implements OnInit {
     const selectedCity = this.cityData.find(city => city.id === selectedCityid);
     this.registrationForm.get('address.city')?.setValue(selectedCityid);
   }
-
 
 }
