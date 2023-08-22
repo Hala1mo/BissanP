@@ -25,7 +25,7 @@ export class CustomerComponent implements OnInit,AfterViewInit {
 
   isSearchLoading = false;
   selectedEnabledOption = "Enabled"
-  displayedColumns: string[] = ['name', 'city', 'addressLine','enabled']
+  displayedColumns: string[] = ['name', 'city', 'addressLine','enabled' ,'actions']
   customerData: Customer[] = [];
   originalCustomerData: Customer[] = [];
   cityData: City[]=[];
@@ -91,6 +91,7 @@ export class CustomerComponent implements OnInit,AfterViewInit {
 
 
   openCustomerDetails(id: bigint) {
+
     this.router.navigate(['/customers', id]);
 
   }

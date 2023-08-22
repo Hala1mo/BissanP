@@ -15,4 +15,8 @@ body {
   background-color: var(--mat-option-hover-state-layer-color);
 }
 
+.primary-color {
+  color: #3F51B5;
+}
+
 

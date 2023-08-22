@@ -39,73 +39,80 @@ import {EditUserComponent} from "./components/user/edit-user/edit-user.component
 import {DateComponent} from "./components/reports/date/date.component";
 import {DefinitionDialogComponent} from './components/definition/definition-dialog/definition-dialog.component';
 import {FilterCusComponent} from './components/reports/filter-cus/filter-cus.component';
-import { CusComponent } from './components/reports/date/cus/cus.component';
-import { DetailsCusComponent } from './components/reports/date/details-cus/details-cus.component';
+import {CusComponent} from './components/reports/date/cus/cus.component';
+import {DetailsCusComponent} from './components/reports/date/details-cus/details-cus.component';
 import {CusDetailsComponent} from "./components/customer/cus-details/cus-details.component";
-import { CustomerDialogueComponent } from './components/customer/customer-dialogue/customer-dialogue.component';
-import { CanvasJSAngularChartsModule } from '@canvasjs/angular-charts';
-import { TypesChartComponent } from './components/reports/types-chart/types-chart.component';
+import {CustomerDialogueComponent} from './components/customer/customer-dialogue/customer-dialogue.component';
+import {MatChipsModule} from "@angular/material/chips";
+import {MatBadgeModule} from "@angular/material/badge";
+import {MatTabsModule} from "@angular/material/tabs";
+
+import {CanvasJSAngularChartsModule} from '@canvasjs/angular-charts';
+import {TypesChartComponent} from './components/reports/types-chart/types-chart.component';
 
 @NgModule({
-    declarations: [
-        AppComponent,
-        HeaderComponent,
-        UserComponent,
-        CustomerComponent,
-        CustomerDetailsComponent,
-        DefinitionComponent,
-        DefinitionDetailsComponent,
-        AssignmentDetailsComponent,
-        AddUserComponent,
-        EditUserComponent,
-        ReportsComponent,
-        StatusComponent,
-        DateComponent,
-        EditUserComponent,
-        DefinitionDialogComponent,
-        EditUserComponent,
-        FilterCusComponent,
-        CusComponent,
-        DetailsCusComponent,
-        CusDetailsComponent,
-        CustomerDialogueComponent,
-        TypesChartComponent
+  declarations: [
+    AppComponent,
+    HeaderComponent,
+    UserComponent,
+    CustomerComponent,
+    CustomerDetailsComponent,
+    DefinitionComponent,
+    DefinitionDetailsComponent,
+    AssignmentDetailsComponent,
+    AddUserComponent,
+    EditUserComponent,
+    ReportsComponent,
+    StatusComponent,
+    DateComponent,
+    EditUserComponent,
+    DefinitionDialogComponent,
+    EditUserComponent,
+    FilterCusComponent,
+    CusComponent,
+    DetailsCusComponent,
+    CusDetailsComponent,
+    CustomerDialogueComponent,
+    TypesChartComponent
 
 
-    ],
-    imports: [
-        BrowserModule,
-        MatSnackBarModule,
-        AppRoutingModule,
-        HttpClientModule,
-        ReactiveFormsModule,
-        BrowserAnimationsModule,
-        MatDialogModule,
-        NgbAlertModule,
-        NgbModule,
-        NgbPaginationModule,
-        NgOptimizedImage,
-        FormsModule,
-        MatCheckboxModule,
-        MatFormFieldModule,
-        MatInputModule,
-        MatSelectModule,
-        MatTableModule,
-        MatDatepickerModule,
-        MatNativeDateModule,
-        MatAutocompleteModule,
-        MatSortModule,
-        MatToolbarModule,
-        MatButtonModule,
-        MatMenuModule,
-        MatIconModule,
-        MatPaginatorModule,
-        MatSlideToggleModule,
-        MatCardModule,
-      CanvasJSAngularChartsModule
-    ],
-    providers: [],
-    bootstrap: [AppComponent]
+  ],
+  imports: [
+    BrowserModule,
+    MatSnackBarModule,
+    AppRoutingModule,
+    HttpClientModule,
+    ReactiveFormsModule,
+    BrowserAnimationsModule,
+    MatDialogModule,
+    NgbAlertModule,
+    NgbModule,
+    NgbPaginationModule,
+    NgOptimizedImage,
+    FormsModule,
+    MatCheckboxModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatTableModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatAutocompleteModule,
+    MatSortModule,
+    MatToolbarModule,
+    MatButtonModule,
+    MatMenuModule,
+    MatIconModule,
+    MatPaginatorModule,
+    MatSlideToggleModule,
+    MatCardModule,
+    MatChipsModule,
+    MatBadgeModule,
+    MatTabsModule,
+    CanvasJSAngularChartsModule,
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
 })
 export class AppModule {
 }

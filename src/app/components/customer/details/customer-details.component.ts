@@ -223,7 +223,7 @@ export class CustomerDetailsComponent implements OnInit {
                 console.log('Fetched types data:', data);
                 this.TypesData = data;
                 this.types = data;
-                this.updateFormControls();
+               // this.updateFormControls();
                 this.populateCheckboxes();
             },
             (error) => {
@@ -232,16 +232,16 @@ export class CustomerDetailsComponent implements OnInit {
         );
     }
 
-    updateFormControls() {
-        if (!this.registrationForm) return;
-
-        this.types.forEach((type) => {
-            const formControl = this.registrationForm.get(type.id);
-            if (formControl) {
-                formControl.setValue(false);
-            }
-        });
-    }
+    // updateFormControls() {
+    //     if (!this.registrationForm) return;
+    //
+    //     this.types.forEach((type) => {
+    //         const formControl = this.registrationForm.get(type.id);
+    //         if (formControl) {
+    //             formControl.setValue(false);
+    //         }
+    //     });
+    // }
 
     onCheckboxChange(event: MatCheckboxChange, id: string) {
         if (event.checked) {
