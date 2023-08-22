@@ -1,7 +1,9 @@
+import {City} from "./City";
+
 export class Address {
   addressLine1: string;
   addressLine2: string;
-  city: string;
+  city: City;
   createdTime: string;
   lastModifiedTime: string;
   latitude: number;

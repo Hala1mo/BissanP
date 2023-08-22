@@ -61,7 +61,7 @@ export class CustomerComponent implements OnInit,AfterViewInit {
     this.fetchCustomerData();
 
     this.dataSource.filterPredicate = function (customer, filter) {
-      return customer.name.toLocaleLowerCase().includes(filter.toLocaleLowerCase())||customer.address.city.toLocaleLowerCase()
+      return customer.name.toLocaleLowerCase().includes(filter.toLocaleLowerCase())||customer.address.city.name.toLocaleLowerCase()
         .includes(filter.toLocaleLowerCase())||customer.address.addressLine1.toLocaleLowerCase().includes(filter.toLocaleLowerCase())
     }
 
