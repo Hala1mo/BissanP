@@ -145,7 +145,10 @@ export class DefinitionDetailsComponent implements OnInit {
         'definition': definition,
         'types': this.visitTypes
       }
-    }).afterClosed().subscribe(() => {
+    }).afterClosed().subscribe(response => {
+      if (response == undefined) return
+
+      definition.createdTime = response.createdTime
 
 
     });
