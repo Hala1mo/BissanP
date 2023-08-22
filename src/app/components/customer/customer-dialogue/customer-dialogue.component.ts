@@ -57,12 +57,15 @@ export class CustomerDialogueComponent {
     console.log("this.registrationForm", this.registrationForm);
 
     if(this.editMode){
-
       this.registrationForm.patchValue({
+
         name: this.selectedCustomer.name,
         address: {
           addressLine1: this.selectedCustomer.address.addressLine1,
           addressLine2: this.selectedCustomer.address.addressLine2,
+          longitude:this.selectedCustomer.address.longitude,
+          latitude:this.selectedCustomer.address.latitude,
+          precise: this.selectedCustomer.address.precise,
           city: this.selectedCustomer.address.city,
           zipcode: this.selectedCustomer.address.zipcode,
         },

@@ -8,6 +8,7 @@ export class Address {
   longitude: number;
   id: string;
   zipcode: string;
+  precise:boolean;
 
   constructor(data: any) {
     this.addressLine1 = data.addressLine1 || '';
@@ -19,5 +20,6 @@ export class Address {
     this.longitude = data.longitude || 0;
     this.id = data.id || '';
     this.zipcode = data.zipcode || '';
+    this.precise=data.precise || false;
   }
 }
