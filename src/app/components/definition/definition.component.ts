@@ -24,7 +24,7 @@ export class DefinitionComponent implements OnInit, AfterViewInit {
 
   searchInput: string = "";
 
-  displayedColumns: string[] = ['name', 'description', 'frequency', 'allowRecurring', 'type', 'actions'];
+  displayedColumns: string[] = ['name', 'description', 'frequency', 'allowRecurring', 'type', 'enabled', 'actions'];
   dataSource = new MatTableDataSource(this.visitDefinitionData);
 
   @ViewChild('definitionTablePaginator') paginator!: MatPaginator;

@@ -46,6 +46,7 @@ import { CusComponent } from './components/reports/date/cus/cus.component';
 import { DetailsCusComponent } from './components/reports/date/details-cus/details-cus.component';
 import {CusDetailsComponent} from "./components/customer/cus-details/cus-details.component";
 import { CustomerDialogueComponent } from './components/customer/customer-dialogue/customer-dialogue.component';
+import {MatChipsModule} from "@angular/material/chips";
 
 
 @NgModule({
@@ -106,6 +107,7 @@ import { CustomerDialogueComponent } from './components/customer/customer-dialog
         MatPaginatorModule,
         MatSlideToggleModule,
         MatCardModule,
+        MatChipsModule,
     ],
     providers: [],
     bootstrap: [AppComponent]
