@@ -43,9 +43,9 @@ import {DefinitionDialogComponent} from './components/definition/definition-dial
 import {FilterCusComponent} from './components/reports/filter-cus/filter-cus.component';
 import {TypesComponent} from './components/reports/types/types.component';
 import { CusComponent } from './components/reports/date/cus/cus.component';
-
 import { DetailsCusComponent } from './components/reports/date/details-cus/details-cus.component';
-import { CusDetailsComponent } from './components/customer/cus-details/cus-details.component';
+import {CusDetailsComponent} from "./components/customer/cus-details/cus-details.component";
+
 
 @NgModule({
     declarations: [

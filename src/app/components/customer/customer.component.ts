@@ -7,9 +7,10 @@ import {MatPaginator} from "@angular/material/paginator";
 import {MatTableDataSource} from "@angular/material/table";
 import {MatSort, Sort} from "@angular/material/sort";
 import {LiveAnnouncer} from "@angular/cdk/a11y";
-import {MatDialog} from "@angular/material/dialog";
 import {AddCustomerComponent} from "./add/add-customer.component";
 import {CusDetailsComponent} from "./cus-details/cus-details.component";
+import {MatDialog} from "@angular/material/dialog";
+
 
 
 @Component({
@@ -19,6 +20,8 @@ import {CusDetailsComponent} from "./cus-details/cus-details.component";
 })
 
 export class CustomerComponent implements OnInit,AfterViewInit {
+  page = 1;
+  pageSize = 10;
 
   isSearchLoading = false;
   selectedEnabledOption = "Enabled"
@@ -48,7 +51,7 @@ export class CustomerComponent implements OnInit,AfterViewInit {
 
   constructor(
     private router: Router,
-    private _registrationService: RegistrationService, private fb: FormBuilder,private _liveAnnouncer: LiveAnnouncer,private matDialog: MatDialog) {
+    private _registrationService: RegistrationService, private fb: FormBuilder,private _liveAnnouncer: LiveAnnouncer, private matDialog: MatDialog) {
   }
 
   ngOnInit() {
@@ -95,7 +98,7 @@ export class CustomerComponent implements OnInit,AfterViewInit {
         console.log('Fetched customer data:', data);
         this.originalCustomerData = data;
         this.customerData = data;
-        this.dataSource=data;
+        this.dataSource.data = this.customerData ;
       },
       error => {
         console.error('Error fetching customer data:', error);
@@ -186,6 +189,8 @@ export class CustomerComponent implements OnInit,AfterViewInit {
     )
   }
 
+  protected readonly console = console;
+
   openAddDialog(){
     this.matDialog.open(AddCustomerComponent,{
       width:'40%'
@@ -204,6 +209,4 @@ export class CustomerComponent implements OnInit,AfterViewInit {
       data: customerId
     });
   }
-
-  protected readonly console = console;
 }

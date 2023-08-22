@@ -8,8 +8,9 @@ import {DetailsCusComponent} from "../details-cus/details-cus.component";
   styleUrls: ['./cus.component.css']
 })
 export class CusComponent {
-  constructor(  private matDialog: MatDialog ,
-                @Inject(MAT_DIALOG_DATA) public data: any[]) { }
+  constructor(private matDialog: MatDialog,
+              @Inject(MAT_DIALOG_DATA) public data: any[]) {
+  }
 
 
   openCustomerDetailDialog(customerId: bigint) {

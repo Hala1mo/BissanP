@@ -52,7 +52,8 @@ export class DateComponent implements OnInit,AfterViewInit {
         (data) => {
           console.log('Fetched Date data:', data);
           this.Data = data;
-          this.dataSource=data;
+          this.dataSource.data=data;
+
         },
         (error) => {
           console.error('Error fetching Date data:', error);

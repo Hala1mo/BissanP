@@ -6,6 +6,7 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 import {Router} from "@angular/router";
 import {nameValidator} from "../../../shared/Name.validators";
 import {City} from "../../../models/City";
+import {MatSelectChange} from "@angular/material/select";
 
 @Component({
   selector: 'app-add',
@@ -180,16 +181,11 @@ export class AddCustomerComponent implements OnInit {
   }
 
 
-  // getAddressErrorMessage() {
-  //   const addressLine1Control = this.registrationForm.get('address.addressLine1');
-  //
-  //   if (addressControl.hasError('required'))
-  //     return 'Address is required';
-  //   if (addressControl.hasError('maxLength'))
-  //     return 'Address is too long';
-  //   if (addressControl.hasError('minLength'))
-  //     return 'Address is too short';
-  //
-  //   return ''; // Return an empty string if no error is found
-  // }
+  showCity(event: MatSelectChange) {
+    const selectedCityUuid = event.value;
+    const selectedCity = this.cityData.find(city => city.uuid === selectedCityUuid);
+    this.registrationForm.get('address.city')?.setValue(selectedCityUuid);
+  }
+
+
 }

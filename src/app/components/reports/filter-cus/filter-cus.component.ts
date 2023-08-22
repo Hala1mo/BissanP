@@ -47,7 +47,7 @@ id!:bigint;
       (data) => {
         console.log('Fetched customer data:', data);
         this.Data = data;
-        this.dataSource=data;
+        this.dataSource.data=data;
       },
       (error) => {
         console.error('Error fetching customer data:', error);
