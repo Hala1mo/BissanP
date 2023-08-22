@@ -7,10 +7,8 @@ import {MatPaginator} from "@angular/material/paginator";
 import {MatTableDataSource} from "@angular/material/table";
 import {MatSort, Sort} from "@angular/material/sort";
 import {LiveAnnouncer} from "@angular/cdk/a11y";
-import {AddCustomerComponent} from "./add/add-customer.component";
 import {CusDetailsComponent} from "./cus-details/cus-details.component";
 import {MatDialog} from "@angular/material/dialog";
-import {EditCustomerComponent} from "./edit/edit-customer.component";
 import {City} from "../../models/City";
 import {CustomerDialogueComponent} from "./customer-dialogue/customer-dialogue.component";
 

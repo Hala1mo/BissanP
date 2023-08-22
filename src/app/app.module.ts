@@ -12,9 +12,7 @@ import {NgbAlertModule, NgbModule, NgbPaginationModule} from "@ng-bootstrap/ng-b
 import {MatSnackBarModule} from "@angular/material/snack-bar";
 import {CustomerComponent} from './components/customer/customer.component';
 import {NgOptimizedImage} from "@angular/common";
-import {AddCustomerComponent} from './components/customer/add/add-customer.component';
 import {CustomerDetailsComponent} from './components/customer/details/customer-details.component';
-import {EditCustomerComponent} from './components/customer/edit/edit-customer.component';
 import {AddUserComponent} from "./components/user/add/add-user.component";
 import {MatCheckboxModule} from "@angular/material/checkbox";
 import {DefinitionComponent} from './components/definition/definition.component';
@@ -54,9 +52,7 @@ import { CustomerDialogueComponent } from './components/customer/customer-dialog
         HeaderComponent,
         UserComponent,
         CustomerComponent,
-        AddCustomerComponent,
         CustomerDetailsComponent,
-        EditCustomerComponent,
         DefinitionComponent,
         DefinitionDetailsComponent,
         AssignmentDetailsComponent,

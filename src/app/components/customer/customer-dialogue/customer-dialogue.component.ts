@@ -98,8 +98,42 @@ export class CustomerDialogueComponent {
   }
 
   onSubmitCustomer() {
+    if (this.editMode) {
+      this.onUpdateCustomer();
+    } else
+      this.saveNewCustomer();
+  }
+
+
+  onUpdateCustomer() {
+    const editedCustomerData = this.registrationForm.value;
+    console.log(this.registrationForm.value);
+    this._registrationService.updateCustomerData(this.selectedCustomer.id, editedCustomerData).subscribe({
+        next: response => {
+          this.matDialogRef.close(response);
+          console.log('User data updated successfully:', response);
+
+        },
+        error: error => {
+          console.error('Error updating user data:', error);
+          if (error.error && error.error.errors && error.error.errors.length > 0) {
+            const errorMessage = error.error.errors[0];
+            console.log('Error message:', errorMessage);
+            // this.toastService.show('Error', errorMessage);
+            this._snackBar.open(errorMessage, '', {
+              duration: 3000
+            });
+
+          }
+        }
+      }
+    );
+  }
+
+  saveNewCustomer() {
     if (this.registrationForm.valid) {
       console.log(this.registrationForm.value);
+
       this._registrationService.registerCustomer(this.registrationForm.value).subscribe(
         (res) => {
           console.log('Registration successful:', res);
