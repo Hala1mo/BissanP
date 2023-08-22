@@ -1,225 +1,237 @@
 <div class="container mt-1">
   <h2>Customer Details</h2>
   <hr class="mb-3">
-<div class="row">
+  <div class="row">
 
-  <div class="col-md-8">
-    <div class="card p-3">
-      <div *ngIf="customerDetails">
-        <h3>Name: {{ customerDetails.name }}</h3>
-        <h2>Address</h2>
-        <p>Address Line 1: {{ customerDetails.address.addressLine1 }}</p>
-        <p>Address Line 2: {{ customerDetails.address.addressLine2 }}</p>
-        <p>City: {{ customerDetails.address.city }}</p>
-        <p>Zip Code: {{ customerDetails.address.zipcode }}</p>
-        <h2>Time</h2>
-        <p>Created time: {{ customerDetails.createdTime}}</p>
-        <p>Last modified time: {{ customerDetails.lastModifiedTime }}</p>
+    <div class="col-md-8">
+      <div class="card p-3">
+        <div *ngIf="customerDetails">
+          <h3>Name: {{ customerDetails.name }}</h3>
+          <h2>Address</h2>
+          <p>Address Line 1: {{ customerDetails.address.addressLine1 }}</p>
+          <p>Address Line 2: {{ customerDetails.address.addressLine2 }}</p>
+          <p>City: {{ customerDetails.address.city }}</p>
+          <p>Zip Code: {{ customerDetails.address.zipcode }}</p>
+          <h2>Time</h2>
+          <p>Created time: {{ customerDetails.createdTime}}</p>
+          <p>Last modified time: {{ customerDetails.lastModifiedTime }}</p>
 
 
+          <h2>Contacts</h2>
+          <div class="col-12">
+            <table class="table table-striped table-hover">
+              <thead>
+              <tr>
+                <th>Full Name</th>
+                <th>Phone number</th>
+                <th>Email</th>
+                <th>Action</th>
 
-        <h2>Contacts</h2>
-        <div class="col-12">
-          <table class="table table-striped table-hover">
-            <thead>
-            <tr>
-              <th >Full Name</th>
-              <th>Phone number</th>
-              <th>Email</th>
-              <th>Action</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr *ngFor="let contact of customerDetails?.contacts">
+                <td>{{ contact.firstName}} {{ contact.lastName}}</td>
+                <td>{{ contact.phoneNumber}}</td>
+                <td>{{ contact.email}}</td>
 
-            </tr>
-            </thead>
-            <tbody>
-            <tr *ngFor="let contact of customerDetails?.contacts">
-              <td>{{ contact.firstName}} {{ contact.lastName}}</td>
-              <td>{{ contact.phoneNumber}}</td>
-              <td>{{ contact.email}}</td>
+                <td>
+                  <div class="row gap-3">
 
-              <td>
-                <div class="row gap-3">
+                    <button class="col-6 btn {{contact.enabled === 1 ? 'btn-success' : 'btn-warning'}}"
+                            (click)="updateEnabled(customerDetails.id,contact.id)">
+                      {{ contact.enabled === 1 ? 'Enabled' : 'Disabled' }}
+                    </button>
 
-                  <button class="col-6 btn {{contact.enabled === 1 ? 'btn-success' : 'btn-warning'}}"
-                          (click)="updateEnabled(customerDetails.id,contact.id)">
-                    {{ contact.enabled === 1 ? 'Enabled' : 'Disabled' }}
-                  </button>
+                    <button type="button"
+                            class="col-3 btn btn-info"
+                            (click)="onEditContact(contact)">
+                      Edit
+                    </button>
+                  </div>
 
-                  <button type="button"
-                          class="col-3 btn btn-info"
-                          (click)="onEditContact(contact)">
-                    Edit
-                  </button>
-                </div>
+                </td>
 
-              </td>
+              </tr>
+              </tbody>
+            </table>
 
-            </tr>
-            </tbody>
-          </table>
-
+          </div>
+        </div>
       </div>
+
     </div>
-  </div>
-
-  </div>
 
 
-  <div class="col-4 h-100">
-    <div class="w-100 mx-2 p-1">
-      <div *ngIf="!isEditMode">
-        <div class="card p-3">
-          <h3 class="mb=2 card-title">Add New Contact</h3>
-          <div class="card-body">
-            <form class="form-group" [formGroup]="registrationForm" (ngSubmit)="onSubmit(customerDetails?.id)">
+    <div class="col-4 h-100">
+      <div class="w-100 mx-2 p-1">
+        <div *ngIf="!isEditMode">
+          <div class="card p-3">
+            <h3 class="mb=2 card-title">Add New Contact</h3>
+            <div class="card-body">
+              <form class="form-group" [formGroup]="registrationForm" (ngSubmit)="onSubmit(customerDetails?.id)">
 
-              <div class="mb-3">
-                <label class="form-label">First Name</label>
-                <input
-                  type="text" formControlName="firstName" class="form-control">
-                <div *ngIf="registrationForm.controls['firstName']?.invalid && registrationForm.controls['firstName'].touched"
-                     class="text-danger">
-                  <div *ngIf="registrationForm.controls['firstName'].hasError('required')">First Name is required.</div>
-                  <div *ngIf="registrationForm.controls['firstName'].hasError('invalidName')">Invalid name it must contain(A-Z,a-z).</div>
+                <div class="mb-3">
+                  <label class="form-label">First Name</label>
+                  <input
+                    type="text" formControlName="firstName" class="form-control">
+                  <div
+                    *ngIf="registrationForm.controls['firstName']?.invalid && registrationForm.controls['firstName'].touched"
+                    class="text-danger">
+                    <div *ngIf="registrationForm.controls['firstName'].hasError('required')">First Name is required.
+                    </div>
+                    <div *ngIf="registrationForm.controls['firstName'].hasError('invalidName')">Invalid name it must
+                      contain(A-Z,a-z).
+                    </div>
+                  </div>
+
                 </div>
 
-              </div>
+                <div class="mb-3">
+                  <label class="form-label">Last Name</label>
+                  <input
+                    type="text" formControlName="lastName" class="form-control">
+                  <div
+                    *ngIf="registrationForm.controls['lastName']?.invalid && registrationForm.controls['lastName'].touched"
+                    class="text-danger">
+                    <div *ngIf="registrationForm.controls['lastName'].hasError('required')">Last Name is required.</div>
+                    <div *ngIf="registrationForm.controls['lastName'].hasError('invalidName')">Invalid name it must
+                      contain(A-Z,a-z).
+                    </div>
+                  </div>
 
-              <div class="mb-3">
-                <label class="form-label">Last Name</label>
-                <input
-                  type="text" formControlName="lastName" class="form-control">
-                <div *ngIf="registrationForm.controls['lastName']?.invalid && registrationForm.controls['lastName'].touched"
-                     class="text-danger">
-                  <div *ngIf="registrationForm.controls['lastName'].hasError('required')">Last Name is required.</div>
-                  <div *ngIf="registrationForm.controls['lastName'].hasError('invalidName')">Invalid name it must contain(A-Z,a-z).</div>
-                </div>
-
-              </div>
-
-
-              <div class="mb-3">
-                <label class="form-label">Phone Number</label>
-                <input formControlName="phoneNumber"
-                       type="tel"
-                       class="form-control">
-                <div *ngIf="registrationForm.get('phoneNumber')?.invalid && registrationForm.get('phoneNumber')?.touched" class="text-danger">
-                  <div *ngIf="registrationForm.get('phoneNumber')?.hasError('required')">Phone number is required.</div>
-                  <div *ngIf="registrationForm.get('phoneNumber')?.hasError('phoneNumberInvalid')">Invalid phone number. Only digits are allowed.</div>
-                </div>
-
-              </div>
-
-              <div class="mb-3">
-                <label class="form-label">Email</label>
-                <input
-                  type="email" formControlName="email" class="form-control">
-                <div *ngIf="registrationForm.get('email')?.invalid && registrationForm.get('email')?.touched" class="text-danger">
-                  <div *ngIf="registrationForm.get('email')?.hasError('required')">Email is required.</div>
-                  <div *ngIf="registrationForm.get('email')?.hasError('email')">Invalid email format.</div>
                 </div>
 
 
+                <div class="mb-3">
+                  <label class="form-label">Phone Number</label>
+                  <input formControlName="phoneNumber"
+                         type="tel"
+                         class="form-control">
+                  <div
+                    *ngIf="registrationForm.get('phoneNumber')?.invalid && registrationForm.get('phoneNumber')?.touched"
+                    class="text-danger">
+                    <div *ngIf="registrationForm.get('phoneNumber')?.hasError('required')">Phone number is required.
+                    </div>
+                    <div *ngIf="registrationForm.get('phoneNumber')?.hasError('phoneNumberInvalid')">Invalid phone
+                      number. Only digits are allowed.
+                    </div>
+                  </div>
 
-              </div>
-
-
-
-              <div *ngFor="let type of TypesData">
-                <mat-checkbox [formControlName]="type.id" (change)="onCheckboxChange($event, type.id)">
-                  {{ type.name }}
-                </mat-checkbox>
-              </div>
-
-              <div class="mb-3">
-                <button [disabled]='!registrationForm.valid' class="btn btn-large btn-primary" type="submit">
-                  Register
-                </button>
-
-              </div>
-
-
-
-
-            </form>
-
-          </div>
-
-        </div>
-      </div>
-
-      <div *ngIf="isEditMode && selectedContact">
-        <div class="card p-3">
-          <h3 class="mb=2 card-title">Edit Contact</h3>
-          <div class="card-body">
-            <form class="form-group" [formGroup]="editForm"   (ngSubmit)="onSubmitEdit(customerDetails?.id)" >
-
-              <div class="mb-3">
-                <label class="form-label">First Name</label>
-                <input
-                  type="text" formControlName="firstName" class="form-control">
-                <div *ngIf="editForm.controls['firstName']?.invalid && editForm.controls['firstName'].touched"
-                     class="text-danger">
-                  <div *ngIf="editForm.controls['firstName'].hasError('required')">First Name is required.</div>
-                  <div *ngIf="editForm.controls['firstName'].hasError('invalidName')">Invalid name it must contain(A-Z,a-z).</div>
                 </div>
 
-              </div>
+                <div class="mb-3">
+                  <label class="form-label">Email</label>
+                  <input
+                    type="email" formControlName="email" class="form-control">
+                  <div *ngIf="registrationForm.get('email')?.invalid && registrationForm.get('email')?.touched"
+                       class="text-danger">
+                    <div *ngIf="registrationForm.get('email')?.hasError('required')">Email is required.</div>
+                    <div *ngIf="registrationForm.get('email')?.hasError('email')">Invalid email format.</div>
+                  </div>
 
-              <div class="mb-3">
-                <label class="form-label">Last Name</label>
-                <input
-                  type="text" formControlName="lastName" class="form-control">
-                <div *ngIf="editForm.controls['lastName']?.invalid && editForm.controls['lastName'].touched"
-                     class="text-danger">
-                  <div *ngIf="editForm.controls['lastName'].hasError('required')">Last Name is required.</div>
-                  <div *ngIf="editForm.controls['lastName'].hasError('invalidName')">Invalid name it must contain(A-Z,a-z).</div>
-                </div>
-              </div>
 
-              <div class="mb-3">
-                <label class="form-label">Phone Number</label>
-                <input
-                  type="text" formControlName="phoneNumber" class="form-control">
-                  <div *ngIf="editForm.get('phoneNumber')?.invalid" class="text-danger">
-                  <div *ngIf="editForm.get('phoneNumber')?.hasError('required')">Phone number is required.</div>
-                  <div *ngIf="editForm.get('phoneNumber')?.hasError('phoneNumberInvalid')">Invalid phone number. Only digits are allowed.</div>
                 </div>
 
-              </div>
 
-              <div class="mb-3">
-                <label class="form-label">Email</label>
-                <input
-                  type="email" formControlName="email" class="form-control">
-
-                <div *ngIf="editForm.get('email')?.invalid && editForm.get('email')?.touched" class="text-danger">
-                  <div *ngIf="editForm.get('email')?.hasError('required')">Email is required.</div>
-                  <div *ngIf="editForm.get('email')?.hasError('email')">Invalid email format.</div>
-                </div>
-              </div>
-              <div formGroupName="Types">
                 <div *ngFor="let type of TypesData">
-                  <mat-checkbox [formControlName]="type.id">{{ type.name }}</mat-checkbox>
+                  <mat-checkbox [formControlName]="type.id" (change)="onCheckboxChange($event, type.id)">
+                    {{ type.name }}
+                  </mat-checkbox>
                 </div>
-              </div>
+
+                <div class="mb-3">
+                  <button [disabled]='!registrationForm.valid' class="btn btn-large btn-primary" type="submit">
+                    Register
+                  </button>
+
+                </div>
 
 
+              </form>
 
-              <div class="mb-3">
-                <button [disabled]="!editForm.valid" class="btn btn-large btn-primary me-1" type="submit">
-                  Save Changes
-                </button>
-                <button class="btn btn-large btn-secondary ms-1" (click)="cancelEdit()">Cancel</button>
-              </div>
+            </div>
 
-            </form>
           </div>
         </div>
-      </div>
+
+        <div *ngIf="isEditMode && selectedContact">
+          <div class="card p-3">
+            <h3 class="mb=2 card-title">Edit Contact</h3>
+            <div class="card-body">
+              <form class="form-group" [formGroup]="editForm" (ngSubmit)="onSubmitEdit(customerDetails?.id)">
+
+                <div class="mb-3">
+                  <label class="form-label">First Name</label>
+                  <input
+                    type="text" formControlName="firstName" class="form-control">
+                  <div *ngIf="editForm.controls['firstName']?.invalid && editForm.controls['firstName'].touched"
+                       class="text-danger">
+                    <div *ngIf="editForm.controls['firstName'].hasError('required')">First Name is required.</div>
+                    <div *ngIf="editForm.controls['firstName'].hasError('invalidName')">Invalid name it must
+                      contain(A-Z,a-z).
+                    </div>
+                  </div>
+
+                </div>
+
+                <div class="mb-3">
+                  <label class="form-label">Last Name</label>
+                  <input
+                    type="text" formControlName="lastName" class="form-control">
+                  <div *ngIf="editForm.controls['lastName']?.invalid && editForm.controls['lastName'].touched"
+                       class="text-danger">
+                    <div *ngIf="editForm.controls['lastName'].hasError('required')">Last Name is required.</div>
+                    <div *ngIf="editForm.controls['lastName'].hasError('invalidName')">Invalid name it must
+                      contain(A-Z,a-z).
+                    </div>
+                  </div>
+                </div>
+
+                <div class="mb-3">
+                  <label class="form-label">Phone Number</label>
+                  <input
+                    type="text" formControlName="phoneNumber" class="form-control">
+                  <div *ngIf="editForm.get('phoneNumber')?.invalid" class="text-danger">
+                    <div *ngIf="editForm.get('phoneNumber')?.hasError('required')">Phone number is required.</div>
+                    <div *ngIf="editForm.get('phoneNumber')?.hasError('phoneNumberInvalid')">Invalid phone number. Only
+                      digits are allowed.
+                    </div>
+                  </div>
+
+                </div>
+
+                <div class="mb-3">
+                  <label class="form-label">Email</label>
+                  <input
+                    type="email" formControlName="email" class="form-control">
+
+                  <div *ngIf="editForm.get('email')?.invalid && editForm.get('email')?.touched" class="text-danger">
+                    <div *ngIf="editForm.get('email')?.hasError('required')">Email is required.</div>
+                    <div *ngIf="editForm.get('email')?.hasError('email')">Invalid email format.</div>
+                  </div>
+                </div>
+                <div formGroupName="Types">
+                  <div *ngFor="let type of TypesData">
+                    <mat-checkbox [formControlName]="type.id">{{ type.name }}</mat-checkbox>
+                  </div>
+                </div>
+
+
+                <div class="mb-3">
+                  <button [disabled]="!editForm.valid" class="btn btn-large btn-primary me-1" type="submit">
+                    Save Changes
+                  </button>
+                  <button class="btn btn-large btn-secondary ms-1" (click)="cancelEdit()">Cancel</button>
+                </div>
+
+              </form>
+            </div>
+          </div>
+        </div>
 
         <!--            {{registrationForm.value | json}}-->
       </div>
-
 
 
     </div>

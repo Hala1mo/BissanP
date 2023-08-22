@@ -46,6 +46,7 @@ import {CusDetailsComponent} from "./components/customer/cus-details/cus-details
 import { CustomerDialogueComponent } from './components/customer/customer-dialogue/customer-dialogue.component';
 import {MatChipsModule} from "@angular/material/chips";
 import {MatBadgeModule} from "@angular/material/badge";
+import {MatTabsModule} from "@angular/material/tabs";
 
 
 @NgModule({
@@ -106,6 +107,7 @@ import {MatBadgeModule} from "@angular/material/badge";
     MatCardModule,
     MatChipsModule,
     MatBadgeModule,
+    MatTabsModule,
   ],
     providers: [],
     bootstrap: [AppComponent]
