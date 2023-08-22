@@ -11,6 +11,8 @@ import {AddCustomerComponent} from "./add/add-customer.component";
 import {CusDetailsComponent} from "./cus-details/cus-details.component";
 import {MatDialog} from "@angular/material/dialog";
 import {EditCustomerComponent} from "./edit/edit-customer.component";
+import {City} from "../../models/City";
+import {CustomerDialogueComponent} from "./customer-dialogue/customer-dialogue.component";
 
 
 @Component({
@@ -28,7 +30,7 @@ export class CustomerComponent implements OnInit,AfterViewInit {
   displayedColumns: string[] = ['name', 'city', 'addressLine','enabled']
   customerData: Customer[] = [];
   originalCustomerData: Customer[] = [];
-
+  cityData: City[]=[];
   name: String = '';
   registrationForm!: FormGroup;
 
@@ -55,6 +57,7 @@ export class CustomerComponent implements OnInit,AfterViewInit {
   }
 
   ngOnInit() {
+    this.fetchCityData(),
     this.fetchCustomerData();
 
     this.dataSource.filterPredicate = function (customer, filter) {
@@ -82,14 +85,7 @@ export class CustomerComponent implements OnInit,AfterViewInit {
     this.dataSource.sort = this.sort;
   }
 
-  announceSortChange(sortState: Sort) {
-    if (sortState.direction) {
-      this._liveAnnouncer.announce(`Sorted ${sortState.direction}ending`);
-    } else {
-      this._liveAnnouncer.announce('Sorting cleared');
-    }
-    console.log(this.dataSource.sort?.active);
-  }
+
 
   fetchCustomerData() {
     this.selectedEnabledOption = "All"
@@ -132,15 +128,6 @@ export class CustomerComponent implements OnInit,AfterViewInit {
 
   protected readonly Customer = Customer;
 
-
-  openAddCustomer() {
-    this.router.navigate(['/customers/add']);
-  }
-
-  openEditCustomer(id: bigint) {
-
-    this.router.navigate(['customers/edit', id]);
-  }
 
 
   showEnabledCustomers() {
@@ -191,9 +178,27 @@ export class CustomerComponent implements OnInit,AfterViewInit {
 
   protected readonly console = console;
 
+  fetchCityData() {
+    this._registrationService.fetchCityData().subscribe(
+      data => {
+        console.log('Fetched city data:', data);
+
+        this.cityData = data;
+      },
+      error => {
+        console.error('Error fetching city data:', error);
+      }
+    );
+
+  }
+
   openAddDialog(){
-    this.matDialog.open(AddCustomerComponent,{
-      width:'40%'
+    this.matDialog.open(CustomerDialogueComponent,{
+      width:'40%',
+      data:{
+        'mode':0,
+        'cityData':this.cityData
+      }
 
     }).afterClosed().subscribe(() => {
       this.fetchCustomerData();
@@ -201,6 +206,21 @@ export class CustomerComponent implements OnInit,AfterViewInit {
     })
   }
 
+  openEditDialog(customer: Customer) {
+    this.matDialog.open(CustomerDialogueComponent, {
+      width: '40%',
+
+        data:{
+          'mode':1,
+          'cityData':this.cityData,
+          'customer':customer
+        }
+
+    }).afterClosed().subscribe(
+      response => {
+        this.fetchCustomerData();
+      });
+  }
 
   openCustomerDetailDialog(customerId: bigint) {
     this.matDialog.closeAll();
@@ -210,19 +230,5 @@ export class CustomerComponent implements OnInit,AfterViewInit {
     });
   }
 
-  openEditDialog(customer: Customer) {
-    this.matDialog.open(EditCustomerComponent, {
-      width: '40%',
-      data: customer
-    }).afterClosed().subscribe(
-      response => {
-        if (response === undefined) return;
 
-        if (response.name && response.address ) {
-          customer.name = response.name;
-          customer.address = response.address;
-
-        }
-      })
-  }
 }
