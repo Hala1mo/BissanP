@@ -49,6 +49,7 @@ import {ContactDialogueComponent} from './components/customer/details/contact-di
 
 import {CanvasJSAngularChartsModule} from '@canvasjs/angular-charts';
 import {TypesChartComponent} from './components/reports/types-chart/types-chart.component';
+import {MatLegacyChipsModule} from "@angular/material/legacy-chips";
 
 @NgModule({
   declarations: [
@@ -110,6 +111,7 @@ import {TypesChartComponent} from './components/reports/types-chart/types-chart.
     MatBadgeModule,
     MatTabsModule,
     CanvasJSAngularChartsModule,
+    MatLegacyChipsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -32,9 +32,6 @@ export class CustomerDialogueComponent implements OnInit{
     this.selectedCustomer = data.customer;
 
 
-    console.log("zip" + data.customer.address.zipcode);
-    console.log("zip" + data.customer.address.precise);
-
     this.registrationForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(30)]],
       address: this.fb.group({

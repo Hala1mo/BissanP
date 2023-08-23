@@ -90,7 +90,6 @@ export class CustomerComponent implements OnInit,AfterViewInit {
 
 
   openCustomerDetails(id: bigint) {
-
     this.router.navigate(['/customers', id]);
 
   }
@@ -178,7 +177,6 @@ export class CustomerComponent implements OnInit,AfterViewInit {
     );
 
   }
-
   openAddDialog(){
     this.matDialog.open(CustomerDialogueComponent,{
       width:'40%',

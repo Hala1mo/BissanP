@@ -1,3 +1,5 @@
+import {VisitType} from "./VisitType";
+
 export class Contact {
 
   email: string;
@@ -6,7 +8,7 @@ export class Contact {
   lastName: string;
   phoneNumber: string;
   id: bigint;
-  checkedVisits: string[] = [];
+  visitTypes: VisitType[] = [];
 
   constructor(data: any) {
     this.firstName = data.firstName || '';
@@ -16,6 +18,6 @@ export class Contact {
 
     this.phoneNumber = data.phoneNumber || '';
     this.id = data.id || '';
-    this.checkedVisits = data.visitTypes;
+    this.visitTypes = data.visitTypes;
   }
 }
