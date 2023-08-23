@@ -73,7 +73,6 @@ export class DateComponent implements OnInit,AfterViewInit {
 
 
   openDialog(customer: any[]) {
-    console.log("dsdc",customer);
     this.matDialog.open(CusComponent, {
       width: '50%',
       data: customer
@@ -81,11 +80,6 @@ export class DateComponent implements OnInit,AfterViewInit {
     }).afterClosed().subscribe(
       response => {
         if (response === undefined) return;
-        // if (response.id && response.name ){
-        //   customer.id = response.id;
-        //   customer.name = response.name;
-        //
-        // }
       })
   }
 }
