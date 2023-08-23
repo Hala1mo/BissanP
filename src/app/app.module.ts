@@ -49,6 +49,7 @@ import {ContactDialogueComponent} from './components/customer/details/contact-di
 import {CanvasJSAngularChartsModule} from '@canvasjs/angular-charts';
 import {TypesChartComponent} from './components/reports/types-chart/types-chart.component';
 import {MatLegacyChipsModule} from "@angular/material/legacy-chips";
+import { CreateAssignmentDialogComponent } from './components/assignments/create/create-assignment-dialog.component';
 
 
 @NgModule({
@@ -75,6 +76,7 @@ import {MatLegacyChipsModule} from "@angular/material/legacy-chips";
     CustomerDialogueComponent,
     TypesChartComponent,
     ContactDialogueComponent,
+    CreateAssignmentDialogComponent,
 
   ],
   imports: [
