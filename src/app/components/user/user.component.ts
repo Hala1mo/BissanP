@@ -8,6 +8,8 @@ import {MatDialog} from "@angular/material/dialog";
 import {AddUserComponent} from "./add/add-user.component";
 import {UserService} from "../../services/user.service";
 import {EditUserComponent} from "./edit-user/edit-user.component";
+import {Customer} from "../../models/Customer";
+import {Router} from "@angular/router";
 
 
 @Component({
@@ -22,7 +24,7 @@ export class UserComponent implements OnInit, AfterViewInit {
 
   searchInput: string = "";
 
-  displayedColumns: string[] = ['username', 'firstName', 'lastName', 'accessLevel', 'actions']
+  displayedColumns: string[] = ['username', 'firstName', 'lastName', 'accessLevel','enabled', 'actions']
   dataSource = new MatTableDataSource(this.userData);
 
   @ViewChild('userTablePaginator') userPaginator!: MatPaginator;
@@ -31,7 +33,8 @@ export class UserComponent implements OnInit, AfterViewInit {
   constructor(
     private snackBar: MatSnackBar,
     private userService: UserService,
-    private matDialog: MatDialog
+    private matDialog: MatDialog,
+    private router: Router
   ) {
 
   }
@@ -160,4 +163,11 @@ export class UserComponent implements OnInit, AfterViewInit {
     this.dataSource.data = this.userData;
   }
 
+  protected readonly Customer = Customer;
+
+
+  openUserDetails(username: string) {
+    this.router.navigate(['/users/details', username]);
+
+  }
 }

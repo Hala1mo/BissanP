@@ -8,7 +8,7 @@ import {HttpClient} from "@angular/common/http";
 export class UserService {
 
   private usersUrl = 'http://10.10.33.91:8080/users';
-
+  private usersReports = 'http://10.10.33.91:8080/reports/users';
   constructor(private _http: HttpClient) {
   }
 
@@ -38,4 +38,18 @@ export class UserService {
     const _urlDetails = `${this.usersUrl}/search?query=${query}`;
     return this._http.get<any>(_urlDetails);
   }
+
+  getUserReports(username:string): Observable<any> {
+    const Url = `${this.usersReports}/${username}`;
+    return this._http.get<any>(Url);
+  }
+
+  getUserData(username:string): Observable<any> {
+    const Url = `${this.usersUrl}/${username}`;
+    return this._http.get<any>(Url);
+  }
+
+
+
+
 }

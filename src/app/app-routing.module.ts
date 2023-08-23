@@ -12,12 +12,14 @@ import {StatusComponent} from "./components/reports/status/status.component";
 import {DateComponent} from "./components/reports/date/date.component";
 import {FilterCusComponent} from "./components/reports/filter-cus/filter-cus.component";
 import {TypesChartComponent} from "./components/reports/types-chart/types-chart.component";
+import {UserDetailsComponent} from "./components/user/user-details/user-details.component";
 
 const routes: Routes = [
     {path: 'users', component: UserComponent},
     {path: 'customers', component: CustomerComponent},
     {path: 'definitions', component: DefinitionComponent},
     {path: 'users/add', component: AddUserComponent},
+  {path: 'users/details/:username', component: UserDetailsComponent},
 
     {path: 'customers/:id', component: CustomerDetailsComponent},
     {path: 'definitions/:id', component: DefinitionDetailsComponent},
@@ -27,7 +29,7 @@ const routes: Routes = [
     {path:'reports/status',component:StatusComponent},
     {path:'reports/types-chart',component:TypesChartComponent},
     {path:'reports/date',component:DateComponent},
-    // {path:'reports/:id',component:FilterCusComponent},
+    {path:'reports/:id',component:FilterCusComponent},
 
 
 ];

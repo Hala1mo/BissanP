@@ -15,6 +15,10 @@ export class ReportsService {
   private _customers_url = 'http://10.10.33.91:8080/customers';
   private types_url='http://10.10.33.91:8080/reports/customers/countByType';
   private areas_url='http://10.10.33.91:8080/reports/customers/countByArea';
+  private users_url='http://10.10.33.91:8080/users/employees';
+  private usersChart_url='http://10.10.33.91:8080/reports/users';
+
+
 
   private customers = 'http://10.10.33.91:8080/reports/customers';
 
