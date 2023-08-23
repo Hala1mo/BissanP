@@ -1,14 +1,16 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {ActivatedRoute, Router} from "@angular/router";
-import {FormBuilder, FormGroup} from "@angular/forms";
 import {AssignmentService} from "../../../services/assignment.service";
-import {VisitAssignment} from "../../../models/VisitAssignment";
 import {VisitDefinition} from "../../../models/VisitDefinition";
 import {MatDialog} from "@angular/material/dialog";
 import {DefinitionDialogComponent} from "../definition-dialog/definition-dialog.component";
 import {DefinitionService} from "../../../services/definition.service";
 import {VisitType} from "../../../models/VisitType";
+import {MatPaginator} from "@angular/material/paginator";
+import {MatSort} from "@angular/material/sort";
+import {MatTableDataSource} from "@angular/material/table";
+import {AddUserComponent} from "../../user/add/add-user.component";
 
 @Component({
   selector: 'app-details-def',
@@ -17,14 +19,17 @@ import {VisitType} from "../../../models/VisitType";
 })
 
 export class DefinitionDetailsComponent implements OnInit {
-  definition: VisitDefinition | undefined;
-  assignments: VisitAssignment[] = [];
-
+  currentDefinition: VisitDefinition | undefined;
   visitTypes: VisitType[] = [];
-  displayedColumns: string[] = ['Date', 'Comment', 'Action'];
-  dataSource = this.assignments;
-  registrationForm!: FormGroup;
-  isEditMode = false; // Toggle between add and edit modes
+
+  displayedColumns: string[] = ['date', 'comment', 'actions'];
+  dataSource = new MatTableDataSource([]);
+
+  @ViewChild(MatPaginator) assignmentPaginator!: MatPaginator;
+  @ViewChild(MatSort) assignmentSort!: MatSort;
+
+
+  //UNUSED
   id!: bigint;
 
   constructor(
@@ -33,8 +38,7 @@ export class DefinitionDetailsComponent implements OnInit {
     private definitionService: DefinitionService,
     private matDialog: MatDialog,
     private router: Router,
-    private assignmentService: AssignmentService,
-    private formBuilder: FormBuilder
+    private assignmentService: AssignmentService
   ) {
 
   }
@@ -46,70 +50,80 @@ export class DefinitionDetailsComponent implements OnInit {
         this.fetchDefinitionDetails(this.id);
         this.fetchVisitTypes();
       }
-      this.registrationForm = this.formBuilder.group({
-        date: [''],
-        comment: [''],
-      });
-
-
     });
-
   }
 
-  fetchDefinitionDetails(defId: any) {
-    this.assignmentService.fetchDefinitionDetails(defId).subscribe({
-        next: response => {
-          console.log('Fetched VisitDefinition data:', response);
-          this.definition = response;
 
-          if (Array.isArray(response.visitAssignments)) {
-
-            this.assignments = [...response.visitAssignments];
-
-            console.log(this.assignments);
-          } else {
-            console.error('Invalid or missing visitAssignments data in the response:', response);
-          }
-        },
-        error: error => {
-          console.error('Error fetching VisitAssignment data:', error);
-
-        }
-      }
-    );
-  }
-
-  onSubmit() {
-    console.log(this.registrationForm);
-    console.log("id", this.id);
-    this.assignmentService.AddAssignment(this.registrationForm.value, this.id).subscribe(
-      (res) => {
-        console.log('Registration successful:', res);
-        this.registrationForm.reset();
-        this.fetchDefinitionDetails(this.id);
-      },
-      (error) => {
-        console.error('Registration failed:', error);
-        if (error.error && error.error.errors && error.error.errors.length > 0) {
-          const errorMessage = error.error.errors[0];
-          console.log('Error message:', errorMessage);
-          // this.toastService.show('Error', errorMessage);
-          this.snackBar.open(errorMessage, '', {
-            duration: 3000
-          });
-
-        }
-      }
-    );
-  }
+  // onSubmit() {
+  //   console.log(this.registrationForm);
+  //   console.log("id", this.id);
+  //   this.assignmentService.AddAssignment(this.registrationForm.value, this.id).subscribe(
+  //     (res) => {
+  //       console.log('Registration successful:', res);
+  //       this.registrationForm.reset();
+  //       this.fetchDefinitionDetails(this.id);
+  //     },
+  //     (error) => {
+  //       console.error('Registration failed:', error);
+  //       if (error.error && error.error.errors && error.error.errors.length > 0) {
+  //         const errorMessage = error.error.errors[0];
+  //         console.log('Error message:', errorMessage);
+  //         this.snackBar.open(errorMessage, '', {
+  //           duration: 3000
+  //         });
+  //
+  //       }
+  //     }
+  //   );
+  // }
 
   openAssignmentsDetails(id: bigint) {
-    this.router.navigate(['../../assignments', id]);
+    // this.router.navigate(['../../assignments', id]).then( () => {
+    //
+    // });
   }
 
-  openCreateAssignmentDialog(definition: VisitDefinition) {
-    console.log("OPENING ASSIGNMENT DIALOG")
+  openCreateAssignmentDialog() {
+    if (this.currentDefinition === undefined) return;
+
+    console.log("TRYING TO OPEN ASSIGNMENT DIALOG")
+    this.matDialog.open(AddUserComponent);
+    // this.matDialog.open(AssignmentCreateDialogComponent,
+    //   {
+    //   width: '40%',
+    //   // data: {
+    //   //   'definitionId': this.currentDefinition.id
+    //   // }
+    // }).afterClosed().subscribe(response => {
+    //   console.log("CLOSED ASSIGNMENT DIALOG")
+    //   console.log(response);
+    // });
+    console.log("SOMEWHERE")
   }
+
+  openDefinitionEditDialog() {
+    if (this.currentDefinition === undefined) return;
+
+    this.matDialog.open(DefinitionDialogComponent, {
+      width: '40%',
+      data: {
+        'mode': 1,
+        'definition': this.currentDefinition,
+        'types': this.visitTypes
+      }
+    }).afterClosed().subscribe(response => {
+      if (response === undefined) return;
+      if (this.currentDefinition === undefined) return;
+
+      this.currentDefinition.createdTime = response.createdTime;
+      this.currentDefinition.lastModifiedTime = response.lastModifiedTime;
+      this.currentDefinition.name = response.name;
+      this.currentDefinition.frequency = response.frequency;
+      this.currentDefinition.allowRecurring = response.allowRecurring;
+      this.currentDefinition.description = response.description;
+    });
+  }
+
 
   formatDateString(timeString: string) {
     const date = new Date(timeString);
@@ -117,12 +131,14 @@ export class DefinitionDetailsComponent implements OnInit {
     return date.toLocaleDateString() + " " + date.toLocaleTimeString();
   }
 
+
   fetchVisitTypes() {
     this.definitionService.fetchTypesData().subscribe({
       next: response => {
         console.log('Fetched types data:', response);
         this.visitTypes = response;
       },
+
       error: error => {
         console.error('Error fetching visit types:', error);
         if (error.message) {
@@ -137,21 +153,25 @@ export class DefinitionDetailsComponent implements OnInit {
     });
   }
 
-  openEditDialog(definition: VisitDefinition) {
-    this.matDialog.open(DefinitionDialogComponent, {
-      width: '40%',
-      data: {
-        'mode': 1,
-        'definition': definition,
-        'types': this.visitTypes
+  fetchDefinitionDetails(id: any) {
+    this.assignmentService.fetchDefinitionDetails(id).subscribe({
+        next: response => {
+          console.log('Fetched VisitDefinition data:', response);
+          this.currentDefinition = response;
+          this.dataSource = new MatTableDataSource(response.visitAssignments);
+
+          setTimeout(() => {
+            this.dataSource.sort = this.assignmentSort;
+            this.dataSource.paginator = this.assignmentPaginator;
+          }, 10)
+        },
+        error: error => {
+          console.error('Error fetching VisitAssignment data:', error);
+
+        }
       }
-    }).afterClosed().subscribe(response => {
-      if (response == undefined) return
-
-      definition.createdTime = response.createdTime
-
-
-    });
+    );
   }
+
 
 }
