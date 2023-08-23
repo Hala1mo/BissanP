@@ -20,6 +20,8 @@ export class ReportsComponent implements OnInit{
     DateData:any[]=[];
   cusData:any[]=[];
 
+  isDateDataEmpty: boolean = false;
+
   fromDate: Date | null = null;
   toDate: Date | null = null;
   myControl = new FormControl();
@@ -96,9 +98,12 @@ export class ReportsComponent implements OnInit{
 
         if(this.DateData.length===0) {
           console.log("no data");
+          this.isDateDataEmpty=true;
+
         }
         else{
           console.log("kkkk");
+          this.isDateDataEmpty=false;
           // this.router.navigate(['/reports', fromDateString, toDateString]);
           this.sharedService.updateDateData(this.DateData);
           this.router.navigate(['/reports/date']);
