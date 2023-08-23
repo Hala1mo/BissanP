@@ -21,7 +21,7 @@ export class DefinitionDetailsComponent implements OnInit {
     currentDefinition: VisitDefinition | undefined;
     visitTypes: VisitType[] = [];
 
-    displayedColumns: string[] = ['date', 'comment', 'actions'];
+    displayedColumns: string[] = ['date', 'comment', 'user', 'actions'];
     dataSource = new MatTableDataSource([]);
 
     @ViewChild(MatPaginator) assignmentPaginator!: MatPaginator;
@@ -51,7 +51,7 @@ export class DefinitionDetailsComponent implements OnInit {
     }
 
 
-    openAssignmentsDetails(id: bigint) {
+    openAssignmentDetails(id: bigint) {
         console.log("OPENING ASSIGNMENT", id);
         // this.router.navigate(['../../assignments', id]).then( () => {
         //

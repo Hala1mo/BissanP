@@ -15,8 +15,16 @@ body {
   background-color: var(--mat-option-hover-state-layer-color);
 }
 
-.primary-color {
-  color: #3F51B5;
+.imp-mat-primary {
+  color: #3f51b5 !important
+}
+
+.imp-mat-accent {
+  color: #ff4081 !important
+}
+
+.imp-mat-warn {
+  color: #f44336 !important
 }
 
 
