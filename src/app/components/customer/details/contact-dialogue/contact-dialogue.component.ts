@@ -133,6 +133,7 @@ export class ContactDialogueComponent implements OnInit {
       checkedTypes.push(visitType.id);
     }
 
+
     this.registrationForm.patchValue({
       firstName: contact.firstName,
       lastName: contact.lastName,
@@ -149,11 +150,10 @@ export class ContactDialogueComponent implements OnInit {
     if (this.registrationForm.valid) {
 
       const editedUserData = this.registrationForm.value;
-      editedUserData.Types = this.typesData.filter(type => editedUserData.Types[type.id]);
       this._registrationService.updateContactData(this.selectedContact.id, editedUserData).subscribe(
         (response) => {
+          this.matDialogRef.close(response);
           console.log('User data updated successfully:', response);
-          this.registrationForm.reset();
         },
         (error) => {
           console.error('Error updating user data:', error);

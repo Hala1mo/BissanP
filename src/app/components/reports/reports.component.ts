@@ -7,6 +7,8 @@ import {Router} from "@angular/router";
 import {formatDate} from "@angular/common";
 import {FormControl} from "@angular/forms";
 import {MatAutocompleteSelectedEvent} from "@angular/material/autocomplete";
+import {BehaviorSubject} from "rxjs";
+import {SharedServiceService} from "../../services/shared-service.service";
 
 @Component({
   selector: 'app-reports',
@@ -17,7 +19,7 @@ export class ReportsComponent implements OnInit{
     Date: any[] = [];
     DateData:any[]=[];
   cusData:any[]=[];
-    uniqueDates: string[] = [];
+
   fromDate: Date | null = null;
   toDate: Date | null = null;
   myControl = new FormControl();
@@ -26,7 +28,8 @@ export class ReportsComponent implements OnInit{
   @ViewChild('reportsTablePaginator') paginator!: MatPaginator;
   constructor(    private router: Router,
     private _liveAnnouncer: LiveAnnouncer,
-    private _reportsService: ReportsService
+    private _reportsService: ReportsService,
+                  private sharedService: SharedServiceService
   ) {}
 
   ngOnInit(): void {
@@ -69,14 +72,7 @@ export class ReportsComponent implements OnInit{
     if (this.fromDate && this.toDate) {
       const fromDateString = formatDate(this.fromDate, 'yyyy-MM-dd', 'en');
       const toDateString = formatDate(this.toDate, 'yyyy-MM-dd', 'en');
-
-      console.log('From Date:', fromDateString);
-      console.log('To Date:', toDateString);
-      this.fetchDataa( fromDateString, toDateString);
-
-      if(this.DateData!=null) {
-        this.router.navigate(['/reports', fromDateString, toDateString]);
-      }
+      this.fetchDateData( fromDateString, toDateString);
     }
   }
   onOptionSelected(event: MatAutocompleteSelectedEvent) {
@@ -91,13 +87,23 @@ export class ReportsComponent implements OnInit{
   }
 
 
-  fetchDataa(from: string,to:string) {
-    console.log(from);
-    console.log('dataaaaa', this.DateData);
+  fetchDateData(from: string,to:string) {
+
     this._reportsService.fetchDateData(from,to).subscribe(
       (data) => {
         console.log('Fetched Date data:', data);
         this.DateData = data;
+
+        if(this.DateData.length===0) {
+          console.log("no data");
+        }
+        else{
+          console.log("kkkk");
+          // this.router.navigate(['/reports', fromDateString, toDateString]);
+          this.sharedService.updateDateData(this.DateData);
+          this.router.navigate(['/reports/date']);
+
+        }
       },
       (error) => {
         console.error('Error fetching Date data:', error);

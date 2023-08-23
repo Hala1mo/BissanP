@@ -25,9 +25,9 @@ const routes: Routes = [
 
     {path:'reports',component:ReportsComponent },
     {path:'reports/status',component:StatusComponent},
-  {path:'reports/types-chart',component:TypesChartComponent},
-    {path:'reports/:from/:to',component:DateComponent},
-    {path:'reports/:id',component:FilterCusComponent},
+    {path:'reports/types-chart',component:TypesChartComponent},
+    {path:'reports/date',component:DateComponent},
+    // {path:'reports/:id',component:FilterCusComponent},
 
 
 ];
