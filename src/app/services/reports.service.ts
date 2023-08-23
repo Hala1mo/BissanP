@@ -78,5 +78,7 @@ export class ReportsService {
     return this._http.get<any>(_urlDetails);
   }
 
+
+
 }
 
