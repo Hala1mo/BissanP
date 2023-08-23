@@ -1,139 +1,140 @@
 <div class="container">
-  <div class="row border-bottom mb-5">
-    <div class="d-flex justify-content-between">
-      <h1>Users</h1>
-      <button mat-raised-button color="primary" (click)="openAddDialog()">
-        Add New User
-        <mat-icon>add</mat-icon>
-      </button>
-    </div>
-  </div>
-  <div class="row border-bottom mb-3">
-    <div class="col-8">
-      <form>
-        <mat-form-field [style.width.%]="100">
-          <mat-label>What are you looking for?</mat-label>
-          <input matInput matNativeControl placeholder="search for username, first name, or last name"
-                 [(ngModel)]="searchInput"
-                 [ngModelOptions]="{standalone: true}"
-                 (input)="applyFilter($event)">
-          <mat-icon matSuffix>search</mat-icon>
-        </mat-form-field>
-      </form>
-    </div>
-    <div class="col-4">
-      <div class="d-flex gap-1 justify-content-between">
-        <mat-form-field>
-          <mat-label>Show Active Users</mat-label>
-          <mat-select>
-            <mat-option (click)="resetFilters()">
-              <mat-icon>star</mat-icon>
-              <span>All Users</span>
-            </mat-option>
-            <mat-option (click)="showEnabledUsers()">
-              <mat-icon>toggle_on</mat-icon>
-              <span>Active Users</span>
-            </mat-option>
-            <mat-option (click)="showDisabledUsers()">
-              <mat-icon>toggle_off</mat-icon>
-              <span>Inactive Users</span>
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-        <mat-form-field>
-          <mat-label>Access Level</mat-label>
-          <mat-select>
-            <mat-option (click)="resetFilters()">
-              <mat-icon>star</mat-icon>
-              <span>All Users</span>
-            </mat-option>
-            <mat-option (click)="showAdminUsers()">
-              <mat-icon>supervised_user_circle</mat-icon>
-              <span>Supervisors</span>
-            </mat-option>
-            <mat-option (click)="showEmployeeUsers()">
-              <mat-icon>account_circle</mat-icon>
-              <span>Employees</span>
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
-    </div>
-  </div>
-  <div class="row mb-3">
-    <div class="mat-elevation-z4">
-      <mat-paginator [pageSizeOptions]="[5,10,20]"
-                     #userTablePaginator
-                     showFirstLastButtons
-                     aria-label="Select page of users">
-      </mat-paginator>
-
-      <table mat-table [dataSource]="dataSource" matSort>
-        <ng-container matColumnDef="username">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by username">
-            Username
-          </th>
-          <td mat-cell *matCellDef="let user"> {{user.username}} </td>
-        </ng-container>
-        <ng-container matColumnDef="firstName">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by first name">
-            First Name
-          </th>
-          <td mat-cell *matCellDef="let user"> {{user.firstName}} </td>
-        </ng-container>
-        <ng-container matColumnDef="lastName">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by last name">
-            Last Name
-          </th>
-          <td mat-cell *matCellDef="let user"> {{user.lastName}} </td>
-        </ng-container>
-
-        <ng-container matColumnDef="accessLevel">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by access level">
-            Access Level
-          </th>
-          <td mat-cell *matCellDef="let user">
-            {{user.accessLevel === 1 ? 'Supervisor' : 'Employee'}}
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="enabled">
-          <th mat-header-cell *matHeaderCellDef>
-            Enabled
-          </th>
-          <td mat-cell *matCellDef="let user">
-              <mat-slide-toggle
-                (click)="updateUserStatus(user)"
-                checked="{{user.enabled === 1 ? 'true' : 'false'}}"
-              >
-                {{user.enabled === 1 ? 'Active' : 'Inactive'}}
-              </mat-slide-toggle>
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="actions">
-          <th mat-header-cell *matHeaderCellDef>
-            Actions
-          </th>
-          <td mat-cell *matCellDef="let user" class="text-capitalize">
-            <div class="d-flex justify-content-between align-items-center">
-              <button mat-icon-button color="primary"
-              (click)="openEditDialog(user)"><mat-icon>edit</mat-icon>
-              </button>
-            <button mat-icon-button color="primary"
-                    (click)="openUserDetails(user.username)">
-              <mat-icon>open_in_new</mat-icon>
+    <div class="row border-bottom mb-5">
+        <div class="d-flex justify-content-between">
+            <h1>Users</h1>
+            <button mat-raised-button color="primary" (click)="openAddDialog()">
+                Add New User
+                <mat-icon>add</mat-icon>
             </button>
-            </div>
-          </td>
-        </ng-container>
-
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-        <tr class="mat-row" *matNoDataRow>
-          <td class="mat-cell" colspan="4">No data matching the filter "{{searchInput}}"</td>
-        </tr>
-      </table>
+        </div>
     </div>
-  </div>
+    <div class="row border-bottom mb-3">
+        <div class="col-8">
+            <form>
+                <mat-form-field [style.width.%]="100">
+                    <mat-label>What are you looking for?</mat-label>
+                    <input matInput matNativeControl placeholder="search for username, first name, or last name"
+                           [(ngModel)]="searchInput"
+                           [ngModelOptions]="{standalone: true}"
+                           (input)="applyFilter($event)">
+                    <mat-icon matSuffix>search</mat-icon>
+                </mat-form-field>
+            </form>
+        </div>
+        <div class="col-4">
+            <div class="d-flex gap-1 justify-content-between">
+                <mat-form-field>
+                    <mat-label>Show Active Users</mat-label>
+                    <mat-select>
+                        <mat-option (click)="resetFilters()">
+                            <mat-icon>star</mat-icon>
+                            <span>All Users</span>
+                        </mat-option>
+                        <mat-option (click)="showEnabledUsers()">
+                            <mat-icon>toggle_on</mat-icon>
+                            <span>Active Users</span>
+                        </mat-option>
+                        <mat-option (click)="showDisabledUsers()">
+                            <mat-icon>toggle_off</mat-icon>
+                            <span>Inactive Users</span>
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Access Level</mat-label>
+                    <mat-select>
+                        <mat-option (click)="resetFilters()">
+                            <mat-icon>star</mat-icon>
+                            <span>All Users</span>
+                        </mat-option>
+                        <mat-option (click)="showAdminUsers()">
+                            <mat-icon>supervised_user_circle</mat-icon>
+                            <span>Supervisors</span>
+                        </mat-option>
+                        <mat-option (click)="showEmployeeUsers()">
+                            <mat-icon>account_circle</mat-icon>
+                            <span>Employees</span>
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="mat-elevation-z4">
+            <mat-paginator [pageSizeOptions]="[5,10,20]"
+                           #userTablePaginator
+                           showFirstLastButtons
+                           aria-label="Select page of users">
+            </mat-paginator>
+
+            <table mat-table [dataSource]="dataSource" matSort>
+                <ng-container matColumnDef="username">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by username">
+                        Username
+                    </th>
+                    <td mat-cell *matCellDef="let user"> {{user.username}} </td>
+                </ng-container>
+                <ng-container matColumnDef="firstName">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by first name">
+                        First Name
+                    </th>
+                    <td mat-cell *matCellDef="let user"> {{user.firstName}} </td>
+                </ng-container>
+                <ng-container matColumnDef="lastName">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by last name">
+                        Last Name
+                    </th>
+                    <td mat-cell *matCellDef="let user"> {{user.lastName}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="accessLevel">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by access level">
+                        Access Level
+                    </th>
+                    <td mat-cell *matCellDef="let user">
+                        {{user.accessLevel === 1 ? 'Supervisor' : 'Employee'}}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="enabled">
+                    <th mat-header-cell *matHeaderCellDef>
+                        Enabled
+                    </th>
+                    <td mat-cell *matCellDef="let user">
+                        <mat-slide-toggle
+                                (click)="updateUserStatus(user)"
+                                checked="{{user.enabled === 1 ? 'true' : 'false'}}"
+                        >
+                            {{user.enabled === 1 ? 'Active' : 'Inactive'}}
+                        </mat-slide-toggle>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="actions">
+                    <th mat-header-cell *matHeaderCellDef>
+                        Actions
+                    </th>
+                    <td mat-cell *matCellDef="let user" class="text-capitalize">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <button mat-icon-button color="primary"
+                                    (click)="openEditDialog(user)">
+                                <mat-icon>edit</mat-icon>
+                            </button>
+                            <button mat-icon-button color="primary"
+                                    (click)="openUserDetails(user.username)">
+                                <mat-icon>open_in_new</mat-icon>
+                            </button>
+                        </div>
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                <tr class="mat-row" *matNoDataRow>
+                    <td class="mat-cell" colspan="4">No data matching the filter "{{searchInput}}"</td>
+                </tr>
+            </table>
+        </div>
+    </div>
 </div>

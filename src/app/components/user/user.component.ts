@@ -13,161 +13,161 @@ import {Router} from "@angular/router";
 
 
 @Component({
-  selector: 'app-user',
-  templateUrl: './user.component.html',
-  styleUrls: ['./user.component.css'],
+    selector: 'app-user',
+    templateUrl: './user.component.html',
+    styleUrls: ['./user.component.css'],
 })
 
 export class UserComponent implements OnInit, AfterViewInit {
-  userData: User[] = [];
-  originalUserData: User[] = [];
+    userData: User[] = [];
+    originalUserData: User[] = [];
 
-  searchInput: string = "";
+    searchInput: string = "";
 
-  displayedColumns: string[] = ['username', 'firstName', 'lastName', 'accessLevel','enabled', 'actions']
-  dataSource = new MatTableDataSource(this.userData);
+    displayedColumns: string[] = ['username', 'firstName', 'lastName', 'accessLevel', 'enabled', 'actions']
+    dataSource = new MatTableDataSource(this.userData);
 
-  @ViewChild('userTablePaginator') userPaginator!: MatPaginator;
-  @ViewChild(MatSort) userSort!: MatSort;
+    @ViewChild('userTablePaginator') userPaginator!: MatPaginator;
+    @ViewChild(MatSort) userSort!: MatSort;
 
-  constructor(
-    private snackBar: MatSnackBar,
-    private userService: UserService,
-    private matDialog: MatDialog,
-    private router: Router
-  ) {
+    constructor(
+        private snackBar: MatSnackBar,
+        private userService: UserService,
+        private matDialog: MatDialog,
+        private router: Router
+    ) {
 
-  }
-
-  ngOnInit() {
-    this.fetchAllUserData();
-
-    this.dataSource.filterPredicate = function (user, filter) {
-      return user.username.toLocaleLowerCase().includes(filter.toLocaleLowerCase()) || user.firstName.toLocaleLowerCase().includes(filter.toLocaleLowerCase()) || user.lastName.toLocaleLowerCase().includes(filter.toLocaleLowerCase());
     }
-  }
 
-  ngAfterViewInit() {
-    console.log('ON INIT');
-    console.log(this.userPaginator);
-    console.log(this.userSort);
-    this.dataSource.paginator = this.userPaginator;
-    this.dataSource.sort = this.userSort;
-  }
+    ngOnInit() {
+        this.fetchAllUserData();
 
-  fetchAllUserData() {
-    this.userService.getAllUsers().subscribe({
-      next: response => {
-        console.log('Fetched user data:', response);
-        this.originalUserData = response;
+        this.dataSource.filterPredicate = function (user, filter) {
+            return user.username.toLocaleLowerCase().includes(filter.toLocaleLowerCase()) || user.firstName.toLocaleLowerCase().includes(filter.toLocaleLowerCase()) || user.lastName.toLocaleLowerCase().includes(filter.toLocaleLowerCase());
+        }
+    }
 
-        this.resetFilters();
-        console.log('AFTER RESET');
+    ngAfterViewInit() {
+        console.log('ON INIT');
         console.log(this.userPaginator);
         console.log(this.userSort);
-      },
-      error: error => {
-        console.error('Error fetching users:', error);
-        if (error.message) {
-          let errorMessage = error.message;
-          console.log('Error message:', errorMessage);
+        this.dataSource.paginator = this.userPaginator;
+        this.dataSource.sort = this.userSort;
+    }
 
-          this.snackBar.open(errorMessage, '', {
-            duration: 3000
-          });
-        }
-      }
-    });
-  }
+    fetchAllUserData() {
+        this.userService.getAllUsers().subscribe({
+            next: response => {
+                console.log('Fetched user data:', response);
+                this.originalUserData = response;
 
-  updateUserStatus(user: User) {
-    user.enabled = user.enabled == 1 ? 0 : 1;
-    this.userService.updateUserStatus(user.username).subscribe(
-      {
-        next: response => {
-          console.log('Enabled status updated successfully:', response);
+                this.resetFilters();
+                console.log('AFTER RESET');
+                console.log(this.userPaginator);
+                console.log(this.userSort);
+            },
+            error: error => {
+                console.error('Error fetching users:', error);
+                if (error.message) {
+                    let errorMessage = error.message;
+                    console.log('Error message:', errorMessage);
 
-          user.enabled = response.enabled;
-        },
-        error: error => {
-          console.error('Error updating enabled status:', error);
-          if (error.message) {
-            let errorMessage = error.message;
-            console.log('Error message:', errorMessage);
+                    this.snackBar.open(errorMessage, '', {
+                        duration: 3000
+                    });
+                }
+            }
+        });
+    }
 
-            this.snackBar.open(errorMessage, '', {
-              duration: 3000
-            });
-          }
-          user.enabled = user.enabled == 1 ? 0 : 1;
-        }
-      }
-    );
-  }
+    updateUserStatus(user: User) {
+        user.enabled = user.enabled == 1 ? 0 : 1;
+        this.userService.updateUserStatus(user.username).subscribe(
+            {
+                next: response => {
+                    console.log('Enabled status updated successfully:', response);
 
-  openAddDialog() {
-    this.matDialog.open(AddUserComponent, {
-      width: '40%'
-    }).afterClosed().subscribe(() => {
-      this.fetchAllUserData();
-    });
-  }
+                    user.enabled = response.enabled;
+                },
+                error: error => {
+                    console.error('Error updating enabled status:', error);
+                    if (error.message) {
+                        let errorMessage = error.message;
+                        console.log('Error message:', errorMessage);
 
-  openEditDialog(user: User) {
-    this.matDialog.open(EditUserComponent, {
-      width: '40%',
-      data: user
-    }).afterClosed().subscribe(
-      response => {
-        if (response === undefined) return;
+                        this.snackBar.open(errorMessage, '', {
+                            duration: 3000
+                        });
+                    }
+                    user.enabled = user.enabled == 1 ? 0 : 1;
+                }
+            }
+        );
+    }
 
-        if (response.firstName && response.lastName && response.accessLevel) {
-          user.firstName = response.firstName;
-          user.lastName = response.lastName;
-          user.accessLevel = response.accessLevel;
-        }
-      })
-  }
+    openAddDialog() {
+        this.matDialog.open(AddUserComponent, {
+            width: '40%'
+        }).afterClosed().subscribe(() => {
+            this.fetchAllUserData();
+        });
+    }
 
-  showEnabledUsers() {
-    this.userData = this.originalUserData.filter(user => user.enabled === 1);
+    openEditDialog(user: User) {
+        this.matDialog.open(EditUserComponent, {
+            width: '40%',
+            data: user
+        }).afterClosed().subscribe(
+            response => {
+                if (response === undefined) return;
 
-    this.dataSource.data = this.userData;
-  }
+                if (response.firstName && response.lastName && response.accessLevel) {
+                    user.firstName = response.firstName;
+                    user.lastName = response.lastName;
+                    user.accessLevel = response.accessLevel;
+                }
+            })
+    }
 
-  showDisabledUsers() {
-    this.userData = this.originalUserData.filter(user => user.enabled === 0);
+    showEnabledUsers() {
+        this.userData = this.originalUserData.filter(user => user.enabled === 1);
 
-    this.dataSource.data = this.userData;
-  }
+        this.dataSource.data = this.userData;
+    }
 
-  showAdminUsers() {
-    this.userData = this.originalUserData.filter(user => user.accessLevel === 1);
+    showDisabledUsers() {
+        this.userData = this.originalUserData.filter(user => user.enabled === 0);
 
-    this.dataSource.data = this.userData;
-  }
+        this.dataSource.data = this.userData;
+    }
 
-  showEmployeeUsers() {
-    this.userData = this.originalUserData.filter(user => user.accessLevel === 0);
+    showAdminUsers() {
+        this.userData = this.originalUserData.filter(user => user.accessLevel === 1);
 
-    this.dataSource.data = this.userData;
-  }
+        this.dataSource.data = this.userData;
+    }
 
-  applyFilter($event: Event) {
-    const filterValue = ($event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-  }
+    showEmployeeUsers() {
+        this.userData = this.originalUserData.filter(user => user.accessLevel === 0);
 
-  resetFilters() {
-    this.userData = this.originalUserData;
-    this.dataSource.data = this.userData;
-  }
+        this.dataSource.data = this.userData;
+    }
 
-  protected readonly Customer = Customer;
+    applyFilter($event: Event) {
+        const filterValue = ($event.target as HTMLInputElement).value;
+        this.dataSource.filter = filterValue.trim().toLowerCase();
+    }
+
+    resetFilters() {
+        this.userData = this.originalUserData;
+        this.dataSource.data = this.userData;
+    }
+
+    protected readonly Customer = Customer;
 
 
-  openUserDetails(username: string) {
-    this.router.navigate(['/users/details', username]);
+    openUserDetails(username: string) {
+        this.router.navigate(['/users/details', username]);
 
-  }
+    }
 }

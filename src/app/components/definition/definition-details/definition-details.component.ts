@@ -10,6 +10,7 @@ import {MatPaginator} from "@angular/material/paginator";
 import {MatSort} from "@angular/material/sort";
 import {MatTableDataSource} from "@angular/material/table";
 import {CreateAssignmentDialogComponent} from "../../assignments/create/create-assignment-dialog.component";
+import {AssignmentDetailsComponent} from "../../assignments/assignment-details.component";
 
 @Component({
     selector: 'app-details-def',
@@ -51,8 +52,17 @@ export class DefinitionDetailsComponent implements OnInit {
     }
 
 
-    openAssignmentDetails(id: bigint) {
-        console.log("OPENING ASSIGNMENT", id);
+    openAssignmentDetails(assignmentId: bigint) {
+        console.log("OPENING ASSIGNMENT", assignmentId);
+
+        this.matDialog.open(AssignmentDetailsComponent, {
+            width: '40%',
+            data: {
+                assignmentId: assignmentId,
+            }
+        }).afterClosed().subscribe( response => {
+            console.log(response);
+        })
         // this.router.navigate(['../../assignments', id]).then( () => {
         //
         // });
