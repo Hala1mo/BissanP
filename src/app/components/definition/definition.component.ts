@@ -9,7 +9,6 @@ import {MatPaginator} from "@angular/material/paginator";
 import {MatSort} from "@angular/material/sort";
 import {DefinitionDialogComponent} from "./definition-dialog/definition-dialog.component";
 import {Router} from "@angular/router";
-import {identity} from "rxjs";
 
 @Component({
   selector: 'app-definition',
@@ -56,7 +55,7 @@ export class DefinitionComponent implements OnInit, AfterViewInit {
 
 
   fetchAllDefinitions() {
-    this.definitionService.fetchDefinition().subscribe({
+    this.definitionService.fetchAllDefinitions().subscribe({
       next: response => {
         console.log('Fetched definitions data:', response);
         this.originalVisitDefinitionData = response;
@@ -124,7 +123,7 @@ export class DefinitionComponent implements OnInit, AfterViewInit {
 
   updateDefinitionStatus(definition: VisitDefinition) {
     definition.enabled = definition.enabled == 1 ? 0 : 1;
-    this.definitionService.updateEnabledStatusDefinition(definition.id).subscribe(
+    this.definitionService.updateDefinitionEnabledStatus(definition.id).subscribe(
       {
         next: response => {
           console.log('Enabled status updated successfully:', response);

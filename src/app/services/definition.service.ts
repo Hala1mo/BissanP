@@ -1,61 +1,64 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
 import {Observable, throwError} from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import {catchError} from 'rxjs/operators';
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class DefinitionService {
-  private VistUrl = 'http://10.10.33.91:8080/visit_definitions';
-  private TypeUrl='http://10.10.33.91:8080/visit_types';
+    private visitDefinitionsURL = 'http://10.10.33.91:8080/visit_definitions';
+    private visitTypesURL = 'http://10.10.33.91:8080/visit_types';
 
-  constructor(private http: HttpClient) {}
+    constructor(private http: HttpClient) {
+    }
 
-  fetchDefinition(): Observable<any> {
-    return this.http.get<any>(this.VistUrl).pipe(
-      catchError(this.handleError) // Handle errors
-    );
-  }
+    fetchAllDefinitions(): Observable<any> {
+        return this.http.get<any>(this.visitDefinitionsURL).pipe(
+            catchError(this.handleError)
+        );
+    }
 
-  updateEnabledStatusDefinition(id: bigint): Observable<any> {
-    const updateUrl = `${this.VistUrl}/${id}/endis`;
+    fetchDefinitionById(id: bigint): Observable<any> {
+        const getUrl = `${this.visitDefinitionsURL}/${id}`
+        return this.http.get<any>(getUrl).pipe(
+            catchError(this.handleError)
+        );
+    }
 
-    return this.http.put<any>(updateUrl, {}).pipe(
-      catchError(this.handleError) // Handle errors
-    );
-  }
+    updateDefinitionEnabledStatus(id: bigint): Observable<any> {
+        const updateUrl = `${this.visitDefinitionsURL}/${id}/endis`;
+        return this.http.put<any>(updateUrl, '').pipe(
+            catchError(this.handleError) // Handle errors
+        );
+    }
 
-  fetchTypesData(): Observable<any> {
-    const typesUrl = `${this.TypeUrl}`; // Assuming you have a separate URL for fetching types
-    return this.http.get<any>(typesUrl).pipe(
-      catchError(this.handleError) // Handle errors
-    );
-  }
+    updateVisitDefinition(definitionId: bigint, updatedVisitDefinition: any): Observable<any> {
+        const updateUrl = `${this.visitDefinitionsURL}/${definitionId}`;
+        return this.http.put<any>(updateUrl, updatedVisitDefinition);
+    }
 
-  addDefinition(defData: any): Observable<any> {
-    return this.http.post<any>(this.VistUrl, defData).pipe(
-      catchError(this.handleError) // Handle errors
-    );
-  }
+    saveNewDefinition(visitDefinition: any) {
+        return this.http.post<any>(this.visitDefinitionsURL, visitDefinition).pipe(
+            catchError(this.handleError)
+        );
+    }
 
-  private handleError(error: any): Observable<never> {
-    console.error('An error occurred:', error);
-    return throwError('Something went wrong. Please try again later.');
-  }
-  fetchdef(id: bigint): Observable<any> {
-    const urlVisit = `${this.VistUrl}/${id}`;
-    return this.http.get<any>(urlVisit);
-  }
-  updateVisitData(id: bigint, updatedVisitData: any): Observable<any> {
-    const updateUrl = `${this.VistUrl}/${id}`; // Adjust the URL endpoint as needed
-    return this.http.put<any>(updateUrl, updatedVisitData);
-  }
+    fetchTypesData(): Observable<any> {
+        return this.http.get<any>(this.visitTypesURL).pipe(
+            catchError(this.handleError)
+        );
+    }
+
+    saveNewAssignmentToDefinition(assignment: any, definitionId: bigint): Observable<any> {
+        const urlAssignment = `${this.visitDefinitionsURL}/${definitionId}/assignments`;
+        return this.http.post<any>(urlAssignment, assignment).pipe();
+    }
+
+    private handleError(error: any): Observable<never> {
+        console.error('An error occurred:', error);
+        return throwError('Something went wrong. Please try again later.');
+    }
 
 
-  saveNewDefinition(defData: any) {
-    return this.http.post<any>(this.VistUrl,defData).pipe(
-      catchError(this.handleError)
-    );
-  }
 }
