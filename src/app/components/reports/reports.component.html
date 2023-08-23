@@ -4,59 +4,74 @@
       <h1>Reports</h1>
     </div>
   </div>
-  <div class="col">
+  <div class="row mb-5">
+    <div class="col-4">
 
-    <button mat-stroked-button class="mb-4"
-            [routerLink]="['/reports/status']">
-      Show by Status
-    </button>
+    </div>
+    <div class="col-4">
 
-    <button mat-stroked-button class="mb-4"
-            [routerLink]="['/reports/types-chart']">
-      Show by Types
-    </button>
-
-
-
-    <form class="example-form">
-      <mat-form-field class="example-full-width">
-        <input type="text"
-               placeholder="Assign Customer"
-               aria-label="Number"
-               matInput
-               [formControl]="myControl"
-               [matAutocomplete]="auto">
-        <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" (optionSelected)="onOptionSelected($event)">
-          <mat-option *ngFor="let option of cusData" [value]="option">
-            {{ option.name }}
-          </mat-option>
-        </mat-autocomplete>
-      </mat-form-field>
-    </form>
-    <div class="date-range">
-      <mat-form-field class="date-field" color="accent">
-        <mat-label>From:</mat-label>
-        <input matInput [matDatepicker]="picker1" [(ngModel)]="fromDate">
-        <mat-datepicker-toggle matIconSuffix [for]="picker1"></mat-datepicker-toggle>
-        <mat-datepicker #picker1></mat-datepicker>
-      </mat-form-field>
-
-      <mat-form-field class="date-field" color="accent">
-        <mat-label>To:</mat-label>
-        <input matInput [matDatepicker]="picker2" [(ngModel)]="toDate">
-        <mat-datepicker-toggle matIconSuffix [for]="picker2"></mat-datepicker-toggle>
-        <mat-datepicker #picker2 color="primary"></mat-datepicker>
-      </mat-form-field>
-
-      <button mat-stroked-button class="show-by-date-button" (click)="onTypeSelect()">
-        Show by Date
-      </button>
     </div>
 
+    <div class="col-4">
+
+    </div>
+  </div>
+
+  <div class="row">
+    <h3>Forms</h3>
+    <div class="row mb-5">
+      <button mat-stroked-button class="mb-2" color="primary"
+              [routerLink]="['/reports/status']">
+        Show by Status
+      </button>
+      <button mat-stroked-button class="mb-4" color="primary"
+              [routerLink]="['/reports/types-chart']">
+        Show by Types
+      </button>
 
 
+    </div>
+  </div>
+  <div class="row">
+    <h3>Assignment</h3>
+    <div class="row mb-5">
+      <div class="d-flex justify-content-between">
+        <form class="example-form">
+          <mat-form-field>
+            <input type="text"
+                   placeholder="Customer Assignment"
+                   aria-label="Number"
+                   matInput
+                   [formControl]="myControl"
+                   [matAutocomplete]="auto">
+            <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" (optionSelected)="onOptionSelected($event)">
+              <mat-option *ngFor="let option of cusData" [value]="option">
+                {{ option.name }}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </form>
+        <div class="date-range">
+          <mat-form-field class="date-field" color="accent">
+            <mat-label>From:</mat-label>
+            <input matInput [matDatepicker]="picker1" [(ngModel)]="fromDate">
+            <mat-datepicker-toggle matIconSuffix [for]="picker1"></mat-datepicker-toggle>
+            <mat-datepicker #picker1></mat-datepicker>
+          </mat-form-field>
 
+          <mat-form-field class="date-field" color="accent">
+            <mat-label>To:</mat-label>
+            <input matInput [matDatepicker]="picker2" [(ngModel)]="toDate">
+            <mat-datepicker-toggle matIconSuffix [for]="picker2"></mat-datepicker-toggle>
+            <mat-datepicker #picker2 color="primary"></mat-datepicker>
+          </mat-form-field>
 
-
+          <button mat-mini-fab color="primary" (click)="onTypeSelect()">
+            <mat-icon>search</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
+

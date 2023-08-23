@@ -15,6 +15,7 @@ import {MatAutocompleteSelectedEvent} from "@angular/material/autocomplete";
 })
 export class ReportsComponent implements OnInit{
     Date: any[] = [];
+    DateData:any[]=[];
   cusData:any[]=[];
     uniqueDates: string[] = [];
   fromDate: Date | null = null;
@@ -71,8 +72,11 @@ export class ReportsComponent implements OnInit{
 
       console.log('From Date:', fromDateString);
       console.log('To Date:', toDateString);
+      this.fetchDataa( fromDateString, toDateString);
 
-      this.router.navigate(['/reports', fromDateString, toDateString]);
+      if(this.DateData!=null) {
+        this.router.navigate(['/reports', fromDateString, toDateString]);
+      }
     }
   }
   onOptionSelected(event: MatAutocompleteSelectedEvent) {
@@ -84,5 +88,20 @@ export class ReportsComponent implements OnInit{
     } else {
       console.error("Invalid option or name");
     }
+  }
+
+
+  fetchDataa(from: string,to:string) {
+    console.log(from);
+    console.log('dataaaaa', this.DateData);
+    this._reportsService.fetchDateData(from,to).subscribe(
+      (data) => {
+        console.log('Fetched Date data:', data);
+        this.DateData = data;
+      },
+      (error) => {
+        console.error('Error fetching Date data:', error);
+      }
+    );
   }
 }
