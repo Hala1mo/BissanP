@@ -20,7 +20,7 @@ export class DefinitionDialogComponent implements OnInit {
   currentDefinition: VisitDefinition;
 
   constructor(
-    private formBuilder: FormBuilder,
+    formBuilder: FormBuilder,
     private snackBar: MatSnackBar,
     private definitionService: DefinitionService,
     public matDialogRef: MatDialogRef<DefinitionDialogComponent>,

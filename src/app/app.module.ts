@@ -46,10 +46,10 @@ import {MatChipsModule} from "@angular/material/chips";
 import {MatBadgeModule} from "@angular/material/badge";
 import {MatTabsModule} from "@angular/material/tabs";
 import {ContactDialogueComponent} from './components/customer/details/contact-dialogue/contact-dialogue.component';
-
 import {CanvasJSAngularChartsModule} from '@canvasjs/angular-charts';
 import {TypesChartComponent} from './components/reports/types-chart/types-chart.component';
 import {MatLegacyChipsModule} from "@angular/material/legacy-chips";
+
 
 @NgModule({
   declarations: [
@@ -74,8 +74,7 @@ import {MatLegacyChipsModule} from "@angular/material/legacy-chips";
     DetailsCusComponent,
     CustomerDialogueComponent,
     TypesChartComponent,
-    ContactDialogueComponent
-
+    ContactDialogueComponent,
 
   ],
   imports: [
