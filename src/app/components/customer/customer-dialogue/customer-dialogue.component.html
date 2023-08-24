@@ -10,7 +10,6 @@
         <mat-error *ngIf="registrationForm.controls['name'].invalid">{{getNameErrorMessage()}}</mat-error>
       </mat-form-field>
     </div>
-    <div formGroupName="address">
       <div class="row mb-1">
         <mat-checkbox formControlName="precise" (click)="togglePreciseLocation()"> Precise Location?</mat-checkbox>
       </div>
@@ -20,7 +19,7 @@
             <mat-label>Address</mat-label>
             <input matInput type="text" formControlName="addressLine1" required>
             <mat-error
-              *ngIf="registrationForm.get('address.addressLine1')?.invalid">{{getAddressErrorMessage()}}</mat-error>
+              *ngIf="registrationForm.get('addressLine1')?.invalid">{{getAddressErrorMessage()}}</mat-error>
           </mat-form-field>
         </div>
         <div class="col-6">
@@ -28,7 +27,7 @@
             <mat-label>Address 2</mat-label>
             <input matInput type="text" formControlName="addressLine2">
             <mat-error
-              *ngIf="registrationForm.controls['address.addressLine2']?.invalid">{{getAddress2ErrorMessage()}}</mat-error>
+              *ngIf="registrationForm.controls['addressLine2']?.invalid">{{getAddress2ErrorMessage()}}</mat-error>
           </mat-form-field>
         </div>
       </div>
@@ -47,7 +46,7 @@
             <mat-label>Zip Code</mat-label>
             <input matInput type="text" formControlName="zipcode" required>
 
-            <mat-error *ngIf="registrationForm.get('address.zipcode')?.invalid">{{getZipCodeErrorMessage()}}</mat-error>
+            <mat-error *ngIf="registrationForm.get('zipcode')?.invalid">{{getZipCodeErrorMessage()}}</mat-error>
           </mat-form-field>
         </div>
 
@@ -75,7 +74,6 @@
             </div>
           </div>
         </div>
-      </div>
     </div>
 
     <mat-dialog-actions>

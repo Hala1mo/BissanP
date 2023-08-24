@@ -9,7 +9,7 @@ export class VisitDefinition {
   type: VisitType;
   frequency: number;
   allowRecurring: boolean
-  enabled: number;
+  enabled: boolean;
   visitAssignments: VisitType[];
 
   constructor(data: any) {
@@ -21,7 +21,7 @@ export class VisitDefinition {
     this.type = data.type || null;
     this.frequency = data.frequency || '';
     this.allowRecurring = data.allowRecurring || false;
-    this.enabled = data.enabled || 0;
+    this.enabled = data.enabled || false;
     this.visitAssignments = data.visitAssignments || [];
   }
 }

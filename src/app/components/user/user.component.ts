@@ -81,7 +81,7 @@ export class UserComponent implements OnInit, AfterViewInit {
     }
 
     updateUserStatus(user: User) {
-        user.enabled = user.enabled == 1 ? 0 : 1;
+        user.enabled = user.enabled == true ? false : true;
         this.userService.updateUserStatus(user.username).subscribe(
             {
                 next: response => {
@@ -99,7 +99,7 @@ export class UserComponent implements OnInit, AfterViewInit {
                             duration: 3000
                         });
                     }
-                    user.enabled = user.enabled == 1 ? 0 : 1;
+                    user.enabled = user.enabled == true ? false: true;
                 }
             }
         );
@@ -130,13 +130,13 @@ export class UserComponent implements OnInit, AfterViewInit {
     }
 
     showEnabledUsers() {
-        this.userData = this.originalUserData.filter(user => user.enabled === 1);
+        this.userData = this.originalUserData.filter(user => user.enabled === true);
 
         this.dataSource.data = this.userData;
     }
 
     showDisabledUsers() {
-        this.userData = this.originalUserData.filter(user => user.enabled === 0);
+        this.userData = this.originalUserData.filter(user => user.enabled === false);
 
         this.dataSource.data = this.userData;
     }

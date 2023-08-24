@@ -3,7 +3,7 @@ export class User {
   firstName: string;
   lastName: string;
   accessLevel: number;
-  enabled: number;
+  enabled: boolean;
 
 
   constructor(data: any) {
@@ -11,6 +11,6 @@ export class User {
     this.lastName = data.lastName || '';
     this.username = data.username || '';
     this.accessLevel = data.accessLevel || '';
-    this.enabled = data.enabled || '';
+    this.enabled = data.enabled || false;
   }
 }

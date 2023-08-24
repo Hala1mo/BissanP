@@ -33,8 +33,7 @@ export class CustomerDetailsComponent implements OnInit, AfterViewInit {
 
 
   constructor(
-    private _snackBar: MatSnackBar,
-    private route: ActivatedRoute, // Use ActivatedRoute here
+    private route: ActivatedRoute,
     private VisitServices: DefinitionService,
     private _registrationService: RegistrationService,
     private matDialog: MatDialog,
@@ -97,7 +96,7 @@ export class CustomerDetailsComponent implements OnInit, AfterViewInit {
   }
 
   updateEnabled(contact: Contact) {
-    contact.enabled = contact.enabled == 1 ? 0 : 1;
+    contact.enabled = contact.enabled == true ? false : true;
     this._registrationService.updateEnabledStatusContact(contact.id).subscribe(
       (res: any) => {
         console.log('Enabled status updated successfully:', res);

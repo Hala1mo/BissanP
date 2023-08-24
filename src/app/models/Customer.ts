@@ -3,7 +3,7 @@ import {Address} from "./Address";
 
 export class Customer {
   createdTime: string;
-  enabled: number;
+  enabled: boolean;
   lastModifiedTime: string;
   name: string;
   id: bigint;
@@ -12,7 +12,7 @@ export class Customer {
 
   constructor(data: any) {
     this.createdTime = data.createdTime || '';
-    this.enabled = data.enabled || 0;
+    this.enabled = data.enabled || false;
     this.lastModifiedTime = data.lastModifiedTime || '';
     this.name = data.name || '';
     this.id = data.id || '';

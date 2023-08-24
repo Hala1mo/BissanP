@@ -51,7 +51,6 @@ export class CustomerComponent implements OnInit, AfterViewInit {
                 .includes(filter.toLocaleLowerCase()) || customer.address.addressLine1.toLocaleLowerCase().includes(filter.toLocaleLowerCase())
         }
 
-
         this.registrationForm = this.fb.group({
             name: [''],
             address: this.fb.group({
@@ -114,13 +113,13 @@ export class CustomerComponent implements OnInit, AfterViewInit {
 
     showEnabledCustomers() {
         this.selectedEnabledOption = "Enabled"
-        this.customerData = this.originalCustomerData.filter(customer => customer.enabled === 1);
+        this.customerData = this.originalCustomerData.filter(customer => customer.enabled === true);
         this.dataSource.data = this.customerData;
     }
 
     showDisabledCustomers() {
         this.selectedEnabledOption = "Disabled"
-        this.customerData = this.originalCustomerData.filter(customer => customer.enabled === 0);
+        this.customerData = this.originalCustomerData.filter(customer => customer.enabled === false);
         this.dataSource.data = this.customerData;
     }
 

@@ -21,14 +21,12 @@ export class DateComponent implements OnInit,AfterViewInit {
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild('reportsTablePaginator') paginator!: MatPaginator;
   constructor(
-      private _liveAnnouncer: LiveAnnouncer,
       private matDialog: MatDialog,
       private sharedService: SharedServiceService
   ) {}
 
   ngOnInit() {
-
-    this.sharedService.dateData$.subscribe((data) => {
+      this.sharedService.dateData$.subscribe((data) => {
       this.DateData = data;
       this.dataSource.data = this.DateData;
     });
@@ -37,15 +35,12 @@ export class DateComponent implements OnInit,AfterViewInit {
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
+
+    console.log('ON INIT');
+    console.log(this.paginator);
+    console.log(this.sort);
   }
-  announceSortChange(sortState: Sort) {
-    if (sortState.direction) {
-      this._liveAnnouncer.announce(`Sorted ${sortState.direction}ending`);
-    } else {
-      this._liveAnnouncer.announce('Sorting cleared');
-    }
-    console.log(this.dataSource.sort?.active);
-  }
+
 
   protected readonly console = console;
 

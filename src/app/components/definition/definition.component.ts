@@ -122,7 +122,7 @@ export class DefinitionComponent implements OnInit, AfterViewInit {
     }
 
     updateDefinitionStatus(definition: VisitDefinition) {
-        definition.enabled = definition.enabled == 1 ? 0 : 1;
+        definition.enabled = definition.enabled == true ? false : true;
         this.definitionService.updateDefinitionEnabledStatus(definition.id).subscribe(
             {
                 next: response => {
@@ -141,7 +141,7 @@ export class DefinitionComponent implements OnInit, AfterViewInit {
                         });
 
                     }
-                    definition.enabled = definition.enabled == 1 ? 0 : 1;
+                    definition.enabled = definition.enabled == true ? false : true;
                 }
             }
         );
@@ -159,13 +159,13 @@ export class DefinitionComponent implements OnInit, AfterViewInit {
     }
 
     showEnabledDefinitions() {
-        this.visitDefinitionData = this.originalVisitDefinitionData.filter(def => def.enabled === 1);
+        this.visitDefinitionData = this.originalVisitDefinitionData.filter(def => def.enabled === true);
 
         this.dataSource.data = this.visitDefinitionData;
     }
 
     showDisabledDefinitions() {
-        this.visitDefinitionData = this.originalVisitDefinitionData.filter(def => def.enabled === 0);
+        this.visitDefinitionData = this.originalVisitDefinitionData.filter(def => def.enabled === false);
 
         this.dataSource.data = this.visitDefinitionData;
     }

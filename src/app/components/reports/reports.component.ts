@@ -17,7 +17,7 @@ import {SharedServiceService} from "../../services/shared-service.service";
 export class ReportsComponent implements OnInit{
     Date: any[] = [];
     DateData:any[]=[];
-  cusData:any[]=[];
+    cusData:any[]=[];
 
   isDateDataEmpty: boolean = false;
 

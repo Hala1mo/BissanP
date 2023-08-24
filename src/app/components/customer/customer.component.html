@@ -77,11 +77,11 @@
             Enabled
           </th>
           <td mat-cell *matCellDef="let customer">
-            <mat-slide-toggle (click)="updateEnabled(customer.id)"
-                              checked="{{customer.enabled===1 ?'true':'false'}}">
-              {{customer.enabled === 1 ? 'Active' : 'Inactive'}}
+            <mat-slide-toggle (click)="updateEnabled(customer.id)" [checked]="customer.enabled">
+              {{customer.enabled ? 'Active' : 'Inactive'}}
             </mat-slide-toggle>
           </td>
+
         </ng-container>
         <ng-container matColumnDef="actions">
           <th mat-header-cell *matHeaderCellDef>

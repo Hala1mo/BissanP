@@ -3,7 +3,7 @@ import {VisitType} from "./VisitType";
 export class Contact {
 
   email: string;
-  enabled: number;
+  enabled: boolean;
   firstName: string;
   lastName: string;
   phoneNumber: string;
@@ -14,7 +14,7 @@ export class Contact {
     this.firstName = data.firstName || '';
     this.lastName = data.lastName || '';
     this.email = data.email || '';
-    this.enabled = data.enabled || 0;
+    this.enabled = data.enabled || false;
 
     this.phoneNumber = data.phoneNumber || '';
     this.id = data.id || '';

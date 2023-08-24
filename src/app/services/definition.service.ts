@@ -3,6 +3,22 @@ import {HttpClient} from '@angular/common/http';
 import {Observable, throwError} from 'rxjs';
 import {catchError} from 'rxjs/operators';
 import {link} from "../models/link";
+import {editCustomerTDO} from "./user.service";
+
+
+export interface DefinitionForm {
+  name: string;
+  description: string;
+  frequency: number;
+  allowRecurring: boolean;
+  typeId: string;
+}
+
+interface AssignmentForm {
+  date: string; // Change the type to match your use case
+  comment: string;
+}
+
 
 @Injectable({
     providedIn: 'root'
@@ -29,18 +45,35 @@ export class DefinitionService {
 
     updateDefinitionEnabledStatus(id: bigint): Observable<any> {
         const updateUrl = `${this.visitDefinitionsURL}/${id}/endis`;
+
         return this.http.put<any>(updateUrl, '').pipe(
             catchError(this.handleError) // Handle errors
         );
     }
 
     updateVisitDefinition(definitionId: bigint, updatedVisitDefinition: any): Observable<any> {
+      const editDefinitionPayload: DefinitionForm = {
+        name: updatedVisitDefinition.name,
+        description: updatedVisitDefinition.description,
+        frequency: updatedVisitDefinition.frequency,
+        allowRecurring:updatedVisitDefinition.allowRecurring,
+        typeId:updatedVisitDefinition.typeId
+
+      };
         const updateUrl = `${this.visitDefinitionsURL}/${definitionId}`;
-        return this.http.put<any>(updateUrl, updatedVisitDefinition);
+        return this.http.put<any>(updateUrl, editDefinitionPayload);
     }
 
     saveNewDefinition(visitDefinition: any) {
-        return this.http.post<any>(this.visitDefinitionsURL, visitDefinition).pipe(
+      const addDefinitionPayload: DefinitionForm = {
+        name: visitDefinition.name,
+        description: visitDefinition.description,
+        frequency: visitDefinition.frequency,
+        allowRecurring:visitDefinition.allowRecurring,
+        typeId:visitDefinition.typeId
+
+      };
+        return this.http.post<any>(this.visitDefinitionsURL, addDefinitionPayload).pipe(
             catchError(this.handleError)
         );
     }
@@ -53,7 +86,12 @@ export class DefinitionService {
 
     saveNewAssignmentToDefinition(assignment: any, definitionId: bigint): Observable<any> {
         const urlAssignment = `${this.visitDefinitionsURL}/${definitionId}/assignments`;
-        return this.http.post<any>(urlAssignment, assignment).pipe();
+        const newAssignment: AssignmentForm = {
+        date: assignment.date,
+        comment: assignment.comment,
+      };
+
+        return this.http.post<any>(urlAssignment, newAssignment).pipe();
     }
 
     private handleError(error: any): Observable<never> {

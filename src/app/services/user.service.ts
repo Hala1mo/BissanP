@@ -3,6 +3,24 @@ import {Observable} from "rxjs";
 import {HttpClient} from "@angular/common/http";
 import {link} from "../models/link";
 
+
+
+export interface addCustomerTDO {
+  username: string;
+  firstName: string;
+  lastName: string;
+  password: string;
+  confirmPassword: string;
+  accessLevel: string;
+}
+
+
+export interface editCustomerTDO {
+  firstName: string;
+  lastName: string;
+  accessLevel: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -20,7 +38,17 @@ export class UserService {
 
   saveNewUser(userJson: any) {
     // Sends a POST request to the server to save a new user
-    return this._http.post<any>(this.usersUrl, userJson);
+    const newUserPayload: addCustomerTDO = {
+      username: userJson.username,
+      firstName: userJson.firstName,
+      lastName: userJson.lastName,
+      password: userJson.password,
+      confirmPassword: userJson.confirmPassword,
+      accessLevel: userJson.accessLevel,
+    };
+    console.log("fff");
+
+    return this._http.post<any>(this.usersUrl, newUserPayload);
   }
 
   updateUserStatus(username: string): Observable<any> {
@@ -32,13 +60,16 @@ export class UserService {
   updateUser(username: string, updatedUserData: any): Observable<any> {
     const updateUrl = `${this.usersUrl}/${username}`;
 
-    return this._http.put<any>(updateUrl, updatedUserData);
+
+    const editUserPayload: editCustomerTDO = {
+      firstName: updatedUserData.firstName,
+      lastName: updatedUserData.lastName,
+      accessLevel: updatedUserData.accessLevel,
+    };
+
+    return this._http.put<any>(updateUrl, editUserPayload);
   }
 
-  searchUsers(query: string): Observable<any> {
-    const _urlDetails = `${this.usersUrl}/search?query=${query}`;
-    return this._http.get<any>(_urlDetails);
-  }
 
   getUserReports(username:string): Observable<any> {
     const Url = `${this.usersReports}/${username}`;

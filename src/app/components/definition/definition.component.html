@@ -117,13 +117,11 @@
           </th>
           <td mat-cell *matCellDef="let definition" class="text-capitalize">
             <div class="d-flex justify-content-between align-items-center">
-              <mat-slide-toggle
-                (click)="updateDefinitionStatus(definition)"
-                checked="{{definition.enabled === 1 ? 'true' : 'false'}}"
-              >
-                {{definition.enabled === 1 ? 'Active' : 'Inactive'}}
+              <mat-slide-toggle (click)="updateDefinitionStatus(definition)" [checked]="definition.enabled">
+                {{definition.enabled ? 'Active' : 'Inactive'}}
               </mat-slide-toggle>
             </div>
+
           </td>
         </ng-container>
         <ng-container matColumnDef="actions">

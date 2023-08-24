@@ -16,9 +16,9 @@ export class StatusComponent  implements OnInit, AfterViewInit {
   searchInput: string = "";
   selectedEnabledOption: string = "";
 
-
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild('reportsTablePaginator') paginator!: MatPaginator;
+
   constructor(
       private _liveAnnouncer: LiveAnnouncer,
       private _reportsService: ReportsService
@@ -36,9 +36,13 @@ export class StatusComponent  implements OnInit, AfterViewInit {
     this._reportsService.fetchReports().subscribe({
       next: response => {
           console.log('Fetched Reports data:', response);
+
           this.Data = response;
-          this.dataSource.data = response;
+
+          this.dataSource.data = this.Data ;
+
         console.log("DATASOURCE", this.dataSource);
+
           setTimeout( () => {
             this.dataSource.sort = this.sort;
             this.dataSource.paginator = this.paginator;
@@ -65,7 +69,7 @@ export class StatusComponent  implements OnInit, AfterViewInit {
   }
 
 
-  showunderGoing() {
+  showUnderGoing() {
     this._reportsService.underGoing().subscribe(
         data => {
           console.log('Fetched Reports data:', data);
@@ -78,7 +82,7 @@ export class StatusComponent  implements OnInit, AfterViewInit {
     );
   }
 
-  shownotStarted() {
+  showNotStarted() {
     this._reportsService.notStarted().subscribe(
         data => {
           console.log('Fetched Reports data:', data);
@@ -90,18 +94,6 @@ export class StatusComponent  implements OnInit, AfterViewInit {
         }
     );
   }
-
-
-
-  announceSortChange(sortState: Sort) {
-    if (sortState.direction) {
-      this._liveAnnouncer.announce(`Sorted ${sortState.direction}ending`);
-    } else {
-      this._liveAnnouncer.announce('Sorting cleared');
-    }
-    console.log(this.dataSource.sort?.active);
-  }
-
 
   protected readonly console = console;
 

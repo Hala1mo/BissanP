@@ -59,8 +59,6 @@ export class AddUserComponent implements OnInit {
     const newUserJson = this.addNewUserForm.value;
     console.log(newUserJson);
 
-    if (this.addNewUserForm.invalid) return;
-
     this.userService.saveNewUser(this.addNewUserForm.value).subscribe(
       {
         next: response => {

@@ -7,6 +7,19 @@ import {Router} from "@angular/router";
 import {RegistrationService} from "../../../services/registration.service";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 
+
+interface RegistrationFormData {
+  name: string;
+  addressLine1: string;
+  addressLine2: string;
+  latitude: number;
+  longitude: number;
+  precise: boolean;
+  zipcode: string;
+  cityId: number | null;
+}
+
+
 @Component({
   selector: 'app-customer-dialogue',
   templateUrl: './customer-dialogue.component.html',
@@ -20,42 +33,37 @@ export class CustomerDialogueComponent implements OnInit{
   preciseLocationCheck: boolean = false;
   selectedCustomer: any;
 
-  constructor(private _snackBar: MatSnackBar,
-              private router: Router,
-              private _registrationService: RegistrationService,
-              private fb: FormBuilder,
-              public matDialogRef: MatDialogRef<CustomerDialogueComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: any) {
-
+  constructor(
+    private _snackBar: MatSnackBar,
+    private router: Router,
+    private _registrationService: RegistrationService,
+    private fb: FormBuilder,
+    public matDialogRef: MatDialogRef<CustomerDialogueComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any
+  ) {
     this.editMode = data.mode === 1;
     this.cityData = data.cityData;
     this.selectedCustomer = data.customer;
 
-
     this.registrationForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(30)]],
-      address: this.fb.group({
-        addressLine1: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(30)]],
-        addressLine2: [''],
-        latitude: [null, [Validators.min(-90), Validators.max(90)]],
-        longitude: [null, [Validators.min(-180), Validators.max(180)]],
-        precise: [false, [Validators.required]],
-        zipcode: ['', [Validators.required, Validators.maxLength(5)]],
-        cityId: [null],
-      }),
+      addressLine1: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(30)]],
+      addressLine2: [''],
+      latitude: [0, [Validators.min(-90), Validators.max(90)]],
+      longitude: [0, [Validators.min(-180), Validators.max(180)]],
+      precise: [false, Validators.required],
+      zipcode: ['', [Validators.required, Validators.maxLength(5)]],
+      cityId: [null],
     });
-
   }
+
 
   ngOnInit() {
     console.log("this.registrationForm", this.registrationForm);
 
     if (this.editMode) {
-
       this.registrationForm.patchValue({
-
         name: this.selectedCustomer.name,
-        address: {
           addressLine1: this.selectedCustomer.address.addressLine1,
           addressLine2: this.selectedCustomer.address.addressLine2,
           longitude: this.selectedCustomer.address.longitude,
@@ -63,8 +71,8 @@ export class CustomerDialogueComponent implements OnInit{
           precise: this.selectedCustomer.address.precise,
           cityId: this.selectedCustomer.address.cityId,
           zipcode: this.selectedCustomer.address.zipcode,
-        },
       });
+
     }
 
   }
