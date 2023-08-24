@@ -2,20 +2,16 @@ import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {ActivatedRoute} from '@angular/router'; // Import ActivatedRoute
 import {RegistrationService} from '../../../services/registration.service';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Customer} from '../../../models/Customer';
-import {MatCheckboxChange} from "@angular/material/checkbox";
 import {DefinitionService} from "../../../services/definition.service";
 import {nameValidator, telValidator} from "../../../shared/Name.validators";
 import {ContactDialogueComponent} from "./contact-dialogue/contact-dialogue.component";
 import {MatDialog} from "@angular/material/dialog";
-import {VisitDefinition} from "../../../models/VisitDefinition";
-import {CustomerDialogueComponent} from "../customer-dialogue/customer-dialogue.component";
 import {Contact} from "../../../models/Contact";
 import {MatTableDataSource} from "@angular/material/table";
 import {MatPaginator} from "@angular/material/paginator";
 import {MatSort} from "@angular/material/sort";
-import {timeout} from "rxjs";
 
 @Component({
   selector: 'app-details',

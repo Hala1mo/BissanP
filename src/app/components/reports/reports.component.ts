@@ -1,13 +1,12 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ReportsService } from '../../services/reports.service';
-import { MatSort, Sort } from '@angular/material/sort';
+import { MatSort } from '@angular/material/sort';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import {MatPaginator} from "@angular/material/paginator";
 import {Router} from "@angular/router";
 import {formatDate} from "@angular/common";
 import {FormControl} from "@angular/forms";
 import {MatAutocompleteSelectedEvent} from "@angular/material/autocomplete";
-import {BehaviorSubject} from "rxjs";
 import {SharedServiceService} from "../../services/shared-service.service";
 
 @Component({
