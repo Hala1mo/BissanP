@@ -1,22 +1,21 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
+import {link} from "../models/link";
 
 @Injectable({
   providedIn: 'root'
 })
 export class ReportsService {
-  private reportss = 'http://10.10.33.91:8080/reports';
-  private reports = 'http://10.10.33.91:8080/reports/forms/all';
-  private notstarted = 'http://10.10.33.91:8080/reports/forms/not_started';
-  private undergoing = 'http://10.10.33.91:8080/reports/forms/under_going';
-  private completed = 'http://10.10.33.91:8080/reports/forms/completed';
-  private _visitAssignment = 'http://10.10.33.91:8080/visit_assignments';
-  private _customers_url = 'http://10.10.33.91:8080/customers';
-  private types_url='http://10.10.33.91:8080/reports/customers/countByType';
-  private areas_url='http://10.10.33.91:8080/reports/customers/countByArea';
-  private users_url='http://10.10.33.91:8080/users/employees';
-  private usersChart_url='http://10.10.33.91:8080/reports/users';
+  private reportss =link.urlIP+ '/reports';
+  private reports = link.urlIP+'/reports/forms/all';
+  private notstarted = link.urlIP+'/reports/forms/not_started';
+  private undergoing = link.urlIP+'/reports/forms/under_going';
+  private completed = link.urlIP+'/reports/forms/completed';
+  private _visitAssignment = link.urlIP+'/visit_assignments';
+  private _customers_url = link.urlIP+'/customers';
+  private types_url=link.urlIP+'/reports/customers/countByType';
+  private areas_url=link.urlIP+'/reports/customers/countByArea';
 
 
 

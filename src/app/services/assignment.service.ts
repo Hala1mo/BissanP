@@ -1,13 +1,14 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
+import {link} from "../models/link";
 
 @Injectable({
     providedIn: 'root'
 })
 export class AssignmentService {
-    private _visitAssignment = 'http://10.10.33.91:8080/visit_assignments';
-    private employeeUsers = 'http://10.10.33.91:8080/users/employees'
+    private _visitAssignment = link.urlIP+'/visit_assignments';
+    private employeeUsers = link.urlIP+'/users/employees'
 
     constructor(private _http: HttpClient) {
 
@@ -18,23 +19,11 @@ export class AssignmentService {
         return this._http.get<any>(_urlDetails);
     }
 
-    addCustomerToAssignment(customerId: any, assignmentId: bigint) {
-        const urlAssignment = `${this._visitAssignment}/${assignmentId}/customers`;
-        return this._http.post<any>(urlAssignment, customerId).pipe();
-    }
-
-
     fetchUser(): Observable<any> {
         const _urlDetails = `${this.employeeUsers}`;
         return this._http.get<any>(_urlDetails);
     }
 
-    addUserToAssignment(userId: any, assignmentId: bigint) {
-        const urlAssignment = `${this._visitAssignment}/${assignmentId}/users`;
-        return this._http.post<any>(urlAssignment, userId)
-            .pipe(
-            );
-    }
 
 
 }

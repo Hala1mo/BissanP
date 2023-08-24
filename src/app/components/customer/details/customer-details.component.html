@@ -40,12 +40,21 @@
         </mat-paginator>
 
         <table mat-table [dataSource]="dataSource" matSort>
-          <ng-container matColumnDef="name">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name">
-              first Name
+          <ng-container matColumnDef="firstName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by firstName">
+              First Name
             </th>
-            <td mat-cell *matCellDef="let contact">{{contact.firstName}} {{contact.lastName}}</td>
+            <td mat-cell *matCellDef="let contact">{{contact.firstName}} </td>
           </ng-container>
+
+
+          <ng-container matColumnDef="lastName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by lastName">
+             Last  Name
+            </th>
+            <td mat-cell *matCellDef="let contact">{{contact.lastName}}</td>
+          </ng-container>
+
           <ng-container matColumnDef="email">
             <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="sort by email">
               Email

@@ -1,14 +1,15 @@
 import {Injectable} from '@angular/core';
 import {Observable} from "rxjs";
 import {HttpClient} from "@angular/common/http";
+import {link} from "../models/link";
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
 
-  private usersUrl = 'http://10.10.33.91:8080/users';
-  private usersReports = 'http://10.10.33.91:8080/reports/users';
+  private usersUrl = link.urlIP+'/users';
+  private usersReports = link.urlIP+'/reports/users';
   constructor(private _http: HttpClient) {
   }
 

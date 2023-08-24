@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {AfterViewInit, Component, Inject, OnInit, ViewChild} from '@angular/core';
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {Router} from "@angular/router";
 import {RegistrationService} from "../../../../services/registration.service";
@@ -6,18 +6,21 @@ import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from "@angul
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {nameValidator} from "../../../../shared/Name.validators";
 import {DefinitionService} from "../../../../services/definition.service";
+import {MatSort} from "@angular/material/sort";
+import {MatPaginator} from "@angular/material/paginator";
 
 @Component({
   selector: 'app-contact-dialogue',
   templateUrl: './contact-dialogue.component.html',
   styleUrls: ['./contact-dialogue.component.css']
 })
-export class ContactDialogueComponent implements OnInit {
+export class ContactDialogueComponent implements OnInit{
 
   selectedContact: any;
   customerId!: bigint;
   registrationForm!: FormGroup;
   editMode: boolean;
+
   typesData: any[] = [];
 
   constructor(private _snackBar: MatSnackBar,
@@ -37,9 +40,8 @@ export class ContactDialogueComponent implements OnInit {
     this.registrationForm = this.fb.group({
       firstName: ['', [Validators.required, nameValidator]],
       lastName: ['', [Validators.required, nameValidator]],
-      phoneNumber: ['', [Validators.required, Validators.pattern("[0-9]*")]],
+      phoneNumber: ['', [Validators.required, Validators.pattern("[0-9]*"),Validators.minLength(10), Validators.maxLength(10)]],
       email: ['', [Validators.required, Validators.email]],
-      // visitTypes: this.fb.group({ // Update the field name to visitType
       types: []
       // }),
     });
@@ -53,6 +55,7 @@ export class ContactDialogueComponent implements OnInit {
     }
 
   }
+
 
 
   getNameErrorMessage() {
@@ -82,15 +85,31 @@ export class ContactDialogueComponent implements OnInit {
   }
 
   getPhoneErrorMessage() {
-    let nameControl = this.registrationForm.controls['phoneNumber'];
-    if (nameControl.hasError('required'))
+    let phoneControl = this.registrationForm.controls['phoneNumber'];
+    if (phoneControl.hasError('required'))
       return 'Phone Number is required';
-    if (nameControl.hasError('pattern'))
+    if (phoneControl.hasError('pattern'))
       return 'Phone Number must contain only numbers ';
+
+    if (phoneControl.hasError('minlength') || phoneControl.hasError('maxlength')) {
+      return 'Phone Number must be exactly 10 digits';
+    }
 
     return '';
   }
 
+
+  getEmailErrorMessage() {
+    let nameControl = this.registrationForm.controls['email'];
+    if (nameControl.hasError('required'))
+      return 'Email is required';
+    if (nameControl.hasError('email')) {
+      return 'Invalid email format';
+    }
+
+
+    return '';
+  }
 
   onSubmitContact() {
     if (this.editMode) {

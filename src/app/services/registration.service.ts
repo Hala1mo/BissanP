@@ -1,33 +1,20 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
+import {link} from "../models/link";
 
 @Injectable({
   providedIn: 'root'
 })
 export class RegistrationService {
 
-  private _users_url = 'http://10.10.33.91:8080/users';
-  private _customers_url = 'http://10.10.33.91:8080/customers';
-  private _contacts_url = 'http://10.10.33.91:8080/contacts';
-  private _visitTypes = 'http://10.10.33.91:8080/visit_types';
-  private _visitDefinition = 'http://10.10.33.91:8080/visit_definitions';
-  private _city_url = 'http://10.10.33.91:8080/city';
+
+  private _customers_url = link.urlIP+'/customers';
+  private _contacts_url = link.urlIP+'/contacts';
+  private _city_url = link.urlIP+'/city';
 
 
   constructor(private _http: HttpClient) {
-  }
-
-  fetchUserData(): Observable<any> {
-    // Send a GET request to the server to fetch user data
-    return this._http.get<any>(this._users_url);
-  }
-
-
-  registerUser(userData: any) {
-    return this._http.post<any>(this._users_url, userData)
-      .pipe(
-      );
   }
 
 
@@ -35,13 +22,6 @@ export class RegistrationService {
     return this._http.post<any>(this._customers_url, customerData)
       .pipe(
       );
-  }
-
-  updateEnabledStatus(username: string): Observable<any> {
-    const updateUrl = `${this._users_url}/${username}/endis`; // Adjust the URL endpoint as needed
-    const body = "";
-
-    return this._http.put<any>(updateUrl, body);
   }
 
   updateEnabledStatusCustomer(id: bigint): Observable<any> {
@@ -57,21 +37,6 @@ export class RegistrationService {
 
     return this._http.put<any>(updateUrl, body);
   }
-
-  updateEnabledStatusDefinition(id: bigint): Observable<any> {
-    const updateUrl = `${this._visitDefinition}/${id}/endis`; // Adjust the URL endpoint as needed
-    const body = "";
-
-    return this._http.put<any>(updateUrl, body);
-  }
-
-
-  updateUserData(username: string, updatedUserData: any): Observable<any> {
-    const updateUrl = `${this._users_url}/${username}`; // Adjust the URL endpoint as needed
-
-    return this._http.put<any>(updateUrl, updatedUserData);
-  }
-
 
   fetchCustomerData(): Observable<any> {
     // Send a GET request to the server to fetch user data
@@ -106,23 +71,6 @@ export class RegistrationService {
   searchCustomers(query: string): Observable<any> {
     const _urlDetails = `${this._customers_url}/search?query=${query}`;
     return this._http.get<any>(_urlDetails);
-  }
-
-  searchUsers(query: string): Observable<any> {
-    const _urlDetails = `${this._users_url}/search?query=${query}`;
-    return this._http.get<any>(_urlDetails);
-  }
-
-
-  fetchDefinition(): Observable<any> {
-    return this._http.get<any>(this._visitDefinition);
-  }
-
-
-  addDefinition(defData: any) {
-    return this._http.post<any>(this._visitDefinition, defData).pipe(
-      // Any additional operators or logic you want to apply after the POST request
-    );
   }
 
   fetchCityData(): Observable<any> {

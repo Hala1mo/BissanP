@@ -11,11 +11,9 @@ import {MatPaginator} from "@angular/material/paginator";
 })
 export class StatusComponent  implements OnInit, AfterViewInit {
   Data: any[] = [];
-  originalData: any[] = [];
   displayedColumns: string[] = ['Name', 'Address', 'Date', 'Type', 'State', 'Start Time', 'End Time'];
   dataSource = new MatTableDataSource(this.Data);
   searchInput: string = "";
-  isSearchLoading = false;
   selectedEnabledOption: string = "";
 
 
@@ -30,22 +28,26 @@ export class StatusComponent  implements OnInit, AfterViewInit {
     this.fetchAllData();
   }
 
-
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
-
   fetchAllData() {
-    this._reportsService.fetchReports().subscribe(
-        data => {
-          console.log('Fetched Reports data:', data);
-          this.Data = data;
-          this.dataSource.data = data;
+    this._reportsService.fetchReports().subscribe({
+      next: response => {
+          console.log('Fetched Reports data:', response);
+          this.Data = response;
+          this.dataSource.data = response;
+        console.log("DATASOURCE", this.dataSource);
+          setTimeout( () => {
+            this.dataSource.sort = this.sort;
+            this.dataSource.paginator = this.paginator;
+          }, 10);
         },
-        error => {
+        error:error=> {
           console.error('Error fetching Reports data:', error);
         }
+    }
     );
   }
 

@@ -15,20 +15,22 @@ import {Contact} from "../../../models/Contact";
 import {MatTableDataSource} from "@angular/material/table";
 import {MatPaginator} from "@angular/material/paginator";
 import {MatSort} from "@angular/material/sort";
+import {timeout} from "rxjs";
 
 @Component({
   selector: 'app-details',
   templateUrl: './customer-details.component.html',
   styleUrls: ['./customer-details.component.css'],
 })
-export class CustomerDetailsComponent implements OnInit,AfterViewInit {
+export class CustomerDetailsComponent implements OnInit, AfterViewInit {
   customerDetails: Customer | null = null;
   registrationForm!: FormGroup;
   TypesData: any[] = [];
   types: any[] = [];
-  customerId!:bigint;
-  contactsData!:Contact[];
-  displayedColumns: string[] = ['name', 'email', 'phoneNumber','enabled' ,'actions']
+  customerId!: bigint;
+  contactsData!: Contact[];
+
+  displayedColumns: string[] = ['firstName','lastName', 'email', 'phoneNumber', 'enabled', 'actions']
   dataSource = new MatTableDataSource(this.contactsData);
   @ViewChild('customerTablePaginator') paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -48,7 +50,7 @@ export class CustomerDetailsComponent implements OnInit,AfterViewInit {
     this.route.params.subscribe((params) => {
       const id = params['id'];
       if (id) {
-        this.customerId=id;
+        this.customerId = id;
         this.fetchCustomerDetails(id);
       }
       this.fetchvisitTypes();
@@ -63,30 +65,43 @@ export class CustomerDetailsComponent implements OnInit,AfterViewInit {
       }),
     });
   }
+
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
 
-  fetchCustomerDetails(id: bigint) {
-    this._registrationService.fetchCustomerDetails(id).subscribe(
-      (data) => {
-        console.log('Fetched details data:', data);
-        this.customerDetails = new Customer(data); // Create a new Customer object
 
-        this.contactsData=this.customerDetails.contacts;
-        console.log("customerDetails", this.customerDetails);
-        this.dataSource.data = this.contactsData ;
-        console.log("contacts Data", this.contactsData);
-      },
-      (error) => {
-        console.error('Error fetching customer data:', error);
+  fetchCustomerDetails(id: bigint) {
+    this._registrationService.fetchCustomerDetails(id).subscribe({
+        next: response => {
+          console.log('Fetched details data:', response);
+          this.customerDetails = new Customer(response);
+
+          this.contactsData = this.customerDetails.contacts;
+
+          console.log("customerDetails", this.customerDetails);
+
+          this.dataSource.data = this.contactsData;
+
+          console.log("DATASOURCE", this.dataSource);
+
+          setTimeout( () => {
+            this.dataSource.sort = this.sort;
+            this.dataSource.paginator = this.paginator;
+          }, 10);
+        },
+        error: error => {
+          console.error('Error fetching customer data:', error);
+
+        }
+
       }
     );
   }
 
   updateEnabled(contact: Contact) {
-    contact.enabled= contact.enabled==1 ? 0:1;
+    contact.enabled = contact.enabled == 1 ? 0 : 1;
     this._registrationService.updateEnabledStatusContact(contact.id).subscribe(
       (res: any) => {
         console.log('Enabled status updated successfully:', res);
@@ -122,25 +137,26 @@ export class CustomerDetailsComponent implements OnInit,AfterViewInit {
 
   openCreateContactDialog() {
     this.matDialog.open(ContactDialogueComponent, {
-      data:{
-        'mode':0,
-        'typesData':this.TypesData,
-        'customerId':this.customerId
+      data: {
+        'mode': 0,
+        'typesData': this.TypesData,
+        'customerId': this.customerId
       }
     }).afterClosed().subscribe(
       response => {
         this.fetchCustomerDetails(this.customerId);
       });
   }
+
   openEditDialog(contact: Contact) {
     this.matDialog.open(ContactDialogueComponent, {
       width: '40%',
 
-      data:{
-        'mode':1,
-        'typesData':this.TypesData,
-        'contact':contact,
-        'customerId':this.customerId
+      data: {
+        'mode': 1,
+        'typesData': this.TypesData,
+        'contact': contact,
+        'customerId': this.customerId
       }
 
     }).afterClosed().subscribe(

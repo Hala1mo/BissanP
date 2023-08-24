@@ -2,13 +2,14 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable, throwError} from 'rxjs';
 import {catchError} from 'rxjs/operators';
+import {link} from "../models/link";
 
 @Injectable({
     providedIn: 'root'
 })
 export class DefinitionService {
-    private visitDefinitionsURL = 'http://10.10.33.91:8080/visit_definitions';
-    private visitTypesURL = 'http://10.10.33.91:8080/visit_types';
+    private visitDefinitionsURL = link.urlIP+'/visit_definitions';
+    private visitTypesURL = link.urlIP+'/visit_types';
 
     constructor(private http: HttpClient) {
     }
