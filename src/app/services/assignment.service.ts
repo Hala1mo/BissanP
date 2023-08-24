@@ -13,12 +13,12 @@ export class AssignmentService {
 
     }
 
-    fetchAssignmentsDetails(id: bigint): Observable<any> {
+    findAssignmentById(id: bigint): Observable<any> {
         const _urlDetails = `${this._visitAssignment}/${id}`;
         return this._http.get<any>(_urlDetails);
     }
 
-    AddCustomer(customerId: any, assignmentId: bigint) {
+    addCustomerToAssignment(customerId: any, assignmentId: bigint) {
         const urlAssignment = `${this._visitAssignment}/${assignmentId}/customers`;
         return this._http.post<any>(urlAssignment, customerId).pipe();
     }
@@ -29,7 +29,7 @@ export class AssignmentService {
         return this._http.get<any>(_urlDetails);
     }
 
-    AddUser(userId: any, assignmentId: bigint) {
+    addUserToAssignment(userId: any, assignmentId: bigint) {
         const urlAssignment = `${this._visitAssignment}/${assignmentId}/users`;
         return this._http.post<any>(urlAssignment, userId)
             .pipe(
