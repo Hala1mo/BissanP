@@ -152,4 +152,5 @@ export class UserDetailsComponent implements OnInit, AfterViewInit {
     );
   }
 
+
 }
