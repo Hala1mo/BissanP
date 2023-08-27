@@ -12,6 +12,9 @@ import {Contact} from "../../../models/Contact";
 import {MatTableDataSource} from "@angular/material/table";
 import {MatPaginator} from "@angular/material/paginator";
 import {MatSort} from "@angular/material/sort";
+import {MatTabChangeEvent} from "@angular/material/tabs";
+import {ReportsService} from "../../../services/reports.service";
+import {CanvasJS} from "@canvasjs/angular-charts";
 
 @Component({
   selector: 'app-details',
@@ -30,11 +33,19 @@ export class CustomerDetailsComponent implements OnInit, AfterViewInit {
   dataSource = new MatTableDataSource(this.contactsData);
   @ViewChild('customerTablePaginator') paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
-
+  dataColChar: any[] = [];
+  dataPieChart: any[] = [];
+  dataPieChart2: any[] = [];
+  private dataReport: any[]=[] ;
+  dataSource2 = new MatTableDataSource(this.dataReport);
+  displayedColumns2: string[] = ['Date', 'userName', 'FullName', 'Type'];
+  @ViewChild(MatSort) sort2!: MatSort;
+  @ViewChild('reportsTablePaginator') paginator2!: MatPaginator;
 
   constructor(
     private route: ActivatedRoute,
     private VisitServices: DefinitionService,
+    private reportsService:ReportsService,
     private _registrationService: RegistrationService,
     private matDialog: MatDialog,
     private fb: FormBuilder
@@ -47,6 +58,7 @@ export class CustomerDetailsComponent implements OnInit, AfterViewInit {
       if (id) {
         this.customerId = id;
         this.fetchCustomerDetails(id);
+        this.fetchCustomerReports(id);
       }
       this.fetchvisitTypes();
     });
@@ -64,7 +76,13 @@ export class CustomerDetailsComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
+
+
+    this.dataSource.paginator = this.paginator2;
+    this.dataSource.sort = this.sort2;
   }
+
+
 
 
   fetchCustomerDetails(id: bigint) {
@@ -158,5 +176,101 @@ export class CustomerDetailsComponent implements OnInit, AfterViewInit {
       response => {
         this.fetchCustomerDetails(this.customerId);
       });
+  }
+
+
+  fetchCustomerReports(id: any) {
+    this.reportsService.fetchCustomersReports(id).subscribe({
+        next: response => {
+          console.log('Fetched customer Reports data:', response);
+
+          this.dataColChar = response.count;
+          console.log(this.dataColChar);
+          this.dataPieChart = response.percentages;
+
+          this.dataReport = response.details;
+          console.log("kmdfkmdf",this.dataReport);
+          this.dataSource2.data=this.dataReport ;
+          console.log("gdgdgdg",this.dataSource2.data);
+
+          this.dataPieChart2 = response.percentagesForType;
+
+
+          console.log(this.dataPieChart);
+
+        },
+        error: error => {
+          console.error('Error fetching VisitAssignment data:', error);
+
+        }
+      }
+    );
+  }
+
+  renderChart() {
+    // Create a new chart instance using CanvasJS
+    let chart = new CanvasJS.Chart("chartContainer2", {
+      animationEnabled: true,
+      title: {
+        text: "Forms Status"
+      },
+      theme: "light2",
+      exportEnabled: true,
+      axisY: {
+        includeZero: true,
+      },
+      data: [{
+        type: "column",
+        dataPoints: this.dataColChar,
+      }]
+    });
+
+    // Render the chart
+    chart.render();
+  }
+
+  renderPieChart2() {
+    // Create a new chart instance using CanvasJS
+    let chart = new CanvasJS.Chart("chartAreaContainer2", {
+      animationEnabled: true,
+      title: {
+        text: "Types"
+      },
+      data: [{
+        type: "doughnut",
+        // startAngle: -90,
+        indexLabel: "{name}: {y}",
+        yValueFormatString: "##.##'%'",
+        dataPoints: this.dataPieChart2,
+      }]
+    });
+
+    // Render the chart
+    chart.render();
+  }
+
+  renderPieChart() {
+    // Create a new chart instance using CanvasJS
+    let chart = new CanvasJS.Chart("chartAreaContainer", {
+      animationEnabled: true,
+      title: {
+        text: "status"
+      },
+      data: [{
+        type: "doughnut",
+        // startAngle: -90,
+        indexLabel: "{name}: {y}",
+        yValueFormatString: "##.##'%'",
+        dataPoints: this.dataPieChart,
+      }]
+    });
+
+    // Render the chart
+    chart.render();
+  }
+  tabChanged($event: MatTabChangeEvent) {
+    this.renderChart();
+    this.renderPieChart();
+    this.renderPieChart2();
   }
 }

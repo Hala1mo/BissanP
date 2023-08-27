@@ -38,7 +38,6 @@ import {StatusComponent} from './components/reports/status/status.component';
 import {EditUserComponent} from "./components/user/edit-user/edit-user.component";
 import {DateComponent} from "./components/reports/date/date.component";
 import {DefinitionDialogComponent} from './components/definition/definition-dialog/definition-dialog.component';
-import {FilterCusComponent} from './components/reports/filter-cus/filter-cus.component';
 import {CusComponent} from './components/reports/date/cus/cus.component';
 import {DetailsCusComponent} from './components/reports/date/details-cus/details-cus.component';
 import {CustomerDialogueComponent} from './components/customer/customer-dialogue/customer-dialogue.component';
@@ -71,7 +70,6 @@ import {UserDetailsComponent} from './components/user/user-details/user-details.
         EditUserComponent,
         DefinitionDialogComponent,
         EditUserComponent,
-        FilterCusComponent,
         CusComponent,
         DetailsCusComponent,
         CustomerDialogueComponent,

@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {ActivatedRoute} from "@angular/router";
 import {VisitDefinition} from "../../../models/VisitDefinition";
@@ -12,6 +12,8 @@ import {MatTableDataSource} from "@angular/material/table";
 import {CreateAssignmentDialogComponent} from "../../assignments/create/create-assignment-dialog.component";
 import {AssignmentDetailsComponent} from "../../assignments/assignment-details.component";
 import {ReportsService} from "../../../services/reports.service";
+import {CanvasJS} from "@canvasjs/angular-charts";
+import {MatTabChangeEvent} from "@angular/material/tabs";
 
 @Component({
     selector: 'app-details-def',
@@ -19,7 +21,8 @@ import {ReportsService} from "../../../services/reports.service";
     styleUrls: ['./definition-details.component.css']
 })
 
-export class DefinitionDetailsComponent implements OnInit {
+export class DefinitionDetailsComponent implements OnInit{
+
     currentDefinition: VisitDefinition | undefined;
     visitTypes: VisitType[] = [];
 
@@ -29,6 +32,8 @@ export class DefinitionDetailsComponent implements OnInit {
     @ViewChild(MatPaginator) assignmentPaginator!: MatPaginator;
     @ViewChild(MatSort) assignmentSort!: MatSort;
 
+  dataColChar: any[] = [];
+  dataPieChart: any[] = [];
 
     //UNUSED
     id!: bigint;
@@ -56,7 +61,6 @@ export class DefinitionDetailsComponent implements OnInit {
 
 
 
-
     openAssignmentDetails(assignmentId: bigint) {
         console.log("OPENING ASSIGNMENT", assignmentId);
 
@@ -68,9 +72,7 @@ export class DefinitionDetailsComponent implements OnInit {
         }).afterClosed().subscribe( response => {
             console.log(response);
         })
-        // this.router.navigate(['../../assignments', id]).then( () => {
-        //
-        // });
+
     }
 
     openCreateAssignmentDialog() {
@@ -162,6 +164,13 @@ export class DefinitionDetailsComponent implements OnInit {
     this.reportsService.fetchDefinitionReports(id).subscribe({
         next: response => {
           console.log('Fetched VisitDefinition Reports data:', response);
+
+          this.dataColChar = response.count;
+          console.log(this.dataColChar);
+          this.dataPieChart = response.percentages;
+
+          console.log(this.dataPieChart);
+
         },
         error: error => {
           console.error('Error fetching VisitAssignment data:', error);
@@ -169,5 +178,53 @@ export class DefinitionDetailsComponent implements OnInit {
         }
       }
     );
+  }
+
+
+  renderChart() {
+      // Create a new chart instance using CanvasJS
+    let chart = new CanvasJS.Chart("chartContainer2", {
+      animationEnabled: true,
+      title: {
+        text: "Forms Status"
+      },
+      theme: "light2",
+      exportEnabled: true,
+      axisY: {
+        includeZero: true,
+      },
+      data: [{
+        type: "column",
+        dataPoints: this.dataColChar,
+      }]
+    });
+
+    // Render the chart
+    chart.render();
+  }
+
+  renderPieChart() {
+    // Create a new chart instance using CanvasJS
+    let chart = new CanvasJS.Chart("chartAreaContainer", {
+      animationEnabled: true,
+      title: {
+        text: "status"
+      },
+      data: [{
+        type: "doughnut",
+        // startAngle: -90,
+        indexLabel: "{name}: {y}",
+        yValueFormatString: "##.##'%'",
+        dataPoints: this.dataPieChart,
+      }]
+    });
+
+    // Render the chart
+    chart.render();
+  }
+
+  tabChanged($event: MatTabChangeEvent) {
+    this.renderChart();
+    this.renderPieChart();
   }
 }

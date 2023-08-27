@@ -31,6 +31,7 @@ export class UserDetailsComponent implements OnInit, AfterViewInit {
 
   userSpecificData!:User;
 
+
   constructor(
     private route: ActivatedRoute,
     private _userService: UserService,
@@ -144,6 +145,8 @@ export class UserDetailsComponent implements OnInit, AfterViewInit {
       data => {
         console.log('Fetched Reports data:', data);
         this.userSpecificData = data;
+
+
 
       },
       error => {

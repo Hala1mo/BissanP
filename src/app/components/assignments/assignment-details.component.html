@@ -5,14 +5,14 @@
       <form>
         <mat-form-field [style.width.%]="100">
           <mat-label>User Assignee</mat-label>
-          <input type="text" matInput [formControl]="userSelectControl" [matAutocomplete]="auto">
-          <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayUser">
+          <input type="text" matInput [formControl]="userSelectControl" [matAutocomplete]="autoUser" >
+          <mat-autocomplete #autoUser="matAutocomplete" [displayWith]="displayUser" (optionSelected)="selectUser($event)">
             <mat-option *ngFor="let option of filteredUsers | async" [value]="option">
               {{option.username}}
             </mat-option>
           </mat-autocomplete>
         </mat-form-field>
-        <button mat-raised-button color="primary">
+        <button mat-raised-button color="primary" (click)="assignUser(selectedUser?.username)">
           Assign User
         </button>
       </form>
@@ -21,10 +21,10 @@
         <!-- ASSIGN CUSTOMERS -->
       <form>
         <mat-form-field [style.width.%]="100">
-          <mat-label>Customer Assignee</mat-label>
-          <input type="text" matInput [formControl]="customerSelectControl" [matAutocomplete]="auto">
-          <mat-autocomplete #auto="matAutocomplete">
-            <mat-option *ngFor="let customer of customerData" [value]="customer">
+          <mat-label>Customer Assignee</mat-label>"
+          <input type="text" matInput [formControl]="customerSelectControl" [matAutocomplete]="autoCustomer" >
+          <mat-autocomplete #autoCustomer="matAutocomplete" [displayWith]="displayCustomer" (optionSelected)="selectCustomer($event)">
+            <mat-option *ngFor="let customer of filteredCustomers | async" [value]="customer">
               {{ customer.name }}
             </mat-option>
           </mat-autocomplete>
@@ -32,7 +32,7 @@
         </mat-form-field>
 
 
-        <button mat-raised-button color="primary">
+        <button mat-raised-button color="primary" (click)="assignCustomer(selectedCustomer?.id)">
           Assign Customer
         </button>
       </form>
