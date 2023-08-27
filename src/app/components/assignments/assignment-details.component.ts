@@ -37,6 +37,7 @@ export class AssignmentDetailsComponent implements OnInit, AfterViewInit {
     @ViewChild(MatPaginator) paginator!: MatPaginator;
     @ViewChild(MatSort) sort!: MatSort;
 
+
     constructor(
         private router: Router,
         private assignmentService: AssignmentService,
@@ -74,9 +75,9 @@ export class AssignmentDetailsComponent implements OnInit, AfterViewInit {
                     this.currentAssignment = response;
                     console.log("RESPONSE --->", this.currentAssignment);
 
-                    if (response.user) {
-                        this.userSelectControl.setValue(response.user.username);
-                    }
+                    // if (response.user) {
+                    //     this.userSelectControl.setValue(response.user.username);
+                    // }
 
                 },
                 error: error => {
@@ -86,21 +87,20 @@ export class AssignmentDetailsComponent implements OnInit, AfterViewInit {
         );
     }
 
-    fetchCustomerData() {
-        this.registrationService.fetchCustomerData().subscribe({
-                next: response => {
-                    console.log('Fetched customer data:', response);
-                    this.customerData = response;
-                },
-                error: error => {
-                    console.error('Error fetching customer data:', error);
+  fetchCustomerData() {
+    this.registrationService.fetchCustomerData().subscribe({
+      next: response => {
+        console.log('Fetched customer data:', response);
+        this.customerData = response;
+      },
+      error: error => {
+        console.error('Error fetching customer data:', error);
+      }
+    });
+  }
 
-                }
-            }
-        );
-    }
 
-    fetchUserData() {
+  fetchUserData() {
         this.assignmentService.fetchUser().subscribe(
             data => {
                 console.log('Fetched user data:', data);

@@ -15,6 +15,7 @@ export class AddUserComponent implements OnInit {
 
   hidePassword: boolean;
 
+
   constructor(
     private formBuilder: FormBuilder,
     private userService: UserService,
@@ -42,12 +43,13 @@ export class AddUserComponent implements OnInit {
         Validators.minLength(8),
         Validators.maxLength(30)]],
 
-      confirmPassword: ['', [Validators.required,
-        Validators.minLength(8),
-        Validators.maxLength(30)]],
+      confirmPassword: ['', [Validators.required]],
+      // ,
+      // Validators.minLength(8),
+      // Validators.maxLength(30)
 
       accessLevel: ['', [Validators.required]]
-    }, {validator: PasswordValidators});
+    }, {validator: PasswordValidators('password', 'confirmPassword')})
 
   }
 
@@ -58,6 +60,8 @@ export class AddUserComponent implements OnInit {
   submitNewUser() {
     const newUserJson = this.addNewUserForm.value;
     console.log(newUserJson);
+    console.log('Password:', this.addNewUserForm.controls['password'].value);
+    console.log('Confirm Password:', this.addNewUserForm.controls['confirmPassword'].value);
 
     this.userService.saveNewUser(this.addNewUserForm.value).subscribe(
       {
@@ -66,13 +70,17 @@ export class AddUserComponent implements OnInit {
           this.matDialogRef.close();
         },
         error: error => {
-          if (error.error && error.error.errors && error.error.errors.length > 0) {
-            const errorMessage = error.error.errors[0];
+          console.log(error);
+
+          if (error.error && error.error.message) {
+            const errorMessage = error.error.message;
             console.log('Error message:', errorMessage);
 
             this.snackBar.open(errorMessage, '', {
               duration: 3000
             });
+          } else {
+            console.log('Unknown error occurred.');
           }
         }
       }
@@ -87,7 +95,6 @@ export class AddUserComponent implements OnInit {
       return 'Username is too long';
     if (usernameControl.hasError('minLength'))
       return 'Username is too short';
-
 
     return '';
   }
@@ -122,30 +129,34 @@ export class AddUserComponent implements OnInit {
 
   getPasswordErrorMessage() {
     let passwordControl = this.addNewUserForm.controls['password'];
+
     if (passwordControl.hasError('required'))
       return 'Password is required';
-    if (passwordControl.hasError('maxLength'))
+    if (passwordControl.hasError('maxlength'))
       return 'Password is too long';
-    if (passwordControl.hasError('minLength'))
-      return 'Password is too short';
+
+    // Display custom error message for minimum length requirement
+    if (passwordControl.hasError('minlength'))
+      return 'Password must be at least 8 characters long';
 
     if (this.addNewUserForm.hasError('misMatch'))
       return 'Passwords do not match';
-    return ''
+
+    return '';
   }
 
   getConfirmPasswordErrorMessage() {
     let confirmPasswordControl = this.addNewUserForm.controls['confirmPassword'];
+
     if (confirmPasswordControl.hasError('required'))
       return 'Confirm Password is required';
-    if (confirmPasswordControl.hasError('maxLength'))
-      return 'Password is too long';
-    if (confirmPasswordControl.hasError('minLength'))
-      return 'Password is too short';
-    if (this.addNewUserForm.hasError('misMatch'))
+    if ( this.addNewUserForm.hasError('misMatch')) {
+      console.log('misMatch error condition met');
       return 'Passwords do not match';
-    return ''
+    }
+    return '';
   }
+
 
   getAccessLevelErrorMessage() {
     let lastNameControl = this.addNewUserForm.controls['accessLevel'];

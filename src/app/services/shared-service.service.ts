@@ -5,6 +5,9 @@ import {BehaviorSubject} from "rxjs";
   providedIn: 'root'
 })
 export class SharedServiceService {
+
+
+  //this service for sending data from component to component
   private dateDataSubject = new BehaviorSubject<any[]>([]);
   public dateData$ = this.dateDataSubject.asObservable();
 

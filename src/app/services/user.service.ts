@@ -46,7 +46,6 @@ export class UserService {
       confirmPassword: userJson.confirmPassword,
       accessLevel: userJson.accessLevel,
     };
-    console.log("fff");
 
     return this._http.post<any>(this.usersUrl, newUserPayload);
   }

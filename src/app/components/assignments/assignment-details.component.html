@@ -2,31 +2,40 @@
 <mat-dialog-content>
     <div class="row mb-2 pb-1 border-bottom">
         <!-- ASSIGN USER -->
-        <form>
-            <mat-form-field [style.width.%]="100">
-                <mat-label>User Assignee</mat-label>
-                <input type="text" matInput [formControl]="userSelectControl" [matAutocomplete]="auto">
-                <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayUser">
-                    <mat-option *ngFor="let option of filteredUsers | async" [value]="option">
-                        {{option.username}}
-                    </mat-option>
-                </mat-autocomplete>
-            </mat-form-field>
-            <button mat-raised-button color="primary">
-                Assign User
-            </button>
-        </form>
+      <form>
+        <mat-form-field [style.width.%]="100">
+          <mat-label>User Assignee</mat-label>
+          <input type="text" matInput [formControl]="userSelectControl" [matAutocomplete]="auto">
+          <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayUser">
+            <mat-option *ngFor="let option of filteredUsers | async" [value]="option">
+              {{option.username}}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+        <button mat-raised-button color="primary">
+          Assign User
+        </button>
+      </form>
     </div>
     <div class="row mb-2 pb-1 border-bottom">
         <!-- ASSIGN CUSTOMERS -->
-        <form>
-            <mat-form-field [style.width.%]="100">
+      <form>
+        <mat-form-field [style.width.%]="100">
+          <mat-label>Customer Assignee</mat-label>
+          <input type="text" matInput [formControl]="customerSelectControl" [matAutocomplete]="auto">
+          <mat-autocomplete #auto="matAutocomplete">
+            <mat-option *ngFor="let customer of customerData" [value]="customer">
+              {{ customer.name }}
+            </mat-option>
+          </mat-autocomplete>
 
-            </mat-form-field>
-            <button mat-raised-button color="primary">
-                Add Customer
-            </button>
-        </form>
+        </mat-form-field>
+
+
+        <button mat-raised-button color="primary">
+          Assign Customer
+        </button>
+      </form>
     </div>
     <div class="row mb-2 pb-1">
         <!-- VIEW ASSIGNED CUSTOMERS SCROLLABLE OR PAGINATION -->

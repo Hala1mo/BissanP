@@ -11,6 +11,7 @@ import {MatSort} from "@angular/material/sort";
 import {MatTableDataSource} from "@angular/material/table";
 import {CreateAssignmentDialogComponent} from "../../assignments/create/create-assignment-dialog.component";
 import {AssignmentDetailsComponent} from "../../assignments/assignment-details.component";
+import {ReportsService} from "../../../services/reports.service";
 
 @Component({
     selector: 'app-details-def',
@@ -36,6 +37,7 @@ export class DefinitionDetailsComponent implements OnInit {
         private snackBar: MatSnackBar,
         private activatedRoute: ActivatedRoute,
         private definitionService: DefinitionService,
+        private reportsService: ReportsService,
         private matDialog: MatDialog,
     ) {
 
@@ -47,9 +49,12 @@ export class DefinitionDetailsComponent implements OnInit {
             if (this.id) {
                 this.fetchDefinitionDetails(this.id);
                 this.fetchVisitTypes();
+                this.fetchDefinitionReports(this.id)
             }
         });
     }
+
+
 
 
     openAssignmentDetails(assignmentId: bigint) {
@@ -153,5 +158,16 @@ export class DefinitionDetailsComponent implements OnInit {
         );
     }
 
+  fetchDefinitionReports(id: any) {
+    this.reportsService.fetchDefinitionReports(id).subscribe({
+        next: response => {
+          console.log('Fetched VisitDefinition Reports data:', response);
+        },
+        error: error => {
+          console.error('Error fetching VisitAssignment data:', error);
 
+        }
+      }
+    );
+  }
 }

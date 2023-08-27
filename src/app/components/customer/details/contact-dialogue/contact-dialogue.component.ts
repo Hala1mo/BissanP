@@ -134,12 +134,16 @@ export class ContactDialogueComponent implements OnInit{
       },
       (error) => {
         console.error('Registration failed:', error);
-        if (error.error && error.error.errors && error.error.errors.length > 0) {
-          const errorMessage = error.error.errors[0];
+
+        if (error.error && error.error.message) { // Check if 'message' property exists
+          const errorMessage = error.error.message;
           console.log('Error message:', errorMessage);
+
           this._snackBar.open(errorMessage, '', {
             duration: 3000
           });
+        } else {
+          console.log('Unknown error occurred.');
         }
       }
     );
@@ -176,14 +180,16 @@ export class ContactDialogueComponent implements OnInit{
         },
         (error) => {
           console.error('Error updating user data:', error);
-          if (error.error && error.error.errors && error.error.errors.length > 0) {
-            const errorMessage = error.error.errors[0];
+
+          if (error.error && error.error.message) { // Check if 'message' property exists
+            const errorMessage = error.error.message;
             console.log('Error message:', errorMessage);
-            // this.toastService.show('Error', errorMessage);
+
             this._snackBar.open(errorMessage, '', {
               duration: 3000
             });
-
+          } else {
+            console.log('Unknown error occurred.');
           }
         }
       );

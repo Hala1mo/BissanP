@@ -17,6 +17,8 @@ export class ReportsService {
   private types_url=link.urlIP+'/reports/customers/countByType';
   private areas_url=link.urlIP+'/reports/customers/countByArea';
 
+  private definitionReports=link.urlIP+'/reports/visit_definitions'
+
 
 
   private customers = 'http://10.10.33.91:8080/reports/customers';
@@ -78,6 +80,12 @@ export class ReportsService {
 
   fetchAreaChart(): Observable<any> {
     const _urlDetails = `${this.areas_url}`;
+    return this._http.get<any>(_urlDetails);
+  }
+
+
+  fetchDefinitionReports(id:bigint): Observable<any> {
+    const _urlDetails = `${this.definitionReports}/${id}`;
     return this._http.get<any>(_urlDetails);
   }
 

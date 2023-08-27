@@ -39,14 +39,17 @@ export class CreateAssignmentDialogComponent {
                 this.matDialogRef.close(response);
             },
             error: error => {
-                if (error.error && error.error.errors && error.error.errors.length > 0) {
-                    const errorMessage = error.error.errors[0];
-                    console.log('Error message:', errorMessage);
 
-                    this.snackBar.open(errorMessage, '', {
-                        duration: 3000
-                    });
-                }
+              if (error.error && error.error.message) { // Check if 'message' property exists
+                const errorMessage = error.error.message;
+                console.log('Error message:', errorMessage);
+
+                this.snackBar.open(errorMessage, '', {
+                  duration: 3000
+                });
+              } else {
+                console.log('Unknown error occurred.');
+              }
             }
         })
     }
