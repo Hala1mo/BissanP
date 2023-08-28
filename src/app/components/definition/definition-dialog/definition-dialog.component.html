@@ -37,6 +37,16 @@
                 </mat-select>
             </mat-form-field>
         </div>
+
+      <div class="row mb-1">
+        <mat-form-field>
+          <mat-label>City</mat-label>
+          <mat-select formControlName="cityId">
+            <mat-option *ngFor="let city of cities" [value]="city.id">{{city.name}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
         <mat-dialog-actions>
             <button mat-raised-button (click)="submitForm()" color="primary">Save</button>
             <button mat-raised-button color="warn" mat-dialog-close>Cancel</button>

@@ -50,6 +50,8 @@ import {TypesChartComponent} from './components/reports/types-chart/types-chart.
 import {MatLegacyChipsModule} from "@angular/material/legacy-chips";
 import {CreateAssignmentDialogComponent} from './components/assignments/create/create-assignment-dialog.component';
 import {UserDetailsComponent} from './components/user/user-details/user-details.component';
+import { TypeDialogComponent } from './components/definition/type-dialog/type-dialog.component';
+import { CityDialogComponent } from './components/definition/city-dialog/city-dialog.component';
 
 
 @NgModule({
@@ -77,6 +79,8 @@ import {UserDetailsComponent} from './components/user/user-details/user-details.
         ContactDialogueComponent,
         CreateAssignmentDialogComponent,
         UserDetailsComponent,
+        TypeDialogComponent,
+        CityDialogComponent,
 
     ],
     imports: [

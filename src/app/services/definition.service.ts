@@ -12,6 +12,7 @@ export interface DefinitionForm {
   frequency: number;
   allowRecurring: boolean;
   typeId: string;
+  cityId:string;
 }
 
 interface AssignmentForm {
@@ -19,6 +20,9 @@ interface AssignmentForm {
   comment: string;
 }
 
+interface addForm {
+  name: string;
+}
 
 @Injectable({
     providedIn: 'root'
@@ -26,6 +30,7 @@ interface AssignmentForm {
 export class DefinitionService {
     private visitDefinitionsURL = link.urlIP+'/visit_definitions';
     private visitTypesURL = link.urlIP+'/visit_types';
+  private _city_url = link.urlIP+'/cities';
 
     constructor(private http: HttpClient) {
     }
@@ -57,7 +62,8 @@ export class DefinitionService {
         description: updatedVisitDefinition.description,
         frequency: updatedVisitDefinition.frequency,
         allowRecurring:updatedVisitDefinition.allowRecurring,
-        typeId:updatedVisitDefinition.typeId
+        typeId:updatedVisitDefinition.typeId,
+        cityId:updatedVisitDefinition.cityId,
 
       };
         const updateUrl = `${this.visitDefinitionsURL}/${definitionId}`;
@@ -70,7 +76,8 @@ export class DefinitionService {
         description: visitDefinition.description,
         frequency: visitDefinition.frequency,
         allowRecurring:visitDefinition.allowRecurring,
-        typeId:visitDefinition.typeId
+        typeId:visitDefinition.typeId,
+        cityId:visitDefinition.cityId,
 
       };
         return this.http.post<any>(this.visitDefinitionsURL, addDefinitionPayload).pipe(
@@ -84,7 +91,14 @@ export class DefinitionService {
         );
     }
 
-    saveNewAssignmentToDefinition(assignment: any, definitionId: bigint): Observable<any> {
+
+  fetchCityData(): Observable<any> {
+    return this.http.get<any>(this._city_url).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  saveNewAssignmentToDefinition(assignment: any, definitionId: bigint): Observable<any> {
         const urlAssignment = `${this.visitDefinitionsURL}/${definitionId}/assignments`;
         const newAssignment: AssignmentForm = {
         date: assignment.date,
@@ -100,4 +114,24 @@ export class DefinitionService {
     }
 
 
+  saveNewCity(cityForm: any) {
+
+    const addPayload: addForm = {
+      name: cityForm.name,
+    };
+
+    return this.http.post<any>(this._city_url, addPayload).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  saveNewType(typeForm: any) {
+
+    const addPayload: addForm = {
+      name: typeForm.name,
+    };
+    return this.http.post<any>(this.visitTypesURL,addPayload).pipe(
+      catchError(this.handleError)
+    );
+  }
 }

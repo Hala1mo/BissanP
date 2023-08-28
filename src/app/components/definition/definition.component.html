@@ -6,6 +6,15 @@
         Create New Visit Definition
         <mat-icon>add</mat-icon>
       </button>
+      <button mat-raised-button color="primary" (click)="openTypeDialog()">
+        Add type
+        <mat-icon>add</mat-icon>
+      </button>
+
+      <button mat-raised-button color="primary" (click)="openCityDialog()">
+        Add City
+        <mat-icon>add</mat-icon>
+      </button>
     </div>
   </div>
   <div class="row border-bottom mb-5">
@@ -111,6 +120,15 @@
           </th>
           <td mat-cell *matCellDef="let definition"> {{definition.type.name}} </td>
         </ng-container>
+
+<!--        <ng-container matColumnDef="city">-->
+<!--          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by city">-->
+<!--           City-->
+<!--          </th>-->
+<!--          <td mat-cell *matCellDef="let definition"> {{definition.city.name}} </td>-->
+<!--        </ng-container>-->
+
+
         <ng-container matColumnDef="enabled">
           <th mat-header-cell *matHeaderCellDef>
             Enabled

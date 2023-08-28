@@ -26,7 +26,7 @@ export class CustomerComponent implements OnInit, AfterViewInit {
     selectedEnabledOption = "Enabled"
     displayedColumns: string[] = ['name', 'city', 'addressLine', 'enabled', 'actions']
     customerData: Customer[] = [];
-    originalCustomerData: Customer[] = [];
+   originalCustomerData: Customer[] = [];
     cityData: City[] = [];
     name: String = '';
     registrationForm!: FormGroup;
@@ -46,11 +46,21 @@ export class CustomerComponent implements OnInit, AfterViewInit {
         this.fetchCityData();
         this.fetchCustomerData();
 
-        this.dataSource.filterPredicate = function (customer, filter) {
-            return customer.name.toLocaleLowerCase().includes(filter.toLocaleLowerCase()) || customer.address.city.name.toLocaleLowerCase()
-                .includes(filter.toLocaleLowerCase()) || customer.address.addressLine1.toLocaleLowerCase().includes(filter.toLocaleLowerCase())
-        }
+        // this.dataSource.filterPredicate = function (customer, filter) {
+        //     return customer.name.toLocaleLowerCase().includes(filter.toLocaleLowerCase()) || customer.address.city.name.toLocaleLowerCase()
+        //         .includes(filter.toLocaleLowerCase()) || customer.address.addressLine1.toLocaleLowerCase().includes(filter.toLocaleLowerCase())
+        // }
 
+
+      this.dataSource.filterPredicate = function (customer, filter) {
+        const name = customer.name ? customer.name.toLocaleLowerCase() : '';
+        const cityName = customer.address && customer.address.city ? customer.address.city.name.toLocaleLowerCase() : '';
+        const addressLine1 = customer.address ? customer.address.addressLine1.toLocaleLowerCase() : '';
+
+        return name.includes(filter.toLocaleLowerCase()) ||
+          cityName.includes(filter.toLocaleLowerCase()) ||
+          addressLine1.includes(filter.toLocaleLowerCase());
+      }
         this.registrationForm = this.fb.group({
             name: [''],
             address: this.fb.group({
@@ -112,27 +122,37 @@ export class CustomerComponent implements OnInit, AfterViewInit {
 
 
     showEnabledCustomers() {
-        this.selectedEnabledOption = "Enabled"
-        this.customerData = this.originalCustomerData.filter(customer => customer.enabled === true);
-        this.dataSource.data = this.customerData;
+        this.selectedEnabledOption = "Enabled";
+
+        console.log("DDDDDD"+this.dataSource.data);
+      this.dataSource.filter = '';
+      this.dataSource.data = this.customerData.filter(customer => customer.enabled === true);
+
     }
 
     showDisabledCustomers() {
-        this.selectedEnabledOption = "Disabled"
-        this.customerData = this.originalCustomerData.filter(customer => customer.enabled === false);
-        this.dataSource.data = this.customerData;
+        this.selectedEnabledOption = "Disabled";
+      this.dataSource.filter = '';
+        this.dataSource.data = this.customerData.filter(customer => customer.enabled === false);
+
     }
 
-    applySearchFilter(event: Event) {
-        if (this.searchInput === "") {
-            this.customerData = this.originalCustomerData;
-        } else {
-            this.searchCustomers(this.searchInput.toLowerCase().trim());
-            const filterValue = (event.target as HTMLInputElement).value;
-            this.dataSource.filter = filterValue.trim()
-        }
-    }
+    // applySearchFilter(event: Event) {
+    //     if (this.searchInput === "") {
+    //         this.customerData = this.originalCustomerData;
+    //     } else {
+    //         this.searchCustomers(this.searchInput.toLowerCase().trim());
+    //         const filterValue = (event.target as HTMLInputElement).value;
+    //         this.dataSource.filter = filterValue.trim()
+    //     }
+    // }
 
+  applySearchFilter(event: Event) {
+    this.searchCustomers(this.searchInput.toLowerCase().trim());
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.data = this.customerData; // Update the data source with the search results
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
     searchCustomers(query: string) {
         this.dataSource.filter = query.trim().toLowerCase();
         this.isSearchLoading = true;

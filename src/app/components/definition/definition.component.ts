@@ -9,6 +9,9 @@ import {MatPaginator} from "@angular/material/paginator";
 import {MatSort} from "@angular/material/sort";
 import {DefinitionDialogComponent} from "./definition-dialog/definition-dialog.component";
 import {Router} from "@angular/router";
+import {TypeDialogComponent} from "./type-dialog/type-dialog.component";
+import {CityDialogComponent} from "./city-dialog/city-dialog.component";
+import {City} from "../../models/City";
 
 @Component({
     selector: 'app-definition',
@@ -20,10 +23,10 @@ export class DefinitionComponent implements OnInit, AfterViewInit {
     originalVisitDefinitionData: VisitDefinition[] = [];
 
     visitTypesData: VisitType[] = [];
-
+    cityData:City[]=[];
     searchInput: string = "";
 
-    displayedColumns: string[] = ['name', 'description', 'frequency', 'allowRecurring', 'type', 'enabled', 'actions'];
+    displayedColumns: string[] = ['name', 'description', 'frequency', 'allowRecurring', 'type','enabled', 'actions'];
     dataSource = new MatTableDataSource(this.visitDefinitionData);
 
     @ViewChild('definitionTablePaginator') paginator!: MatPaginator;
@@ -42,6 +45,7 @@ export class DefinitionComponent implements OnInit, AfterViewInit {
     ngOnInit() {
         this.fetchAllDefinitions();
         this.fetchVisitTypes();
+        this.fetchCity();
 
         this.dataSource.filterPredicate = function (definition, filter) {
             return definition.name.toLocaleLowerCase().includes(filter.toLocaleLowerCase()) || definition.description.toLocaleLowerCase().includes(filter.toLocaleLowerCase());
@@ -96,12 +100,34 @@ export class DefinitionComponent implements OnInit, AfterViewInit {
         });
     }
 
+
+  fetchCity() {
+    this.definitionService.fetchCityData().subscribe({
+      next: response => {
+        console.log('Fetched city data:', response);
+        this.cityData = response;
+      },
+      error: error => {
+        console.error('Error fetching city types:', error);
+        if (error.message) {
+          let errorMessage = error.message;
+          console.log('Error message:', errorMessage);
+
+          this.snackBar.open(errorMessage, '', {
+            duration: 3000
+          });
+        }
+      }
+    });
+  }
+
     openCreateDialog() {
         this.matDialog.open(DefinitionDialogComponent, {
             width: '40%',
             data: {
                 'mode': 0,
-                'types': this.visitTypesData
+                'types': this.visitTypesData,
+                'cities':this.cityData
             }
         }).afterClosed().subscribe(() => {
             this.fetchAllDefinitions();
@@ -114,7 +140,8 @@ export class DefinitionComponent implements OnInit, AfterViewInit {
             data: {
                 'mode': 1,
                 'definition': definition,
-                'types': this.visitTypesData
+                'types': this.visitTypesData,
+                'cities':this.cityData
             }
         }).afterClosed().subscribe(() => {
             this.fetchAllDefinitions();
@@ -192,4 +219,24 @@ export class DefinitionComponent implements OnInit, AfterViewInit {
     openDetailsPage(definition: any) {
         this.router.navigate(['/definitions', definition.id])
     }
+
+  openTypeDialog() {
+      this.matDialog.open(TypeDialogComponent, {
+        width: '40%',
+
+      }).afterClosed().subscribe(() => {
+        this.fetchVisitTypes();
+      });
+
+
+  }
+
+  openCityDialog() {
+    this.matDialog.open(CityDialogComponent, {
+      width: '40%',
+
+    }).afterClosed().subscribe(() => {
+      // this.fetchCities();
+    });
+  }
 }
