@@ -14,28 +14,26 @@ import {TypesChartComponent} from "./components/reports/types-chart/types-chart.
 import {UserDetailsComponent} from "./components/user/user-details/user-details.component";
 
 const routes: Routes = [
-    {path: 'users', component: UserComponent},
-    {path: 'customers', component: CustomerComponent},
-    {path: 'definitions', component: DefinitionComponent},
-    {path: 'users/add', component: AddUserComponent},
-  {path: 'users/details/:username', component: UserDetailsComponent},
+  {path: 'users', component: UserComponent},
+  {path: 'customers', component: CustomerComponent},
+  {path: 'definitions', component: DefinitionComponent},
 
-    {path: 'customers/:id', component: CustomerDetailsComponent},
-    {path: 'definitions/:id', component: DefinitionDetailsComponent},
-    {path: 'assignments/:id', component: AssignmentDetailsComponent},
+  {path: 'users/:username', component: UserDetailsComponent},
+  {path: 'customers/:id', component: CustomerDetailsComponent},
+  {path: 'definitions/:id', component: DefinitionDetailsComponent},
+  {path: 'assignments/:id', component: AssignmentDetailsComponent},
 
-    {path:'reports',component:ReportsComponent },
-    {path:'reports/status',component:StatusComponent},
-    {path:'reports/types-chart',component:TypesChartComponent},
-    {path:'reports/date',component:DateComponent},
-
+  {path: 'reports', component: ReportsComponent},
+  {path: 'reports/status', component: StatusComponent},
+  {path: 'reports/types-chart', component: TypesChartComponent},
+  {path: 'reports/date', component: DateComponent},
 
 
 ];
 
 @NgModule({
-    imports: [RouterModule.forRoot(routes)],
-    exports: [RouterModule]
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule]
 })
 export class AppRoutingModule {
 }

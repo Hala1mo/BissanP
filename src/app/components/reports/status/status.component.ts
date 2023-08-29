@@ -56,7 +56,7 @@ export class StatusComponent  implements OnInit, AfterViewInit {
   }
 
   showCompleted() {
-    this._reportsService.Completed().subscribe(
+    this._reportsService.fetchCompletedForms().subscribe(
         data => {
           console.log('Fetched Reports data:', data);
           this.Data = data;
@@ -70,7 +70,7 @@ export class StatusComponent  implements OnInit, AfterViewInit {
 
 
   showUnderGoing() {
-    this._reportsService.underGoing().subscribe(
+    this._reportsService.fetchUndergoingForms().subscribe(
         data => {
           console.log('Fetched Reports data:', data);
           this.Data = data;
@@ -83,7 +83,7 @@ export class StatusComponent  implements OnInit, AfterViewInit {
   }
 
   showNotStarted() {
-    this._reportsService.notStarted().subscribe(
+    this._reportsService.fetchNotStartedForms().subscribe(
         data => {
           console.log('Fetched Reports data:', data);
           this.Data = data;

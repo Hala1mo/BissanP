@@ -1,3 +1,13 @@
 * {
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
+
+.chart-container {
+  max-height: 400px;
+  max-width: 400px;
+}
+
+.chart {
+  max-width: 400px;
+  max-height: 400px;
+}

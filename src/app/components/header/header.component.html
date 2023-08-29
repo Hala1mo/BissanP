@@ -1,13 +1,27 @@
 <div class="mb-4">
   <mat-toolbar color="primary">
     <mat-toolbar-row>
-      <div class="gap-1">
+      <div class="w-100 d-flex justify-content-between">
         <!--    <img class="me-3" src="../../../assets/bisan-logo.png" alt="Logo" width="60" height="30">-->
         <span class="me-3">Visit Manager</span>
-        <a class="fs-6" mat-button [routerLink]="['/users']">Users</a>
-        <a class="fs-6" mat-button [routerLink]="['/customers']">Customers</a>
-        <a class="fs-6" mat-button [routerLink]="['/definitions']">Visits</a>
-        <a class="fs-6" mat-button [routerLink]="['/reports']">Reports</a>
+        <div class="d-flex gap-3">
+          <a class="fs-6" mat-button [routerLink]="['/users']">
+            <mat-icon>person</mat-icon>
+            Users
+          </a>
+          <a class="fs-6" mat-button [routerLink]="['/customers']">
+            <mat-icon>business</mat-icon>
+            Customers
+          </a>
+          <a class="fs-6" mat-button [routerLink]="['/definitions']">
+            <mat-icon>route</mat-icon>
+            Visits
+          </a>
+          <a class="fs-6" mat-button [routerLink]="['/reports']">
+            <mat-icon>summarize</mat-icon>
+            Reports
+          </a>
+        </div>
       </div>
     </mat-toolbar-row>
   </mat-toolbar>

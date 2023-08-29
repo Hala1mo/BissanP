@@ -1,10 +1,5 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
-import {FormBuilder, Validators} from "@angular/forms";
-import {MatSnackBar} from "@angular/material/snack-bar";
 import {ActivatedRoute} from "@angular/router";
-import {DefinitionService} from "../../../services/definition.service";
-import {MatDialog} from "@angular/material/dialog";
-import {Customer} from "../../../models/Customer";
 import {UserService} from "../../../services/user.service";
 import {CanvasJS} from "@canvasjs/angular-charts";
 import {MatTableDataSource} from "@angular/material/table";
@@ -12,30 +7,35 @@ import {MatSort} from "@angular/material/sort";
 import {MatPaginator} from "@angular/material/paginator";
 import {ReportsService} from "../../../services/reports.service";
 import {User} from "../../../models/User";
+import {MatTabChangeEvent} from "@angular/material/tabs";
+import {MatDialog} from "@angular/material/dialog";
+import {EditUserComponent} from "../edit-user/edit-user.component";
 
 @Component({
   selector: 'app-user-details',
   templateUrl: './user-details.component.html',
   styleUrls: ['./user-details.component.css']
 })
-export class UserDetailsComponent implements OnInit, AfterViewInit {
+export class UserDetailsComponent implements OnInit {
+  isUserLoaded: boolean = false;
 
-  UserData: any[] = [];
+  userForms: any[] = [];
   displayedColumns: string[] = ['Name', 'Address', 'Date', 'Type', 'State', 'Start Time', 'End Time'];
-  dataSource = new MatTableDataSource(this.UserData);
+
+  dataSource = new MatTableDataSource(this.userForms);
   userReports: any[] = [];
-  userName!: string;
+  routeUsername!: string;
 
   dataColChar: any[] = [];
   dataPieChart: any[] = [];
 
-  userSpecificData!:User;
+  currentUser: User | undefined;
 
 
   constructor(
-    private route: ActivatedRoute,
-    private _userService: UserService,
-    private _reportsService: ReportsService
+    private activatedRoute: ActivatedRoute,
+    private userService: UserService,
+    private matDialog: MatDialog,
   ) {
   }
 
@@ -43,36 +43,65 @@ export class UserDetailsComponent implements OnInit, AfterViewInit {
   @ViewChild('reportsTablePaginator') paginator!: MatPaginator;
 
   ngOnInit() {
-    this.route.params.subscribe((params) => {
+    this.activatedRoute.params.subscribe((params) => {
       const username = params['username'];
       if (username) {
-        this.userName=username;
+        this.routeUsername = username;
+        this.fetchUser(username);
+
         this.fetchUserReports(username);
-        this.fetchAllData();
-        this.fetchuserData(username);
       }
     });
-
-
   }
 
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
+  fetchUser(username: string) {
+    this.userService.getUserData(username).subscribe({
+        next: response => {
+          this.isUserLoaded = true;
+          this.currentUser = response;
+          console.log(response)
+
+          setTimeout(() => {
+            this.dataSource.sort = this.sort;
+            this.dataSource.paginator = this.paginator;
+          })
+        },
+        error: error => {
+          console.error('Error fetching User data:', error);
+        }
+      }
+    );
+  }
+
+  fetchUserReports(username: string) {
+    this.userService.getUserReports(username).subscribe({
+        next: response => {
+          console.log('Fetched  user Details data:', response);
+          this.userReports = response;
+          this.dataColChar = response.count;
+          this.dataPieChart = response.percentages;
+
+          this.renderBarChart();
+          this.renderPieChart();
+        },
+        error: error => {
+          console.error('Error fetching user Details data:', error);
+        }
+      }
+    );
   }
 
 
-  renderChart() {
+  renderBarChart() {
     // Create a new chart instance using CanvasJS
-    let chart = new CanvasJS.Chart("chartContainer", {
+    const chart = new CanvasJS.Chart("barChart", {
       animationEnabled: true,
       title: {
-        text: "User Status"
+        text: "Forms Status"
       },
       theme: "light2",
-      exportEnabled: true,
       axisY: {
-        includeZero: true,
+        includeZero: false,
       },
       data: [{
         type: "column",
@@ -84,29 +113,9 @@ export class UserDetailsComponent implements OnInit, AfterViewInit {
     chart.render();
   }
 
-
-  fetchUserReports(username: string) {
-    this._userService.getUserReports(username).subscribe({
-        next: response => {
-          console.log('Fetched  user Details data:', response);
-          this.dataColChar = response.count;
-          this.dataPieChart = response.percentages;
-          this.userReports = response;
-          this.renderChart();
-          this.renderPieChart();
-        },
-        error: error => {
-          console.error('Error fetching user Details data:', error);
-
-        }
-      }
-    );
-  }
-
-
   renderPieChart() {
     // Create a new chart instance using CanvasJS
-    let chart = new CanvasJS.Chart("chartAreaContainer", {
+    let chart = new CanvasJS.Chart("pieChart", {
       animationEnabled: true,
       title: {
         text: "status"
@@ -125,35 +134,26 @@ export class UserDetailsComponent implements OnInit, AfterViewInit {
   }
 
 
-  fetchAllData() {
-    this._reportsService.fetchReports().subscribe(
-      data => {
-        console.log('Fetched Reports data:', data);
-        this.UserData = data;
-        this.dataSource.data = data;
-      },
-      error => {
-        console.error('Error fetching Reports data:', error);
-      }
-    );
+  tabChanged($event: MatTabChangeEvent) {
+    if ($event.index === 1) {
+      this.fetchUserReports(this.routeUsername);
+    }
   }
 
+  openEditDialog() {
+    this.matDialog.open(EditUserComponent, {
+      width: '40%',
+      data: this.currentUser
+    }).afterClosed().subscribe(
+      response => {
+        if (response === undefined) return;
+        if (this.currentUser === undefined) return;
 
-
-  fetchuserData(username:string) {
-    this._userService.getUserData(username).subscribe(
-      data => {
-        console.log('Fetched Reports data:', data);
-        this.userSpecificData = data;
-
-
-
-      },
-      error => {
-        console.error('Error fetching Reports data:', error);
-      }
-    );
+        if (response.firstName && response.lastName && response.accessLevel) {
+          this.currentUser.firstName = response.firstName;
+          this.currentUser.lastName = response.lastName;
+          this.currentUser.accessLevel = response.accessLevel;
+        }
+      })
   }
-
-
 }

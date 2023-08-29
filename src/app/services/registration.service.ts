@@ -75,8 +75,9 @@ export class RegistrationService {
   }
 
   fetchCustomerData(): Observable<any> {
-    // Send a GET request to the server to fetch user data
-    return this._http.get<any>(this._customers_url);
+    let url = `${this._customers_url}/all`;
+
+    return this._http.get<any>(url);
   }
 
 

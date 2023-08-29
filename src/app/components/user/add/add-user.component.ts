@@ -10,9 +10,8 @@ import {MatDialogRef} from "@angular/material/dialog";
   templateUrl: './add-user.component.html',
   styleUrls: ['./add-user.component.css']
 })
-export class AddUserComponent implements OnInit {
+export class AddUserComponent {
   addNewUserForm: FormGroup;
-
   hidePassword: boolean;
 
 
@@ -43,44 +42,32 @@ export class AddUserComponent implements OnInit {
         Validators.minLength(8),
         Validators.maxLength(30)]],
 
-      confirmPassword: ['', [Validators.required]],
-      // ,
-      // Validators.minLength(8),
-      // Validators.maxLength(30)
+      confirmPassword: ['', [Validators.required,
+        Validators.minLength(8),
+        Validators.maxLength(30)]],
+
 
       accessLevel: ['', [Validators.required]]
     }, {validator: PasswordValidators('password', 'confirmPassword')})
 
   }
 
-  ngOnInit(): void {
-
-  }
-
   submitNewUser() {
     const newUserJson = this.addNewUserForm.value;
-    console.log(newUserJson);
-    console.log('Password:', this.addNewUserForm.controls['password'].value);
-    console.log('Confirm Password:', this.addNewUserForm.controls['confirmPassword'].value);
-
     this.userService.saveNewUser(this.addNewUserForm.value).subscribe(
       {
         next: response => {
-          console.log("Saved new User: ", response)
-          this.matDialogRef.close();
+          this.matDialogRef.close(response);
         },
         error: error => {
-          console.log(error);
-
           if (error.error && error.error.message) {
-            const errorMessage = error.error.message;
-            console.log('Error message:', errorMessage);
-
-            this.snackBar.open(errorMessage, '', {
+            this.snackBar.open(error.error.message, '', {
               duration: 3000
             });
           } else {
-            console.log('Unknown error occurred.');
+            this.snackBar.open(error.message, '', {
+              duration: 3000
+            });
           }
         }
       }
@@ -129,16 +116,12 @@ export class AddUserComponent implements OnInit {
 
   getPasswordErrorMessage() {
     let passwordControl = this.addNewUserForm.controls['password'];
-
     if (passwordControl.hasError('required'))
       return 'Password is required';
     if (passwordControl.hasError('maxlength'))
       return 'Password is too long';
-
-    // Display custom error message for minimum length requirement
     if (passwordControl.hasError('minlength'))
       return 'Password must be at least 8 characters long';
-
     if (this.addNewUserForm.hasError('misMatch'))
       return 'Passwords do not match';
 
@@ -147,16 +130,13 @@ export class AddUserComponent implements OnInit {
 
   getConfirmPasswordErrorMessage() {
     let confirmPasswordControl = this.addNewUserForm.controls['confirmPassword'];
-
     if (confirmPasswordControl.hasError('required'))
       return 'Confirm Password is required';
-    if ( this.addNewUserForm.hasError('misMatch')) {
-      console.log('misMatch error condition met');
+    if (this.addNewUserForm.hasError('misMatch')) {
       return 'Passwords do not match';
     }
     return '';
   }
-
 
   getAccessLevelErrorMessage() {
     let lastNameControl = this.addNewUserForm.controls['accessLevel'];
@@ -164,6 +144,5 @@ export class AddUserComponent implements OnInit {
       return 'Access Level is required';
     return ''
   }
-
 
 }

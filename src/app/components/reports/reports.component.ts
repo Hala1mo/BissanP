@@ -38,7 +38,7 @@ export class ReportsComponent implements OnInit{
     this.fetchDate();
   }
     fetchDate() {
-        this._reportsService.getDate().subscribe(
+        this._reportsService.fetchAssignmentsByDate().subscribe(
             data => {
                 console.log('Fetched assignments data:', data);
 
@@ -65,7 +65,7 @@ export class ReportsComponent implements OnInit{
 
   fetchDateData(from: string,to:string) {
 
-    this._reportsService.fetchDateData(from,to).subscribe(
+    this._reportsService.fetchAssignmentByDateBetween(from,to).subscribe(
       (data) => {
         console.log('Fetched Date data:', data);
         this.DateData = data;

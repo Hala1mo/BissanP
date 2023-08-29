@@ -4,7 +4,6 @@ import {HttpClient} from "@angular/common/http";
 import {link} from "../models/link";
 
 
-
 export interface addCustomerTDO {
   username: string;
   firstName: string;
@@ -26,8 +25,9 @@ export interface editCustomerDTO {
 })
 export class UserService {
 
-  private usersUrl = link.urlIP+'/users';
-  private usersReports = link.urlIP+'/reports/users';
+  private usersUrl = link.urlIP + '/users';
+  private usersReports = link.urlIP + '/reports/users';
+
   constructor(private _http: HttpClient) {
   }
 
@@ -70,18 +70,15 @@ export class UserService {
     return this._http.put<any>(updateUrl, editUserPayload);
   }
 
-
-  getUserReports(username:string): Observable<any> {
+  getUserReports(username: string): Observable<any> {
     const Url = `${this.usersReports}/${username}`;
     return this._http.get<any>(Url);
   }
 
-  getUserData(username:string): Observable<any> {
+  getUserData(username: string): Observable<any> {
     const Url = `${this.usersUrl}/${username}`;
     return this._http.get<any>(Url);
   }
-
-
 
 
 }

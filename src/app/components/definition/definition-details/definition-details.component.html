@@ -1,8 +1,3 @@
-<div *ngIf="!currentDefinition" class="container">
-  <div class="spinner-border mx-auto my-auto">
-
-  </div>
-</div>
 <div *ngIf="currentDefinition" class="container text-capitalize">
   <div class="row mb-1 py-1">
     <div class="d-flex justify-content-between">
@@ -107,18 +102,16 @@
       </mat-tab>
       <mat-tab label="Reports">
         <ng-template matTabContent>
-
           <div class="row mb-2 pb-1">
-
             <div class="col-6" *ngIf="tabGroup.selectedIndex == 1">
               <div class="chart-container">
-                <div id="chartContainer2" style="height: 350px;"></div>
+                <div id="chartContainer2" class="chart" style="height: 350px;"></div>
               </div>
             </div>
 
             <div class="col-6">
               <div class="chart-container">
-                <div id="chartAreaContainer" style="height: 350px;"></div>
+                <div id="chartAreaContainer" class="chart" style="height: 350px;"></div>
 
               </div>
             </div>

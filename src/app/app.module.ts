@@ -22,7 +22,7 @@ import {MatInputModule} from "@angular/material/input";
 import {MatSelectModule} from "@angular/material/select";
 import {MatTableModule} from "@angular/material/table";
 import {MatDatepickerModule} from "@angular/material/datepicker";
-import {MatNativeDateModule} from '@angular/material/core';
+import {MatLineModule, MatNativeDateModule} from '@angular/material/core';
 import {AssignmentDetailsComponent} from './components/assignments/assignment-details.component';
 import {MatAutocompleteModule} from "@angular/material/autocomplete";
 import {MatSortModule} from "@angular/material/sort";
@@ -52,6 +52,9 @@ import {CreateAssignmentDialogComponent} from './components/assignments/create/c
 import {UserDetailsComponent} from './components/user/user-details/user-details.component';
 import { TypeDialogComponent } from './components/definition/type-dialog/type-dialog.component';
 import { CityDialogComponent } from './components/definition/city-dialog/city-dialog.component';
+import {MatProgressBarModule} from "@angular/material/progress-bar";
+import {MatDrawer, MatSidenavModule} from "@angular/material/sidenav";
+import {MatListModule} from "@angular/material/list";
 
 
 @NgModule({
@@ -83,41 +86,45 @@ import { CityDialogComponent } from './components/definition/city-dialog/city-di
         CityDialogComponent,
 
     ],
-    imports: [
-        BrowserModule,
-        MatSnackBarModule,
-        AppRoutingModule,
-        HttpClientModule,
-        ReactiveFormsModule,
-        BrowserAnimationsModule,
-        MatDialogModule,
-        NgbAlertModule,
-        NgbModule,
-        NgbPaginationModule,
-        NgOptimizedImage,
-        FormsModule,
-        MatCheckboxModule,
-        MatFormFieldModule,
-        MatInputModule,
-        MatSelectModule,
-        MatTableModule,
-        MatDatepickerModule,
-        MatNativeDateModule,
-        MatAutocompleteModule,
-        MatSortModule,
-        MatToolbarModule,
-        MatButtonModule,
-        MatMenuModule,
-        MatIconModule,
-        MatPaginatorModule,
-        MatSlideToggleModule,
-        MatCardModule,
-        MatChipsModule,
-        MatBadgeModule,
-        MatTabsModule,
-        CanvasJSAngularChartsModule,
-        MatLegacyChipsModule,
-    ],
+  imports: [
+    BrowserModule,
+    MatSnackBarModule,
+    AppRoutingModule,
+    HttpClientModule,
+    ReactiveFormsModule,
+    BrowserAnimationsModule,
+    MatDialogModule,
+    NgbAlertModule,
+    NgbModule,
+    NgbPaginationModule,
+    NgOptimizedImage,
+    FormsModule,
+    MatCheckboxModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatTableModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatAutocompleteModule,
+    MatSortModule,
+    MatToolbarModule,
+    MatButtonModule,
+    MatMenuModule,
+    MatIconModule,
+    MatPaginatorModule,
+    MatSlideToggleModule,
+    MatCardModule,
+    MatChipsModule,
+    MatBadgeModule,
+    MatTabsModule,
+    CanvasJSAngularChartsModule,
+    MatLegacyChipsModule,
+    MatProgressBarModule,
+    MatSidenavModule,
+    MatListModule,
+    MatLineModule,
+  ],
     providers: [],
     bootstrap: [AppComponent]
 })

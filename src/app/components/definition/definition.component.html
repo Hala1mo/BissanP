@@ -2,19 +2,20 @@
   <div class="row border-bottom mb-5">
     <div class="d-flex justify-content-between">
       <h1>Visit Definitions</h1>
-      <button mat-raised-button color="primary" (click)="openCreateDialog()">
-        Create New Visit Definition
-        <mat-icon>add</mat-icon>
-      </button>
-      <button mat-raised-button color="primary" (click)="openTypeDialog()">
-        Add type
-        <mat-icon>add</mat-icon>
-      </button>
-
-      <button mat-raised-button color="primary" (click)="openCityDialog()">
-        Add City
-        <mat-icon>add</mat-icon>
-      </button>
+      <div class="d-flex justify-content-between gap-1">
+        <button mat-raised-button color="primary" (click)="openCreateDialog()">
+          Create New Visit Definition
+          <mat-icon>add</mat-icon>
+        </button>
+        <button mat-raised-button color="primary" (click)="openTypeDialog()">
+          Add Type
+          <mat-icon>add</mat-icon>
+        </button>
+        <button mat-raised-button color="primary" (click)="openCityDialog()">
+          Add City
+          <mat-icon>add</mat-icon>
+        </button>
+      </div>
     </div>
   </div>
   <div class="row border-bottom mb-5">
@@ -121,12 +122,12 @@
           <td mat-cell *matCellDef="let definition"> {{definition.visitType.name}} </td>
         </ng-container>
 
-<!--        <ng-container matColumnDef="city">-->
-<!--          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by city">-->
-<!--           City-->
-<!--          </th>-->
-<!--          <td mat-cell *matCellDef="let definition"> {{definition.city.name}} </td>-->
-<!--        </ng-container>-->
+        <!--        <ng-container matColumnDef="city">-->
+        <!--          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by city">-->
+        <!--           City-->
+        <!--          </th>-->
+        <!--          <td mat-cell *matCellDef="let definition"> {{definition.city.name}} </td>-->
+        <!--        </ng-container>-->
 
 
         <ng-container matColumnDef="enabled">
