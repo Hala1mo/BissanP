@@ -48,7 +48,7 @@ export class AssignmentDetailsComponent implements OnInit, AfterViewInit {
     private router: Router,
     private assignmentService: AssignmentService,
     private registrationService: RegistrationService,
-    private _snackBar:MatSnackBar,
+    private _snackBar: MatSnackBar,
     public matDialogRef: MatDialogRef<AssignmentDetailsComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
   ) {
@@ -138,7 +138,7 @@ export class AssignmentDetailsComponent implements OnInit, AfterViewInit {
   }
 
   displayUser(user: User): string {
-    return user ? user.username  : '';
+    return user ? user.username : '';
   }
 
   displayCustomer(customer: Customer): string {
@@ -167,9 +167,9 @@ export class AssignmentDetailsComponent implements OnInit, AfterViewInit {
   }
 
 
-  assignCustomer(id:bigint) {
+  assignCustomer(customerId: bigint) {
 
-    this.assignmentService.assignCustomer(this.currentAssignmentId, id).subscribe({
+    this.assignmentService.assignCustomer(this.currentAssignmentId, customerId).subscribe({
         next: response => {
           this.fetchAssignmentData(this.currentAssignmentId);
           console.log('Customer assigned successfully:', response);
@@ -194,7 +194,7 @@ export class AssignmentDetailsComponent implements OnInit, AfterViewInit {
   }
 
 
-  assignUser(username:string) {
+  assignUser(username: string) {
     this.assignmentService.assignUser(this.currentAssignmentId, username).subscribe({
         next: response => {
           this.fetchAssignmentData(this.currentAssignmentId);

@@ -150,7 +150,7 @@ export class DefinitionDetailsComponent implements OnInit{
                     setTimeout(() => {
                         this.dataSource.sort = this.assignmentSort;
                         this.dataSource.paginator = this.assignmentPaginator;
-                    }, 10)
+                    }, 20)
                 },
                 error: error => {
                     console.error('Error fetching VisitAssignment data:', error);

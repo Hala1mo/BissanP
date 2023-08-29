@@ -2,21 +2,23 @@ import {Contact} from "./Contact";
 import {Address} from "./Address";
 
 export class Customer {
-  createdTime: string;
-  enabled: boolean;
-  lastModifiedTime: string;
-  name: string;
   id: bigint;
-  contacts: Contact[]; // Array of Contact objects
+  name: string;
   address: Address; // Address object
+  contacts: Contact[]; // Array of Contact objects
+
+  enabled: boolean;
+  createdTime: string;
+  lastModifiedTime: string;
 
   constructor(data: any) {
-    this.createdTime = data.createdTime || '';
-    this.enabled = data.enabled || false;
-    this.lastModifiedTime = data.lastModifiedTime || '';
-    this.name = data.name || '';
     this.id = data.id || '';
-    this.contacts = (data.contacts || []).map((contactData: any) => new Contact(contactData));
-    this.address = new Address(data.address || {});
+    this.name = data.name || '';
+    this.address = data.address || {};
+    this.contacts = data.contacts || [];
+
+    this.enabled = data.enabled || false;
+    this.createdTime = data.createdTime || '';
+    this.lastModifiedTime = data.lastModifiedTime || '';
   }
 }

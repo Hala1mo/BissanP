@@ -15,7 +15,7 @@ export interface addCustomerTDO {
 }
 
 
-export interface editCustomerTDO {
+export interface editCustomerDTO {
   firstName: string;
   lastName: string;
   accessLevel: string;
@@ -32,8 +32,9 @@ export class UserService {
   }
 
   getAllUsers(): Observable<any> {
+    const url = `${this.usersUrl}/all`
     // Send a GET request to the server to fetch user data
-    return this._http.get<any>(this.usersUrl);
+    return this._http.get<any>(url);
   }
 
   saveNewUser(userJson: any) {
@@ -60,7 +61,7 @@ export class UserService {
     const updateUrl = `${this.usersUrl}/${username}`;
 
 
-    const editUserPayload: editCustomerTDO = {
+    const editUserPayload: editCustomerDTO = {
       firstName: updatedUserData.firstName,
       lastName: updatedUserData.lastName,
       accessLevel: updatedUserData.accessLevel,

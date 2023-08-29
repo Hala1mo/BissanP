@@ -1,4 +1,3 @@
-
 <div *ngIf="customerDetails" class="container text-capitalize">
   <div class="row mb-1 py-1 border-bottom">
     <div class="d-flex justify-content-between">
@@ -21,13 +20,12 @@
       <h4><strong>Address</strong></h4>
       <p>Address Line 1: {{ customerDetails.address.addressLine1 }}</p>
       <p>Address Line 2: {{ customerDetails.address.addressLine2 }}</p>
-      <p>City: {{ customerDetails.address.city.name }}</p>
+      <p>City: {{ customerDetails.address.cityName}}</p>
       <p>Zip Code: {{ customerDetails.address.zipcode }}</p>
       <h4><strong>Time</strong></h4>
-            <p>Created time: {{ formatDateString(customerDetails.createdTime)}}</p>
-            <p>Last modified time: {{formatDateString(customerDetails.lastModifiedTime) }}</p>
+      <p>Created time: {{ formatDateString(customerDetails.createdTime)}}</p>
+      <p>Last modified time: {{formatDateString(customerDetails.lastModifiedTime) }}</p>
     </div>
-
 
 
     <div class="row mb-3">
@@ -35,69 +33,69 @@
         <mat-tab label="Customers">
           <ng-template matTabContent>
 
-        <mat-paginator [pageSizeOptions]="[5,10,20]" #customerTablePaginator showFirstLastButtons
-                       aria-label="Select page of Contact">
-        </mat-paginator>
+            <mat-paginator [pageSizeOptions]="[5,10,20]" #customerTablePaginator showFirstLastButtons
+                           aria-label="Select page of Contact">
+            </mat-paginator>
 
-        <table mat-table [dataSource]="dataSource" matSort>
-          <ng-container matColumnDef="firstName">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by firstName">
-              First Name
-            </th>
-            <td mat-cell *matCellDef="let contact">{{contact.firstName}} </td>
-          </ng-container>
+            <table mat-table [dataSource]="dataSource" matSort>
+              <ng-container matColumnDef="firstName">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by firstName">
+                  First Name
+                </th>
+                <td mat-cell *matCellDef="let contact">{{contact.firstName}} </td>
+              </ng-container>
 
 
-          <ng-container matColumnDef="lastName">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by lastName">
-             Last  Name
-            </th>
-            <td mat-cell *matCellDef="let contact">{{contact.lastName}}</td>
-          </ng-container>
+              <ng-container matColumnDef="lastName">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by lastName">
+                  Last Name
+                </th>
+                <td mat-cell *matCellDef="let contact">{{contact.lastName}}</td>
+              </ng-container>
 
-          <ng-container matColumnDef="email">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="sort by email">
-              Email
-            </th>
-            <td mat-cell *matCellDef="let contact">{{contact.email}}</td>
-          </ng-container>
+              <ng-container matColumnDef="email">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="sort by email">
+                  Email
+                </th>
+                <td mat-cell *matCellDef="let contact">{{contact.email}}</td>
+              </ng-container>
 
-          <ng-container matColumnDef="phoneNumber">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="sort by phoneNumber">
-              phone Number
-            </th>
-            <td mat-cell
-                *matCellDef="let contact">{{contact.phoneNumber}}</td>
-          </ng-container>
+              <ng-container matColumnDef="phoneNumber">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="sort by phoneNumber">
+                  phone Number
+                </th>
+                <td mat-cell
+                    *matCellDef="let contact">{{contact.phoneNumber}}</td>
+              </ng-container>
 
-          <ng-container matColumnDef="enabled">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="sort by activity">
-              Enabled
-            </th>
-            <td mat-cell *matCellDef="let contact">
-              <mat-slide-toggle (click)="updateEnabled(contact)" [checked]="contact.enabled">
-                {{contact.enabled ? 'Active' : 'Inactive'}}
-              </mat-slide-toggle>
-            </td>
-          </ng-container>
-          <ng-container matColumnDef="actions">
-            <th mat-header-cell *matHeaderCellDef>
-              Actions
-            </th>
-            <td mat-cell *matCellDef="let contact" class="text-capitalize">
-              <div class="d-flex justify-content-between align-items-center">
-                <button mat-icon-button color="primary"
-                        (click)="openEditDialog(contact)">
-                  <mat-icon>edit</mat-icon>
-                </button>
-              </div>
+              <ng-container matColumnDef="enabled">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="sort by activity">
+                  Enabled
+                </th>
+                <td mat-cell *matCellDef="let contact">
+                  <mat-slide-toggle (click)="updateEnabled(contact)" [checked]="contact.enabled">
+                    {{contact.enabled ? 'Active' : 'Inactive'}}
+                  </mat-slide-toggle>
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef>
+                  Actions
+                </th>
+                <td mat-cell *matCellDef="let contact" class="text-capitalize">
+                  <div class="d-flex justify-content-between align-items-center">
+                    <button mat-icon-button color="primary"
+                            (click)="openEditDialog(contact)">
+                      <mat-icon>edit</mat-icon>
+                    </button>
+                  </div>
 
-            </td>
-          </ng-container>
-          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-          <tr mat-row *matRowDef="let row; columns:displayedColumns;"></tr>
+                </td>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns:displayedColumns;"></tr>
 
-        </table>
+            </table>
           </ng-template>
         </mat-tab>
         <mat-tab label="Reports">
@@ -126,7 +124,7 @@
                              showFirstLastButtons
                              aria-label="Select page of reports">
               </mat-paginator>
-              <table mat-table [dataSource]="dataSource2" matSort >
+              <table mat-table [dataSource]="dataSource2" matSort>
 
                 <ng-container matColumnDef="Date">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by date">
@@ -146,9 +144,8 @@
                   <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by fullName">
                     Full Name
                   </th>
-                  <td mat-cell *matCellDef="let element"> {{element.firstName +' ' + element.lastName}}</td>
+                  <td mat-cell *matCellDef="let element"> {{element.firstName + ' ' + element.lastName}}</td>
                 </ng-container>
-
 
                 <ng-container matColumnDef="Type">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by type">
@@ -172,7 +169,6 @@
 
 
         </mat-tab>
-
 
 
       </mat-tab-group>

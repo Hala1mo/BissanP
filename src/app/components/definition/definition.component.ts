@@ -210,7 +210,7 @@ export class DefinitionComponent implements OnInit, AfterViewInit {
     }
 
     showTypeDefinitions(typeId: bigint) {
-        this.visitDefinitionData = this.originalVisitDefinitionData.filter(def => def.type.id == typeId);
+        this.visitDefinitionData = this.originalVisitDefinitionData.filter(def => def.visitType.id == typeId);
 
         this.dataSource.data = this.visitDefinitionData;
     }

@@ -3,7 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {Observable, throwError} from 'rxjs';
 import {catchError} from 'rxjs/operators';
 import {link} from "../models/link";
-import {editCustomerTDO} from "./user.service";
+import {editCustomerDTO} from "./user.service";
 
 
 export interface DefinitionForm {

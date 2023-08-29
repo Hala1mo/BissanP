@@ -54,7 +54,7 @@ export class CustomerComponent implements OnInit, AfterViewInit {
 
       this.dataSource.filterPredicate = function (customer, filter) {
         const name = customer.name ? customer.name.toLocaleLowerCase() : '';
-        const cityName = customer.address && customer.address.city ? customer.address.city.name.toLocaleLowerCase() : '';
+        const cityName = customer.address && customer.address.cityName ? customer.address.cityName.toLocaleLowerCase() : '';
         const addressLine1 = customer.address ? customer.address.addressLine1.toLocaleLowerCase() : '';
 
         return name.includes(filter.toLocaleLowerCase()) ||

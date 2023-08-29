@@ -55,28 +55,33 @@
           <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name">
             Name
           </th>
-          <td mat-cell *matCellDef="let customer">{{customer.name}}</td>
+          <td mat-cell *matCellDef="let customer" class="text-capitalize">
+            {{customer.name}}
+          </td>
         </ng-container>
         <ng-container matColumnDef="city">
           <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="sort by city">
             City
           </th>
-          <td mat-cell *matCellDef="let customer">{{customer.address.city}}</td>
+          <td mat-cell *matCellDef="let customer" class="text-capitalize">
+            {{customer.address.cityName}}
+          </td>
         </ng-container>
 
         <ng-container matColumnDef="addressLine">
           <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="sort by address">
             Address
           </th>
-          <td mat-cell
-              *matCellDef="let customer">{{customer.address.addressLine1}} {{customer.address.addressLine2}}</td>
+          <td mat-cell *matCellDef="let customer" class="text-capitalize">
+            {{customer.address.addressLine1}} {{customer.address.addressLine2}}
+          </td>
         </ng-container>
 
         <ng-container matColumnDef="enabled">
           <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="sort by activity">
             Enabled
           </th>
-          <td mat-cell *matCellDef="let customer">
+          <td mat-cell *matCellDef="let customer" class="text-capitalize">
             <mat-slide-toggle (click)="updateEnabled(customer.id)" [checked]="customer.enabled">
               {{customer.enabled ? 'Active' : 'Inactive'}}
             </mat-slide-toggle>

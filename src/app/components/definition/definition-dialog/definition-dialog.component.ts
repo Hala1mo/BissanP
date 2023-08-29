@@ -18,7 +18,7 @@ export class DefinitionDialogComponent implements OnInit {
 
   editMode: boolean;
   types: VisitType[];
-  cities:City[];
+  cities: City[];
   currentDefinition: VisitDefinition;
 
   constructor(
@@ -31,7 +31,7 @@ export class DefinitionDialogComponent implements OnInit {
     this.editMode = data.mode === 1;
     this.types = data.types;
     this.currentDefinition = data.definition;
-    this.cities=data.cities;
+    this.cities = data.cities;
 
 
     this.definitionForm = formBuilder.group({
@@ -50,7 +50,7 @@ export class DefinitionDialogComponent implements OnInit {
       allowRecurring: [true, [Validators.required]],
 
       typeId: ['', [Validators.required]],
-      cityId:['',[Validators.required]]
+      cityId: ['', [Validators.required]]
     })
   }
 
@@ -63,8 +63,8 @@ export class DefinitionDialogComponent implements OnInit {
         description: this.currentDefinition.description,
         frequency: this.currentDefinition.frequency,
         allowRecurring: this.currentDefinition.allowRecurring,
-        typeId: this.currentDefinition.type.id,
-        cityId:this.currentDefinition.city.id
+        typeId: this.currentDefinition.visitType.id,
+        cityId: this.currentDefinition.cityId
       });
     }
   }

@@ -27,9 +27,8 @@ export class AssignmentService {
 
   assignCustomer(id: bigint, cusId: bigint): Observable<any> {
     const assignUrl = `${this._visitAssignment}/${id}/customers`;
-    const requestPayload = { customerId: cusId }; // Assuming the backend expects a payload with a 'customerId' property
 
-    return this._http.put<any>(assignUrl, requestPayload);
+    return this._http.post<any>(assignUrl, cusId);
   }
 
 

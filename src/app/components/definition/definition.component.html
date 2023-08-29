@@ -50,7 +50,7 @@
           </mat-select>
         </mat-form-field>
         <mat-form-field>
-          <mat-label>VisitType</mat-label>
+          <mat-label>Visit Type</mat-label>
           <mat-select>
             <mat-option (click)="resetFilters()">
               <mat-icon>star</mat-icon>
@@ -118,7 +118,7 @@
           <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by type">
             Visit Type
           </th>
-          <td mat-cell *matCellDef="let definition"> {{definition.type.name}} </td>
+          <td mat-cell *matCellDef="let definition"> {{definition.visitType.name}} </td>
         </ng-container>
 
 <!--        <ng-container matColumnDef="city">-->

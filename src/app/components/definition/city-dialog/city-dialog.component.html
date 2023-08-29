@@ -1,4 +1,4 @@
-<h1>Add new City</h1>
+<h1 mat-dialog-title>Add new City</h1>
 
 <form [formGroup]="addForm">
   <mat-dialog-content>
@@ -6,11 +6,11 @@
       <mat-form-field>
         <mat-label>Name</mat-label>
         <input matInput type="text" formControlName="name" required>
-        <!--            <mat-error *ngIf="definitionForm.controls['name'].invalid">{{getNameErrorMessage()}}</mat-error>-->
       </mat-form-field>
     </div>
-
-    <button mat-raised-button color="primary" (click)="saveNewCity()">Add</button>
+    <mat-dialog-actions>
+      <button mat-raised-button color="primary" (click)="saveNewCity()">Add</button>
+    </mat-dialog-actions>
   </mat-dialog-content>
 </form>
 

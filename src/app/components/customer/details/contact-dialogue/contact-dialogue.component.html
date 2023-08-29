@@ -1,7 +1,7 @@
 <h1 mat-dialog-title>
   {{editMode ? 'Editing "' + selectedContact.firstName + " " + selectedContact.lastName + '"' : 'Add new Contact'}}
 </h1>
-<form [formGroup]="registrationForm">
+<form [formGroup]="contactForm">
   <mat-dialog-content>
 
     <div class="row mb-1">
@@ -10,7 +10,7 @@
           <mat-label>First Name</mat-label>
           <input matInput type="text" formControlName="firstName" required>
           <mat-error
-            *ngIf="registrationForm.controls['firstName'].invalid">{{getNameErrorMessage()}}</mat-error>
+            *ngIf="contactForm.controls['firstName'].invalid">{{getNameErrorMessage()}}</mat-error>
         </mat-form-field>
       </div>
       <div class="col-6">
@@ -18,7 +18,7 @@
           <mat-label>Last Name</mat-label>
           <input matInput type="text" formControlName="lastName" required>
           <mat-error
-            *ngIf="registrationForm.controls['lastName'].invalid">{{getLastNameErrorMessage()}}</mat-error>
+            *ngIf="contactForm.controls['lastName'].invalid">{{getLastNameErrorMessage()}}</mat-error>
         </mat-form-field>
       </div>
     </div>
@@ -28,7 +28,7 @@
           <mat-label>Phone Number</mat-label>
           <input matInput type="text" formControlName="phoneNumber">
           <mat-error
-            *ngIf="registrationForm.controls['phoneNumber']?.invalid">{{getPhoneErrorMessage()}}</mat-error>
+            *ngIf="contactForm.controls['phoneNumber']?.invalid">{{getPhoneErrorMessage()}}</mat-error>
         </mat-form-field>
       </div>
       <div class="col-6">
@@ -36,7 +36,7 @@
           <mat-label>Email</mat-label>
           <input matInput type="text" formControlName="email">
           <mat-error
-            *ngIf="registrationForm.controls['email']?.invalid">{{ getEmailErrorMessage()}}</mat-error>
+            *ngIf="contactForm.controls['email']?.invalid">{{ getEmailErrorMessage()}}</mat-error>
         </mat-form-field>
       </div>
 
@@ -44,7 +44,7 @@
 
     <div class="row mb-1">
       <mat-label>Visit Type</mat-label>
-      <mat-chip-listbox formControlName="types" multiple>
+      <mat-chip-listbox formControlName="visitTypes" multiple>
         <mat-chip-option
           *ngFor="let type of typesData"
           [value]="type.id">

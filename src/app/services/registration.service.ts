@@ -4,7 +4,6 @@ import {Observable} from 'rxjs';
 import {link} from "../models/link";
 
 
-
 interface customerTDO {
   name: string;
   addressLine1: string;
@@ -17,12 +16,12 @@ interface customerTDO {
 }
 
 
-interface contactTDO {
+interface contactDTO {
   firstName: string;
   lastName: string;
   phoneNumber: string;
   email: string;
-  types: {
+  visitTypes: {
     id: string;
   };
 }
@@ -35,9 +34,9 @@ interface contactTDO {
 export class RegistrationService {
 
 
-  private _customers_url = link.urlIP+'/customers';
-  private _contacts_url = link.urlIP+'/contacts';
-  private _city_url = link.urlIP+'/cities';
+  private _customers_url = link.urlIP + '/customers';
+  private _contacts_url = link.urlIP + '/contacts';
+  private _city_url = link.urlIP + '/cities';
 
 
   constructor(private _http: HttpClient) {
@@ -81,17 +80,17 @@ export class RegistrationService {
   }
 
 
-  AddnewContact(id: bigint, contactDetails: any) {
+  addNewContact(id: bigint, contactDetails: any) {
     const _urlDetails = `${this._customers_url}/${id}/contacts`;
 
 
-    const newContact: contactTDO = {
+    const newContact: contactDTO = {
       firstName: contactDetails.firstName,
       lastName: contactDetails.lastName,
       phoneNumber: contactDetails.phoneNumber,
       email: contactDetails.email,
-      types:
-        contactDetails.types
+      visitTypes:
+      contactDetails.types
 
     };
 
@@ -106,13 +105,12 @@ export class RegistrationService {
     const updateUrl = `${this._contacts_url}/${conId}`; // Adjust the URL endpoint as needed
 
 
-    const editContactPayload: contactTDO = {
+    const editContactPayload: contactDTO = {
       firstName: updatedContactData.firstName,
       lastName: updatedContactData.lastName,
       phoneNumber: updatedContactData.phoneNumber,
       email: updatedContactData.email,
-      types:
-      updatedContactData.types
+      visitTypes: updatedContactData.visitTypes
 
     };
 

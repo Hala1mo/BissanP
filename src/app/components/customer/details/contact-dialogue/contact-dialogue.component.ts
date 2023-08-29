@@ -14,11 +14,11 @@ import {MatPaginator} from "@angular/material/paginator";
   templateUrl: './contact-dialogue.component.html',
   styleUrls: ['./contact-dialogue.component.css']
 })
-export class ContactDialogueComponent implements OnInit{
+export class ContactDialogueComponent implements OnInit {
 
   selectedContact: any;
   customerId!: bigint;
-  registrationForm!: FormGroup;
+  contactForm!: FormGroup;
   editMode: boolean;
 
   typesData: any[] = [];
@@ -37,18 +37,18 @@ export class ContactDialogueComponent implements OnInit{
     this.customerId = data.customerId;
 
 
-    this.registrationForm = this.fb.group({
+    this.contactForm = this.fb.group({
       firstName: ['', [Validators.required, nameValidator]],
       lastName: ['', [Validators.required, nameValidator]],
-      phoneNumber: ['', [Validators.required, Validators.pattern("[0-9]*"),Validators.minLength(10), Validators.maxLength(10)]],
+      phoneNumber: ['', [Validators.required, Validators.pattern("[0-9]*"), Validators.minLength(10), Validators.maxLength(10)]],
       email: ['', [Validators.required, Validators.email]],
-      types: []
+      visitTypes: []
       // }),
     });
   }
 
   ngOnInit() {
-    console.log("this.registrationForm", this.registrationForm);
+    console.log("this.registrationForm", this.contactForm);
 
     if (this.editMode) {
       this.populateEditForm(this.selectedContact);
@@ -57,9 +57,8 @@ export class ContactDialogueComponent implements OnInit{
   }
 
 
-
   getNameErrorMessage() {
-    let nameControl = this.registrationForm.controls['firstName'];
+    let nameControl = this.contactForm.controls['firstName'];
     if (nameControl.hasError('required'))
       return 'Name is required';
     if (nameControl.hasError('maxLength'))
@@ -72,7 +71,7 @@ export class ContactDialogueComponent implements OnInit{
   }
 
   getLastNameErrorMessage() {
-    let nameControl = this.registrationForm.controls['lastName'];
+    let nameControl = this.contactForm.controls['lastName'];
     if (nameControl.hasError('required'))
       return 'Name is required';
     if (nameControl.hasError('maxLength'))
@@ -85,12 +84,11 @@ export class ContactDialogueComponent implements OnInit{
   }
 
   getPhoneErrorMessage() {
-    let phoneControl = this.registrationForm.controls['phoneNumber'];
+    let phoneControl = this.contactForm.controls['phoneNumber'];
     if (phoneControl.hasError('required'))
       return 'Phone Number is required';
     if (phoneControl.hasError('pattern'))
       return 'Phone Number must contain only numbers ';
-
     if (phoneControl.hasError('minlength') || phoneControl.hasError('maxlength')) {
       return 'Phone Number must be exactly 10 digits';
     }
@@ -100,7 +98,7 @@ export class ContactDialogueComponent implements OnInit{
 
 
   getEmailErrorMessage() {
-    let nameControl = this.registrationForm.controls['email'];
+    let nameControl = this.contactForm.controls['email'];
     if (nameControl.hasError('required'))
       return 'Email is required';
     if (nameControl.hasError('email')) {
@@ -116,20 +114,16 @@ export class ContactDialogueComponent implements OnInit{
       this.onSubmitEdit();
     } else {
       this.addContact(this.customerId);
-      console.log("customer Id" + this.customerId)
     }
   }
 
   addContact(id: bigint) {
+    const formData = this.contactForm.value;
 
-    const formData = this.registrationForm.value;
-    console.log(formData);
-
-    this._registrationService.AddnewContact(id, formData).subscribe(
+    this._registrationService.addNewContact(id, formData).subscribe(
       (res) => {
         console.log('Registration successful:', res);
         this.matDialogRef.close(res);
-        // this.fetchCustomerDetails(id);
 
       },
       (error) => {
@@ -150,46 +144,46 @@ export class ContactDialogueComponent implements OnInit{
   }
 
   populateEditForm(contact: any) {
-    console.log("jmdcksdcksdc", contact.visitTypes);
     const checkedTypes: bigint[] = [];
     for (let visitType of contact.visitTypes) {
       checkedTypes.push(visitType.id);
     }
 
 
-    this.registrationForm.patchValue({
+    this.contactForm.patchValue({
       firstName: contact.firstName,
       lastName: contact.lastName,
       phoneNumber: contact.phoneNumber,
       email: contact.email,
-      types: checkedTypes,
+      visitTypes: checkedTypes,
     });
-    console.log(">>>>", contact);
-    console.log(contact.types);
   }
 
 
   onSubmitEdit() {
-    if (this.registrationForm.valid) {
+    console.log(this.contactForm.value)
+    if (this.contactForm.valid) {
+      const editedUserData = this.contactForm.value;
 
-      const editedUserData = this.registrationForm.value;
-      this._registrationService.updateContactData(this.selectedContact.id, editedUserData).subscribe(
-        (response) => {
-          this.matDialogRef.close(response);
-          console.log('User data updated successfully:', response);
-        },
-        (error) => {
-          console.error('Error updating user data:', error);
+      this._registrationService.updateContactData(this.selectedContact.id, editedUserData).subscribe({
+          next: response => {
+            this.matDialogRef.close(response);
+            console.log('User data updated successfully:', response);
 
-          if (error.error && error.error.message) { // Check if 'message' property exists
-            const errorMessage = error.error.message;
-            console.log('Error message:', errorMessage);
+          },
+          error: error => {
+            console.error('Error updating user data:', error);
 
-            this._snackBar.open(errorMessage, '', {
-              duration: 3000
-            });
-          } else {
-            console.log('Unknown error occurred.');
+            if (error.error && error.error.message) { // Check if 'message' property exists
+              const errorMessage = error.error.message;
+              console.log('Error message:', errorMessage);
+
+              this._snackBar.open(errorMessage, '', {
+                duration: 3000
+              });
+            } else {
+              console.log('Unknown error occurred.');
+            }
           }
         }
       );
