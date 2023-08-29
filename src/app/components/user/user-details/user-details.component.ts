@@ -1,13 +1,8 @@
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {UserService} from "../../../services/user.service";
 import {CanvasJS} from "@canvasjs/angular-charts";
-import {MatTableDataSource} from "@angular/material/table";
-import {MatSort} from "@angular/material/sort";
-import {MatPaginator} from "@angular/material/paginator";
-import {ReportsService} from "../../../services/reports.service";
 import {User} from "../../../models/User";
-import {MatTabChangeEvent} from "@angular/material/tabs";
 import {MatDialog} from "@angular/material/dialog";
 import {EditUserComponent} from "../edit-user/edit-user.component";
 
@@ -18,19 +13,12 @@ import {EditUserComponent} from "../edit-user/edit-user.component";
 })
 export class UserDetailsComponent implements OnInit {
   isUserLoaded: boolean = false;
-
-  userForms: any[] = [];
-  displayedColumns: string[] = ['Name', 'Address', 'Date', 'Type', 'State', 'Start Time', 'End Time'];
-
-  dataSource = new MatTableDataSource(this.userForms);
-  userReports: any[] = [];
   routeUsername!: string;
 
-  dataColChar: any[] = [];
-  dataPieChart: any[] = [];
+  barChartPoints: any[] = [];
+  pieChartPoints: any[] = [];
 
   currentUser: User | undefined;
-
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -39,16 +27,13 @@ export class UserDetailsComponent implements OnInit {
   ) {
   }
 
-  @ViewChild(MatSort) sort!: MatSort;
-  @ViewChild('reportsTablePaginator') paginator!: MatPaginator;
-
   ngOnInit() {
     this.activatedRoute.params.subscribe((params) => {
       const username = params['username'];
       if (username) {
         this.routeUsername = username;
-        this.fetchUser(username);
 
+        this.fetchUser(username);
         this.fetchUserReports(username);
       }
     });
@@ -57,14 +42,7 @@ export class UserDetailsComponent implements OnInit {
   fetchUser(username: string) {
     this.userService.getUserData(username).subscribe({
         next: response => {
-          this.isUserLoaded = true;
           this.currentUser = response;
-          console.log(response)
-
-          setTimeout(() => {
-            this.dataSource.sort = this.sort;
-            this.dataSource.paginator = this.paginator;
-          })
         },
         error: error => {
           console.error('Error fetching User data:', error);
@@ -76,13 +54,18 @@ export class UserDetailsComponent implements OnInit {
   fetchUserReports(username: string) {
     this.userService.getUserReports(username).subscribe({
         next: response => {
-          console.log('Fetched  user Details data:', response);
-          this.userReports = response;
-          this.dataColChar = response.count;
-          this.dataPieChart = response.percentages;
+          this.isUserLoaded = true;
 
-          this.renderBarChart();
-          this.renderPieChart();
+          console.log(response);
+
+          this.barChartPoints = response.count;
+          this.pieChartPoints = response.percentages;
+
+          setTimeout(() => {
+            this.renderBarChart();
+            this.renderPieChart();
+          }, 50);
+
         },
         error: error => {
           console.error('Error fetching user Details data:', error);
@@ -96,16 +79,13 @@ export class UserDetailsComponent implements OnInit {
     // Create a new chart instance using CanvasJS
     const chart = new CanvasJS.Chart("barChart", {
       animationEnabled: true,
-      title: {
-        text: "Forms Status"
-      },
       theme: "light2",
       axisY: {
         includeZero: false,
       },
       data: [{
         type: "column",
-        dataPoints: this.dataColChar,
+        dataPoints: this.barChartPoints,
       }]
     });
 
@@ -117,27 +97,17 @@ export class UserDetailsComponent implements OnInit {
     // Create a new chart instance using CanvasJS
     let chart = new CanvasJS.Chart("pieChart", {
       animationEnabled: true,
-      title: {
-        text: "status"
-      },
       data: [{
         type: "doughnut",
-        // startAngle: -90,
+        includeZero: false,
         indexLabel: "{name}: {y}",
         yValueFormatString: "##.##'%'",
-        dataPoints: this.dataPieChart,
+        dataPoints: this.pieChartPoints,
       }]
     });
 
     // Render the chart
     chart.render();
-  }
-
-
-  tabChanged($event: MatTabChangeEvent) {
-    if ($event.index === 1) {
-      this.fetchUserReports(this.routeUsername);
-    }
   }
 
   openEditDialog() {
