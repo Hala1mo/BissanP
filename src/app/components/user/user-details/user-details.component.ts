@@ -13,6 +13,7 @@ import {EditUserComponent} from "../edit-user/edit-user.component";
 })
 export class UserDetailsComponent implements OnInit {
   isUserLoaded: boolean = false;
+  noReportsAvailable: boolean = false;
   routeUsername!: string;
 
   barChartPoints: any[] = [];
@@ -58,6 +59,10 @@ export class UserDetailsComponent implements OnInit {
 
           console.log(response);
 
+          if (response.percentages.length === 0){
+            this.noReportsAvailable = true;
+            return;
+          }
           this.barChartPoints = response.count;
           this.pieChartPoints = response.percentages;
 

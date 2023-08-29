@@ -31,14 +31,17 @@
       </p>
     </div>
     <div class="row mb-3 pb-3 justify-content-between mb-5">
-      <h2 class="text-capitalize">Forms Status</h2>
+      <div class="text-center" *ngIf="noReportsAvailable">
+        <h2 class="imp-mat-warn">No Reports Available</h2>
+      </div>
+      <h2 class="text-capitalize" *ngIf="!noReportsAvailable">Forms Status</h2>
       <div class="col-4">
-        <div class="chart-container">
+        <div>
           <div id="pieChart" style="height: 400px"></div>
         </div>
       </div>
       <div class="col-6">
-        <div class="chart-container">
+        <div>
           <div id="barChart" style="height: 400px"></div>
         </div>
       </div>
