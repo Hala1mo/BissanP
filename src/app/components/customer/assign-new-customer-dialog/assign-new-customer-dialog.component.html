@@ -1,0 +1,22 @@
+<h1 mat-dialog-title>Assign {{customer.name}}</h1>
+
+<mat-dialog-content>
+  <div class="overflow-y-auto overflow-x-hidden" style="height: 300px">
+    <div *ngFor="let assignment of assignments" class="border-bottom mb-3 pb-2 px-3 pt-1">
+      <div class="row justify-content-between">
+        <div>
+          <h3 class="mb-1 text-capitalize">{{assignment.date}}</h3>
+          <h5 class="mb-1 text-capitalize">{{assignment.comment}}</h5>
+          <h5 class="mb-1 text-capitalize">{{assignment.visitType.name}}</h5>
+        </div>
+        <button class="text-capitalize" mat-raised-button (click)="onSubmitAssignment(assignment.id)"
+                color="primary">
+          Assign to {{assignment.comment}}
+        </button>
+      </div>
+    </div>
+  </div>
+  <mat-dialog-actions>
+    <button mat-raised-button color="warn" mat-dialog-close>Cancel</button>
+  </mat-dialog-actions>
+</mat-dialog-content>

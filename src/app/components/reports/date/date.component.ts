@@ -5,7 +5,7 @@ import {MatPaginator} from "@angular/material/paginator";
 import {LiveAnnouncer} from "@angular/cdk/a11y";
 import {CusComponent} from "./cus/cus.component";
 import {MatDialog} from "@angular/material/dialog";
-import {SharedServiceService} from "../../../services/shared-service.service";
+import {SharedService} from "../../../services/shared.service";
 
 
 @Component({
@@ -22,7 +22,7 @@ export class DateComponent implements OnInit,AfterViewInit {
   @ViewChild('reportsTablePaginator') paginator!: MatPaginator;
   constructor(
       private matDialog: MatDialog,
-      private sharedService: SharedServiceService
+      private sharedService: SharedService
   ) {}
 
   ngOnInit() {

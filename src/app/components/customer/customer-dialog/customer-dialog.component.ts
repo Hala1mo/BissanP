@@ -21,11 +21,11 @@ interface RegistrationFormData {
 
 
 @Component({
-  selector: 'app-customer-dialogue',
-  templateUrl: './customer-dialogue.component.html',
-  styleUrls: ['./customer-dialogue.component.css']
+  selector: 'app-customer-dialog',
+  templateUrl: './customer-dialog.component.html',
+  styleUrls: ['./customer-dialog.component.css']
 })
-export class CustomerDialogueComponent implements OnInit{
+export class CustomerDialogComponent implements OnInit{
   registrationForm!: FormGroup;
   editMode: boolean;
   customerData: Customer[] = [];
@@ -38,7 +38,7 @@ export class CustomerDialogueComponent implements OnInit{
     private router: Router,
     private _registrationService: RegistrationService,
     private fb: FormBuilder,
-    public matDialogRef: MatDialogRef<CustomerDialogueComponent>,
+    public matDialogRef: MatDialogRef<CustomerDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.editMode = data.mode === 1;

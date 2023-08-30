@@ -17,7 +17,7 @@ export class DefinitionDialogComponent implements OnInit {
   definitionForm: FormGroup;
 
   editMode: boolean;
-  types: VisitType[];
+  visitTypes: VisitType[];
   cities: City[];
   currentDefinition: VisitDefinition;
 
@@ -29,7 +29,7 @@ export class DefinitionDialogComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.editMode = data.mode === 1;
-    this.types = data.types;
+    this.visitTypes = data.types;
     this.currentDefinition = data.definition;
     this.cities = data.cities;
 

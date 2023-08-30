@@ -1,119 +1,116 @@
 <div class="container">
-  <div class="row border-bottom mb-5">
-    <div class="d-flex justify-content-between">
-      <h1>Customers</h1>
-      <button mat-raised-button color="primary" (click)="openAddDialog()">
-        <mat-icon>add</mat-icon>
-        Add New Customer
-      </button>
-
+    <div class="row border-bottom mb-5">
+        <div class="d-flex justify-content-between">
+            <h1>Customers</h1>
+            <button mat-raised-button color="primary" (click)="openAddDialog()">
+                <mat-icon>add</mat-icon>
+                Add New Customer
+            </button>
+        </div>
     </div>
-  </div>
-  <div class="row border-bottom mb-3">
-    <div class="col-8">
-      <form>
-        <mat-form-field [style.width.%]="100">
-          <mat-label>What are you looking for?</mat-label>
-          <input matInput matNativeControl placeholder="search for name, city, or address"
-                 [(ngModel)]="searchInput"
-                 [ngModelOptions]="{standalone: true}"
-                 (input)="applySearchFilter($event)">
-          <mat-icon matSuffix>search</mat-icon>
-        </mat-form-field>
-      </form>
-    </div>
-    <div class="col-4">
-      <div class="d-flex gap-1 justify-content-between">
-        <mat-form-field [style.width.%]="100">
-          <mat-label>Show Active Customers</mat-label>
-          <mat-select [(value)]="selectedEnabledOption">
-            <mat-option (click)="fetchCustomerData()">
-              <mat-icon>star</mat-icon>
-              <span>All Customers</span>
-            </mat-option>
-            <mat-option (click)="showEnabledCustomers()">
-              <mat-icon>toggle_on</mat-icon>
-              <span>Active Customers</span>
-            </mat-option>
-            <mat-option (click)="showDisabledCustomers()">
-              <mat-icon>toggle_off</mat-icon>
-              <span>Inactive Customer</span>
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
-    </div>
-  </div>
-  <div class="row mb-3">
-    <div class="mat-elevation-z4">
-      <mat-paginator [pageSizeOptions]="[5,10,20]" #customerTablePaginator showFirstLastButtons
-                     aria-label="Select page of Customers">
-      </mat-paginator>
-
-      <table mat-table [dataSource]="dataSource" matSort>
-        <ng-container matColumnDef="name">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name">
-            Name
-          </th>
-          <td mat-cell *matCellDef="let customer" class="text-capitalize">
-            {{customer.name}}
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="city">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="sort by city">
-            City
-          </th>
-          <td mat-cell *matCellDef="let customer" class="text-capitalize">
-            {{customer.address.cityName}}
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="addressLine">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="sort by address">
-            Address
-          </th>
-          <td mat-cell *matCellDef="let customer" class="text-capitalize">
-            {{customer.address.addressLine1}} {{customer.address.addressLine2}}
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="enabled">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="sort by activity">
-            Enabled
-          </th>
-          <td mat-cell *matCellDef="let customer" class="text-capitalize">
-            <mat-slide-toggle (click)="updateEnabled(customer.id)" [checked]="customer.enabled">
-              {{customer.enabled ? 'Active' : 'Inactive'}}
-            </mat-slide-toggle>
-          </td>
-
-        </ng-container>
-        <ng-container matColumnDef="actions">
-          <th mat-header-cell *matHeaderCellDef>
-            Actions
-          </th>
-          <td mat-cell *matCellDef="let Customer" class="text-capitalize">
-            <div class="d-flex justify-content-between align-items-center">
-              <button mat-icon-button color="primary"
-                      (click)="openEditDialog(Customer)">
-                <mat-icon>edit</mat-icon>
-              </button>
-              <button mat-icon-button color="primary"
-                      (click)="openCustomerDetails(Customer.id)">
-                <mat-icon>open_in_new</mat-icon>
-              </button>
+    <div class="row border-bottom mb-3">
+        <div class="col-8">
+            <form>
+                <mat-form-field [style.width.%]="100">
+                    <mat-label>What are you looking for?</mat-label>
+                    <input matInput matNativeControl placeholder="search for name, city, or address"
+                           [(ngModel)]="searchInput"
+                           [ngModelOptions]="{standalone: true}"
+                           (input)="applySearchFilter($event)">
+                    <mat-icon matSuffix>search</mat-icon>
+                </mat-form-field>
+            </form>
+        </div>
+        <div class="col-4">
+            <div class="d-flex gap-1 justify-content-between">
+                <mat-form-field [style.width.%]="100">
+                    <mat-label>Show Active Customers</mat-label>
+                    <mat-select [(value)]="selectedEnabledOption">
+                        <mat-option (click)="resetFilters()">
+                            <mat-icon>star</mat-icon>
+                            <span>All Customers</span>
+                        </mat-option>
+                        <mat-option (click)="showEnabledCustomers()">
+                            <mat-icon>toggle_on</mat-icon>
+                            <span>Active Customers</span>
+                        </mat-option>
+                        <mat-option (click)="showDisabledCustomers()">
+                            <mat-icon>toggle_off</mat-icon>
+                            <span>Inactive Customer</span>
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
             </div>
-
-          </td>
-        </ng-container>
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns:displayedColumns;"></tr>
-
-      </table>
-
+        </div>
     </div>
-  </div>
+    <div class="row mb-3">
+        <div *ngIf="!isTableLoaded">
+            <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+        </div>
+        <div *ngIf="isTableLoaded" class="mat-elevation-z4">
+            <mat-paginator [pageSizeOptions]="[10,15,20]" #customerTablePaginator showFirstLastButtons
+                           aria-label="Select page of Customers">
+            </mat-paginator>
+            <table mat-table [dataSource]="dataSource" matSort>
+                <ng-container matColumnDef="name">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name">
+                        Name
+                    </th>
+                    <td mat-cell *matCellDef="let customer" class="text-capitalize">
+                        {{customer.name}}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="city">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="sort by city">
+                        City
+                    </th>
+                    <td mat-cell *matCellDef="let customer" class="text-capitalize">
+                        {{customer.address.cityName}}
+                    </td>
+                </ng-container>
 
+                <ng-container matColumnDef="addressLine">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="sort by address">
+                        Address
+                    </th>
+                    <td mat-cell *matCellDef="let customer" class="text-capitalize">
+                        {{customer.address.addressLine1}} {{customer.address.addressLine2}}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="enabled">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="sort by activity">
+                        Enabled
+                    </th>
+                    <td mat-cell *matCellDef="let customer" class="text-capitalize">
+                        <mat-slide-toggle (click)="updateEnabled(customer)" [checked]="customer.enabled">
+                            {{customer.enabled ? 'Active' : 'Inactive'}}
+                        </mat-slide-toggle>
+                    </td>
+
+                </ng-container>
+                <ng-container matColumnDef="actions">
+                    <th mat-header-cell *matHeaderCellDef>
+                        Actions
+                    </th>
+                    <td mat-cell *matCellDef="let Customer" class="text-capitalize">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <button mat-icon-button color="primary"
+                                    (click)="openEditCustomerDialog(Customer)">
+                                <mat-icon>edit</mat-icon>
+                            </button>
+                            <button mat-icon-button color="primary"
+                                    (click)="openCustomerDetails(Customer.id)">
+                                <mat-icon>open_in_new</mat-icon>
+                            </button>
+                        </div>
+                    </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns:displayedColumns;"></tr>
+            </table>
+        </div>
+    </div>
 </div>
 
 

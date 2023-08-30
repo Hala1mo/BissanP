@@ -19,7 +19,7 @@ export class UserDetailsComponent implements OnInit {
   barChartPoints: any[] = [];
   pieChartPoints: any[] = [];
 
-  currentUser: User | undefined;
+  currentUser: User | null = null;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -43,7 +43,7 @@ export class UserDetailsComponent implements OnInit {
   fetchUser(username: string) {
     this.userService.getUserData(username).subscribe({
         next: response => {
-          this.currentUser = response;
+          this.currentUser = new User(response);
         },
         error: error => {
           console.error('Error fetching User data:', error);
@@ -56,8 +56,6 @@ export class UserDetailsComponent implements OnInit {
     this.userService.getUserReports(username).subscribe({
         next: response => {
           this.isUserLoaded = true;
-
-          console.log(response);
 
           if (response.percentages.length === 0){
             this.noReportsAvailable = true;
@@ -115,14 +113,14 @@ export class UserDetailsComponent implements OnInit {
     chart.render();
   }
 
-  openEditDialog() {
+  openEditUserDialog() {
     this.matDialog.open(EditUserComponent, {
       width: '40%',
       data: this.currentUser
     }).afterClosed().subscribe(
       response => {
         if (response === undefined) return;
-        if (this.currentUser === undefined) return;
+        if (!this.currentUser) return;
 
         if (response.firstName && response.lastName && response.accessLevel) {
           this.currentUser.firstName = response.firstName;

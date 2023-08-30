@@ -13,148 +13,147 @@ import {Router} from "@angular/router";
 
 
 @Component({
-  selector: 'app-user',
-  templateUrl: './user.component.html',
-  styleUrls: ['./user.component.css'],
+    selector: 'app-user',
+    templateUrl: './user.component.html',
+    styleUrls: ['./user.component.css'],
 })
 
 export class UserComponent implements OnInit, AfterViewInit {
-  isTableLoaded: boolean = false;
-  userData: User[] = [];
-  originalUserData: User[] = [];
+    isTableLoaded: boolean = false;
+    userData: User[] = [];
+    originalUserData: User[] = [];
 
-  searchInput: string = "";
+    searchInput: string = "";
 
-  displayedColumns: string[] = ['username', 'firstName', 'lastName', 'accessLevel', 'enabled', 'actions']
-  dataSource = new MatTableDataSource(this.userData);
+    displayedColumns: string[] = ['username', 'name', 'accessLevel', 'enabled', 'actions']
+    dataSource = new MatTableDataSource(this.userData);
 
-  @ViewChild('userTablePaginator') userPaginator!: MatPaginator;
-  @ViewChild(MatSort) userSort!: MatSort;
+    @ViewChild('userTablePaginator') userPaginator!: MatPaginator;
+    @ViewChild(MatSort) userSort!: MatSort;
 
-  constructor(
-    private snackBar: MatSnackBar,
-    private userService: UserService,
-    private matDialog: MatDialog,
-    private router: Router
-  ) {
+    constructor(
+        private snackBar: MatSnackBar,
+        private userService: UserService,
+        private matDialog: MatDialog,
+        private router: Router
+    ) {
 
-  }
-
-  ngOnInit() {
-    this.fetchAllUserData();
-
-    this.dataSource.filterPredicate = function (user, filter) {
-      return user.username.toLocaleLowerCase().includes(filter.toLocaleLowerCase()) || user.firstName.toLocaleLowerCase().includes(filter.toLocaleLowerCase()) || user.lastName.toLocaleLowerCase().includes(filter.toLocaleLowerCase());
     }
-  }
 
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.userPaginator;
-    this.dataSource.sort = this.userSort;
-  }
+    ngOnInit() {
+        this.fetchAllUserData();
 
-  fetchAllUserData() {
-    this.userService.getAllUsers().subscribe({
-      next: response => {
-        this.isTableLoaded = true;
+        this.dataSource.filterPredicate = function (user, filter) {
+            return user.username.toLocaleLowerCase().includes(filter.toLocaleLowerCase()) || user.firstName.toLocaleLowerCase().includes(filter.toLocaleLowerCase()) || user.lastName.toLocaleLowerCase().includes(filter.toLocaleLowerCase());
+        }
+    }
 
-        this.originalUserData = response;
-        this.resetFilters();
+    ngAfterViewInit() {
+        this.dataSource.paginator = this.userPaginator;
+        this.dataSource.sort = this.userSort;
+    }
 
-        setTimeout(() => {
-          this.dataSource.sort = this.userSort;
-          this.dataSource.paginator = this.userPaginator;
-        }, 10);
+    fetchAllUserData() {
+        this.userService.getAllUsers().subscribe({
+            next: response => {
+                this.isTableLoaded = true;
 
-      },
-      error: error => {
-        if (!error.message) return
+                this.originalUserData = response;
+                this.resetFilters();
 
-        this.snackBar.open(error.message, '', {
-          duration: 3000
+                setTimeout(() => {
+                    this.dataSource.sort = this.userSort;
+                    this.dataSource.paginator = this.userPaginator;
+                }, 10);
+
+            },
+            error: error => {
+                if (!error.message) return
+
+                this.snackBar.open(error.message, '', {
+                    duration: 3000
+                });
+            }
         });
-      }
-    });
-  }
+    }
 
-  updateUserStatus(user: User) {
-    user.enabled = !user.enabled;
-    this.userService.updateUserStatus(user.username).subscribe(
-      {
-        next: response => {
-          user.enabled = response.enabled;
-        },
-        error: error => {
-          if (error.message) {
-            this.snackBar.open(error.message, '', {
-              duration: 3000
-            });
-          }
-          user.enabled = !user.enabled;
-        }
-      }
-    );
-  }
+    updateUserStatus(user: User) {
+        user.enabled = !user.enabled;
+        this.userService.updateUserStatus(user.username).subscribe(
+            {
+                next: response => {
+                    user.enabled = response.enabled;
+                },
+                error: error => {
+                    if (error.message) {
+                        this.snackBar.open(error.message, '', {
+                            duration: 3000
+                        });
+                    }
+                    user.enabled = !user.enabled;
+                }
+            }
+        );
+    }
 
-  openAddDialog() {
-    this.matDialog.open(AddUserComponent, {
-      width: '40%'
-    }).afterClosed().subscribe(() => {
-      this.fetchAllUserData();
-    });
-  }
+    openAddDialog() {
+        this.matDialog.open(AddUserComponent, {
+            width: '40%'
+        }).afterClosed().subscribe(() => {
+            this.fetchAllUserData();
+        });
+    }
 
-  openEditDialog(user: User) {
-    this.matDialog.open(EditUserComponent, {
-      width: '40%',
-      data: user
-    }).afterClosed().subscribe(
-      response => {
-        if (response === undefined) return;
+    openEditDialog(user: User) {
+        this.matDialog.open(EditUserComponent, {
+            width: '40%',
+            data: user
+        }).afterClosed().subscribe(
+            response => {
+                if (response === undefined) return;
 
-        if (response.firstName && response.lastName && response.accessLevel) {
-          user.firstName = response.firstName;
-          user.lastName = response.lastName;
-          user.accessLevel = response.accessLevel;
-        }
-      })
-  }
+                if (response.firstName && response.lastName && response.accessLevel) {
+                    user.firstName = response.firstName;
+                    user.lastName = response.lastName;
+                    user.accessLevel = response.accessLevel;
+                }
+            })
+    }
 
-  showEnabledUsers() {
-    this.userData = this.originalUserData.filter(user => user.enabled);
-    this.dataSource.data = this.userData;
-  }
+    showEnabledUsers() {
+        this.userData = this.originalUserData.filter(user => user.enabled);
+        this.dataSource.data = this.userData;
+    }
 
-  showDisabledUsers() {
-    this.userData = this.originalUserData.filter(user => !user.enabled);
-    this.dataSource.data = this.userData;
-  }
+    showDisabledUsers() {
+        this.userData = this.originalUserData.filter(user => !user.enabled);
+        this.dataSource.data = this.userData;
+    }
 
-  showAdminUsers() {
-    this.userData = this.originalUserData.filter(user => user.accessLevel === 1);
-    this.dataSource.data = this.userData;
-  }
+    showAdminUsers() {
+        this.userData = this.originalUserData.filter(user => user.accessLevel === 1);
+        this.dataSource.data = this.userData;
+    }
 
-  showEmployeeUsers() {
-    this.userData = this.originalUserData.filter(user => user.accessLevel === 0);
-    this.dataSource.data = this.userData;
-  }
+    showEmployeeUsers() {
+        this.userData = this.originalUserData.filter(user => user.accessLevel === 0);
+        this.dataSource.data = this.userData;
+    }
 
-  applyFilter($event: Event) {
-    const filterValue = ($event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-  }
+    applyFilter($event: Event) {
+        const filterValue = ($event.target as HTMLInputElement).value;
+        this.dataSource.filter = filterValue.trim().toLowerCase();
+    }
 
-  resetFilters() {
-    this.userData = this.originalUserData;
-    this.dataSource.data = this.userData;
-  }
+    resetFilters() {
+        this.userData = this.originalUserData;
+        this.dataSource.data = this.userData;
+    }
 
-  protected readonly Customer = Customer;
+    openUserDetails(username: string) {
+        this.router.navigate(['/users/', username]);
+    }
 
+    protected readonly Customer = Customer;
 
-  openUserDetails(username: string) {
-    this.router.navigate(['/users/', username]);
-
-  }
 }

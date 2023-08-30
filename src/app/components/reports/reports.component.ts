@@ -7,7 +7,7 @@ import {Router} from "@angular/router";
 import {formatDate} from "@angular/common";
 import {FormControl} from "@angular/forms";
 import {MatAutocompleteSelectedEvent} from "@angular/material/autocomplete";
-import {SharedServiceService} from "../../services/shared-service.service";
+import {SharedService} from "../../services/shared.service";
 
 @Component({
   selector: 'app-reports',
@@ -30,7 +30,7 @@ export class ReportsComponent implements OnInit{
   constructor(    private router: Router,
     private _liveAnnouncer: LiveAnnouncer,
     private _reportsService: ReportsService,
-                  private sharedService: SharedServiceService
+                  private sharedService: SharedService
   ) {}
 
   ngOnInit(): void {

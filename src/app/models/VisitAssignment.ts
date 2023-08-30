@@ -1,11 +1,13 @@
 import {Customer} from "./Customer";
 import {User} from "./User";
+import {VisitType} from "./VisitType";
 
 export class VisitAssignment {
   id: bigint;
   date: string;
   comment: string;
   user: User;
+  visitType: VisitType;
   customers: Customer[];
 
   enabled: boolean;
@@ -17,6 +19,7 @@ export class VisitAssignment {
     this.date = data.date || '';
     this.comment = data.name || '';
     this.user = data.user || {};
+    this.visitType = data.visitType || {};
     this.customers = data.customers || [];
 
     this.enabled = data.enabled || false;

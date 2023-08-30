@@ -40,7 +40,7 @@ import {DateComponent} from "./components/reports/date/date.component";
 import {DefinitionDialogComponent} from './components/definition/definition-dialog/definition-dialog.component';
 import {CusComponent} from './components/reports/date/cus/cus.component';
 import {DetailsCusComponent} from './components/reports/date/details-cus/details-cus.component';
-import {CustomerDialogueComponent} from './components/customer/customer-dialogue/customer-dialogue.component';
+import {CustomerDialogComponent} from './components/customer/customer-dialog/customer-dialog.component';
 import {MatChipsModule} from "@angular/material/chips";
 import {MatBadgeModule} from "@angular/material/badge";
 import {MatTabsModule} from "@angular/material/tabs";
@@ -55,6 +55,7 @@ import { CityDialogComponent } from './components/definition/city-dialog/city-di
 import {MatProgressBarModule} from "@angular/material/progress-bar";
 import {MatDrawer, MatSidenavModule} from "@angular/material/sidenav";
 import {MatListModule} from "@angular/material/list";
+import { AssignNewCustomerDialogComponent } from './components/customer/assign-new-customer-dialog/assign-new-customer-dialog.component';
 
 
 @NgModule({
@@ -77,13 +78,14 @@ import {MatListModule} from "@angular/material/list";
         EditUserComponent,
         CusComponent,
         DetailsCusComponent,
-        CustomerDialogueComponent,
+        CustomerDialogComponent,
         TypesChartComponent,
         ContactDialogueComponent,
         CreateAssignmentDialogComponent,
         UserDetailsComponent,
         TypeDialogComponent,
         CityDialogComponent,
+        AssignNewCustomerDialogComponent,
 
     ],
   imports: [

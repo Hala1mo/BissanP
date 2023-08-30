@@ -7,30 +7,30 @@ import {editCustomerDTO} from "./user.service";
 
 
 export interface DefinitionForm {
-  name: string;
-  description: string;
-  frequency: number;
-  allowRecurring: boolean;
-  typeId: string;
-  cityId:string;
+    name: string;
+    description: string;
+    frequency: number;
+    allowRecurring: boolean;
+    typeId: string;
+    cityId: string;
 }
 
 interface AssignmentForm {
-  date: string; // Change the type to match your use case
-  comment: string;
+    date: string; // Change the type to match your use case
+    comment: string;
 }
 
 interface addForm {
-  name: string;
+    name: string;
 }
 
 @Injectable({
     providedIn: 'root'
 })
 export class DefinitionService {
-    private visitDefinitionsURL = link.urlIP+'/visit_definitions';
-    private visitTypesURL = link.urlIP+'/visit_types';
-  private _city_url = link.urlIP+'/cities';
+    private visitDefinitionsURL = link.urlIP + '/visit_definitions';
+    private visitTypesURL = link.urlIP + '/visit_types';
+    private _city_url = link.urlIP + '/cities';
 
     constructor(private http: HttpClient) {
     }
@@ -57,29 +57,29 @@ export class DefinitionService {
     }
 
     updateVisitDefinition(definitionId: bigint, updatedVisitDefinition: any): Observable<any> {
-      const editDefinitionPayload: DefinitionForm = {
-        name: updatedVisitDefinition.name,
-        description: updatedVisitDefinition.description,
-        frequency: updatedVisitDefinition.frequency,
-        allowRecurring:updatedVisitDefinition.allowRecurring,
-        typeId:updatedVisitDefinition.typeId,
-        cityId:updatedVisitDefinition.cityId,
+        const editDefinitionPayload: DefinitionForm = {
+            name: updatedVisitDefinition.name,
+            description: updatedVisitDefinition.description,
+            frequency: updatedVisitDefinition.frequency,
+            allowRecurring: updatedVisitDefinition.allowRecurring,
+            typeId: updatedVisitDefinition.typeId,
+            cityId: updatedVisitDefinition.cityId,
 
-      };
+        };
         const updateUrl = `${this.visitDefinitionsURL}/${definitionId}`;
         return this.http.put<any>(updateUrl, editDefinitionPayload);
     }
 
     saveNewDefinition(visitDefinition: any) {
-      const addDefinitionPayload: DefinitionForm = {
-        name: visitDefinition.name,
-        description: visitDefinition.description,
-        frequency: visitDefinition.frequency,
-        allowRecurring:visitDefinition.allowRecurring,
-        typeId:visitDefinition.typeId,
-        cityId:visitDefinition.cityId,
+        const addDefinitionPayload: DefinitionForm = {
+            name: visitDefinition.name,
+            description: visitDefinition.description,
+            frequency: visitDefinition.frequency,
+            allowRecurring: visitDefinition.allowRecurring,
+            typeId: visitDefinition.typeId,
+            cityId: visitDefinition.cityId,
 
-      };
+        };
         return this.http.post<any>(this.visitDefinitionsURL, addDefinitionPayload).pipe(
             catchError(this.handleError)
         );
@@ -92,18 +92,18 @@ export class DefinitionService {
     }
 
 
-  fetchCityData(): Observable<any> {
-    return this.http.get<any>(this._city_url).pipe(
-      catchError(this.handleError)
-    );
-  }
+    fetchCityData(): Observable<any> {
+        return this.http.get<any>(this._city_url).pipe(
+            catchError(this.handleError)
+        );
+    }
 
-  saveNewAssignmentToDefinition(assignment: any, definitionId: bigint): Observable<any> {
+    saveNewAssignmentToDefinition(assignment: any, definitionId: bigint): Observable<any> {
         const urlAssignment = `${this.visitDefinitionsURL}/${definitionId}/assignments`;
         const newAssignment: AssignmentForm = {
-        date: assignment.date,
-        comment: assignment.comment,
-      };
+            date: assignment.date,
+            comment: assignment.comment,
+        };
 
         return this.http.post<any>(urlAssignment, newAssignment).pipe();
     }
@@ -114,24 +114,24 @@ export class DefinitionService {
     }
 
 
-  saveNewCity(cityForm: any) {
+    saveNewCity(cityForm: any) {
 
-    const addPayload: addForm = {
-      name: cityForm.name,
-    };
+        const addPayload: addForm = {
+            name: cityForm.name,
+        };
 
-    return this.http.post<any>(this._city_url, addPayload).pipe(
-      catchError(this.handleError)
-    );
-  }
+        return this.http.post<any>(this._city_url, addPayload).pipe(
+            catchError(this.handleError)
+        );
+    }
 
-  saveNewType(typeForm: any) {
+    saveNewType(typeForm: any) {
 
-    const addPayload: addForm = {
-      name: typeForm.name,
-    };
-    return this.http.post<any>(this.visitTypesURL,addPayload).pipe(
-      catchError(this.handleError)
-    );
-  }
+        const addPayload: addForm = {
+            name: typeForm.name,
+        };
+        return this.http.post<any>(this.visitTypesURL, addPayload).pipe(
+            catchError(this.handleError)
+        );
+    }
 }

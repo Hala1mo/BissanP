@@ -1,50 +1,54 @@
 <div class="container">
-  <div *ngIf="!isUserLoaded">
-    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-  </div>
-  <div *ngIf="isUserLoaded && currentUser">
-    <div class="row mb-3 pb-1 border-bottom">
-      <div class="d-flex justify-content-between">
-        <h1 class="text-capitalize">{{currentUser.firstName}} {{currentUser.lastName}}</h1>
-        <button mat-raised-button color="primary" (click)="openEditDialog()">
-          Edit User
-          <mat-icon>edit</mat-icon>
-        </button>
-      </div>
+    <div *ngIf="!isUserLoaded">
+        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
     </div>
-    <div class="row mb-5 pb-3 border-bottom">
-      <p class="mb-1 h6 text-capitalize">
-        Username:
-        <span class="imp-mat-primary text-lowercase">{{currentUser.username}}</span>
-      </p>
-      <p class="mb-1 h6 text-capitalize">
-        Access Level:
-        <span class="imp-mat-primary">{{currentUser.accessLevel === 1 ? 'Supervisor' : 'Employee'}}</span>
-      </p>
-      <p class="mb-1 h6 text-capitalize">
-        Created On:
-        <span class="imp-mat-primary text-lowercase">{{currentUser.createdTime}}</span>
-      </p>
-      <p class="mb-1 h6 text-capitalize">
-        Last Modified On:
-        <span class="imp-mat-primary text-lowercase">{{currentUser.lastModifiedTime}}</span>
-      </p>
-    </div>
-    <div class="row mb-3 pb-3 justify-content-between mb-5">
-      <div class="text-center" *ngIf="noReportsAvailable">
-        <h2 class="imp-mat-warn">No Reports Available</h2>
-      </div>
-      <h2 class="text-capitalize" *ngIf="!noReportsAvailable">Forms Status</h2>
-      <div class="col-4">
-        <div>
-          <div id="pieChart" style="height: 400px"></div>
+    <div *ngIf="isUserLoaded && currentUser">
+        <div class="row mb-3 pb-1 border-bottom">
+            <div class="d-flex justify-content-between">
+                <div>
+                    <h1 class="text-capitalize">{{currentUser.firstName}} {{currentUser.lastName}}</h1>
+                </div>
+                <div class="d-flex justify-content-between gap-1">
+                    <button mat-raised-button color="accent" (click)="openEditUserDialog()">
+                        Edit User
+                        <mat-icon>edit</mat-icon>
+                    </button>
+                </div>
+            </div>
         </div>
-      </div>
-      <div class="col-6">
-        <div>
-          <div id="barChart" style="height: 400px"></div>
+        <div class="row mb-5 pb-3 border-bottom">
+            <p class="mb-1 h6 text-capitalize">
+                Username:
+                <span class="imp-mat-primary text-lowercase">{{currentUser.username}}</span>
+            </p>
+            <p class="mb-1 h6 text-capitalize">
+                Access Level:
+                <span class="imp-mat-primary">{{currentUser.accessLevel === 1 ? 'Supervisor' : 'Employee'}}</span>
+            </p>
+            <p class="mb-1 h6 text-capitalize">
+                Created On:
+                <span class="imp-mat-primary text-lowercase">{{currentUser.createdTime}}</span>
+            </p>
+            <p class="mb-1 h6 text-capitalize">
+                Last Modified On:
+                <span class="imp-mat-primary text-lowercase">{{currentUser.lastModifiedTime}}</span>
+            </p>
         </div>
-      </div>
+        <div class="row mb-3 pb-3 justify-content-between mb-5">
+            <div class="text-center" *ngIf="noReportsAvailable">
+                <h2 class="imp-mat-warn">No Reports Available</h2>
+            </div>
+            <h2 class="text-capitalize" *ngIf="!noReportsAvailable">Forms Status</h2>
+            <div class="col-4">
+                <div>
+                    <div id="pieChart" style="height: 400px"></div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div>
+                    <div id="barChart" style="height: 400px"></div>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
