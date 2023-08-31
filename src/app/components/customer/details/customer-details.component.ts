@@ -1,18 +1,14 @@
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
-import {MatSnackBar} from '@angular/material/snack-bar';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute} from '@angular/router'; // Import ActivatedRoute
 import {RegistrationService} from '../../../services/registration.service';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Customer} from '../../../models/Customer';
 import {DefinitionService} from "../../../services/definition.service";
-import {nameValidator, telValidator} from "../../../shared/Name.validators";
 import {ContactDialogueComponent} from "./contact-dialogue/contact-dialogue.component";
 import {MatDialog} from "@angular/material/dialog";
 import {Contact} from "../../../models/Contact";
 import {MatTableDataSource} from "@angular/material/table";
 import {MatPaginator} from "@angular/material/paginator";
 import {MatSort} from "@angular/material/sort";
-import {MatTabChangeEvent} from "@angular/material/tabs";
 import {ReportsService} from "../../../services/reports.service";
 import {CanvasJS} from "@canvasjs/angular-charts";
 import {CustomerDialogComponent} from "../customer-dialog/customer-dialog.component";
@@ -172,7 +168,7 @@ export class CustomerDetailsComponent implements OnInit {
 
             this.currentCustomer.enabled = response.enabled;
             this.currentCustomer.name = response.name;
-            this.currentCustomer.address = response.address;
+            this.currentCustomer.location = response.location;
         });
     }
 

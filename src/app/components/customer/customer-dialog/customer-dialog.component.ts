@@ -1,4 +1,4 @@
-import {Component, Inject,OnInit} from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Customer} from "../../../models/Customer";
 import {City} from "../../../models/City";
@@ -6,37 +6,33 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 import {Router} from "@angular/router";
 import {RegistrationService} from "../../../services/registration.service";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
-
-
-interface RegistrationFormData {
-  name: string;
-  addressLine1: string;
-  addressLine2: string;
-  latitude: number;
-  longitude: number;
-  precise: boolean;
-  zipcode: string;
-  cityId: number | null;
-}
-
+import {Location} from "../../../models/Location";
+import {SharedService} from "../../../services/shared.service";
 
 @Component({
   selector: 'app-customer-dialog',
   templateUrl: './customer-dialog.component.html',
   styleUrls: ['./customer-dialog.component.css']
 })
-export class CustomerDialogComponent implements OnInit{
-  registrationForm!: FormGroup;
+export class CustomerDialogComponent implements OnInit {
+  isSaving: boolean = false;
+
+  customerForm: FormGroup;
   editMode: boolean;
   customerData: Customer[] = [];
-  cityData: City[] = [];
   preciseLocationCheck: boolean = false;
   selectedCustomer: any;
 
+  cityData: City[] = [];
+  selectedCityLocations: Location[] | any = [];
+
+  selectedCity: City | null = null;
+
   constructor(
-    private _snackBar: MatSnackBar,
+    private snackBar: MatSnackBar,
     private router: Router,
-    private _registrationService: RegistrationService,
+    private customerService: RegistrationService,
+    private sharedService: SharedService,
     private fb: FormBuilder,
     public matDialogRef: MatDialogRef<CustomerDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
@@ -45,32 +41,27 @@ export class CustomerDialogComponent implements OnInit{
     this.cityData = data.cityData;
     this.selectedCustomer = data.customer;
 
-    this.registrationForm = this.fb.group({
+    this.customerForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(30)]],
-      addressLine1: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(30)]],
-      addressLine2: [''],
+      cityId: [null, [Validators.required]],
+      locationId: [null, [Validators.required]],
       latitude: [0, [Validators.min(-90), Validators.max(90)]],
       longitude: [0, [Validators.min(-180), Validators.max(180)]],
       precise: [false, Validators.required],
-      zipcode: ['', [Validators.required, Validators.maxLength(5)]],
-      cityId: [null],
     });
   }
 
 
   ngOnInit() {
-    console.log("this.registrationForm", this.registrationForm);
+    console.log("this.registrationForm", this.customerForm);
 
     if (this.editMode) {
-      this.registrationForm.patchValue({
+      this.customerForm.patchValue({
         name: this.selectedCustomer.name,
-          addressLine1: this.selectedCustomer.address.addressLine1,
-          addressLine2: this.selectedCustomer.address.addressLine2,
-          longitude: this.selectedCustomer.address.longitude,
-          latitude: this.selectedCustomer.address.latitude,
-          precise: this.selectedCustomer.address.precise,
-          cityId: this.selectedCustomer.address.cityId,
-          zipcode: this.selectedCustomer.address.zipcode,
+        cityId: this.selectedCustomer.location.cityId,
+        locationId: this.selectedCustomer.location.id,
+        longitude: this.selectedCustomer.longitude,
+        latitude: this.selectedCustomer.latitude,
       });
 
     }
@@ -78,14 +69,13 @@ export class CustomerDialogComponent implements OnInit{
   }
 
   get firstName() {
-    return this.registrationForm.get('name');
+    return this.customerForm.get('name');
   }
 
   fetchCustomerData() {
-    this._registrationService.fetchCustomerData().subscribe(
+    this.customerService.fetchCustomerData().subscribe(
       data => {
         console.log('Fetched customer data:', data);
-
         this.customerData = data;
       },
       error => {
@@ -94,7 +84,7 @@ export class CustomerDialogComponent implements OnInit{
           let errorMessage = error.message;
           console.log('Error message:', errorMessage);
 
-          this._snackBar.open(errorMessage, '', {
+          this.snackBar.open(errorMessage, '', {
             duration: 3000
           });
         }
@@ -103,6 +93,9 @@ export class CustomerDialogComponent implements OnInit{
   }
 
   onSubmitCustomer() {
+    if (this.isSaving) return;
+
+    this.isSaving = true;
     if (this.editMode) {
       this.onUpdateCustomer();
     } else
@@ -111,26 +104,18 @@ export class CustomerDialogComponent implements OnInit{
 
 
   onUpdateCustomer() {
-    const editedCustomerData = this.registrationForm.value;
-    console.log(this.registrationForm.value);
-    this._registrationService.updateCustomerData(this.selectedCustomer.id, editedCustomerData).subscribe({
+    const editedCustomerData = this.customerForm.value;
+    console.log(this.customerForm.value);
+    this.customerService.updateCustomerData(this.selectedCustomer.id, editedCustomerData).subscribe({
         next: response => {
           this.matDialogRef.close(response);
-          console.log('User data updated successfully:', response);
-
         },
         error: error => {
-          console.error('Error updating user data:', error);
-
           if (error.error && error.error.message) { // Check if 'message' property exists
             const errorMessage = error.error.message;
-            console.log('Error message:', errorMessage);
-
-            this._snackBar.open(errorMessage, '', {
+            this.snackBar.open(errorMessage, '', {
               duration: 3000
             });
-          } else {
-            console.log('Unknown error occurred.');
           }
         }
       }
@@ -138,13 +123,13 @@ export class CustomerDialogComponent implements OnInit{
   }
 
   saveNewCustomer() {
-    if (this.registrationForm.valid) {
-      console.log(this.registrationForm.value);
+    if (this.customerForm.valid) {
+      console.log(this.customerForm.value);
 
-      this._registrationService.registerCustomer(this.registrationForm.value).subscribe(
+      this.customerService.registerCustomer(this.customerForm.value).subscribe(
         (res) => {
           console.log('Registration successful:', res);
-          this.registrationForm.reset();
+          this.customerForm.reset();
           this.fetchCustomerData();
           this.matDialogRef.close(res);
 
@@ -158,7 +143,7 @@ export class CustomerDialogComponent implements OnInit{
             const errorMessage = error.error.message;
             console.log('Error message:', errorMessage);
 
-            this._snackBar.open(errorMessage, '', {
+            this.snackBar.open(errorMessage, '', {
               duration: 3000
             });
           } else {
@@ -174,15 +159,15 @@ export class CustomerDialogComponent implements OnInit{
   }
 
   get latitudeControl() {
-    return this.registrationForm.get('address.latitude');
+    return this.customerForm.get('address.latitude');
   }
 
   get longitudeControl() {
-    return this.registrationForm.get('address.longitude');
+    return this.customerForm.get('address.longitude');
   }
 
   getNameErrorMessage() {
-    let nameControl = this.registrationForm.controls['name'];
+    let nameControl = this.customerForm.controls['name'];
     if (nameControl.hasError('required'))
       return 'Name is required';
     if (nameControl.hasError('maxLength'))
@@ -194,38 +179,31 @@ export class CustomerDialogComponent implements OnInit{
     return '';
   }
 
-  getAddressErrorMessage() {
-    let addressControl = this.registrationForm.get('address.addressLine1');
-    if (addressControl?.hasError('required'))
-      return 'Address is required';
-    if (addressControl?.hasError('maxLength'))
-      return 'Address is too long';
-    if (addressControl?.hasError('minLength'))
-      return 'Address is too short';
-
-    return '';
+  changeSelectedCity(city: City) {
+    this.selectedCity = city;
+    if (!this.selectedCity.locations) {
+      console.log("FETCHING LOCATIONS")
+      // GO FETCH THE LOCATIONS IN THAT CITY
+      this.sharedService.fetchCityById(this.selectedCity.id).subscribe({
+        next: response => {
+          if (!this.selectedCity) return
+          if (!response.locations || response.locations.length < 1){
+            this.snackBar.open(`No locations found in ${this.selectedCity.name}`, '', {
+              duration: 3000
+            })
+          }
+          this.selectedCity.locations = response.locations;
+          this.selectedCityLocations = [...this.selectedCity.locations];
+        },
+        error: () => {
+          this.snackBar.open("Error Finding Locations", '', {
+            duration: 3000
+          })
+        }
+      })
+    } else {
+      this.selectedCityLocations = [...this.selectedCity.locations];
+    }
   }
-
-  getAddress2ErrorMessage() {
-    let addressControl = this.registrationForm.get('address.addressLine2');
-
-    if (addressControl?.hasError('maxLength'))
-      return 'Address is too long';
-    if (addressControl?.hasError('minLength'))
-      return 'Address is too short';
-
-    return '';
-  }
-
-  getZipCodeErrorMessage() {
-    let zipCodeControl = this.registrationForm.get('address.zipcode');
-    if (zipCodeControl?.hasError('required'))
-      return 'Zip Code is required';
-    if (zipCodeControl?.hasError('maxLength'))
-      return 'Zip Code is too long';
-
-    return '';
-  }
-
 
 }

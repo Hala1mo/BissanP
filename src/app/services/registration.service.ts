@@ -4,19 +4,15 @@ import {Observable} from 'rxjs';
 import {link} from "../models/link";
 
 
-interface customerTDO {
+interface CustomerDTO {
   name: string;
-  addressLine1: string;
-  addressLine2: string;
+  locationId: number | null;
   latitude: number | null;
   longitude: number | null;
-  precise: boolean;
-  zipcode: string;
-  cityId: number | null;
 }
 
 
-interface contactDTO {
+interface ContactDTO {
   firstName: string;
   lastName: string;
   phoneNumber: string;
@@ -44,20 +40,14 @@ export class RegistrationService {
 
 
   registerCustomer(customerData: any) {
-    const customerPayload: customerTDO = {
+    const customerPayload: CustomerDTO = {
       name: customerData.name,
-      addressLine1: customerData.addressLine1,
-      addressLine2: customerData.addressLine2,
+      locationId: customerData.locationId,
       latitude: customerData.latitude,
       longitude: customerData.longitude,
-      precise: customerData.precise,
-      zipcode: customerData.zipcode,
-      cityId: customerData.cityId,
     }
 
-    return this._http.post<any>(this._customers_url, customerPayload)
-      .pipe(
-      );
+    return this._http.post<any>(this._customers_url, customerPayload).pipe();
   }
 
   updateEnabledStatusCustomer(id: bigint): Observable<any> {
@@ -85,28 +75,23 @@ export class RegistrationService {
     const _urlDetails = `${this._customers_url}/${id}/contacts`;
 
 
-    const newContact: contactDTO = {
+    const newContact: ContactDTO = {
       firstName: contactDetails.firstName,
       lastName: contactDetails.lastName,
       phoneNumber: contactDetails.phoneNumber,
       email: contactDetails.email,
       visitTypes:
       contactDetails.types
-
     };
 
-    console.log(newContact);
-
-    return this._http.post<any>(_urlDetails, newContact)
-      .pipe(
-      );
+    return this._http.post<any>(_urlDetails, newContact).pipe();
   }
 
   updateContactData(conId: bigint, updatedContactData: any): Observable<any> {
     const updateUrl = `${this._contacts_url}/${conId}`; // Adjust the URL endpoint as needed
 
 
-    const editContactPayload: contactDTO = {
+    const editContactPayload: ContactDTO = {
       firstName: updatedContactData.firstName,
       lastName: updatedContactData.lastName,
       phoneNumber: updatedContactData.phoneNumber,
@@ -122,16 +107,13 @@ export class RegistrationService {
     const updateUrl = `${this._customers_url}/${id}`; // Adjust the URL endpoint as needed
 
 
-    const customerPayload: customerTDO = {
+    const customerPayload: CustomerDTO = {
       name: updatedCustomerData.name,
-      addressLine1: updatedCustomerData.addressLine1,
-      addressLine2: updatedCustomerData.addressLine2,
+      locationId: updatedCustomerData.locationId,
       latitude: updatedCustomerData.latitude,
       longitude: updatedCustomerData.longitude,
-      precise: updatedCustomerData.precise,
-      zipcode: updatedCustomerData.zipcode,
-      cityId: updatedCustomerData.cityId,
     }
+
     return this._http.put<any>(updateUrl, customerPayload);
   }
 
@@ -145,7 +127,4 @@ export class RegistrationService {
     return this._http.get<any>(_urlDetails);
   }
 
-  fetchCityData(): Observable<any> {
-    return this._http.get<any>(this._city_url);
-  }
 }

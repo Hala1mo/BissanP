@@ -24,20 +24,12 @@
             <p class="mb-1 h5 text-capitalize">Address</p>
             <div class="ps-4">
                 <p class="mb-1 h6 text-capitalize">
-                    Address Line 1:
-                    <span class="imp-mat-primary text-capitalize">{{currentCustomer.address.addressLine1}}</span>
-                </p>
-                <p *ngIf="currentCustomer.address.addressLine2 !== ''" class="mb-1 h6 text-capitalize">
-                    Address Line 2:
-                    <span class="imp-mat-primary text-capitalize">{{currentCustomer.address.addressLine2}}</span>
-                </p>
-                <p class="mb-1 h6 text-capitalize">
                     City:
-                    <span class="imp-mat-primary text-capitalize">{{currentCustomer.address.cityName}}</span>
+                    <span class="imp-mat-primary text-capitalize">{{currentCustomer.location.cityName}}</span>
                 </p>
                 <p class="mb-1 h6 text-capitalize">
-                    Zipcode:
-                    <span class="imp-mat-primary text-lowercase">{{currentCustomer.address.zipcode}}</span>
+                    Location:
+                    <span class="imp-mat-primary text-capitalize">{{currentCustomer.location.address}}</span>
                 </p>
             </div>
             <p class="mb-1 h6 text-capitalize mt-3">
