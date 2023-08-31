@@ -23,7 +23,7 @@ export class CustomerDialogComponent implements OnInit {
   preciseLocationCheck: boolean = false;
   selectedCustomer: any;
 
-  cityData: City[] = [];
+  cities: City[] = [];
   selectedCityLocations: Location[] | any = [];
 
   selectedCity: City | null = null;
@@ -38,7 +38,7 @@ export class CustomerDialogComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.editMode = data.mode === 1;
-    this.cityData = data.cityData;
+    this.cities = data.cityData;
     this.selectedCustomer = data.customer;
 
     this.customerForm = this.fb.group({
@@ -93,6 +93,7 @@ export class CustomerDialogComponent implements OnInit {
   }
 
   onSubmitCustomer() {
+    if (this.customerForm.invalid) return;
     if (this.isSaving) return;
 
     this.isSaving = true;
@@ -187,7 +188,7 @@ export class CustomerDialogComponent implements OnInit {
       this.sharedService.fetchCityById(this.selectedCity.id).subscribe({
         next: response => {
           if (!this.selectedCity) return
-          if (!response.locations || response.locations.length < 1){
+          if (!response.locations || response.locations.length < 1) {
             this.snackBar.open(`No locations found in ${this.selectedCity.name}`, '', {
               duration: 3000
             })

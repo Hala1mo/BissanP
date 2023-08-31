@@ -22,7 +22,7 @@ export class CustomerComponent implements OnInit {
   isTableLoaded: boolean = false;
 
   selectedEnabledOption = "Enabled"
-  displayedColumns: string[] = ['name', 'city', 'addressLine', 'enabled', 'actions']
+  displayedColumns: string[] = ['name', 'city', 'location', 'enabled', 'actions']
   customerData: Customer[] = [];
   originalCustomerData: Customer[] = [];
 

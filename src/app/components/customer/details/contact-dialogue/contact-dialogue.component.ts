@@ -1,13 +1,10 @@
-import {AfterViewInit, Component, Inject, OnInit, ViewChild} from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
 import {MatSnackBar} from "@angular/material/snack-bar";
-import {Router} from "@angular/router";
 import {RegistrationService} from "../../../../services/registration.service";
-import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {nameValidator} from "../../../../shared/Name.validators";
-import {DefinitionService} from "../../../../services/definition.service";
-import {MatSort} from "@angular/material/sort";
-import {MatPaginator} from "@angular/material/paginator";
+import {VisitType} from "../../../../models/VisitType";
 
 @Component({
   selector: 'app-contact-dialogue',
@@ -17,22 +14,21 @@ import {MatPaginator} from "@angular/material/paginator";
 export class ContactDialogueComponent implements OnInit {
 
   selectedContact: any;
-  customerId!: bigint;
-  contactForm!: FormGroup;
+  customerId: bigint;
+  contactForm: FormGroup;
   editMode: boolean;
 
-  typesData: any[] = [];
+  visitTypesData: VisitType[] = [];
+  isSaving: boolean = false;
 
   constructor(private _snackBar: MatSnackBar,
-              private router: Router,
-              private _registrationService: RegistrationService,
+              private customerService: RegistrationService,
               private fb: FormBuilder,
-              private VisitServices: DefinitionService,
               public matDialogRef: MatDialogRef<ContactDialogueComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any) {
 
     this.editMode = data.mode === 1;
-    this.typesData = data.typesData;
+    this.visitTypesData = data.typesData;
     this.selectedContact = data.contact;
     this.customerId = data.customerId;
 
@@ -41,9 +37,8 @@ export class ContactDialogueComponent implements OnInit {
       firstName: ['', [Validators.required, nameValidator]],
       lastName: ['', [Validators.required, nameValidator]],
       phoneNumber: ['', [Validators.required, Validators.pattern("[0-9]*"), Validators.minLength(10), Validators.maxLength(10)]],
-      email: ['', [Validators.required, Validators.email]],
+      email: ['', [Validators.email]],
       visitTypes: []
-      // }),
     });
   }
 
@@ -99,32 +94,31 @@ export class ContactDialogueComponent implements OnInit {
 
   getEmailErrorMessage() {
     let nameControl = this.contactForm.controls['email'];
-    if (nameControl.hasError('required'))
-      return 'Email is required';
     if (nameControl.hasError('email')) {
       return 'Invalid email format';
     }
-
 
     return '';
   }
 
   onSubmitContact() {
+    if (this.contactForm.invalid) return;
+    if (this.isSaving) return;
+
+    this.isSaving = true;
     if (this.editMode) {
       this.onSubmitEdit();
     } else {
-      this.addContact(this.customerId);
+      this.addContactToCustomer(this.customerId);
     }
   }
 
-  addContact(id: bigint) {
+  addContactToCustomer(id: bigint) {
     const formData = this.contactForm.value;
-
-    this._registrationService.addNewContact(id, formData).subscribe(
+    this.customerService.addNewContact(id, formData).subscribe(
       (res) => {
         console.log('Registration successful:', res);
         this.matDialogRef.close(res);
-
       },
       (error) => {
         console.error('Registration failed:', error);
@@ -148,8 +142,6 @@ export class ContactDialogueComponent implements OnInit {
     for (let visitType of contact.visitTypes) {
       checkedTypes.push(visitType.id);
     }
-
-
     this.contactForm.patchValue({
       firstName: contact.firstName,
       lastName: contact.lastName,
@@ -159,21 +151,15 @@ export class ContactDialogueComponent implements OnInit {
     });
   }
 
-
   onSubmitEdit() {
     console.log(this.contactForm.value)
     if (this.contactForm.valid) {
       const editedUserData = this.contactForm.value;
-
-      this._registrationService.updateContactData(this.selectedContact.id, editedUserData).subscribe({
+      this.customerService.updateContactData(this.selectedContact.id, editedUserData).subscribe({
           next: response => {
             this.matDialogRef.close(response);
-            console.log('User data updated successfully:', response);
-
           },
           error: error => {
-            console.error('Error updating user data:', error);
-
             if (error.error && error.error.message) { // Check if 'message' property exists
               const errorMessage = error.error.message;
               console.log('Error message:', errorMessage);
@@ -181,8 +167,6 @@ export class ContactDialogueComponent implements OnInit {
               this._snackBar.open(errorMessage, '', {
                 duration: 3000
               });
-            } else {
-              console.log('Unknown error occurred.');
             }
           }
         }

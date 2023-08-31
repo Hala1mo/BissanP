@@ -3,7 +3,6 @@ import {HttpClient} from '@angular/common/http';
 import {Observable, throwError} from 'rxjs';
 import {catchError} from 'rxjs/operators';
 import {link} from "../models/link";
-import {editCustomerDTO} from "./user.service";
 
 
 export interface DefinitionForm {
@@ -11,8 +10,8 @@ export interface DefinitionForm {
     description: string;
     frequency: number;
     allowRecurring: boolean;
-    typeId: string;
-    cityId: string;
+    typeId: bigint;
+    locationId: bigint;
 }
 
 interface AssignmentForm {
@@ -63,7 +62,7 @@ export class DefinitionService {
             frequency: updatedVisitDefinition.frequency,
             allowRecurring: updatedVisitDefinition.allowRecurring,
             typeId: updatedVisitDefinition.typeId,
-            cityId: updatedVisitDefinition.cityId,
+            locationId: updatedVisitDefinition.locationId,
 
         };
         const updateUrl = `${this.visitDefinitionsURL}/${definitionId}`;
@@ -77,7 +76,7 @@ export class DefinitionService {
             frequency: visitDefinition.frequency,
             allowRecurring: visitDefinition.allowRecurring,
             typeId: visitDefinition.typeId,
-            cityId: visitDefinition.cityId,
+            locationId: visitDefinition.locationId,
 
         };
         return this.http.post<any>(this.visitDefinitionsURL, addDefinitionPayload).pipe(

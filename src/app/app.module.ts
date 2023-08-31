@@ -7,7 +7,7 @@ import {UserComponent} from './components/user/user.component';
 import {HttpClientModule} from '@angular/common/http';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {MatDialogModule} from "@angular/material/dialog";
+import {MAT_DIALOG_DEFAULT_OPTIONS, MatDialogModule} from "@angular/material/dialog";
 import {NgbAlertModule, NgbModule, NgbPaginationModule} from "@ng-bootstrap/ng-bootstrap";
 import {MatSnackBarModule} from "@angular/material/snack-bar";
 import {CustomerComponent} from './components/customer/customer.component';
@@ -53,7 +53,7 @@ import {UserDetailsComponent} from './components/user/user-details/user-details.
 import { TypeDialogComponent } from './components/definition/type-dialog/type-dialog.component';
 import { CityDialogComponent } from './components/definition/city-dialog/city-dialog.component';
 import {MatProgressBarModule} from "@angular/material/progress-bar";
-import {MatDrawer, MatSidenavModule} from "@angular/material/sidenav";
+import {MatSidenavModule} from "@angular/material/sidenav";
 import {MatListModule} from "@angular/material/list";
 import { AssignNewCustomerDialogComponent } from './components/customer/assign-new-customer-dialog/assign-new-customer-dialog.component';
 
@@ -127,7 +127,9 @@ import { AssignNewCustomerDialogComponent } from './components/customer/assign-n
     MatListModule,
     MatLineModule,
   ],
-    providers: [],
+    providers: [
+      {provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {}}
+    ],
     bootstrap: [AppComponent]
 })
 export class AppModule {

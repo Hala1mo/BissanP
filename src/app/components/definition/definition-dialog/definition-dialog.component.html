@@ -1,55 +1,72 @@
 <h1 mat-dialog-title>
-    {{editMode ? 'Editing "' + currentDefinition.name + '"' : 'Create new Visit Definition'}}
+  {{editMode ? 'Editing "' + currentDefinition.name + '"' : 'Create new Visit Definition'}}
 </h1>
 <form [formGroup]="definitionForm">
-    <mat-dialog-content>
-        <div class="row mb-1">
-            <mat-form-field>
-                <mat-label>Name</mat-label>
-                <input matInput type="text" formControlName="name" required>
-                <!--            <mat-error *ngIf="definitionForm.controls['name'].invalid">{{getNameErrorMessage()}}</mat-error>-->
-            </mat-form-field>
-        </div>
-        <div class="row mb-1">
-            <mat-form-field>
-                <mat-label>Description</mat-label>
-                <textarea style="max-height: 25vh" matInput type="text" formControlName="description"
-                          required></textarea>
-                <!--            <mat-error *ngIf="definitionForm.controls['description'].invalid">{{getDescriptionErrorMessage()}}</mat-error>-->
-            </mat-form-field>
-        </div>
-        <div class="row mb-1">
-            <div class="col-4 pt-1">
-                <mat-checkbox formControlName="allowRecurring">Is Recurring</mat-checkbox>
-            </div>
-            <div class="col-8">
-                <mat-form-field [style.width.%]="100">
-                    <mat-label>Frequency</mat-label>
-                    <input matInput type="number" formControlName="frequency" required>
-                </mat-form-field>
-            </div>
-        </div>
-        <div class="row mb-1">
-            <mat-form-field>
-                <mat-label>Visit Type</mat-label>
-                <mat-select formControlName="typeId">
-                    <mat-option *ngFor="let type of visitTypes" [value]="type.id">{{type.name}}</mat-option>
-                </mat-select>
-            </mat-form-field>
-        </div>
+  <mat-dialog-content>
+    <div class="row mb-1">
+      <mat-form-field>
+        <mat-label>Name</mat-label>
+        <input matInput type="text" formControlName="name" required>
+      </mat-form-field>
+    </div>
+    <div class="row mb-1">
+      <mat-form-field>
+        <mat-label>Description</mat-label>
+        <textarea style="max-height: 25vh" matInput type="text" formControlName="description"
+                  required></textarea>
+      </mat-form-field>
+    </div>
+    <div class="row mb-1">
+      <div class="col-4 pt-1">
+        <mat-checkbox formControlName="allowRecurring">Is Recurring</mat-checkbox>
+      </div>
+      <div class="col-8">
+        <mat-form-field [style.width.%]="100">
+          <mat-label>Frequency</mat-label>
+          <input matInput type="number" formControlName="frequency" required>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="row mb-1">
+      <mat-form-field>
+        <mat-label>Visit Type</mat-label>
+        <mat-select formControlName="typeId">
+          <mat-option *ngFor="let type of visitTypes" [value]="type.id">{{type.name}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
 
-      <div class="row mb-1">
-        <mat-form-field>
+    <div class="row mb-1">
+      <div class="col-6">
+        <mat-form-field [style.width.%]="100">
           <mat-label>City</mat-label>
-          <mat-select formControlName="cityId">
-            <mat-option *ngFor="let city of cities" [value]="city.id">{{city.name}}</mat-option>
+          <mat-select formControlName="cityId" required>
+            <mat-option *ngFor="let city of cities"
+                        [value]="city.id"
+                        (click)="changeSelectedCity(city)"
+            >
+              {{ city.name }}
+            </mat-option>
           </mat-select>
         </mat-form-field>
       </div>
-
-        <mat-dialog-actions>
-            <button mat-raised-button (click)="submitForm()" color="primary">Save</button>
-            <button mat-raised-button color="warn" mat-dialog-close>Cancel</button>
-        </mat-dialog-actions>
-    </mat-dialog-content>
+      <div class="col-6">
+        <mat-form-field [style.width.%]="100">
+          <mat-label>Location</mat-label>
+          <mat-select formControlName="locationId" required>
+            <div *ngIf="selectedCity !== null">
+              <mat-option *ngFor="let location of selectedCityLocations"
+                          [value]="location.id">{{location.address}}</mat-option>
+            </div>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+    <mat-dialog-actions>
+      <button mat-raised-button (click)="submitForm()" color="primary" [disabled]="isSaving">
+        {{isSaving ? 'Saving' : 'Save'}}
+      </button>
+      <button mat-raised-button color="warn" mat-dialog-close>Cancel</button>
+    </mat-dialog-actions>
+  </mat-dialog-content>
 </form>

@@ -11,195 +11,171 @@ import {DefinitionDialogComponent} from "./definition-dialog/definition-dialog.c
 import {Router} from "@angular/router";
 import {TypeDialogComponent} from "./type-dialog/type-dialog.component";
 import {CityDialogComponent} from "./city-dialog/city-dialog.component";
-import {City} from "../../models/City";
-import {RegistrationService} from "../../services/registration.service";
 import {SharedService} from "../../services/shared.service";
 
 @Component({
-    selector: 'app-definition',
-    templateUrl: './definition.component.html',
-    styleUrls: ['./definition.component.css']
+  selector: 'app-definition',
+  templateUrl: './definition.component.html',
+  styleUrls: ['./definition.component.css']
 })
 export class DefinitionComponent implements OnInit, AfterViewInit {
-    visitDefinitionData: VisitDefinition[] = [];
-    originalVisitDefinitionData: VisitDefinition[] = [];
+  visitDefinitionData: VisitDefinition[] = [];
+  originalVisitDefinitionData: VisitDefinition[] = [];
 
-    visitTypesData: VisitType[] = [];
-    cities: City[] = [];
-    searchInput: string = "";
+  visitTypesData: VisitType[] = [];
+  searchInput: string = "";
 
-    displayedColumns: string[] = ['name', 'description', 'frequency', 'allowRecurring', 'type', 'enabled', 'actions'];
-    dataSource = new MatTableDataSource(this.visitDefinitionData);
+  displayedColumns: string[] = ['name', 'description', 'frequency', 'allowRecurring', 'type', 'city', 'location', 'enabled', 'actions'];
+  dataSource = new MatTableDataSource(this.visitDefinitionData);
 
-    @ViewChild('definitionTablePaginator') paginator!: MatPaginator;
-    @ViewChild(MatSort) sort!: MatSort;
+  @ViewChild('definitionTablePaginator') paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
 
 
-    constructor(
-        private definitionService: DefinitionService,
-        private customerService: RegistrationService,
-        private sharedService: SharedService,
-        private router: Router,
-        private matDialog: MatDialog,
-        private snackBar: MatSnackBar,
-    ) {
+  constructor(
+    private definitionService: DefinitionService,
+    private sharedService: SharedService,
+    private router: Router,
+    private matDialog: MatDialog,
+    private snackBar: MatSnackBar,
+  ) {
+  }
+
+
+  ngOnInit() {
+    this.fetchAllDefinitions();
+
+    this.visitTypesData = this.sharedService.getVisitTypesAsList();
+
+    this.dataSource.filterPredicate = function (definition, filter) {
+      return definition.name.toLocaleLowerCase().includes(filter.toLocaleLowerCase()) || definition.description.toLocaleLowerCase().includes(filter.toLocaleLowerCase());
     }
+  }
+
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+  }
 
 
-    ngOnInit() {
-        this.fetchAllDefinitions();
-        this.fetchVisitTypes();
-
-        this.dataSource.filterPredicate = function (definition, filter) {
-            return definition.name.toLocaleLowerCase().includes(filter.toLocaleLowerCase()) || definition.description.toLocaleLowerCase().includes(filter.toLocaleLowerCase());
+  fetchAllDefinitions() {
+    this.definitionService.fetchAllDefinitions().subscribe({
+      next: response => {
+        this.originalVisitDefinitionData = response;
+        this.resetFilters();
+      },
+      error: error => {
+        if (error.message) {
+          let errorMessage = error.message;
+          this.snackBar.open(errorMessage, '', {
+            duration: 3000
+          });
         }
-    }
-
-    ngAfterViewInit() {
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
-    }
+      }
+    });
+  }
 
 
-    fetchAllDefinitions() {
-        this.definitionService.fetchAllDefinitions().subscribe({
-            next: response => {
-                this.originalVisitDefinitionData = response;
-                this.resetFilters();
-            },
-            error: error => {
-                if (error.message) {
-                    let errorMessage = error.message;
-                    this.snackBar.open(errorMessage, '', {
-                        duration: 3000
-                    });
-                }
-            }
-        });
-    }
+  openCreateDialog() {
+    this.matDialog.open(DefinitionDialogComponent, {
+      width: '40%',
+      data: {
+        'mode': 0,
+        'types': this.sharedService.getVisitTypesAsList(),
+        'cities': this.sharedService.getCitiesAsList()
+      }
+    }).afterClosed().subscribe(() => {
+      this.fetchAllDefinitions();
+    });
+  }
 
-    fetchVisitTypes() {
-        this.definitionService.fetchTypesData().subscribe({
-            next: response => {
-                console.log('Fetched types data:', response);
-                this.visitTypesData = response;
-            },
-            error: error => {
-                if (error.message) {
-                    let errorMessage = error.message;
-                    this.snackBar.open(errorMessage, '', {
-                        duration: 3000
-                    });
-                }
-            }
-        });
-    }
+  openEditDialog(definition: VisitDefinition) {
+    this.matDialog.open(DefinitionDialogComponent, {
+      width: '40%',
+      data: {
+        'mode': 1,
+        'definition': definition,
+        'types': this.sharedService.getVisitTypesAsList(),
+        'cities': this.sharedService.getCitiesAsList()
+      }
+    }).afterClosed().subscribe(() => {
+      this.fetchAllDefinitions();
+    });
+  }
 
+  updateDefinitionStatus(definition: VisitDefinition) {
+    definition.enabled = !definition.enabled;
+    this.definitionService.updateDefinitionEnabledStatus(definition.id).subscribe(
+      {
+        next: response => {
+          definition.enabled = response.enabled;
+        },
+        error: error => {
+          if (error.message) {
+            let errorMessage = error.message;
+            this.snackBar.open(errorMessage, '', {
+              duration: 3000
+            });
+          }
+          definition.enabled = !definition.enabled;
+        }
+      }
+    );
+  }
 
-    openCreateDialog() {
-        this.matDialog.open(DefinitionDialogComponent, {
-            width: '40%',
-            data: {
-                'mode': 0,
-                'types': this.visitTypesData,
-                'cities': this.sharedService.getCitiesAsList()
-            }
-        }).afterClosed().subscribe(() => {
-            this.fetchAllDefinitions();
-        });
-    }
+  applyFilter($event: Event) {
+    const filterValue = ($event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
 
-    openEditDialog(definition: VisitDefinition) {
-        this.matDialog.open(DefinitionDialogComponent, {
-            width: '40%',
-            data: {
-                'mode': 1,
-                'definition': definition,
-                'types': this.visitTypesData,
-                'cities': this.sharedService.getCitiesAsList()
-            }
-        }).afterClosed().subscribe(() => {
-            this.fetchAllDefinitions();
-        });
-    }
+  resetFilters() {
+    this.visitDefinitionData = this.originalVisitDefinitionData;
+    this.dataSource.data = this.visitDefinitionData;
+  }
 
-    updateDefinitionStatus(definition: VisitDefinition) {
-        definition.enabled = !definition.enabled;
-        this.definitionService.updateDefinitionEnabledStatus(definition.id).subscribe(
-            {
-                next: response => {
-                    definition.enabled = response.enabled;
-                },
-                error: error => {
-                    if (error.message) {
-                        let errorMessage = error.message;
-                        this.snackBar.open(errorMessage, '', {
-                            duration: 3000
-                        });
-                    }
-                    definition.enabled = !definition.enabled;
-                }
-            }
-        );
-    }
+  showEnabledDefinitions() {
+    this.visitDefinitionData = this.originalVisitDefinitionData.filter(definition => definition.enabled);
+    this.dataSource.data = this.visitDefinitionData;
+  }
 
-    applyFilter($event: Event) {
-        const filterValue = ($event.target as HTMLInputElement).value;
-        this.dataSource.filter = filterValue.trim().toLowerCase();
-    }
+  showDisabledDefinitions() {
+    this.visitDefinitionData = this.originalVisitDefinitionData.filter(definition => !definition.enabled);
+    this.dataSource.data = this.visitDefinitionData;
+  }
 
-    resetFilters() {
-        this.visitDefinitionData = this.originalVisitDefinitionData;
+  showRecurringDefinitions() {
+    this.visitDefinitionData = this.originalVisitDefinitionData.filter(def => def.allowRecurring);
+    this.dataSource.data = this.visitDefinitionData;
+  }
 
-        this.dataSource.data = this.visitDefinitionData;
-    }
+  showNonRecurringDefinitions() {
+    this.visitDefinitionData = this.originalVisitDefinitionData.filter(def => !def.allowRecurring);
+    this.dataSource.data = this.visitDefinitionData;
+  }
 
-    showEnabledDefinitions() {
-        this.visitDefinitionData = this.originalVisitDefinitionData.filter(definition => definition.enabled);
-        this.dataSource.data = this.visitDefinitionData;
-    }
-
-    showDisabledDefinitions() {
-        this.visitDefinitionData = this.originalVisitDefinitionData.filter(definition => !definition.enabled);
-        this.dataSource.data = this.visitDefinitionData;
-    }
-
-    showRecurringDefinitions() {
-        this.visitDefinitionData = this.originalVisitDefinitionData.filter(def => def.allowRecurring);
-        this.dataSource.data = this.visitDefinitionData;
-    }
-
-    showNonRecurringDefinitions() {
-        this.visitDefinitionData = this.originalVisitDefinitionData.filter(def => !def.allowRecurring);
-        this.dataSource.data = this.visitDefinitionData;
-    }
-
-    showTypeDefinitions(typeId: bigint) {
-        this.visitDefinitionData = this.originalVisitDefinitionData.filter(def => def.visitType.id == typeId);
-        this.dataSource.data = this.visitDefinitionData;
-    }
+  showTypeDefinitions(typeId: bigint) {
+    this.visitDefinitionData = this.originalVisitDefinitionData.filter(def => def.visitType.id == typeId);
+    this.dataSource.data = this.visitDefinitionData;
+  }
 
 
-    openDetailsPage(definition: any) {
-        this.router.navigate(['/definitions', definition.id])
-    }
+  openDetailsPage(definition: any) {
+    this.router.navigate(['/definitions', definition.id])
+  }
 
-    openTypeDialog() {
-        this.matDialog.open(TypeDialogComponent, {
-            width: '40%',
+  openTypeDialog() {
+    this.matDialog.open(TypeDialogComponent, {
+      width: '40%',
+    }).afterClosed().subscribe(() => {
+      this.sharedService.updateVisitTypes();
+    });
+  }
 
-        }).afterClosed().subscribe(() => {
-            this.fetchVisitTypes();
-        });
-
-
-    }
-
-    openCityDialog() {
-        this.matDialog.open(CityDialogComponent, {
-            width: '40%',
-        }).afterClosed().subscribe(() => {
-            this.sharedService.updateCities();
-        });
-    }
+  openCityDialog() {
+    this.matDialog.open(CityDialogComponent, {
+      width: '40%',
+    }).afterClosed().subscribe(() => {
+      this.sharedService.updateCities();
+    });
+  }
 }

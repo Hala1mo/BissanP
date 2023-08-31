@@ -6,6 +6,8 @@ import {VisitType} from "../../../models/VisitType";
 import {VisitDefinition} from "../../../models/VisitDefinition";
 import {DefinitionService} from "../../../services/definition.service";
 import {City} from "../../../models/City";
+import {Location} from "../../../models/Location"
+import {SharedService} from "../../../services/shared.service";
 
 @Component({
   selector: 'app-definition-dialog',
@@ -20,11 +22,15 @@ export class DefinitionDialogComponent implements OnInit {
   visitTypes: VisitType[];
   cities: City[];
   currentDefinition: VisitDefinition;
+  selectedCity: City | null = null;
+  selectedCityLocations: Location[] = [];
+  isSaving: boolean = false;
 
   constructor(
     formBuilder: FormBuilder,
     private snackBar: MatSnackBar,
     private definitionService: DefinitionService,
+    private sharedService: SharedService,
     public matDialogRef: MatDialogRef<DefinitionDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
@@ -50,28 +56,32 @@ export class DefinitionDialogComponent implements OnInit {
       allowRecurring: [true, [Validators.required]],
 
       typeId: ['', [Validators.required]],
-      cityId: ['', [Validators.required]]
+      cityId: ['', [Validators.required]],
+      locationId: ['', [Validators.required]],
+
     })
   }
 
   ngOnInit(): void {
-    console.log(this.currentDefinition);
-
     if (this.editMode) {
+      console.log("EDITING", this.currentDefinition);
       this.definitionForm.patchValue({
         name: this.currentDefinition.name,
         description: this.currentDefinition.description,
         frequency: this.currentDefinition.frequency,
         allowRecurring: this.currentDefinition.allowRecurring,
         typeId: this.currentDefinition.visitType.id,
-        cityId: this.currentDefinition.cityId
+        cityId: this.currentDefinition.location.cityId,
+        locationId: this.currentDefinition.location.id,
       });
     }
   }
 
   submitForm() {
     if (this.definitionForm.invalid) return;
+    if (this.isSaving) return;
 
+    this.isSaving = false;
     if (this.editMode)
       this.updateDefinition(this.currentDefinition, this.definitionForm.value);
     else
@@ -81,20 +91,15 @@ export class DefinitionDialogComponent implements OnInit {
   private updateDefinition(currentDefinition: VisitDefinition, formJson: any) {
     this.definitionService.updateVisitDefinition(currentDefinition.id, formJson).subscribe({
       next: response => {
-        console.log("Updated VisitDefinition: ", response)
         this.matDialogRef.close(response);
       },
       error: error => {
-
         if (error.error && error.error.message) { // Check if 'message' property exists
           const errorMessage = error.error.message;
-          console.log('Error message:', errorMessage);
-
           this.snackBar.open(errorMessage, '', {
             duration: 3000
           });
         } else {
-          console.log('Unknown error occurred.');
         }
       }
     })
@@ -103,22 +108,45 @@ export class DefinitionDialogComponent implements OnInit {
   private saveNewDefinition(formJson: any) {
     this.definitionService.saveNewDefinition(formJson).subscribe({
       next: response => {
-        console.log("Created new VisitDefinition: ", response)
-        this.matDialogRef.close();
+        this.matDialogRef.close(response);
       },
       error: error => {
-
         if (error.error && error.error.message) { // Check if 'message' property exists
           const errorMessage = error.error.message;
-          console.log('Error message:', errorMessage);
 
           this.snackBar.open(errorMessage, '', {
             duration: 3000
           });
-        } else {
-          console.log('Unknown error occurred.');
         }
       }
     })
   }
+
+  changeSelectedCity(city: City) {
+    this.selectedCity = city;
+    if (!this.selectedCity.locations) {
+      console.log("FETCHING LOCATIONS")
+      // GO FETCH THE LOCATIONS IN THAT CITY
+      this.sharedService.fetchCityById(this.selectedCity.id).subscribe({
+        next: response => {
+          if (!this.selectedCity) return
+          if (!response.locations || response.locations.length < 1){
+            this.snackBar.open(`No locations found in ${this.selectedCity.name}`, '', {
+              duration: 3000
+            })
+          }
+          this.selectedCity.locations = response.locations;
+          this.selectedCityLocations = [...this.selectedCity.locations];
+        },
+        error: () => {
+          this.snackBar.open("Error Finding Locations", '', {
+            duration: 3000
+          })
+        }
+      })
+    } else {
+      this.selectedCityLocations = [...this.selectedCity.locations];
+    }
+  }
+
 }

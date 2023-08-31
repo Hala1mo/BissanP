@@ -3,7 +3,6 @@
 </h1>
 <form [formGroup]="contactForm">
   <mat-dialog-content>
-
     <div class="row mb-1">
       <div class="col-6">
         <mat-form-field [style.width.%]="100">
@@ -39,14 +38,12 @@
             *ngIf="contactForm.controls['email']?.invalid">{{ getEmailErrorMessage()}}</mat-error>
         </mat-form-field>
       </div>
-
     </div>
-
     <div class="row mb-1">
       <mat-label>Visit Type</mat-label>
       <mat-chip-listbox formControlName="visitTypes" multiple>
         <mat-chip-option
-          *ngFor="let type of typesData"
+          *ngFor="let type of visitTypesData"
           [value]="type.id">
           {{ type.name }}
         </mat-chip-option>

@@ -79,8 +79,7 @@ export class RegistrationService {
       lastName: contactDetails.lastName,
       phoneNumber: contactDetails.phoneNumber,
       email: contactDetails.email,
-      visitTypes:
-      contactDetails.types
+      visitTypes: contactDetails.visitTypes
     };
 
     return this._http.post<any>(_urlDetails, newContact).pipe();

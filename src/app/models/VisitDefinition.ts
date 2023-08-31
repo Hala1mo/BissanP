@@ -1,5 +1,6 @@
 import {VisitType} from "./VisitType";
 import {VisitAssignment} from "./VisitAssignment";
+import {Location} from "./Location";
 
 export class VisitDefinition {
   id: bigint;
@@ -7,9 +8,8 @@ export class VisitDefinition {
   description: string;
   frequency: number;
   allowRecurring: boolean
+  location: Location;
   visitType: VisitType;
-  cityId: bigint;
-  cityName: string;
   visitAssignments: VisitAssignment[];
 
   enabled: boolean;
@@ -22,9 +22,8 @@ export class VisitDefinition {
     this.description = data.description || '';
     this.frequency = data.frequency || '';
     this.allowRecurring = data.allowRecurring || false;
+    this.location = data.location || {};
     this.visitType = data.visitType || {};
-    this.cityId = data.cityId || 0;
-    this.cityName = data.cityName || ''
     this.visitAssignments = data.visitAssignments || [];
 
     this.enabled = data.enabled || false;

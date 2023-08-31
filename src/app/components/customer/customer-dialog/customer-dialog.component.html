@@ -18,7 +18,7 @@
         <mat-form-field [style.width.%]="100">
           <mat-label>City</mat-label>
           <mat-select formControlName="cityId" required>
-            <mat-option *ngFor="let city of cityData"
+            <mat-option *ngFor="let city of cities"
                         [value]="city.id"
                         (click)="changeSelectedCity(city)"
             >
@@ -38,33 +38,30 @@
           </mat-select>
         </mat-form-field>
       </div>
-      <div *ngIf="preciseLocationCheck">
-        <div class="row mb-3">
-          <div class="col-6">
-            <mat-form-field [style.width.%]="100">
-              <mat-label>Latitude</mat-label>
-              <input matInput type="number" formControlName="latitude" min="-90" max="90">
-              <mat-error *ngIf="latitudeControl?.hasError('min') || latitudeControl?.hasError('max')">
-                Latitude must be between -90 and 90 degrees.
-              </mat-error>
-            </mat-form-field>
-          </div>
-
-          <div class="col-6">
-            <mat-form-field [style.width.%]="100">
-              <mat-label>Longitude</mat-label>
-              <input matInput type="number" formControlName="longitude" min="-180" max="180">
-              <mat-error *ngIf="longitudeControl?.hasError('min') || longitudeControl?.hasError('max')">
-                Longitude must be between -180 and 180 degrees.
-              </mat-error>
-            </mat-form-field>
-          </div>
-        </div>
+    </div>
+    <div class="row mb-1" *ngIf="preciseLocationCheck">
+      <div class="col-6">
+        <mat-form-field [style.width.%]="100">
+          <mat-label>Latitude</mat-label>
+          <input matInput type="number" formControlName="latitude" min="-90" max="90">
+          <mat-error *ngIf="latitudeControl?.hasError('min') || latitudeControl?.hasError('max')">
+            Latitude must be between -90 and 90 degrees.
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col-6">
+        <mat-form-field [style.width.%]="100">
+          <mat-label>Longitude</mat-label>
+          <input matInput type="number" formControlName="longitude" min="-180" max="180">
+          <mat-error *ngIf="longitudeControl?.hasError('min') || longitudeControl?.hasError('max')">
+            Longitude must be between -180 and 180 degrees.
+          </mat-error>
+        </mat-form-field>
       </div>
     </div>
 
     <mat-dialog-actions>
-      <button mat-raised-button (click)="onSubmitCustomer()" color="primary">
+      <button mat-raised-button (click)="onSubmitCustomer()" color="primary" [disabled]="isSaving">
         {{isSaving ? 'Saving' : 'Save'}}
       </button>
       <button mat-raised-button color="warn" mat-dialog-close>Cancel</button>
