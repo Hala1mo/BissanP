@@ -32,7 +32,6 @@ export class RegistrationService {
 
   private _customers_url = link.urlIP + '/customers';
   private _contacts_url = link.urlIP + '/contacts';
-  private _city_url = link.urlIP + '/cities';
 
 
   constructor(private _http: HttpClient) {
