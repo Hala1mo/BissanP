@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {ActivatedRoute} from "@angular/router";
 import {VisitDefinition} from "../../../models/VisitDefinition";
@@ -13,167 +13,130 @@ import {CreateAssignmentDialogComponent} from "../../assignments/create/create-a
 import {AssignmentDetailsComponent} from "../../assignments/assignment-details.component";
 import {ReportsService} from "../../../services/reports.service";
 import {CanvasJS} from "@canvasjs/angular-charts";
+import {SharedService} from "../../../services/shared.service";
 import {MatTabChangeEvent} from "@angular/material/tabs";
 
 @Component({
-    selector: 'app-details-def',
-    templateUrl: './definition-details.component.html',
-    styleUrls: ['./definition-details.component.css']
+  selector: 'app-details-def',
+  templateUrl: './definition-details.component.html',
+  styleUrls: ['./definition-details.component.css']
 })
 
-export class DefinitionDetailsComponent implements OnInit{
+export class DefinitionDetailsComponent implements OnInit {
 
-    currentDefinition: VisitDefinition | undefined;
-    visitTypes: VisitType[] = [];
+  currentDefinition: VisitDefinition | undefined;
+  visitTypes: VisitType[] = [];
 
-    displayedColumns: string[] = ['date', 'comment', 'user', 'actions'];
-    dataSource = new MatTableDataSource([]);
+  displayedColumns: string[] = ['date', 'comment', 'user', 'actions'];
+  dataSource = new MatTableDataSource([]);
 
-    @ViewChild(MatPaginator) assignmentPaginator!: MatPaginator;
-    @ViewChild(MatSort) assignmentSort!: MatSort;
+  @ViewChild(MatPaginator) assignmentPaginator!: MatPaginator;
+  @ViewChild(MatSort) assignmentSort!: MatSort;
 
   dataColChar: any[] = [];
   dataPieChart: any[] = [];
 
-    //UNUSED
-    id!: bigint;
+  //UNUSED
+  id!: bigint;
 
-    constructor(
-        private snackBar: MatSnackBar,
-        private activatedRoute: ActivatedRoute,
-        private definitionService: DefinitionService,
-        private reportsService: ReportsService,
-        private matDialog: MatDialog,
-    ) {
+  constructor(
+    private snackBar: MatSnackBar,
+    private activatedRoute: ActivatedRoute,
+    private sharedService: SharedService,
+    private definitionService: DefinitionService,
+    private reportsService: ReportsService,
+    private matDialog: MatDialog,
+  ) {
 
-    }
+  }
 
-    ngOnInit() {
-        this.activatedRoute.params.subscribe((params) => {
-            this.id = params['id'];
-            if (this.id) {
-                this.fetchDefinitionDetails(this.id);
-                this.fetchVisitTypes();
-                this.fetchDefinitionReports(this.id)
-            }
-        });
-    }
-
-
-
-    openAssignmentDetails(assignmentId: bigint) {
-        console.log("OPENING ASSIGNMENT", assignmentId);
-
-        this.matDialog.open(AssignmentDetailsComponent, {
-            width: '40%',
-            data: {
-                assignmentId: assignmentId,
-            }
-        }).afterClosed().subscribe( response => {
-            console.log(response);
-        })
-
-    }
-
-    openCreateAssignmentDialog() {
-        if (this.currentDefinition === undefined) return;
-
-        this.matDialog.open(CreateAssignmentDialogComponent, {
-            width: '40%',
-            data: {
-                definitionId: this.currentDefinition.id
-            }
-        }).afterClosed().subscribe(() => {
-            this.fetchDefinitionDetails(this.id);
-        });
-    }
-
-    openDefinitionEditDialog() {
-        if (this.currentDefinition === undefined) return;
-
-        this.matDialog.open(DefinitionDialogComponent, {
-            width: '40%',
-            data: {
-                'mode': 1,
-                'definition': this.currentDefinition,
-                'types': this.visitTypes
-            }
-        }).afterClosed().subscribe(response => {
-            if (response === undefined) return;
-            if (this.currentDefinition === undefined) return;
-
-            this.currentDefinition.createdTime = response.createdTime;
-            this.currentDefinition.lastModifiedTime = response.lastModifiedTime;
-            this.currentDefinition.name = response.name;
-            this.currentDefinition.frequency = response.frequency;
-            this.currentDefinition.allowRecurring = response.allowRecurring;
-            this.currentDefinition.description = response.description;
-        });
-    }
+  ngOnInit() {
+    this.activatedRoute.params.subscribe((params) => {
+      this.id = params['id'];
+      if (this.id) {
+        this.fetchDefinitionDetails(this.id);
+        this.fetchDefinitionReports(this.id)
+      }
+    });
+  }
 
 
-    formatDateString(timeString: string) {
-        const date = new Date(timeString);
+  openAssignmentDetails(assignmentId: bigint) {
+    console.log("OPENING ASSIGNMENT", assignmentId);
 
-        return date.toLocaleDateString() + " " + date.toLocaleTimeString();
-    }
+    this.matDialog.open(AssignmentDetailsComponent, {
+      width: '40%',
+      data: {
+        assignmentId: assignmentId,
+      }
+    }).afterClosed().subscribe(response => {
+      console.log(response);
+    })
 
+  }
 
-    fetchVisitTypes() {
-        this.definitionService.fetchTypesData().subscribe({
-            next: response => {
-                console.log('Fetched types data:', response);
-                this.visitTypes = response;
-            },
+  openCreateAssignmentDialog() {
+    if (this.currentDefinition === undefined) return;
 
-            error: error => {
-                console.error('Error fetching visit types:', error);
-                if (error.message) {
-                    let errorMessage = error.message;
-                    console.log('Error message:', errorMessage);
+    this.matDialog.open(CreateAssignmentDialogComponent, {
+      width: '40%',
+      data: {
+        definitionId: this.currentDefinition.id
+      }
+    }).afterClosed().subscribe(() => {
+      this.fetchDefinitionDetails(this.id);
+    });
+  }
 
-                    this.snackBar.open(errorMessage, '', {
-                        duration: 3000
-                    });
-                }
-            }
-        });
-    }
+  openDefinitionEditDialog() {
+    if (this.currentDefinition === undefined) return;
 
-    fetchDefinitionDetails(id: any) {
-        this.definitionService.fetchDefinitionById(id).subscribe({
-                next: response => {
-                    console.log('Fetched VisitDefinition data:', response);
-                    this.currentDefinition = response;
-                    this.dataSource = new MatTableDataSource(response.visitAssignments);
+    this.matDialog.open(DefinitionDialogComponent, {
+      width: '40%',
+      data: {
+        'mode': 1,
+        'definition': this.currentDefinition,
+        'types': this.sharedService.getVisitTypesAsList(),
+      }
+    }).afterClosed().subscribe(response => {
+      if (response === undefined) return;
+      if (this.currentDefinition === undefined) return;
 
-                    setTimeout(() => {
-                        this.dataSource.sort = this.assignmentSort;
-                        this.dataSource.paginator = this.assignmentPaginator;
-                    }, 20)
-                },
-                error: error => {
-                    console.error('Error fetching VisitAssignment data:', error);
+      this.currentDefinition.createdTime = response.createdTime;
+      this.currentDefinition.lastModifiedTime = response.lastModifiedTime;
+      this.currentDefinition.name = response.name;
+      this.currentDefinition.frequency = response.frequency;
+      this.currentDefinition.allowRecurring = response.allowRecurring;
+      this.currentDefinition.description = response.description;
+    });
+  }
 
-                }
-            }
-        );
-    }
+  fetchDefinitionDetails(id: any) {
+    this.definitionService.fetchDefinitionById(id).subscribe({
+        next: response => {
+          this.currentDefinition = response;
+          this.dataSource = new MatTableDataSource(response.visitAssignments);
+
+          setTimeout(() => {
+            this.dataSource.sort = this.assignmentSort;
+            this.dataSource.paginator = this.assignmentPaginator;
+          }, 20)
+        },
+        error: error => {
+          console.error(error);
+        }
+      }
+    );
+  }
 
   fetchDefinitionReports(id: any) {
     this.reportsService.fetchDefinitionReports(id).subscribe({
         next: response => {
-          console.log('Fetched VisitDefinition Reports data:', response);
-
           this.dataColChar = response.count;
-          console.log(this.dataColChar);
           this.dataPieChart = response.percentages;
-
-          console.log(this.dataPieChart);
-
         },
         error: error => {
-          console.error('Error fetching VisitAssignment data:', error);
+          console.error('Error fetching Visit Definition reports:', error);
 
         }
       }
@@ -182,7 +145,7 @@ export class DefinitionDetailsComponent implements OnInit{
 
 
   renderChart() {
-      // Create a new chart instance using CanvasJS
+    // Create a new chart instance using CanvasJS
     let chart = new CanvasJS.Chart("chartContainer2", {
       animationEnabled: true,
       title: {
@@ -223,7 +186,7 @@ export class DefinitionDetailsComponent implements OnInit{
     chart.render();
   }
 
-  tabChanged($event: MatTabChangeEvent) {
+  tabChanged($event : MatTabChangeEvent) {
     this.renderChart();
     this.renderPieChart();
   }

@@ -41,7 +41,7 @@ export class UserDetailsComponent implements OnInit {
   }
 
   fetchUser(username: string) {
-    this.userService.getUserData(username).subscribe({
+    this.userService.fetchUserByUsername(username).subscribe({
         next: response => {
           this.currentUser = new User(response);
         },
@@ -53,7 +53,7 @@ export class UserDetailsComponent implements OnInit {
   }
 
   fetchUserReports(username: string) {
-    this.userService.getUserReports(username).subscribe({
+    this.userService.fetchUserReportsByUsername(username).subscribe({
         next: response => {
           this.isUserLoaded = true;
 

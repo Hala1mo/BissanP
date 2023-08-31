@@ -14,6 +14,7 @@ import {MatPaginator} from "@angular/material/paginator";
 import {MatSort} from "@angular/material/sort";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {MatAutocompleteSelectedEvent} from "@angular/material/autocomplete";
+import {UserService} from "../../services/user.service";
 
 @Component({
   selector: 'app-assignments',
@@ -48,6 +49,7 @@ export class AssignmentDetailsComponent implements OnInit, AfterViewInit {
     private router: Router,
     private assignmentService: AssignmentService,
     private registrationService: RegistrationService,
+    private userService: UserService,
     private _snackBar: MatSnackBar,
     public matDialogRef: MatDialogRef<AssignmentDetailsComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -125,11 +127,9 @@ export class AssignmentDetailsComponent implements OnInit, AfterViewInit {
 
 
   fetchUserData() {
-    this.assignmentService.fetchUser().subscribe(
+    this.userService.fetchEmployees().subscribe(
       data => {
-        console.log('Fetched user data:', data);
         this.userData = data;
-
       },
       error => {
         console.error('Error fetching user data:', error);
@@ -168,12 +168,10 @@ export class AssignmentDetailsComponent implements OnInit, AfterViewInit {
 
 
   assignCustomer(customerId: bigint) {
-
     this.assignmentService.assignCustomer(this.currentAssignmentId, customerId).subscribe({
         next: response => {
           this.fetchAssignmentData(this.currentAssignmentId);
           console.log('Customer assigned successfully:', response);
-
         },
         error: error => {
           console.error('Customer not assigned successfully:', error);
@@ -193,6 +191,18 @@ export class AssignmentDetailsComponent implements OnInit, AfterViewInit {
     );
   }
 
+  deleteCustomerFromAssignment(customerId: bigint) {
+    this.assignmentService.deleteCustomer(this.currentAssignmentId, customerId).subscribe({
+      next: response => {
+        console.log("DELETED");
+        this.fetchAssignmentData(this.currentAssignmentId);
+      },
+      error: error => {
+        console.error(error)
+      }
+    })
+  }
+
 
   assignUser(username: string) {
     this.assignmentService.assignUser(this.currentAssignmentId, username).subscribe({
@@ -203,11 +213,9 @@ export class AssignmentDetailsComponent implements OnInit, AfterViewInit {
         },
         error: error => {
           console.error('Customer not assigned successfully:', error);
-
           if (error.error && error.error.message) { // Check if 'message' property exists
             const errorMessage = error.error.message;
             console.log('Error message:', errorMessage);
-
             this._snackBar.open(errorMessage, '', {
               duration: 3000
             });

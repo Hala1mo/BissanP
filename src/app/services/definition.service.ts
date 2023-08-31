@@ -14,12 +14,13 @@ export interface DefinitionForm {
     locationId: bigint;
 }
 
-interface AssignmentForm {
-    date: string; // Change the type to match your use case
+interface AssignmentDTO {
+    date: string;
     comment: string;
+    username: string;
 }
 
-interface addForm {
+interface basicNameDTO {
     name: string;
 }
 
@@ -90,18 +91,12 @@ export class DefinitionService {
         );
     }
 
-
-    fetchCityData(): Observable<any> {
-        return this.http.get<any>(this._city_url).pipe(
-            catchError(this.handleError)
-        );
-    }
-
-    saveNewAssignmentToDefinition(assignment: any, definitionId: bigint): Observable<any> {
+  saveNewAssignmentToDefinition(assignment: any, definitionId: bigint): Observable<any> {
         const urlAssignment = `${this.visitDefinitionsURL}/${definitionId}/assignments`;
-        const newAssignment: AssignmentForm = {
+        const newAssignment: AssignmentDTO = {
             date: assignment.date,
             comment: assignment.comment,
+            username: assignment.username,
         };
 
         return this.http.post<any>(urlAssignment, newAssignment).pipe();
@@ -114,8 +109,7 @@ export class DefinitionService {
 
 
     saveNewCity(cityForm: any) {
-
-        const addPayload: addForm = {
+        const addPayload: basicNameDTO = {
             name: cityForm.name,
         };
 
@@ -125,8 +119,7 @@ export class DefinitionService {
     }
 
     saveNewType(typeForm: any) {
-
-        const addPayload: addForm = {
+        const addPayload: basicNameDTO = {
             name: typeForm.name,
         };
         return this.http.post<any>(this.visitTypesURL, addPayload).pipe(

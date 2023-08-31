@@ -1,74 +1,81 @@
 <h1 mat-dialog-title>Assignment</h1>
 <mat-dialog-content>
-    <div class="row mb-2 pb-1 border-bottom">
-        <!-- ASSIGN USER -->
-      <form>
-        <mat-form-field [style.width.%]="100">
-          <mat-label>User Assignee</mat-label>
-          <input type="text" matInput [formControl]="userSelectControl" [matAutocomplete]="autoUser" >
-          <mat-autocomplete #autoUser="matAutocomplete" [displayWith]="displayUser" (optionSelected)="selectUser($event)">
-            <mat-option *ngFor="let option of filteredUsers | async" [value]="option">
-              {{option.username}}
-            </mat-option>
-          </mat-autocomplete>
-        </mat-form-field>
-        <button mat-raised-button color="primary" (click)="assignUser(selectedUser?.username)">
-          Assign User
-        </button>
-      </form>
-    </div>
-    <div class="row mb-2 pb-1 border-bottom">
-        <!-- ASSIGN CUSTOMERS -->
-      <form>
-        <mat-form-field [style.width.%]="100">
-          <mat-label>Customer Assignee</mat-label>"
-          <input type="text" matInput [formControl]="customerSelectControl" [matAutocomplete]="autoCustomer" >
-          <mat-autocomplete #autoCustomer="matAutocomplete" [displayWith]="displayCustomer" (optionSelected)="selectCustomer($event)">
-            <mat-option *ngFor="let customer of filteredCustomers | async" [value]="customer">
-              {{ customer.name }}
-            </mat-option>
-          </mat-autocomplete>
+  <div class="row mb-2 pb-1 border-bottom">
+    <!-- ASSIGN USER -->
+    <form>
+      <mat-form-field [style.width.%]="100">
+        <mat-label>User Assignee</mat-label>
+        <input type="text" matInput [formControl]="userSelectControl" [matAutocomplete]="autoUser">
+        <mat-autocomplete #autoUser="matAutocomplete" [displayWith]="displayUser" (optionSelected)="selectUser($event)">
+          <mat-option *ngFor="let option of filteredUsers | async" [value]="option">
+            {{option.username}}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+      <button mat-raised-button color="primary" (click)="assignUser(selectedUser?.username)">
+        Assign User
+      </button>
+    </form>
+  </div>
+  <div class="row mb-2 pb-1 border-bottom">
+    <!-- ASSIGN CUSTOMERS -->
+    <form>
+      <mat-form-field [style.width.%]="100">
+        <mat-label>Customer Assignee</mat-label>
+        "
+        <input type="text" matInput [formControl]="customerSelectControl" [matAutocomplete]="autoCustomer">
+        <mat-autocomplete #autoCustomer="matAutocomplete" [displayWith]="displayCustomer"
+                          (optionSelected)="selectCustomer($event)">
+          <mat-option *ngFor="let customer of filteredCustomers | async" [value]="customer">
+            {{ customer.name }}
+          </mat-option>
+        </mat-autocomplete>
 
-        </mat-form-field>
+      </mat-form-field>
 
 
-        <button mat-raised-button color="primary" (click)="assignCustomer(selectedCustomer?.id)">
-          Assign Customer
-        </button>
-      </form>
-    </div>
-    <div class="row mb-2 pb-1">
-        <!-- VIEW ASSIGNED CUSTOMERS SCROLLABLE OR PAGINATION -->
-        <mat-paginator [pageSizeOptions]="[5,10]"
-                       showFirstLastButtons
-                       aria-label="Select page of assignments">
-        </mat-paginator>
-        <table mat-table [dataSource]="customerDataSource" matSort>
-            <ng-container matColumnDef="name">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name">
-                    Name
-                </th>
-                <td mat-cell *matCellDef="let customer" class="text-capitalize">{{customer.name}}</td>
-            </ng-container>
-            <ng-container matColumnDef="actions">
-                <th mat-header-cell *matHeaderCellDef>
-                    Actions
-                </th>
-                <td mat-cell *matCellDef="let Customer">
-                    <button mat-icon-button color="primary"
-                            (click)="openCustomerDetails(Customer.id)">
-                        <mat-icon>open_in_new</mat-icon>
-                    </button>
+      <button mat-raised-button color="primary" (click)="assignCustomer(selectedCustomer?.id)">
+        Assign Customer
+      </button>
+    </form>
+  </div>
+  <div class="row mb-2 pb-1">
+    <!-- VIEW ASSIGNED CUSTOMERS SCROLLABLE OR PAGINATION -->
+    <mat-paginator [pageSizeOptions]="[5,10]"
+                   showFirstLastButtons
+                   aria-label="Select page of assignments">
+    </mat-paginator>
+    <table mat-table [dataSource]="customerDataSource" matSort>
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name">
+          Name
+        </th>
+        <td mat-cell *matCellDef="let customer" class="text-capitalize">{{customer.name}}</td>
+      </ng-container>
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>
+          Actions
+        </th>
+        <td mat-cell *matCellDef="let customer">
+          <div class="d-flex justify-content-between">
+            <button mat-icon-button color="primary"
+                    (click)="openCustomerDetails(customer.id)">
+              <mat-icon>open_in_new</mat-icon>
+            </button>
+            <button mat-icon-button color="warn"
+                    (click)="deleteCustomerFromAssignment(customer.id)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns:displayedColumns;"></tr>
 
-                </td>
-            </ng-container>
-            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns:displayedColumns;"></tr>
+    </table>
 
-        </table>
+  </div>
+  <mat-dialog-actions>
 
-    </div>
-    <mat-dialog-actions>
-
-    </mat-dialog-actions>
+  </mat-dialog-actions>
 </mat-dialog-content>

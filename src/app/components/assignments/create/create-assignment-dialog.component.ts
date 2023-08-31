@@ -1,56 +1,90 @@
-import {Component, Inject} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {Component, ElementRef, Inject, OnInit, ViewChild} from '@angular/core';
+import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {DefinitionService} from "../../../services/definition.service";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {User} from "../../../models/User";
+import {MatAutocompleteSelectedEvent} from "@angular/material/autocomplete";
+import {UserService} from "../../../services/user.service";
 
 @Component({
-    selector: 'app-create',
-    templateUrl: './create-assignment-dialog.component.html',
-    styleUrls: ['./create-assignment-dialog.component.css']
+  selector: 'app-create',
+  templateUrl: './create-assignment-dialog.component.html',
+  styleUrls: ['./create-assignment-dialog.component.css']
 })
-export class CreateAssignmentDialogComponent {
-    assignmentForm: FormGroup;
-    currentDefinitionId: bigint;
+export class CreateAssignmentDialogComponent implements OnInit {
+  filteredUsers: User[] | undefined;
+  userData: User [] = [];
 
-    constructor(
-        formBuilder: FormBuilder,
-        private snackBar: MatSnackBar,
-        private definitionService: DefinitionService,
-        public matDialogRef: MatDialogRef<CreateAssignmentDialogComponent>,
-        @Inject(MAT_DIALOG_DATA) public data: any,
-    ) {
-        this.currentDefinitionId = data.definitionId;
+  assignmentForm: FormGroup;
+  currentDefinitionId: bigint;
+  userSelectControl = new FormControl();
 
-        this.assignmentForm = formBuilder.group({
-            date: ['', [Validators.required]],
-            comment: ['', [Validators.maxLength(255)]]
-        })
-    }
+  @ViewChild('userInput') userInput!: ElementRef<HTMLInputElement>;
+  isSaving: boolean = false;
+  constructor(
+    formBuilder: FormBuilder,
+    private snackBar: MatSnackBar,
+    private definitionService: DefinitionService,
+    private userService: UserService,
+    public matDialogRef: MatDialogRef<CreateAssignmentDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any,
+  ) {
+    this.currentDefinitionId = data.definitionId;
 
-    submitForm() {
-        if (this.assignmentForm.invalid) return;
+    this.assignmentForm = formBuilder.group({
+      date: ['', [Validators.required]],
+      comment: ['', [Validators.maxLength(30)]],
+      username: ['', [Validators.required]]
+    })
+  }
 
-        console.log(this.assignmentForm.value);
+  ngOnInit() {
+    this.fetchUserData();
+  }
 
-        this.definitionService.saveNewAssignmentToDefinition(this.assignmentForm.value, this.currentDefinitionId).subscribe({
-            next: response => {
-                console.log("SAVED NEW ASSIGNMENT", response);
-                this.matDialogRef.close(response);
-            },
-            error: error => {
+  private fetchUserData() {
+    this.userService.fetchEmployees().subscribe({
+        next: response => {
+          this.userData = response;
+        },
+        error: error => {
+          console.error('Error fetching user data:', error);
+        }
+      }
+    );
+  }
 
-              if (error.error && error.error.message) { // Check if 'message' property exists
-                const errorMessage = error.error.message;
-                console.log('Error message:', errorMessage);
+  filterUsers(){
+    const filterValue = this.userInput.nativeElement.value.toLowerCase();
+    this.filteredUsers = this.userData.filter(option => option.username.toLowerCase().includes(filterValue)
+      || option.firstName.toLowerCase().includes(filterValue)
+      || option.lastName.toLowerCase().includes(filterValue));
+  }
 
-                this.snackBar.open(errorMessage, '', {
-                  duration: 3000
-                });
-              } else {
-                console.log('Unknown error occurred.');
-              }
-            }
-        })
-    }
+  submitForm() {
+    if (this.assignmentForm.invalid) return;
+    if (this.isSaving) return;
+
+    this.isSaving = true;
+    this.definitionService.saveNewAssignmentToDefinition(this.assignmentForm.value, this.currentDefinitionId).subscribe({
+      next: response => {
+        this.matDialogRef.close(response);
+      },
+      error: error => {
+        if (error.error && error.error.message) { // Check if 'message' property exists
+          const errorMessage = error.error.message;
+          this.snackBar.open(errorMessage, '', {
+            duration: 3000
+          });
+        }
+      }
+    })
+  }
+  selectUser(event: MatAutocompleteSelectedEvent): void {
+    this.assignmentForm.patchValue({
+      username: event.option.value
+    })
+  }
+
 }

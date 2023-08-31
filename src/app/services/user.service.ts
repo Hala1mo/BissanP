@@ -31,9 +31,8 @@ export class UserService {
   constructor(private _http: HttpClient) {
   }
 
-  getAllUsers(): Observable<any> {
+  fetchAllUsers(): Observable<any> {
     const url = `${this.usersUrl}/all`
-    // Send a GET request to the server to fetch user data
     return this._http.get<any>(url);
   }
 
@@ -70,14 +69,19 @@ export class UserService {
     return this._http.put<any>(updateUrl, editUserPayload);
   }
 
-  getUserReports(username: string): Observable<any> {
+  fetchUserReportsByUsername(username: string): Observable<any> {
     const Url = `${this.usersReports}/${username}`;
     return this._http.get<any>(Url);
   }
 
-  getUserData(username: string): Observable<any> {
+  fetchUserByUsername(username: string): Observable<any> {
     const Url = `${this.usersUrl}/${username}`;
     return this._http.get<any>(Url);
+  }
+
+  fetchEmployees(): Observable<any> {
+    const _urlDetails = `${this.usersUrl}/employees`;
+    return this._http.get<any>(_urlDetails);
   }
 
 

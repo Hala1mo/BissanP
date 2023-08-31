@@ -54,7 +54,7 @@ export class UserComponent implements OnInit, AfterViewInit {
     }
 
     fetchAllUserData() {
-        this.userService.getAllUsers().subscribe({
+        this.userService.fetchAllUsers().subscribe({
             next: response => {
                 this.isTableLoaded = true;
 
