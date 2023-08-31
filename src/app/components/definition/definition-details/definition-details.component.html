@@ -3,9 +3,6 @@
     <div class="d-flex justify-content-between">
       <div>
         <h1>{{currentDefinition.name}}</h1>
-        <mat-chip-set>
-          <mat-chip>{{currentDefinition.visitType.name}}</mat-chip>
-        </mat-chip-set>
       </div>
       <div class="d-flex gap-1">
         <button mat-raised-button color="primary" (click)="openCreateAssignmentDialog()">
@@ -17,31 +14,36 @@
           <mat-icon>edit</mat-icon>
         </button>
       </div>
-
     </div>
   </div>
   <div class="row mb-5 py-1 border-bottom">
-    <div>
-      <h3>{{currentDefinition.description}}</h3>
+    <p class="mb-1 h6 text-capitalize">
+      Description:
+      <span class="imp-mat-primary text-capitalize">{{currentDefinition.description}}</span>
+    </p>
+    <p class="mb-1 h6 text-capitalize">
+      Type:
+      <span class="imp-mat-primary text-capitalize">{{currentDefinition.visitType.name}}</span>
+    </p>
+    <p class="mb-1 mt-3 h5 text-capitalize">Address</p>
+    <div class="ps-4">
+      <p class="mb-1 h6 text-capitalize">
+        City:
+        <span class="imp-mat-primary text-capitalize">{{currentDefinition.location.cityName}}</span>
+      </p>
+      <p class="mb-1 h6 text-capitalize">
+        Location:
+        <span class="imp-mat-primary text-capitalize">{{currentDefinition.location.address}}</span>
+      </p>
     </div>
-    <div>
-      <div>
-        {{currentDefinition.allowRecurring ? 'Recurring every ' + currentDefinition.frequency +
-        (currentDefinition.frequency > 1 ? ' Days' : ' Day') : 'One Time'}}
-      </div>
-      <div>
-        Created On:
-        <span class="imp-mat-primary text-decoration-underline">
-            {{formatDateString(currentDefinition.createdTime)}}
-          </span>
-      </div>
-      <div>
-        Last Modified On:
-        <span class="imp-mat-primary text-decoration-underline">
-          {{formatDateString(currentDefinition.lastModifiedTime)}}
-        </span>
-      </div>
-    </div>
+    <p class="mb-1 mt-3 h6 text-capitalize ">
+      Created On:
+      <span class="imp-mat-primary text-lowercase">{{currentDefinition.createdTime}}</span>
+    </p>
+    <p class="mb-1 h6 text-capitalize">
+      Last Modified On:
+      <span class="imp-mat-primary text-lowercase">{{currentDefinition.lastModifiedTime}}</span>
+    </p>
   </div>
 
   <div class="row mb-3">
