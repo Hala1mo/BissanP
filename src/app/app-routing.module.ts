@@ -6,14 +6,17 @@ import {CustomerDetailsComponent} from "./components/customer/details/customer-d
 import {DefinitionComponent} from "./components/definition/definition.component";
 import {DefinitionDetailsComponent} from "./components/definition/definition-details/definition-details.component";
 import {AssignmentDetailsComponent} from "./components/assignments/assignment-details.component";
-import {AddUserComponent} from "./components/user/add/add-user.component";
 import {ReportsComponent} from "./components/reports/reports.component";
 import {StatusComponent} from "./components/reports/status/status.component";
 import {DateComponent} from "./components/reports/date/date.component";
 import {TypesChartComponent} from "./components/reports/types-chart/types-chart.component";
 import {UserDetailsComponent} from "./components/user/user-details/user-details.component";
+import {HomeComponent} from "./components/home/home.component";
 
 const routes: Routes = [
+  {path: '', redirectTo: '/dashboard', pathMatch: 'full'},
+  {path: 'dashboard', component: HomeComponent},
+
   {path: 'users', component: UserComponent},
   {path: 'customers', component: CustomerComponent},
   {path: 'definitions', component: DefinitionComponent},

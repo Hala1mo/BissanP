@@ -56,6 +56,7 @@ import {MatProgressBarModule} from "@angular/material/progress-bar";
 import {MatSidenavModule} from "@angular/material/sidenav";
 import {MatListModule} from "@angular/material/list";
 import { AssignNewCustomerDialogComponent } from './components/customer/assign-new-customer-dialog/assign-new-customer-dialog.component';
+import { HomeComponent } from './components/home/home.component';
 
 
 @NgModule({
@@ -86,6 +87,7 @@ import { AssignNewCustomerDialogComponent } from './components/customer/assign-n
         TypeDialogComponent,
         CityDialogComponent,
         AssignNewCustomerDialogComponent,
+        HomeComponent,
 
     ],
   imports: [

@@ -2,9 +2,12 @@
   <mat-toolbar color="primary">
     <mat-toolbar-row>
       <div class="w-100 d-flex justify-content-between">
-        <!--    <img class="me-3" src="../../../assets/bisan-logo.png" alt="Logo" width="60" height="30">-->
-        <span class="me-3">Visit Manager</span>
+        <span class="me-3"><a [routerLink]="['/dashboard']" class="text-decoration-none h2">Visit Manager</a></span>
         <div class="d-flex gap-3">
+          <a class="fs-6" mat-button [routerLink]="['/dashboard']">
+            <mat-icon>dashboard</mat-icon>
+            Dashboard
+          </a>
           <a class="fs-6" mat-button [routerLink]="['/users']">
             <mat-icon>person</mat-icon>
             Users
