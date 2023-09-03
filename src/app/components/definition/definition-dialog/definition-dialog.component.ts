@@ -7,7 +7,6 @@ import {VisitDefinition} from "../../../models/VisitDefinition";
 import {DefinitionService} from "../../../services/definition.service";
 import {City} from "../../../models/City";
 import {Location} from "../../../models/Location"
-import {SharedService} from "../../../services/shared.service";
 
 @Component({
   selector: 'app-definition-dialog',
@@ -21,7 +20,7 @@ export class DefinitionDialogComponent implements OnInit {
   editMode: boolean;
   visitTypes: VisitType[];
   cities: City[];
-  currentDefinition: VisitDefinition;
+  selectedDefinition: VisitDefinition;
   selectedCity: City | null = null;
   selectedCityLocations: Location[] = [];
   isSaving: boolean = false;
@@ -30,13 +29,12 @@ export class DefinitionDialogComponent implements OnInit {
     formBuilder: FormBuilder,
     private snackBar: MatSnackBar,
     private definitionService: DefinitionService,
-    private sharedService: SharedService,
     public matDialogRef: MatDialogRef<DefinitionDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.editMode = data.mode === 1;
     this.visitTypes = data.types;
-    this.currentDefinition = data.definition;
+    this.selectedDefinition = data.definition;
     this.cities = data.cities;
 
 
@@ -64,15 +62,15 @@ export class DefinitionDialogComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.editMode) {
-      console.log("EDITING", this.currentDefinition);
+      this.changeSelectedCity(this.cities.filter((city: City) => city.id == this.selectedDefinition.location.cityId)[0]);
       this.definitionForm.patchValue({
-        name: this.currentDefinition.name,
-        description: this.currentDefinition.description,
-        frequency: this.currentDefinition.frequency,
-        allowRecurring: this.currentDefinition.allowRecurring,
-        typeId: this.currentDefinition.visitType.id,
-        cityId: this.currentDefinition.location.cityId,
-        locationId: this.currentDefinition.location.id,
+        name: this.selectedDefinition.name,
+        description: this.selectedDefinition.description,
+        frequency: this.selectedDefinition.frequency,
+        allowRecurring: this.selectedDefinition.allowRecurring,
+        typeId: this.selectedDefinition.visitType.id,
+        cityId: this.selectedDefinition.location.cityId,
+        locationId: this.selectedDefinition.location.id,
       });
     }
   }
@@ -83,7 +81,7 @@ export class DefinitionDialogComponent implements OnInit {
 
     this.isSaving = false;
     if (this.editMode)
-      this.updateDefinition(this.currentDefinition, this.definitionForm.value);
+      this.updateDefinition(this.selectedDefinition, this.definitionForm.value);
     else
       this.saveNewDefinition(this.definitionForm.value);
   }
@@ -99,7 +97,6 @@ export class DefinitionDialogComponent implements OnInit {
           this.snackBar.open(errorMessage, '', {
             duration: 3000
           });
-        } else {
         }
       }
     })
@@ -124,29 +121,7 @@ export class DefinitionDialogComponent implements OnInit {
 
   changeSelectedCity(city: City) {
     this.selectedCity = city;
-    if (!this.selectedCity.locations) {
-      console.log("FETCHING LOCATIONS")
-      // GO FETCH THE LOCATIONS IN THAT CITY
-      this.sharedService.fetchCityById(this.selectedCity.id).subscribe({
-        next: response => {
-          if (!this.selectedCity) return
-          if (!response.locations || response.locations.length < 1){
-            this.snackBar.open(`No locations found in ${this.selectedCity.name}`, '', {
-              duration: 3000
-            })
-          }
-          this.selectedCity.locations = response.locations;
-          this.selectedCityLocations = [...this.selectedCity.locations];
-        },
-        error: () => {
-          this.snackBar.open("Error Finding Locations", '', {
-            duration: 3000
-          })
-        }
-      })
-    } else {
-      this.selectedCityLocations = [...this.selectedCity.locations];
-    }
+    this.selectedCityLocations = [...this.selectedCity.locations];
   }
 
 }

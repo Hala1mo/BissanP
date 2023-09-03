@@ -53,9 +53,8 @@ export class CustomerDialogComponent implements OnInit {
 
 
   ngOnInit() {
-    console.log("this.registrationForm", this.customerForm);
-
     if (this.editMode) {
+      this.changeSelectedCity(this.cities.filter((city: City) => city.id == this.selectedCustomer.location.cityId)[0]);
       this.customerForm.patchValue({
         name: this.selectedCustomer.name,
         cityId: this.selectedCustomer.location.cityId,
@@ -63,9 +62,7 @@ export class CustomerDialogComponent implements OnInit {
         longitude: this.selectedCustomer.longitude,
         latitude: this.selectedCustomer.latitude,
       });
-
     }
-
   }
 
   get firstName() {
@@ -182,29 +179,7 @@ export class CustomerDialogComponent implements OnInit {
 
   changeSelectedCity(city: City) {
     this.selectedCity = city;
-    if (!this.selectedCity.locations) {
-      console.log("FETCHING LOCATIONS")
-      // GO FETCH THE LOCATIONS IN THAT CITY
-      this.sharedService.fetchCityById(this.selectedCity.id).subscribe({
-        next: response => {
-          if (!this.selectedCity) return
-          if (!response.locations || response.locations.length < 1) {
-            this.snackBar.open(`No locations found in ${this.selectedCity.name}`, '', {
-              duration: 3000
-            })
-          }
-          this.selectedCity.locations = response.locations;
-          this.selectedCityLocations = [...this.selectedCity.locations];
-        },
-        error: () => {
-          this.snackBar.open("Error Finding Locations", '', {
-            duration: 3000
-          })
-        }
-      })
-    } else {
-      this.selectedCityLocations = [...this.selectedCity.locations];
-    }
+    this.selectedCityLocations = [...this.selectedCity.locations];
   }
 
 }
