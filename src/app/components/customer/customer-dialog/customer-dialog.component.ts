@@ -70,7 +70,7 @@ export class CustomerDialogComponent implements OnInit {
   }
 
   fetchCustomerData() {
-    this.customerService.fetchCustomerData().subscribe(
+    this.customerService.fetchCustomers().subscribe(
       data => {
         console.log('Fetched customer data:', data);
         this.customerData = data;

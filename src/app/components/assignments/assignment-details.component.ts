@@ -1,11 +1,9 @@
-import {AfterViewInit, Component, Inject, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, Inject, OnInit, ViewChild} from '@angular/core';
 import {Router} from "@angular/router";
 import {RegistrationService} from "../../services/registration.service";
 import {AssignmentService} from "../../services/assignment.service";
 import {Customer} from "../../models/Customer";
 import {FormControl} from "@angular/forms";
-import {Observable, startWith} from "rxjs";
-import {map} from "rxjs/operators";
 import {User} from "../../models/User";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {VisitAssignment} from "../../models/VisitAssignment";
@@ -25,18 +23,21 @@ export class AssignmentDetailsComponent implements OnInit, AfterViewInit {
   customerData: Customer[] = [];
   userData: User [] = [];
 
+  filteredCustomers: Customer[] | undefined;
   customerSelectControl = new FormControl();
-  userSelectControl = new FormControl();
+  @ViewChild('customerInput') customerInput!: ElementRef<HTMLInputElement>;
 
-  filteredCustomers: Observable<Customer[]> | undefined;
-  filteredUsers: Observable<User[]> | undefined;
+  filteredUsers: User[] | undefined;
+  userSelectControl = new FormControl();
+  @ViewChild('userInput') userInput!: ElementRef<HTMLInputElement>;
+
 
   currentAssignmentId: bigint;
+  currentAssignmentLocationId: bigint;
   currentAssignment: VisitAssignment | undefined;
 
-
-  selectedUser: any; // Placeholder for selected user
-  selectedCustomer: any; // Placeholder for selected customer
+  selectedUser: User | undefined; // Placeholder for selected user
+  selectedCustomer: Customer | undefined; // Placeholder for selected customer
 
   displayedColumns = ['name', 'actions'];
   customerDataSource = new MatTableDataSource([]);
@@ -50,34 +51,19 @@ export class AssignmentDetailsComponent implements OnInit, AfterViewInit {
     private assignmentService: AssignmentService,
     private registrationService: RegistrationService,
     private userService: UserService,
-    private _snackBar: MatSnackBar,
+    private snackBar: MatSnackBar,
     public matDialogRef: MatDialogRef<AssignmentDetailsComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
   ) {
     this.currentAssignmentId = data.assignmentId;
+    this.currentAssignmentLocationId = data.locationId;
+
   }
 
   ngOnInit(): void {
-    this.fetchAssignmentData(this.currentAssignmentId);
-    this.fetchCustomerData();
+    this.fetchCurrentAssignment(this.currentAssignmentId);
     this.fetchUserData();
-
-    this.filteredUsers = this.userSelectControl.valueChanges.pipe(
-      startWith(''),
-      map(value => {
-        const username = typeof value === 'string' ? value : value?.username;
-        return username ? this._filterUser(username as string) : this.userData.slice();
-      }),
-    );
-
-    this.filteredCustomers = this.customerSelectControl.valueChanges.pipe(
-      startWith(''),
-      map(value => {
-        const name = typeof value === 'string' ? value : value?.name;
-        return name ? this._filterCustomer(name as string) : this.customerData.slice();
-      })
-    )
-
+    this.fetchCustomerData();
   }
 
 
@@ -94,17 +80,14 @@ export class AssignmentDetailsComponent implements OnInit, AfterViewInit {
     this.customerDataSource.paginator = this.paginator;
   }
 
-  fetchAssignmentData(id: any) {
+  fetchCurrentAssignment(id: any) {
     this.assignmentService.findAssignmentById(id).subscribe({
         next: response => {
           this.customerDataSource.data = response.customers;
           this.currentAssignment = response;
-          console.log("RESPONSE --->", this.currentAssignment);
 
-          // if (response.user) {
-          //     this.userSelectControl.setValue(response.user.username);
-          // }
-
+          this.selectedUser = response.user;
+          this.userSelectControl.setValue(this.selectedUser);
         },
         error: error => {
           console.error('Error fetching Assignment data:', error);
@@ -114,9 +97,9 @@ export class AssignmentDetailsComponent implements OnInit, AfterViewInit {
   }
 
   fetchCustomerData() {
-    this.registrationService.fetchCustomerData().subscribe({
+    this.registrationService.fetchCustomersInLocation(this.currentAssignmentLocationId).subscribe({
       next: response => {
-        console.log('Fetched customer data:', response);
+        console.log("CUSTOMERS ==> ", response)
         this.customerData = response;
       },
       error: error => {
@@ -127,38 +110,25 @@ export class AssignmentDetailsComponent implements OnInit, AfterViewInit {
 
 
   fetchUserData() {
-    this.userService.fetchEmployees().subscribe(
-      data => {
-        this.userData = data;
-      },
-      error => {
-        console.error('Error fetching user data:', error);
+    this.userService.fetchEmployees().subscribe({
+        next: response => {
+          this.userData = response;
+        },
+        error: error => {
+          console.error('Error fetching user data: ', error);
+        }
       }
     );
   }
 
   displayUser(user: User): string {
-    return user ? user.username : '';
+    return user ? `${user.username} (${user.firstName} ${user.lastName})` : '';
   }
 
   displayCustomer(customer: Customer): string {
-    return customer ? customer.name : '';
+    return customer ? `${customer.name}` : '';
   }
 
-
-  private _filterUser(name: string): User[] {
-    const filterValue = name.toLowerCase();
-
-    return this.userData.filter(option => option.username.toLowerCase().includes(filterValue)
-      || option.firstName.toLowerCase().includes(filterValue)
-      || option.lastName.toLowerCase().includes(filterValue));
-  }
-
-  private _filterCustomer(name: string) {
-    const filterValue = name.toLowerCase();
-
-    return this.customerData.filter(option => option.name.toLowerCase().includes(filterValue));
-  }
 
   openCustomerDetails(id: bigint) {
     this.router.navigate(['/customers', id]).then(() => {
@@ -167,10 +137,12 @@ export class AssignmentDetailsComponent implements OnInit, AfterViewInit {
   }
 
 
-  assignCustomer(customerId: bigint) {
+  assignCustomer(customerId: bigint | undefined) {
+    if (!customerId) return;
+
     this.assignmentService.assignCustomer(this.currentAssignmentId, customerId).subscribe({
         next: response => {
-          this.fetchAssignmentData(this.currentAssignmentId);
+          this.fetchCurrentAssignment(this.currentAssignmentId);
           console.log('Customer assigned successfully:', response);
         },
         error: error => {
@@ -180,7 +152,7 @@ export class AssignmentDetailsComponent implements OnInit, AfterViewInit {
             const errorMessage = error.error.message;
             console.log('Error message:', errorMessage);
 
-            this._snackBar.open(errorMessage, '', {
+            this.snackBar.open(errorMessage, '', {
               duration: 3000
             });
           } else {
@@ -193,9 +165,8 @@ export class AssignmentDetailsComponent implements OnInit, AfterViewInit {
 
   deleteCustomerFromAssignment(customerId: bigint) {
     this.assignmentService.deleteCustomer(this.currentAssignmentId, customerId).subscribe({
-      next: response => {
-        console.log("DELETED");
-        this.fetchAssignmentData(this.currentAssignmentId);
+      next: () => {
+        this.fetchCurrentAssignment(this.currentAssignmentId);
       },
       error: error => {
         console.error(error)
@@ -204,10 +175,12 @@ export class AssignmentDetailsComponent implements OnInit, AfterViewInit {
   }
 
 
-  assignUser(username: string) {
+  assignUser(username: string | undefined) {
+    if (!username) return;
+
     this.assignmentService.assignUser(this.currentAssignmentId, username).subscribe({
         next: response => {
-          this.fetchAssignmentData(this.currentAssignmentId);
+          this.fetchCurrentAssignment(this.currentAssignmentId);
           console.log('Customer assigned successfully:', response);
 
         },
@@ -216,7 +189,7 @@ export class AssignmentDetailsComponent implements OnInit, AfterViewInit {
           if (error.error && error.error.message) { // Check if 'message' property exists
             const errorMessage = error.error.message;
             console.log('Error message:', errorMessage);
-            this._snackBar.open(errorMessage, '', {
+            this.snackBar.open(errorMessage, '', {
               duration: 3000
             });
           } else {
@@ -225,6 +198,20 @@ export class AssignmentDetailsComponent implements OnInit, AfterViewInit {
         }
       }
     );
+  }
+
+  filterUsers() {
+    const filterValue = this.userInput.nativeElement.value.toLowerCase();
+    this.filteredUsers = this.userData.filter(option => option.username.toLowerCase().includes(filterValue)
+      || option.firstName.toLowerCase().includes(filterValue)
+      || option.lastName.toLowerCase().includes(filterValue));
+  }
+
+  filterCustomers() {
+    const filterValue = this.customerInput.nativeElement.value.toLowerCase();
+    console.log("FILTERING", filterValue);
+
+    this.filteredCustomers = this.customerData.filter(option => option.name.toLowerCase().includes(filterValue));
   }
 }
 

@@ -22,6 +22,7 @@ export class CreateAssignmentDialogComponent implements OnInit {
 
   @ViewChild('userInput') userInput!: ElementRef<HTMLInputElement>;
   isSaving: boolean = false;
+
   constructor(
     formBuilder: FormBuilder,
     private snackBar: MatSnackBar,
@@ -55,7 +56,7 @@ export class CreateAssignmentDialogComponent implements OnInit {
     );
   }
 
-  filterUsers(){
+  filterUsers() {
     const filterValue = this.userInput.nativeElement.value.toLowerCase();
     this.filteredUsers = this.userData.filter(option => option.username.toLowerCase().includes(filterValue)
       || option.firstName.toLowerCase().includes(filterValue)
@@ -63,10 +64,13 @@ export class CreateAssignmentDialogComponent implements OnInit {
   }
 
   submitForm() {
+    console.log("FORM VALUE", this.assignmentForm.value)
+
     if (this.assignmentForm.invalid) return;
     if (this.isSaving) return;
 
     this.isSaving = true;
+
     this.definitionService.saveNewAssignmentToDefinition(this.assignmentForm.value, this.currentDefinitionId).subscribe({
       next: response => {
         this.matDialogRef.close(response);
@@ -81,9 +85,15 @@ export class CreateAssignmentDialogComponent implements OnInit {
       }
     })
   }
+
+  displayUser(user: User): string {
+    return user ? `${user.username} (${user.firstName} ${user.lastName})` : '';
+  }
+
+
   selectUser(event: MatAutocompleteSelectedEvent): void {
     this.assignmentForm.patchValue({
-      username: event.option.value
+      username: event.option.value.username,
     })
   }
 

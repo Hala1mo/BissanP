@@ -16,15 +16,14 @@
           <input #userInput
                  type="text"
                  matInput
-                 formControlName="username"
                  [formControl]="userSelectControl"
                  [matAutocomplete]="autoUser"
                  (input)="filterUsers()"
                  (focus)="filterUsers()"
           >
-          <mat-autocomplete #autoUser="matAutocomplete" (optionSelected)="selectUser($event)">
-            <mat-option *ngFor="let option of filteredUsers" [value]="option.username">
-              {{option.username}}
+          <mat-autocomplete #autoUser="matAutocomplete" (optionSelected)="selectUser($event)" [displayWith]="displayUser" >
+            <mat-option *ngFor="let option of filteredUsers" [value]="option">
+              {{displayUser(option)}}
             </mat-option>
           </mat-autocomplete>
         </mat-form-field>

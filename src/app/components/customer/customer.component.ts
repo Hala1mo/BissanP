@@ -59,7 +59,7 @@ export class CustomerComponent implements OnInit {
 
   fetchCustomerData() {
     this.selectedEnabledOption = "All"
-    this.customerService.fetchCustomerData().subscribe({
+    this.customerService.fetchCustomers().subscribe({
         next: response => {
           this.isTableLoaded = true;
           this.originalCustomerData = response;

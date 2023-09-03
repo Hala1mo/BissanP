@@ -1,42 +1,61 @@
-<h1 mat-dialog-title>Assignment</h1>
+<h1 mat-dialog-title class="text-capitalize">{{currentAssignment?.comment}}</h1>
 <mat-dialog-content>
+  <div class="row mb-2 pb-1">
+    <p class="mb-1 h6 text-capitalize">
+      Date:
+      <span class="imp-mat-primary text-capitalize">{{currentAssignment?.date}}</span>
+    </p>
+  </div>
   <div class="row mb-2 pb-1 border-bottom">
     <!-- ASSIGN USER -->
     <form>
       <mat-form-field [style.width.%]="100">
         <mat-label>User Assignee</mat-label>
-        <input type="text" matInput [formControl]="userSelectControl" [matAutocomplete]="autoUser">
-        <mat-autocomplete #autoUser="matAutocomplete" [displayWith]="displayUser" (optionSelected)="selectUser($event)">
-          <mat-option *ngFor="let option of filteredUsers | async" [value]="option">
-            {{option.username}}
+        <input #userInput
+               type="text"
+               matInput
+               [formControl]="userSelectControl"
+               [matAutocomplete]="autoUser"
+               (input)="filterUsers()"
+               (focus)="filterUsers()">
+        <button mat-icon-button matSuffix color="primary" aria-label="assign user"
+                (click)="assignUser(selectedUser?.username)">
+          <mat-icon>person_add</mat-icon>
+        </button>
+        <mat-autocomplete #autoUser="matAutocomplete" (optionSelected)="selectUser($event)" [displayWith]="displayUser">
+          <mat-option *ngFor="let option of filteredUsers" [value]="option">
+            {{displayUser(option)}}
           </mat-option>
         </mat-autocomplete>
+
       </mat-form-field>
-      <button mat-raised-button color="primary" (click)="assignUser(selectedUser?.username)">
-        Assign User
-      </button>
     </form>
   </div>
   <div class="row mb-2 pb-1 border-bottom">
     <!-- ASSIGN CUSTOMERS -->
     <form>
       <mat-form-field [style.width.%]="100">
-        <mat-label>Customer Assignee</mat-label>
-        "
-        <input type="text" matInput [formControl]="customerSelectControl" [matAutocomplete]="autoCustomer">
+        <mat-label>Assign New Customer</mat-label>
+        <input #customerInput
+               type="text"
+               matInput
+               [formControl]="customerSelectControl"
+               [matAutocomplete]="autoCustomer"
+               (input)="filterCustomers()"
+               (focus)="filterCustomers()">
+        <button mat-icon-button matSuffix color="primary" aria-label="assign customer"
+                (click)="assignCustomer(selectedCustomer?.id)">
+          <mat-icon>add_business</mat-icon>
+        </button>
         <mat-autocomplete #autoCustomer="matAutocomplete" [displayWith]="displayCustomer"
                           (optionSelected)="selectCustomer($event)">
-          <mat-option *ngFor="let customer of filteredCustomers | async" [value]="customer">
-            {{ customer.name }}
+          <mat-option *ngFor="let customer of filteredCustomers" [value]="customer">
+            {{displayCustomer(customer)}}
           </mat-option>
         </mat-autocomplete>
 
       </mat-form-field>
 
-
-      <button mat-raised-button color="primary" (click)="assignCustomer(selectedCustomer?.id)">
-        Assign Customer
-      </button>
     </form>
   </div>
   <div class="row mb-2 pb-1">

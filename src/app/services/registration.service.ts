@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {link} from "../models/link";
+import {Customer} from "../models/Customer";
 
 
 interface CustomerDTO {
@@ -32,6 +33,7 @@ export class RegistrationService {
 
   private _customers_url = link.urlIP + '/customers';
   private _contacts_url = link.urlIP + '/contacts';
+  private _locations_url = link.urlIP + "/locations";
 
 
   constructor(private _http: HttpClient) {
@@ -63,16 +65,21 @@ export class RegistrationService {
     return this._http.put<any>(updateUrl, body);
   }
 
-  fetchCustomerData(): Observable<any> {
+  fetchCustomers() {
     let url = `${this._customers_url}/all`;
 
-    return this._http.get<any>(url);
+    return this._http.get<Customer[]>(url);
+  }
+
+  fetchCustomersInLocation(locationId: bigint) {
+    let url = `${this._locations_url}/${locationId}/customers`;
+
+    return this._http.get<Customer[]>(url);
   }
 
 
   addNewContact(id: bigint, contactDetails: any) {
     const _urlDetails = `${this._customers_url}/${id}/contacts`;
-
 
     const newContact: ContactDTO = {
       firstName: contactDetails.firstName,
@@ -124,5 +131,6 @@ export class RegistrationService {
     const _urlDetails = `${this._customers_url}/search?query=${query}`;
     return this._http.get<any>(_urlDetails);
   }
+
 
 }

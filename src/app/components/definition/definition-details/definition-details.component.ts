@@ -68,6 +68,7 @@ export class DefinitionDetailsComponent implements OnInit {
       width: '40%',
       data: {
         assignmentId: assignmentId,
+        locationId: this.currentDefinition?.location.id
       }
     }).afterClosed().subscribe(response => {
       console.log(response);
