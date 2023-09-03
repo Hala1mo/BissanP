@@ -34,7 +34,7 @@ export class RegistrationService {
   private _customers_url = link.urlIP + '/customers';
   private _contacts_url = link.urlIP + '/contacts';
   private _locations_url = link.urlIP + "/locations";
-
+  private _visit_assignments = link.urlIP + "/visit_assignments"
 
   constructor(private _http: HttpClient) {
   }
@@ -92,9 +92,22 @@ export class RegistrationService {
     return this._http.post<any>(_urlDetails, newContact).pipe();
   }
 
+  addNewContactAndAssignCustomer(customerId: bigint, assignmentId: bigint, contactDetails: any) {
+    let url = `${this._visit_assignments}/${assignmentId}/customers/${customerId}/contacts`
+
+    const newContact: ContactDTO = {
+      firstName: contactDetails.firstName,
+      lastName: contactDetails.lastName,
+      phoneNumber: contactDetails.phoneNumber,
+      email: contactDetails.email,
+      visitTypes: contactDetails.visitTypes
+    };
+
+    return this._http.post(url, newContact);
+  }
+
   updateContactData(conId: bigint, updatedContactData: any): Observable<any> {
     const updateUrl = `${this._contacts_url}/${conId}`; // Adjust the URL endpoint as needed
-
 
     const editContactPayload: ContactDTO = {
       firstName: updatedContactData.firstName,
@@ -102,7 +115,6 @@ export class RegistrationService {
       phoneNumber: updatedContactData.phoneNumber,
       email: updatedContactData.email,
       visitTypes: updatedContactData.visitTypes
-
     };
 
     return this._http.put<any>(updateUrl, editContactPayload);
@@ -110,7 +122,6 @@ export class RegistrationService {
 
   updateCustomerData(id: bigint, updatedCustomerData: any): Observable<any> {
     const updateUrl = `${this._customers_url}/${id}`; // Adjust the URL endpoint as needed
-
 
     const customerPayload: CustomerDTO = {
       name: updatedCustomerData.name,
@@ -131,6 +142,7 @@ export class RegistrationService {
     const _urlDetails = `${this._customers_url}/search?query=${query}`;
     return this._http.get<any>(_urlDetails);
   }
+
 
 
 }

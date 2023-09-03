@@ -1,7 +1,9 @@
 import {Component, Inject} from '@angular/core';
 import {Customer} from "../../../models/Customer";
-import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
+import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from "@angular/material/dialog";
 import {VisitAssignment} from "../../../models/VisitAssignment";
+import {ContactDialogueComponent} from "../details/contact-dialogue/contact-dialogue.component";
+import {SharedService} from "../../../services/shared.service";
 
 @Component({
   selector: 'app-assign-new-customer-dialog',
@@ -13,6 +15,8 @@ export class AssignNewCustomerDialogComponent {
   assignments: VisitAssignment[];
 
   constructor(
+    private matDialog: MatDialog,
+    private sharedService: SharedService,
     public matDialogRef: MatDialogRef<AssignNewCustomerDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
@@ -20,7 +24,22 @@ export class AssignNewCustomerDialogComponent {
     this.assignments = data.assignments;
   }
 
-  onSubmitAssignment(assignmentId: bigint) {
-    console.log("assigning " + this.customer.name + " to assignment with id" + assignmentId);
+  onSubmitAssignment(assignment: VisitAssignment) {
+    console.log("OPENING CONTACT DIALOG");
+    let types = assignment.visitType.id;
+
+    this.matDialog.open(ContactDialogueComponent, {
+      data: {
+        'mode': 2,
+        'typesData': this.sharedService.getVisitTypesAsList(),
+        'assignmentId': assignment.id,
+        'customerId': this.customer.id,
+        'checkedTypes' : [types]
+      }
+    }).afterClosed().subscribe(
+      response => {
+        console.log("FINISHED ADDING: RESPONSE => ", response);
+      });
+
   }
 }

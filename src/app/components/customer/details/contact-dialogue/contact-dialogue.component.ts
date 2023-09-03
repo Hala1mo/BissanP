@@ -15,10 +15,13 @@ export class ContactDialogueComponent implements OnInit {
 
   selectedContact: any;
   customerId: bigint;
+  assignmentId: bigint;
   contactForm: FormGroup;
+  mode: number;
   editMode: boolean;
 
   visitTypesData: VisitType[] = [];
+  checkedTypeId: bigint[];
   isSaving: boolean = false;
 
   constructor(private _snackBar: MatSnackBar,
@@ -28,10 +31,14 @@ export class ContactDialogueComponent implements OnInit {
               @Inject(MAT_DIALOG_DATA) public data: any) {
 
     this.editMode = data.mode === 1;
+    this.mode = data.mode;
+
     this.visitTypesData = data.typesData;
+    this.checkedTypeId = data.checkedTypes;
     this.selectedContact = data.contact;
     this.customerId = data.customerId;
 
+    this.assignmentId = data.assignmentId;
 
     this.contactForm = this.fb.group({
       firstName: ['', [Validators.required, nameValidator]],
@@ -45,8 +52,13 @@ export class ContactDialogueComponent implements OnInit {
   ngOnInit() {
     console.log("this.registrationForm", this.contactForm);
 
-    if (this.editMode) {
+    if (this.mode === 1) {
       this.populateEditForm(this.selectedContact);
+    }
+    if (this.mode === 2) {
+      this.contactForm.patchValue({
+        visitTypes: this.checkedTypeId,
+      });
     }
 
   }
@@ -60,8 +72,6 @@ export class ContactDialogueComponent implements OnInit {
       return 'Name is too long';
     if (nameControl.hasError('minLength'))
       return 'Name is too short';
-
-
     return '';
   }
 
@@ -91,7 +101,6 @@ export class ContactDialogueComponent implements OnInit {
     return '';
   }
 
-
   getEmailErrorMessage() {
     let nameControl = this.contactForm.controls['email'];
     if (nameControl.hasError('email')) {
@@ -106,11 +115,17 @@ export class ContactDialogueComponent implements OnInit {
     if (this.isSaving) return;
 
     this.isSaving = true;
-    if (this.editMode) {
-      this.onSubmitEdit();
-    } else {
-      this.addContactToCustomer(this.customerId);
+    if (this.mode === 1) {
+      this.updateContact();
+      return;
     }
+    if (this.mode === 2) {
+      this.saveContactAndAddToAssignment(this.customerId, this.assignmentId);
+      return;
+    }
+
+    this.addContactToCustomer(this.customerId);
+
   }
 
   addContactToCustomer(id: bigint) {
@@ -151,8 +166,7 @@ export class ContactDialogueComponent implements OnInit {
     });
   }
 
-  onSubmitEdit() {
-    console.log(this.contactForm.value)
+  updateContact() {
     if (this.contactForm.valid) {
       const editedUserData = this.contactForm.value;
       this.customerService.updateContactData(this.selectedContact.id, editedUserData).subscribe({
@@ -161,10 +175,7 @@ export class ContactDialogueComponent implements OnInit {
           },
           error: error => {
             if (error.error && error.error.message) { // Check if 'message' property exists
-              const errorMessage = error.error.message;
-              console.log('Error message:', errorMessage);
-
-              this._snackBar.open(errorMessage, '', {
+              this._snackBar.open(error.error.message, '', {
                 duration: 3000
               });
             }
@@ -172,6 +183,22 @@ export class ContactDialogueComponent implements OnInit {
         }
       );
     }
+  }
+
+  private saveContactAndAddToAssignment(customerId: bigint, assignmentId: bigint) {
+    this.customerService.addNewContactAndAssignCustomer(customerId, assignmentId, this.contactForm.value).subscribe({
+      next: response => {
+        this.matDialogRef.close(response);
+      },
+      error: error => {
+        if (error.error && error.error.message) { // Check if 'message' property exists
+          this._snackBar.open(error.error.message, '', {
+            duration: 3000
+          });
+        }
+      }
+
+    })
   }
 
 }

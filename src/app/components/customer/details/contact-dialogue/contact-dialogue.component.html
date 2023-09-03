@@ -50,7 +50,9 @@
       </mat-chip-listbox>
     </div>
     <mat-dialog-actions>
-      <button mat-raised-button (click)="onSubmitContact()" color="primary">Save</button>
+      <button mat-raised-button (click)="onSubmitContact()" color="primary" [disabled]="isSaving">
+        {{isSaving ? 'Saving...' : 'Save'}}
+      </button>
       <button mat-raised-button color="warn" mat-dialog-close>Cancel</button>
     </mat-dialog-actions>
 

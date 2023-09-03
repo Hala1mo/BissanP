@@ -9,7 +9,7 @@
           <h5 class="mb-1 text-capitalize">{{assignment.comment}}</h5>
           <h5 class="mb-1 text-capitalize">{{assignment.visitType.name}}</h5>
         </div>
-        <button class="text-capitalize" mat-raised-button (click)="onSubmitAssignment(assignment.id)"
+        <button class="text-capitalize" mat-raised-button (click)="onSubmitAssignment(assignment)"
                 color="primary">
           Assign to {{assignment.comment}}
         </button>

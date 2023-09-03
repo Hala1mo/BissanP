@@ -149,11 +149,10 @@ export class CustomerComponent implements OnInit {
       }
 
     }).afterClosed().subscribe((response) => {
-      if (!response || !response.availableAssignments || response.availableAssignments.length < 1){
+      if (!response || !response.availableAssignments || response.availableAssignments.length < 1) {
         this.fetchCustomerData();
         return;
       }
-
       this.openAssignNewCustomer(response.availableAssignments, response.customer);
     })
   }
@@ -184,6 +183,8 @@ export class CustomerComponent implements OnInit {
         'assignments': assignments,
         'customer': customer,
       }
+    }).afterClosed().subscribe(() => {
+      this.fetchCustomerData();
     })
   }
 
