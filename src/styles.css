@@ -27,4 +27,63 @@ body {
   color: #f44336 !important
 }
 
+.imp-mat-primary-bg {
+  background-color: #3f51b5 !important
+}
 
+.imp-mat-accent-bg {
+  background-color: #ff4081 !important
+}
+
+.imp-mat-warn-bg {
+  background-color: #f44336 !important
+}
+
+.dash-icon {
+  border: none;
+  position: absolute;
+  top: -2rem;
+  left: 2rem;
+
+  width: 4rem;
+  height: 4rem;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.graph-offset {
+  border: none;
+  position: absolute;
+  top: -2rem;
+
+  width: 90%;
+  height: 225px;
+
+  padding: 0.5rem 0.25rem 0.25rem;
+}
+
+.dash-icon .mat-icon {
+  font-size: 3rem;
+  height: 3rem;
+  width: 3rem;
+
+  color: #F9FFFB;
+}
+
+.bg-blue {
+  background-color: #4FAFC5;
+}
+
+.bg-green {
+  background-color: #67A75F;
+}
+
+.bg-yellow {
+  background-color: #ED9730;
+}
+
+.bg-red {
+  background-color: #DB564E;
+}

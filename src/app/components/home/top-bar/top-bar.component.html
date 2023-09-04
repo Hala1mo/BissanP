@@ -1,0 +1,66 @@
+<div *ngIf="isLoaded" class="row mt-5">
+  <div class="col-3">
+    <div class="card mat-elevation-z4 p-3" style="height: 200px">
+      <div class="card bg-green dash-icon">
+        <mat-icon>task</mat-icon>
+      </div>
+      <div class="row text-end">
+        <p class="text-body-tertiary h4 fw-light">Tasks</p>
+        <p class="text-body h2 fw-light"> {{completedForms}}/{{totalForms}} Completed</p>
+      </div>
+      <hr>
+      <div class="d-flex align-items-center gap-1">
+        <mat-icon>calendar_today</mat-icon>
+        <span> Today </span>
+      </div>
+    </div>
+  </div>
+  <div class="col-3">
+    <div class="card mat-elevation-z4 p-3" style="height: 200px">
+      <div class="card bg-yellow dash-icon">
+        <mat-icon>pending_actions</mat-icon>
+      </div>
+      <div class="row text-end">
+        <p class="text-body-tertiary h4 fw-light">Undergoing</p>
+        <p class="text-body h2 fw-light"> {{undergoingForms}}</p>
+      </div>
+      <hr>
+      <div class="d-flex align-items-center gap-1">
+        <mat-icon>calendar_today</mat-icon>
+        <span> Now </span>
+      </div>
+    </div>
+  </div>
+  <div class="col-3">
+    <div class="card mat-elevation-z4 p-3" style="height: 200px">
+      <div class="card bg-red dash-icon">
+        <mat-icon>error_outline</mat-icon>
+      </div>
+      <div class="row text-end">
+        <p class="text-body-tertiary h4 fw-light">Canceled</p>
+        <p class="text-body h2 fw-light"> {{canceledForms}}</p>
+      </div>
+      <hr>
+      <div class="d-flex align-items-center gap-1">
+        <mat-icon>calendar_today</mat-icon>
+        <span> Last 7 Days</span>
+      </div>
+    </div>
+  </div>
+  <div class="col-3">
+    <div class="card mat-elevation-z4 p-3" style="height: 200px">
+      <div class="card bg-blue dash-icon">
+        <mat-icon>trending_up</mat-icon>
+      </div>
+      <div class="row text-end">
+        <p class="text-body-tertiary h4 fw-light">Customers</p>
+        <p class="text-body h2 fw-light"> {{customersThisMonth}}+</p>
+      </div>
+      <hr>
+      <div class="d-flex align-items-center gap-1">
+        <mat-icon>calendar_today</mat-icon>
+        <span> Last 30 Days</span>
+      </div>
+    </div>
+  </div>
+</div>
