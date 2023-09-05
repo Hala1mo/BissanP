@@ -10,9 +10,7 @@
         <mat-error *ngIf="customerForm.controls['name'].invalid">{{getNameErrorMessage()}}</mat-error>
       </mat-form-field>
     </div>
-    <div class="row mb-1">
-      <mat-checkbox formControlName="precise" (click)="togglePreciseLocation()"> Precise Location?</mat-checkbox>
-    </div>
+
     <div class="row mb-1">
       <div class="col-6">
         <mat-form-field [style.width.%]="100">
@@ -39,27 +37,26 @@
         </mat-form-field>
       </div>
     </div>
-    <div class="row mb-1" *ngIf="preciseLocationCheck">
-      <div class="col-6">
-        <mat-form-field [style.width.%]="100">
-          <mat-label>Latitude</mat-label>
-          <input matInput type="number" formControlName="latitude" min="-90" max="90">
-          <mat-error *ngIf="latitudeControl?.hasError('min') || latitudeControl?.hasError('max')">
-            Latitude must be between -90 and 90 degrees.
-          </mat-error>
-        </mat-form-field>
-      </div>
-      <div class="col-6">
-        <mat-form-field [style.width.%]="100">
-          <mat-label>Longitude</mat-label>
-          <input matInput type="number" formControlName="longitude" min="-180" max="180">
-          <mat-error *ngIf="longitudeControl?.hasError('min') || longitudeControl?.hasError('max')">
-            Longitude must be between -180 and 180 degrees.
-          </mat-error>
-        </mat-form-field>
+    <div class="row mb-1">
+      <div *ngIf="apiLoaded">
+        <google-map
+          height="250px"
+          width="100%"
+          [center]="initialCenter"
+          [zoom]="initialZoom"
+          (mapClick)="moveMarker($event)"
+          (mapMousemove)="move($event)"
+        >
+          <map-marker
+            [position]="markerPosition"
+            [options]="markerOptions">
+          </map-marker>
+
+        </google-map>
+        <div>Latitude: {{markerPosition.lat}}</div>
+        <div>Longitude: {{markerPosition.lng}}</div>
       </div>
     </div>
-
     <mat-dialog-actions>
       <button mat-raised-button (click)="onSubmitCustomer()" color="primary" [disabled]="isSaving">
         {{isSaving ? 'Saving' : 'Save'}}

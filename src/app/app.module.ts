@@ -4,7 +4,7 @@ import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {HeaderComponent} from './components/header/header.component';
 import {UserComponent} from './components/user/user.component';
-import {HttpClientModule} from '@angular/common/http';
+import {HttpClientJsonpModule, HttpClientModule} from '@angular/common/http';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MAT_DIALOG_DEFAULT_OPTIONS, MatDialogModule} from "@angular/material/dialog";
@@ -50,57 +50,59 @@ import {TypesChartComponent} from './components/reports/types-chart/types-chart.
 import {MatLegacyChipsModule} from "@angular/material/legacy-chips";
 import {CreateAssignmentDialogComponent} from './components/assignments/create/create-assignment-dialog.component';
 import {UserDetailsComponent} from './components/user/user-details/user-details.component';
-import { TypeDialogComponent } from './components/definition/type-dialog/type-dialog.component';
-import { CityDialogComponent } from './components/definition/city-dialog/city-dialog.component';
+import {TypeDialogComponent} from './components/definition/type-dialog/type-dialog.component';
+import {CityDialogComponent} from './components/definition/city-dialog/city-dialog.component';
 import {MatProgressBarModule} from "@angular/material/progress-bar";
 import {MatSidenavModule} from "@angular/material/sidenav";
 import {MatListModule} from "@angular/material/list";
-import { AssignNewCustomerDialogComponent } from './components/customer/assign-new-customer-dialog/assign-new-customer-dialog.component';
-import { HomeComponent } from './components/home/home.component';
-import { TopBarComponent } from './components/home/top-bar/top-bar.component';
-import { MidBarComponent } from './components/home/mid-bar/mid-bar.component';
-import { LineGraphComponent } from './components/home/mid-bar/line-graph/line-graph.component';
-
+import {
+  AssignNewCustomerDialogComponent
+} from './components/customer/assign-new-customer-dialog/assign-new-customer-dialog.component';
+import {HomeComponent} from './components/home/home.component';
+import {TopBarComponent} from './components/home/top-bar/top-bar.component';
+import {MidBarComponent} from './components/home/mid-bar/mid-bar.component';
+import {LineGraphComponent} from './components/home/mid-bar/line-graph/line-graph.component';
+import {GoogleMapsModule} from "@angular/google-maps";
 
 @NgModule({
-    declarations: [
-        AppComponent,
-        HeaderComponent,
-        UserComponent,
-        CustomerComponent,
-        CustomerDetailsComponent,
-        DefinitionComponent,
-        DefinitionDetailsComponent,
-        AssignmentDetailsComponent,
-        AddUserComponent,
-        EditUserComponent,
-        ReportsComponent,
-        StatusComponent,
-        DateComponent,
-        EditUserComponent,
-        DefinitionDialogComponent,
-        EditUserComponent,
-        CusComponent,
-        DetailsCusComponent,
-        CustomerDialogComponent,
-        TypesChartComponent,
-        ContactDialogueComponent,
-        CreateAssignmentDialogComponent,
-        UserDetailsComponent,
-        TypeDialogComponent,
-        CityDialogComponent,
-        AssignNewCustomerDialogComponent,
-        HomeComponent,
-        TopBarComponent,
-        MidBarComponent,
-        LineGraphComponent,
-
-    ],
+  declarations: [
+    AppComponent,
+    HeaderComponent,
+    UserComponent,
+    CustomerComponent,
+    CustomerDetailsComponent,
+    DefinitionComponent,
+    DefinitionDetailsComponent,
+    AssignmentDetailsComponent,
+    AddUserComponent,
+    EditUserComponent,
+    ReportsComponent,
+    StatusComponent,
+    DateComponent,
+    EditUserComponent,
+    DefinitionDialogComponent,
+    EditUserComponent,
+    CusComponent,
+    DetailsCusComponent,
+    CustomerDialogComponent,
+    TypesChartComponent,
+    ContactDialogueComponent,
+    CreateAssignmentDialogComponent,
+    UserDetailsComponent,
+    TypeDialogComponent,
+    CityDialogComponent,
+    AssignNewCustomerDialogComponent,
+    HomeComponent,
+    TopBarComponent,
+    MidBarComponent,
+    LineGraphComponent,
+  ],
   imports: [
     BrowserModule,
     MatSnackBarModule,
     AppRoutingModule,
     HttpClientModule,
+    HttpClientJsonpModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
     MatDialogModule,
@@ -134,11 +136,13 @@ import { LineGraphComponent } from './components/home/mid-bar/line-graph/line-gr
     MatSidenavModule,
     MatListModule,
     MatLineModule,
+    GoogleMapsModule,
+
   ],
-    providers: [
-      {provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {}}
-    ],
-    bootstrap: [AppComponent]
+  providers: [
+    {provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {}}
+  ],
+  bootstrap: [AppComponent]
 })
 export class AppModule {
 }

@@ -27,7 +27,7 @@ export class DefinitionDetailsComponent implements OnInit {
   currentDefinition: VisitDefinition | undefined;
   visitTypes: VisitType[] = [];
 
-  displayedColumns: string[] = ['date', 'comment', 'user', 'actions'];
+  displayedColumns: string[] = ['date', 'comment', 'user', 'status', 'actions'];
   dataSource = new MatTableDataSource([]);
 
   @ViewChild(MatPaginator) assignmentPaginator!: MatPaginator;
@@ -187,7 +187,7 @@ export class DefinitionDetailsComponent implements OnInit {
     chart.render();
   }
 
-  tabChanged($event : MatTabChangeEvent) {
+  tabChanged($event: MatTabChangeEvent) {
     this.renderChart();
     this.renderPieChart();
   }

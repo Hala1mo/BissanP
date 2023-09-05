@@ -7,7 +7,7 @@ import {Router} from "@angular/router";
 import {RegistrationService} from "../../../services/registration.service";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {Location} from "../../../models/Location";
-import {SharedService} from "../../../services/shared.service";
+import {HttpClient} from "@angular/common/http";
 
 @Component({
   selector: 'app-customer-dialog',
@@ -20,7 +20,6 @@ export class CustomerDialogComponent implements OnInit {
   customerForm: FormGroup;
   editMode: boolean;
   customerData: Customer[] = [];
-  preciseLocationCheck: boolean = false;
   selectedCustomer: any;
 
   cities: City[] = [];
@@ -28,14 +27,26 @@ export class CustomerDialogComponent implements OnInit {
 
   selectedCity: City | null = null;
 
+  apiLoaded: boolean = false;
+
+  // GOOGLE MAPS
+  initialCenter: google.maps.LatLngLiteral = {lat:  31.90232873931861, lng: 35.20345069995768};
+  initialZoom: number = 10;
+
+  latLngLiteral: google.maps.LatLngLiteral = this.initialCenter;
+  markerPosition: google.maps.LatLngLiteral = this.initialCenter;
+  markerOptions: google.maps.MarkerOptions = {
+    optimized: true,
+  };
+
   constructor(
     private snackBar: MatSnackBar,
     private router: Router,
     private customerService: RegistrationService,
-    private sharedService: SharedService,
     private fb: FormBuilder,
     public matDialogRef: MatDialogRef<CustomerDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    httpClient: HttpClient,
   ) {
     this.editMode = data.mode === 1;
     this.cities = data.cityData;
@@ -49,6 +60,17 @@ export class CustomerDialogComponent implements OnInit {
       longitude: [0, [Validators.min(-180), Validators.max(180)]],
       precise: [false, Validators.required],
     });
+
+    httpClient.jsonp('https://maps.googleapis.com/maps/api/js?key=AIzaSyC1rCFrBqu32lHImkYyDBSyfmaxp5YCPao', 'callback')
+      .pipe()
+      .subscribe({
+        next: () => {
+          this.apiLoaded = true;
+        },
+        error: error => {
+          console.error(error);
+        }
+      });
   }
 
 
@@ -99,7 +121,6 @@ export class CustomerDialogComponent implements OnInit {
     } else
       this.saveNewCustomer();
   }
-
 
   onUpdateCustomer() {
     const editedCustomerData = this.customerForm.value;
@@ -152,18 +173,6 @@ export class CustomerDialogComponent implements OnInit {
     }
   }
 
-  togglePreciseLocation() {
-    this.preciseLocationCheck = !this.preciseLocationCheck;
-  }
-
-  get latitudeControl() {
-    return this.customerForm.get('address.latitude');
-  }
-
-  get longitudeControl() {
-    return this.customerForm.get('address.longitude');
-  }
-
   getNameErrorMessage() {
     let nameControl = this.customerForm.controls['name'];
     if (nameControl.hasError('required'))
@@ -182,4 +191,15 @@ export class CustomerDialogComponent implements OnInit {
     this.selectedCityLocations = [...this.selectedCity.locations];
   }
 
+  move(event: google.maps.MapMouseEvent) {
+    if (!event.latLng) return;
+
+    this.latLngLiteral = event.latLng.toJSON();
+  }
+
+  moveMarker(event: google.maps.MapMouseEvent){
+    if (!event.latLng) return;
+
+    this.markerPosition = event.latLng.toJSON();
+  }
 }

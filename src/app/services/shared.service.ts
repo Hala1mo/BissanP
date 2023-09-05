@@ -67,8 +67,4 @@ export class SharedService {
     return this.httpClient.get<any>(this.citiesURL).pipe();
   }
 
-
-  fetchCityById(id: bigint): Observable<City> {
-    return this.httpClient.get<any>(`${this.citiesURL}/${id}`).pipe();
-  }
 }

@@ -87,3 +87,12 @@ body {
 .bg-red {
   background-color: #DB564E;
 }
+
+.ch-badge {
+  border-radius: 0.5rem;
+
+  padding: 0.125rem 0.25rem;
+  color: white;
+}
+
+
