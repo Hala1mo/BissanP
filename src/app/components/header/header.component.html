@@ -4,26 +4,40 @@
       <div class="w-100 d-flex justify-content-between">
         <span class="me-3"><a [routerLink]="['/dashboard']" class="text-decoration-none h2">Visit Manager</a></span>
         <div class="d-flex gap-3">
-          <a class="fs-6" mat-button [routerLink]="['/dashboard']">
+          <button mat-button [routerLink]="['/dashboard']">
             <mat-icon>dashboard</mat-icon>
-            Dashboard
-          </a>
-          <a class="fs-6" mat-button [routerLink]="['/users']">
+            <span class="fs-6">Dashboard</span>
+          </button>
+          <button mat-button [routerLink]="['/users']">
             <mat-icon>person</mat-icon>
-            Users
-          </a>
-          <a class="fs-6" mat-button [routerLink]="['/customers']">
+            <span class="fs-6">Users</span>
+          </button>
+          <button mat-button [routerLink]="['/customers']">
             <mat-icon>business</mat-icon>
-            Customers
-          </a>
-          <a class="fs-6" mat-button [routerLink]="['/definitions']">
+            <span class="fs-6">Customers</span>
+          </button>
+          <button mat-button [routerLink]="['/definitions']">
             <mat-icon>route</mat-icon>
-            Visits
-          </a>
-          <a class="fs-6" mat-button [routerLink]="['/reports']">
+            <span class="fs-6">Visits</span>
+          </button>
+          <button mat-button [routerLink]="['/reports']">
             <mat-icon>summarize</mat-icon>
-            Reports
-          </a>
+            <span class="fs-6">Reports</span>
+          </button>
+          <button mat-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+              <mat-icon>place</mat-icon>
+            Cities
+          </button>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="openCityDialog()">
+              <mat-icon>add_location_alt</mat-icon>
+              <span>Add City</span>
+            </button>
+            <button mat-menu-item (click)="openLocationsDialog()">
+              <mat-icon>add_location_alt</mat-icon>
+              <span>Add Location</span>
+            </button>
+          </mat-menu>
         </div>
       </div>
     </mat-toolbar-row>

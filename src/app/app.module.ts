@@ -63,6 +63,7 @@ import {TopBarComponent} from './components/home/top-bar/top-bar.component';
 import {MidBarComponent} from './components/home/mid-bar/mid-bar.component';
 import {LineGraphComponent} from './components/home/mid-bar/line-graph/line-graph.component';
 import {GoogleMapsModule} from "@angular/google-maps";
+import { UserPerformanceComponent } from './components/reports/user-performance/user-performance.component';
 
 @NgModule({
   declarations: [
@@ -96,6 +97,7 @@ import {GoogleMapsModule} from "@angular/google-maps";
     TopBarComponent,
     MidBarComponent,
     LineGraphComponent,
+    UserPerformanceComponent,
   ],
   imports: [
     BrowserModule,

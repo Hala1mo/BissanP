@@ -1,7 +1,20 @@
-<h1 mat-dialog-title>Add new City</h1>
+<h1 mat-dialog-title>Add new {{addingCity ? 'City' : 'Location'}}</h1>
 
 <form [formGroup]="addForm">
   <mat-dialog-content>
+    <div class="row mb-1" *ngIf="!addingCity">
+      <mat-form-field [style.width.%]="100">
+        <mat-label>City</mat-label>
+        <mat-select required>
+          <mat-option *ngFor="let city of cities"
+                      [value]="city.id"
+                      (click)="changeSelectedCity(city)"
+          >
+            {{ city.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
     <div class="row mb-1">
       <mat-form-field>
         <mat-label>Name</mat-label>
@@ -9,7 +22,9 @@
       </mat-form-field>
     </div>
     <mat-dialog-actions>
-      <button mat-raised-button color="primary" (click)="saveNewCity()">Add</button>
+      <button mat-raised-button color="primary" (click)="submitForm()" [disabled]="isSaving">
+        {{isSaving ? 'Saving...' : 'Save'}}
+      </button>
     </mat-dialog-actions>
   </mat-dialog-content>
 </form>

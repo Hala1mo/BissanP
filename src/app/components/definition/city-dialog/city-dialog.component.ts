@@ -3,6 +3,8 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {DefinitionService} from "../../../services/definition.service";
+import {City} from "../../../models/City";
+import {SharedService} from "../../../services/shared.service";
 
 @Component({
   selector: 'app-city-dialog',
@@ -10,9 +12,11 @@ import {DefinitionService} from "../../../services/definition.service";
   styleUrls: ['./city-dialog.component.css']
 })
 export class CityDialogComponent {
-
-
   addForm: FormGroup;
+  addingCity: boolean = true;
+  cities: City[] = [];
+  selectedCity: City | null = null;
+  isSaving: boolean = false;
 
 
   constructor(
@@ -20,40 +24,73 @@ export class CityDialogComponent {
     private snackBar: MatSnackBar,
     private definitionService: DefinitionService,
     public matDialogRef: MatDialogRef<CityDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    sharedService: SharedService,
   ) {
+    this.addingCity = data.addingCity;
+
+    if (!this.addingCity)
+      this.cities = sharedService.getCitiesAsList();
 
     this.addForm = formBuilder.group({
       name: ['', [Validators.required,
         Validators.minLength(3),
         Validators.maxLength(30)]],
-
     });
   }
 
+  submitForm() {
+    this.isSaving = true;
+    if (this.addingCity) this.addCity();
+    else this.addLocation();
+  }
 
-
- saveNewCity() {
+  addCity() {
     this.definitionService.saveNewCity(this.addForm.value).subscribe({
-      next: response => {
-        console.log("Added new City: ", response)
+      next: () => {
         this.matDialogRef.close();
       },
       error: error => {
-
         if (error.error && error.error.message) { // Check if 'message' property exists
           const errorMessage = error.error.message;
-          console.log('Error message:', errorMessage);
-
           this.snackBar.open(errorMessage, '', {
             duration: 3000
           });
         } else {
-          console.log('Unknown error occurred.');
+          console.error('Unknown error occurred.', error);
         }
+        this.isSaving = false;
       }
     })
   }
 
+  addLocation() {
+    if (!this.selectedCity) {
+      this.snackBar.open("Choose a city", '', {
+        duration: 3000
+      });
+      return;
+    }
 
+    this.definitionService.saveNewLocation(this.selectedCity.id, this.addForm.value).subscribe({
+      next: () => {
+        this.matDialogRef.close();
+      },
+      error: error => {
+        if (error.error && error.error.message) { // Check if 'message' property exists
+          const errorMessage = error.error.message;
+          this.snackBar.open(errorMessage, '', {
+            duration: 3000
+          });
+        } else {
+          console.error('Unknown error occurred.', error);
+        }
+        this.isSaving = false;
+      }
+    });
+  }
+
+  changeSelectedCity(city: City) {
+    this.selectedCity = city;
+  }
 }
