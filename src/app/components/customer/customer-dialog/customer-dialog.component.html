@@ -31,7 +31,10 @@
           <mat-select formControlName="locationId" required>
             <div *ngIf="selectedCity !== null">
               <mat-option *ngFor="let location of selectedCityLocations"
-                          [value]="location.id">{{location.address}}</mat-option>
+                          [value]="location.id"
+                          (click)="changeSelectedLocation(location)"
+              >
+                {{location.address}}</mat-option>
             </div>
           </mat-select>
         </mat-form-field>

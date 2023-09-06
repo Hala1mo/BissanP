@@ -3,7 +3,6 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Customer} from "../../../models/Customer";
 import {City} from "../../../models/City";
 import {MatSnackBar} from "@angular/material/snack-bar";
-import {Router} from "@angular/router";
 import {RegistrationService} from "../../../services/registration.service";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {Location} from "../../../models/Location";
@@ -30,7 +29,7 @@ export class CustomerDialogComponent implements OnInit {
   apiLoaded: boolean = false;
 
   // GOOGLE MAPS
-  initialCenter: google.maps.LatLngLiteral = {lat:  31.90232873931861, lng: 35.20345069995768};
+  initialCenter: google.maps.LatLngLiteral = {lat: 31.90232873931861, lng: 35.20345069995768};
   initialZoom: number = 10;
 
   latLngLiteral: google.maps.LatLngLiteral = this.initialCenter;
@@ -41,7 +40,6 @@ export class CustomerDialogComponent implements OnInit {
 
   constructor(
     private snackBar: MatSnackBar,
-    private router: Router,
     private customerService: RegistrationService,
     private fb: FormBuilder,
     public matDialogRef: MatDialogRef<CustomerDialogComponent>,
@@ -84,6 +82,14 @@ export class CustomerDialogComponent implements OnInit {
         longitude: this.selectedCustomer.longitude,
         latitude: this.selectedCustomer.latitude,
       });
+
+      let newCenter: google.maps.LatLngLiteral = {
+        lat: this.selectedCustomer.latitude,
+        lng: this.selectedCustomer.longitude,
+      }
+      this.initialCenter = newCenter;
+      this.markerPosition = newCenter;
+      this.initialZoom = 15;
     }
   }
 
@@ -151,9 +157,6 @@ export class CustomerDialogComponent implements OnInit {
           this.customerForm.reset();
           this.fetchCustomerData();
           this.matDialogRef.close(res);
-
-          this.router.navigate(['/customers']);
-
         },
         (error) => {
           console.error('Registration failed:', error);
@@ -197,9 +200,32 @@ export class CustomerDialogComponent implements OnInit {
     this.latLngLiteral = event.latLng.toJSON();
   }
 
-  moveMarker(event: google.maps.MapMouseEvent){
+  moveMarker(event: google.maps.MapMouseEvent) {
     if (!event.latLng) return;
 
-    this.markerPosition = event.latLng.toJSON();
+    let selectedLocation = event.latLng;
+
+    this.customerForm.patchValue({
+      latitude: selectedLocation.lat(),
+      longitude: selectedLocation.lng(),
+    })
+
+    console.log(this.customerForm.value);
+
+    this.markerPosition = selectedLocation.toJSON();
+
+  }
+
+  changeSelectedLocation(location: Location) {
+    if (!location.longitude || !location.latitude) return;
+
+    let newCenter: google.maps.LatLngLiteral = {
+      lat: location.latitude,
+      lng: location.longitude,
+    }
+
+    this.initialCenter = newCenter;
+    this.markerPosition = newCenter;
+    this.initialZoom = 12.5;
   }
 }
