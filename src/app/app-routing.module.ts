@@ -12,6 +12,7 @@ import {DateComponent} from "./components/reports/date/date.component";
 import {TypesChartComponent} from "./components/reports/types-chart/types-chart.component";
 import {UserDetailsComponent} from "./components/user/user-details/user-details.component";
 import {HomeComponent} from "./components/home/home.component";
+import {UserPerformanceComponent} from "./components/reports/user-performance/user-performance.component";
 
 const routes: Routes = [
   {path: '', redirectTo: '/dashboard', pathMatch: 'full'},
@@ -30,7 +31,7 @@ const routes: Routes = [
   {path: 'reports/status', component: StatusComponent},
   {path: 'reports/types-chart', component: TypesChartComponent},
   {path: 'reports/date', component: DateComponent},
-
+  {path: 'reports/user-performance', component: UserPerformanceComponent}
 
 ];
 

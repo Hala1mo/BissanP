@@ -4,6 +4,7 @@ import {City} from "../models/City";
 import {VisitType} from "../models/VisitType";
 import {link} from "../models/link";
 import {HttpClient} from "@angular/common/http";
+import {animate} from "@angular/animations";
 
 @Injectable({
   providedIn: 'root'
@@ -24,6 +25,7 @@ export class SharedService {
 
   private citiesSubject = new BehaviorSubject<City[]>([]);
   private visitTypesSubject = new BehaviorSubject<VisitType[]>([]);
+  private userReport = new BehaviorSubject<any[]>([]);
 
   updateDateData(dateData: any[]) {
     this.dateDataSubject.next(dateData);
@@ -67,4 +69,11 @@ export class SharedService {
     return this.httpClient.get<any>(this.citiesURL).pipe();
   }
 
+  setUserPerformanceReports(response: any) {
+    this.userReport.next(response);
+  }
+
+  getUserPerformanceReportsAsList(){
+    return this.userReport.getValue();
+  }
 }

@@ -82,5 +82,10 @@ export class ReportsService {
   }
 
 
+  generateUserReports(fromDateString: string, toDateString: string) {
+    const url = `${this.reportsBaseUrl}/user_performance?from=${fromDateString}&to=${toDateString}`
+
+    return this._http.get<any>(url).pipe();
+  }
 }
 
