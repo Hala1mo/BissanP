@@ -32,8 +32,7 @@ export class UserPerformanceComponent implements OnInit {
     "Not Started Forms %", "Undergoing Forms %", "Canceled Forms %", "Completed Forms %", "AVG. Time To Complete Forms",
     "Late Forms #"];
 
-    const templateToExcel: string[][] = [excelHeaders, []];
-    let element = document.getElementById('report-table');
+    let element = document.getElementById('report-bot-bar');
 
     const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(element);
     const wb: XLSX.WorkBook = XLSX.utils.book_new();

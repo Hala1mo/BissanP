@@ -65,6 +65,7 @@ import {LineGraphComponent} from './components/home/mid-bar/line-graph/line-grap
 import {GoogleMapsModule} from "@angular/google-maps";
 import { UserPerformanceComponent } from './components/reports/user-performance/user-performance.component';
 import { LoginComponent } from './auth/login/login.component';
+import { BotBarComponent } from './components/home/bot-bar/bot-bar.component';
 
 @NgModule({
   declarations: [
@@ -100,6 +101,7 @@ import { LoginComponent } from './auth/login/login.component';
     LineGraphComponent,
     UserPerformanceComponent,
     LoginComponent,
+    BotBarComponent,
   ],
   imports: [
     BrowserModule,
