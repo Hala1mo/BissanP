@@ -2,9 +2,11 @@
   <h2>Customer List</h2>
   <ul>
     <li *ngFor="let customer of data">
-      <a href="javascript:void(0);" (click)="openCustomerDetailDialog(customer.id)">
-        {{ customer.name }}
-      </a>
+      <div>
+        <button (click)="openCustomerDetailDialog(customer.id)">
+          {{ customer.name }}
+        </button>
+      </div>
     </li>
   </ul>
 </div>

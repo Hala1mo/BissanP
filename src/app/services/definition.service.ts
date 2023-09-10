@@ -36,7 +36,7 @@ export class DefinitionService {
   }
 
   fetchAllDefinitions(): Observable<any> {
-    return this.http.get<any>(this.visitDefinitionsURL).pipe(
+    return this.http.get<any>(`${this.visitDefinitionsURL}/all`).pipe(
       catchError(this.handleError)
     );
   }
