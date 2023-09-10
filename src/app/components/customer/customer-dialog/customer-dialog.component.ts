@@ -74,6 +74,8 @@ export class CustomerDialogComponent implements OnInit {
 
   ngOnInit() {
     if (this.editMode) {
+      console.log(this.selectedCustomer);
+
       this.changeSelectedCity(this.cities.filter((city: City) => city.id == this.selectedCustomer.location.cityId)[0]);
       this.customerForm.patchValue({
         name: this.selectedCustomer.name,
@@ -136,6 +138,8 @@ export class CustomerDialogComponent implements OnInit {
           this.matDialogRef.close(response);
         },
         error: error => {
+          this.isSaving = false;
+
           if (error.error && error.error.message) { // Check if 'message' property exists
             const errorMessage = error.error.message;
             this.snackBar.open(errorMessage, '', {
@@ -159,6 +163,7 @@ export class CustomerDialogComponent implements OnInit {
           this.matDialogRef.close(res);
         },
         (error) => {
+          this.isSaving = false;
           console.error('Registration failed:', error);
 
           if (error.error && error.error.message) { // Check if 'message' property exists
