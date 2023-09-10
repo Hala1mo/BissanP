@@ -86,7 +86,7 @@ export class DefinitionService {
   }
 
   saveNewAssignmentToDefinition(assignment: any, definitionId: bigint): Observable<any> {
-    const urlAssignment = `${this.visitDefinitionsURL}/${definitionId}/assignments`;
+    const urlAssignment = `${this.visitDefinitionsURL}/${definitionId}/visit_assignments`;
     const newAssignment: AssignmentDTO = {
       date: assignment.date,
       comment: assignment.comment,

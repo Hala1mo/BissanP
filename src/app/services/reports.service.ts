@@ -6,25 +6,23 @@ import {link} from "../models/link";
 @Injectable({
   providedIn: 'root'
 })
+
 export class ReportsService {
   private reportsBaseUrl = link.urlIP + '/reports';
-  private reportsAllForms = link.urlIP + '/reports/forms/all';
   private reportsNotStartedForms = link.urlIP + '/reports/forms/not_started';
   private reportsUndergoingForms = link.urlIP + '/reports/forms/under_going';
   private reportsCompletedForms = link.urlIP + '/reports/forms/completed';
 
   private _visitAssignment = link.urlIP + '/visit_assignments';
-  private _customers_url = link.urlIP + '/customers';
-  private types_url = link.urlIP + '/reports/customers/countByType';
+  private types_url = link.urlIP + '/reports/customers/count_by_type';
   private areas_url = link.urlIP + '/reports/customers/countByArea';
 
   private definitionReports = link.urlIP + '/reports/visit_definitions';
   private customersReports = link.urlIP + '/reports/customers';
 
 
-  private customers = 'http://10.10.33.91:8080/reports/customers';
-
   constructor(private _http: HttpClient) {
+
   }
 
 
