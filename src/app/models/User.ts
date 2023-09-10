@@ -13,7 +13,7 @@ export class User {
     this.username = data.username || '';
     this.firstName = data.firstName || '';
     this.lastName = data.lastName || '';
-    this.accessLevel = data.accessLevel || '';
+    this.accessLevel = data.accessLevel || 0;
 
     this.enabled = data.enabled || false;
     this.createdTime = data.createdTime || '';

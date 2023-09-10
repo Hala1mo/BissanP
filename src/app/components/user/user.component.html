@@ -89,7 +89,7 @@
             Access Level
           </th>
           <td mat-cell *matCellDef="let user">
-            {{user.accessLevel === 1 ? 'Supervisor' : 'Employee'}}
+            {{displayUserRole(user)}}
           </td>
         </ng-container>
 
