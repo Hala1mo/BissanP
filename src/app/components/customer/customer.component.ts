@@ -21,7 +21,7 @@ import {SharedService} from "../../services/shared.service";
 export class CustomerComponent implements OnInit {
   isTableLoaded: boolean = false;
 
-  selectedEnabledOption = "Enabled"
+  selectedEnabledOption = "All Customers"
   displayedColumns: string[] = ['name', 'city', 'location', 'enabled', 'actions']
   customerData: Customer[] = [];
   originalCustomerData: Customer[] = [];
@@ -47,18 +47,16 @@ export class CustomerComponent implements OnInit {
     this.dataSource.filterPredicate = function (customer, filter) {
       const name = customer.name ? customer.name.toLocaleLowerCase() : '';
       const cityName = customer.location && customer.location.cityName ? customer.location.cityName.toLocaleLowerCase() : '';
-      const addressLine1 = customer.location ? customer.location.address.toLocaleLowerCase() : '';
+      const address = customer.location ? customer.location.address.toLocaleLowerCase() : '';
 
       return name.includes(filter.toLocaleLowerCase()) ||
         cityName.includes(filter.toLocaleLowerCase()) ||
-        addressLine1.includes(filter.toLocaleLowerCase());
+        address.includes(filter.toLocaleLowerCase());
     }
 
   }
 
-
   fetchCustomerData() {
-    this.selectedEnabledOption = "All"
     this.customerService.fetchCustomers().subscribe({
         next: response => {
           this.isTableLoaded = true;
@@ -77,7 +75,6 @@ export class CustomerComponent implements OnInit {
       }
     );
   }
-
 
   openCustomerDetails(id: bigint) {
     this.router.navigate(['/customers', id]);
@@ -102,15 +99,13 @@ export class CustomerComponent implements OnInit {
 
 
   showEnabledCustomers() {
-    this.selectedEnabledOption = "Enabled";
-    this.dataSource.filter = '';
-    this.dataSource.data = this.customerData.filter(customer => customer.enabled);
+    this.customerData = this.originalCustomerData.filter(customer => customer.enabled);
+    this.dataSource.data = this.customerData;
   }
 
   showDisabledCustomers() {
-    this.selectedEnabledOption = "Disabled";
-    this.dataSource.filter = '';
-    this.dataSource.data = this.customerData.filter(customer => !customer.enabled);
+    this.customerData = this.originalCustomerData.filter(customer => !customer.enabled);
+    this.dataSource.data = this.customerData;
   }
 
   resetFilters() {
@@ -118,26 +113,9 @@ export class CustomerComponent implements OnInit {
     this.dataSource.data = this.customerData;
   }
 
-  applySearchFilter(event: Event) {
-    this.searchCustomers(this.searchInput.toLowerCase().trim());
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.data = this.customerData; // Update the data source with the search results
+  applySearchFilter($event: Event) {
+    const filterValue = ($event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
-  }
-
-  searchCustomers(query: string) {
-    this.dataSource.filter = query.trim().toLowerCase();
-    this.customerService.searchCustomers(query).subscribe({
-        next: response => {
-          console.log('Data Fetched successfully:', response);
-          this.customerData = response;
-          this.dataSource = response;
-        },
-        error: error => {
-          console.error('Error fetching customer data by city:', error);
-        }
-      }
-    )
   }
 
   openAddDialog() {

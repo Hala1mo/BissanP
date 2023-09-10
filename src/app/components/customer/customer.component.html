@@ -26,15 +26,15 @@
                 <mat-form-field [style.width.%]="100">
                     <mat-label>Show Active Customers</mat-label>
                     <mat-select [(value)]="selectedEnabledOption">
-                        <mat-option (click)="resetFilters()">
+                        <mat-option (click)="resetFilters()" value="All Customers">
                             <mat-icon>star</mat-icon>
                             <span>All Customers</span>
                         </mat-option>
-                        <mat-option (click)="showEnabledCustomers()">
+                        <mat-option (click)="showEnabledCustomers()" value="Active Customers">
                             <mat-icon>toggle_on</mat-icon>
                             <span>Active Customers</span>
                         </mat-option>
-                        <mat-option (click)="showDisabledCustomers()">
+                        <mat-option (click)="showDisabledCustomers()" value="Inactive Customers">
                             <mat-icon>toggle_off</mat-icon>
                             <span>Inactive Customer</span>
                         </mat-option>
