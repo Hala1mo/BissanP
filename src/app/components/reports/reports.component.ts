@@ -21,11 +21,12 @@ export class ReportsComponent implements OnInit {
 
   isDateDataEmpty: boolean = false;
 
-  fromDate: Date | null = null;
-  toDate: Date | null = null;
+  fromDate: any;
+  toDate: any;
 
   userFromDate: any;
   userToDate: any;
+
   myControl = new FormControl();
 
   @ViewChild(MatSort) sort!: MatSort;
@@ -60,13 +61,13 @@ export class ReportsComponent implements OnInit {
 
   protected readonly console = console;
 
-  onTypeSelect() {
-    if (this.fromDate && this.toDate) {
-      const fromDateString = formatDate(this.fromDate, 'yyyy-MM-dd', 'en');
-      const toDateString = formatDate(this.toDate, 'yyyy-MM-dd', 'en');
-      this.fetchDateData(fromDateString, toDateString);
-    }
-  }
+  // onTypeSelect() {
+  //   if (this.fromDate && this.toDate) {
+  //     const fromDateString = formatDate(this.fromDate, 'yyyy-MM-dd', 'en');
+  //     const toDateString = formatDate(this.toDate, 'yyyy-MM-dd', 'en');
+  //     this.fetchDateData(fromDateString, toDateString);
+  //   }
+  // }
 
 
   fetchDateData(from: string, to: string) {
@@ -103,5 +104,12 @@ export class ReportsComponent implements OnInit {
 
       }
     })
+  }
+
+
+  generateAssignmentReport() {
+    const fromDateString = formatDate(this.fromDate, 'yyyy-MM-dd', 'en');
+    const toDateString = formatDate(this.toDate, 'yyyy-MM-dd', 'en');
+    this.fetchDateData(fromDateString, toDateString);
   }
 }

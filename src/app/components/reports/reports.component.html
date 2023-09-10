@@ -11,7 +11,13 @@
         <h1>Users</h1>
       </div>
       <div class="row">
-        <div class="col-4"></div>
+        <div class="col-8">
+          <p>
+            This Report will show users performance in a specific period of time, number of total, not started,
+            undergoing, completed assignments.Also, it will show  not started,
+            undergoing, completed forms and their percentages.
+          </p>
+        </div>
         <div class="col-4">
           <mat-form-field [style.width.px]="400">
             <mat-label>Enter a date range</mat-label>
@@ -30,29 +36,43 @@
       </div>
     </div>
   </div>
-</div>
-<div class="mt-5"></div>
-<div class="container mt-5">
-  <div class="row border-bottom mb-5">
-    <div class="d-flex justify-content-between">
-      <h1>Reports</h1>
-    </div>
-  </div>
-  <div class="row mb-5">
-    <div class="col-4">
-
-    </div>
-    <div class="col-4">
-
-    </div>
-
-    <div class="col-4">
-
-    </div>
-  </div>
 
   <div class="row">
-    <h3>Forms</h3>
+    <div class="container">
+      <div class="row">
+        <h1>Assignments</h1>
+      </div>
+      <div class="row">
+        <div class="col-8">
+<p>
+  This Report will show Assignments in a specific period of time, and the user assigned for that assignment.
+
+</p>
+
+
+        </div>
+        <div class="col-4">
+          <mat-form-field [style.width.px]="400">
+            <mat-label>Enter a date range</mat-label>
+            <mat-date-range-input [rangePicker]="assignmentRangePicker">
+              <input matStartDate placeholder="Start date" [(ngModel)]="fromDate">
+              <input matEndDate placeholder="End date" [(ngModel)]="toDate">
+            </mat-date-range-input>
+            <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+            <mat-datepicker-toggle matIconSuffix [for]="assignmentRangePicker"></mat-datepicker-toggle>
+            <mat-date-range-picker #assignmentRangePicker></mat-date-range-picker>
+          </mat-form-field>
+          <button [style.width.px]="400" mat-raised-button color="primary" (click)="generateAssignmentReport()">
+            Generate Report
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="row">
+    <h1>Forms</h1>
     <div class="row mb-5">
       <button mat-stroked-button class="mb-2" color="primary"
               [routerLink]="['/reports/status']">
@@ -66,36 +86,7 @@
 
     </div>
   </div>
-  <div class="row">
-    <h3>Assignment</h3>
-    <div class="row mb-5">
-      <div class="d-flex justify-content-between">
-        <mat-form-field class="date-field" color="accent">
-          <mat-label>From:</mat-label>
-          <input matInput [matDatepicker]="picker1" [(ngModel)]="fromDate">
-          <mat-datepicker-toggle matIconSuffix [for]="picker1"></mat-datepicker-toggle>
-          <mat-datepicker #picker1></mat-datepicker>
-        </mat-form-field>
 
-        <mat-form-field class="date-field" color="accent">
-          <mat-label>To:</mat-label>
-          <input matInput [matDatepicker]="picker2" [(ngModel)]="toDate">
-          <mat-datepicker-toggle matIconSuffix [for]="picker2"></mat-datepicker-toggle>
-          <mat-datepicker #picker2 color="primary"></mat-datepicker>
-        </mat-form-field>
-
-        <button mat-mini-fab color="primary" (click)="onTypeSelect()">
-          <mat-icon>search</mat-icon>
-        </button>
-
-        <div *ngIf="isDateDataEmpty" class="imp-mat-warn">
-          No Assignments in this Date.
-        </div>
-      </div>
-    </div>
-  </div>
 </div>
-
-
 
 

@@ -15,7 +15,7 @@ export class ReportsService {
 
   private _visitAssignment = link.urlIP + '/visit_assignments';
   private types_url = link.urlIP + '/reports/customers/count_by_type';
-  private areas_url = link.urlIP + '/reports/customers/countByArea';
+  private areas_url = link.urlIP + '/reports/customers/count-by-area';
 
   private definitionReports = link.urlIP + '/reports/visit_definitions';
   private customersReports = link.urlIP + '/reports/customers';
@@ -27,7 +27,7 @@ export class ReportsService {
 
 
   fetchReports(): Observable<any> {
-    const _urlDetails = `${this.reportsBaseUrl}`;
+    const _urlDetails = `${this.reportsBaseUrl}/forms/all`;
     return this._http.get<any>(_urlDetails);
   }
 
