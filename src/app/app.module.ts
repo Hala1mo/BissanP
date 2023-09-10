@@ -66,6 +66,7 @@ import {GoogleMapsModule} from "@angular/google-maps";
 import { UserPerformanceComponent } from './components/reports/user-performance/user-performance.component';
 import { LoginComponent } from './auth/login/login.component';
 import { BotBarComponent } from './components/home/bot-bar/bot-bar.component';
+import { SpecificUserComponent } from './components/reports/specific-user/specific-user.component';
 
 @NgModule({
   declarations: [
@@ -102,6 +103,7 @@ import { BotBarComponent } from './components/home/bot-bar/bot-bar.component';
     UserPerformanceComponent,
     LoginComponent,
     BotBarComponent,
+    SpecificUserComponent,
   ],
   imports: [
     BrowserModule,

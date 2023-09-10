@@ -57,13 +57,18 @@
 
   </div>
   <div class="row mt-5">
-    <div class="col-6">
-      <app-line-graph
-        [graphBackground]="'#FFFFFF'"
-        [graphData]="graphDataPoints"
-        [lineColor]="'#000000'"
-        [graphYTitle]="'Username'"
-      />
+    <h2  class="mb-3 h5 text-capitalize">No. Completed forms & assignments</h2>
+    <div class="col-12">
+<!--      <app-line-graph-->
+<!--        [graphBackground]="'#FFFFFF'"-->
+<!--        [graphData]="graphDataPoints"-->
+<!--        [lineColor]="'#000000'"-->
+<!--        [graphYTitle]="'Username'"-->
+<!--      />-->
+
+      <div>
+        <canvasjs-chart [options]="chartOptions" [styles]="{width: '100%', height:'360px'}"></canvasjs-chart>
+      </div>
     </div>
 
   </div>

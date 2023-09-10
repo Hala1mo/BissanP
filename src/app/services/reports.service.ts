@@ -19,7 +19,7 @@ export class ReportsService {
 
   private definitionReports = link.urlIP + '/reports/visit_definitions';
   private customersReports = link.urlIP + '/reports/customers';
-
+username:string='';
 
   constructor(private _http: HttpClient) {
 
@@ -80,8 +80,17 @@ export class ReportsService {
   }
 
 
-  generateUserReports(fromDateString: string, toDateString: string) {
+  generateUserPerformanceReport(fromDateString: string, toDateString: string) {
     const url = `${this.reportsBaseUrl}/user_performance?from=${fromDateString}&to=${toDateString}`
+
+    return this._http.get<any>(url).pipe();
+  }
+
+  generateUserDetailedReport(data: any, fromDateString: string, toDateString: string) {
+
+    this.username=data.username;
+    console.log("gffffffffffffff",this.username);
+    const url = `${this.reportsBaseUrl}/user_detailed/${(this.username)}?from=${fromDateString}&to=${toDateString}`
 
     return this._http.get<any>(url).pipe();
   }
