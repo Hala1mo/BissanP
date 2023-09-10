@@ -32,16 +32,16 @@
       <div class="d-flex gap-1 justify-content-between">
         <mat-form-field>
           <mat-label>Show Active Definitions</mat-label>
-          <mat-select>
-            <mat-option (click)="resetFilters()">
+          <mat-select [(value)]="selectedActive">
+            <mat-option (click)="resetFilters()" value="All Definitions">
               <mat-icon>star</mat-icon>
               <span>All Definitions</span>
             </mat-option>
-            <mat-option (click)="showEnabledDefinitions()">
+            <mat-option (click)="showEnabledDefinitions()" value="Active Definitions">
               <mat-icon>toggle_on</mat-icon>
               <span>Active Definitions</span>
             </mat-option>
-            <mat-option (click)="showDisabledDefinitions()">
+            <mat-option (click)="showDisabledDefinitions()" value="Inactive Definitions">
               <mat-icon>toggle_off</mat-icon>
               <span>Inactive Definitions</span>
             </mat-option>
@@ -49,27 +49,31 @@
         </mat-form-field>
         <mat-form-field>
           <mat-label>Visit Type</mat-label>
-          <mat-select>
-            <mat-option (click)="resetFilters()">
+          <mat-select [(value)]="selectedType">
+            <mat-option (click)="resetFilters()" value="All Definitions">
               <mat-icon>star</mat-icon>
               <span>All Definitions</span>
             </mat-option>
             <mat-option *ngFor="let type of visitTypesData"
-                        (click)="showTypeDefinitions(type.id)">{{type.name}}</mat-option>
+                        value="{{type.name}}"
+                        (click)="showTypeDefinitions(type.id)"
+            >
+              {{type.name}}
+            </mat-option>
           </mat-select>
         </mat-form-field>
         <mat-form-field>
           <mat-label>Is Reoccurring</mat-label>
-          <mat-select>
-            <mat-option (click)="resetFilters()">
+          <mat-select [(value)]="selectedRecurring">
+            <mat-option (click)="resetFilters()" value="All Definitions">
               <mat-icon>star</mat-icon>
               <span>All Definitions</span>
             </mat-option>
-            <mat-option (click)="showRecurringDefinitions()">
+            <mat-option (click)="showRecurringDefinitions()" value="Reoccurring Definitions">
               <mat-icon>update</mat-icon>
               <span>Reoccurring Definitions</span>
             </mat-option>
-            <mat-option (click)="showNonRecurringDefinitions()">
+            <mat-option (click)="showNonRecurringDefinitions()" value="Non Reoccurring Definitions">
               <mat-icon>update_disabled</mat-icon>
               <span>Non Reoccurring Definitions</span>
             </mat-option>

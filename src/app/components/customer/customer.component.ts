@@ -99,12 +99,12 @@ export class CustomerComponent implements OnInit {
 
 
   showEnabledCustomers() {
-    this.customerData = this.originalCustomerData.filter(customer => customer.enabled);
+    this.customerData = this.customerData.filter(customer => customer.enabled);
     this.dataSource.data = this.customerData;
   }
 
   showDisabledCustomers() {
-    this.customerData = this.originalCustomerData.filter(customer => !customer.enabled);
+    this.customerData = this.customerData.filter(customer => !customer.enabled);
     this.dataSource.data = this.customerData;
   }
 

@@ -58,6 +58,9 @@ export class SharedService {
   }
 
   getVisitTypesAsList() {
+    if (this.visitTypesSubject.getValue().length === 0){
+      this.updateVisitTypes();
+    }
     return this.visitTypesSubject.getValue();
   }
 

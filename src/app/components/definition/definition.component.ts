@@ -31,6 +31,10 @@ export class DefinitionComponent implements OnInit, AfterViewInit {
   @ViewChild('definitionTablePaginator') paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
+  selectedActive = 'All Definitions';
+  selectedType = 'All Definitions';
+  selectedRecurring = 'All Definitions';
+
 
   constructor(
     private definitionService: DefinitionService,
@@ -45,7 +49,11 @@ export class DefinitionComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     this.fetchAllDefinitions();
 
-    this.visitTypesData = this.sharedService.getVisitTypesAsList();
+    this.sharedService.fetchVisitTypes().pipe().subscribe({
+      next: response => {
+        this.visitTypesData = response;
+      }
+    });
 
     this.dataSource.filterPredicate = function (definition, filter) {
       return definition.name.toLocaleLowerCase().includes(filter.toLocaleLowerCase()) || definition.description.toLocaleLowerCase().includes(filter.toLocaleLowerCase());
@@ -54,6 +62,7 @@ export class DefinitionComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
+
     this.dataSource.sort = this.sort;
   }
 
@@ -134,27 +143,27 @@ export class DefinitionComponent implements OnInit, AfterViewInit {
   }
 
   showEnabledDefinitions() {
-    this.visitDefinitionData = this.originalVisitDefinitionData.filter(definition => definition.enabled);
+    this.visitDefinitionData = this.visitDefinitionData.filter(definition => definition.enabled);
     this.dataSource.data = this.visitDefinitionData;
   }
 
   showDisabledDefinitions() {
-    this.visitDefinitionData = this.originalVisitDefinitionData.filter(definition => !definition.enabled);
-    this.dataSource.data = this.visitDefinitionData;
-  }
-
-  showRecurringDefinitions() {
-    this.visitDefinitionData = this.originalVisitDefinitionData.filter(def => def.allowRecurring);
-    this.dataSource.data = this.visitDefinitionData;
-  }
-
-  showNonRecurringDefinitions() {
-    this.visitDefinitionData = this.originalVisitDefinitionData.filter(def => !def.allowRecurring);
+    this.visitDefinitionData = this.visitDefinitionData.filter(definition => !definition.enabled);
     this.dataSource.data = this.visitDefinitionData;
   }
 
   showTypeDefinitions(typeId: bigint) {
-    this.visitDefinitionData = this.originalVisitDefinitionData.filter(def => def.visitType.id == typeId);
+    this.visitDefinitionData = this.visitDefinitionData.filter(def => def.visitType.id == typeId);
+    this.dataSource.data = this.visitDefinitionData;
+  }
+
+  showRecurringDefinitions() {
+    this.visitDefinitionData = this.visitDefinitionData.filter(def => def.allowRecurring);
+    this.dataSource.data = this.visitDefinitionData;
+  }
+
+  showNonRecurringDefinitions() {
+    this.visitDefinitionData = this.visitDefinitionData.filter(def => !def.allowRecurring);
     this.dataSource.data = this.visitDefinitionData;
   }
 
@@ -168,14 +177,6 @@ export class DefinitionComponent implements OnInit, AfterViewInit {
       width: '40%',
     }).afterClosed().subscribe(() => {
       this.sharedService.updateVisitTypes();
-    });
-  }
-
-  openCityDialog() {
-    this.matDialog.open(CityDialogComponent, {
-      width: '40%',
-    }).afterClosed().subscribe(() => {
-      this.sharedService.updateCities();
     });
   }
 }

@@ -117,22 +117,22 @@ export class UserComponent implements OnInit {
   }
 
   showEnabledUsers() {
-    this.userData = this.originalUserData.filter(user => user.enabled);
+    this.userData = this.userData.filter(user => user.enabled);
     this.dataSource.data = this.userData;
   }
 
   showDisabledUsers() {
-    this.userData = this.originalUserData.filter(user => !user.enabled);
+    this.userData = this.userData.filter(user => !user.enabled);
     this.dataSource.data = this.userData;
   }
 
   showAdminUsers() {
-    this.userData = this.originalUserData.filter(user => user.accessLevel === 1);
+    this.userData = this.userData.filter(user => user.accessLevel === 1);
     this.dataSource.data = this.userData;
   }
 
   showEmployeeUsers() {
-    this.userData = this.originalUserData.filter(user => user.accessLevel === 0);
+    this.userData = this.userData.filter(user => user.accessLevel === 0);
     this.dataSource.data = this.userData;
   }
 
