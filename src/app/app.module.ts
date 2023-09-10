@@ -4,7 +4,7 @@ import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {HeaderComponent} from './components/header/header.component';
 import {UserComponent} from './components/user/user.component';
-import {HttpClientJsonpModule, HttpClientModule} from '@angular/common/http';
+import {HTTP_INTERCEPTORS, HttpClientJsonpModule, HttpClientModule} from '@angular/common/http';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MAT_DIALOG_DEFAULT_OPTIONS, MatDialogModule} from "@angular/material/dialog";
@@ -63,9 +63,10 @@ import {TopBarComponent} from './components/home/top-bar/top-bar.component';
 import {MidBarComponent} from './components/home/mid-bar/mid-bar.component';
 import {LineGraphComponent} from './components/home/mid-bar/line-graph/line-graph.component';
 import {GoogleMapsModule} from "@angular/google-maps";
-import { UserPerformanceComponent } from './components/reports/user-performance/user-performance.component';
-import { LoginComponent } from './auth/login/login.component';
-import { BotBarComponent } from './components/home/bot-bar/bot-bar.component';
+import {UserPerformanceComponent} from './components/reports/user-performance/user-performance.component';
+import {LoginComponent} from './auth/login/login.component';
+import {BotBarComponent} from './components/home/bot-bar/bot-bar.component';
+import {ErrorInterceptor} from "./interceptors/error-interceptor.service";
 
 @NgModule({
   declarations: [
@@ -146,7 +147,9 @@ import { BotBarComponent } from './components/home/bot-bar/bot-bar.component';
 
   ],
   providers: [
-    {provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {}}
+    {provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {}},
+    {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},
+
   ],
   bootstrap: [AppComponent]
 })
