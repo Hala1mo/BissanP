@@ -3,7 +3,6 @@ import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {link} from "../models/link";
 import {VisitAssignment} from "../models/VisitAssignment";
-import {id} from "@swimlane/ngx-charts";
 
 
 @Injectable({
@@ -11,7 +10,6 @@ import {id} from "@swimlane/ngx-charts";
 })
 export class AssignmentService {
     private _visitAssignment = link.urlIP+'/visit_assignments';
-    private employeeUsers = link.urlIP+'/users/employees'
 
     constructor(private _http: HttpClient) {
 
@@ -39,6 +37,12 @@ export class AssignmentService {
     const assignUrl = `${this._visitAssignment}/${id}/users`;
     console.log("ruruur",username);
     return this._http.put<any>(assignUrl, username);
+  }
+
+
+  fetchAssignmentForms(id: bigint): Observable<any> {
+    const _urlDetails = `${this._visitAssignment}/${id}/forms`;
+    return this._http.get<any>(_urlDetails);
   }
 
 }

@@ -13,6 +13,7 @@ import {MatSort} from "@angular/material/sort";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {MatAutocompleteSelectedEvent} from "@angular/material/autocomplete";
 import {UserService} from "../../services/user.service";
+import {visitForms} from "../../models/visitForms";
 
 @Component({
   selector: 'app-assignments',
@@ -22,6 +23,7 @@ import {UserService} from "../../services/user.service";
 export class AssignmentDetailsComponent implements OnInit, AfterViewInit {
   customerData: Customer[] = [];
   userData: User [] = [];
+  formsData: visitForms[] = [];
 
   filteredCustomers: Customer[] | undefined;
   customerSelectControl = new FormControl();
@@ -39,9 +41,8 @@ export class AssignmentDetailsComponent implements OnInit, AfterViewInit {
   selectedUser: User | undefined; // Placeholder for selected user
   selectedCustomer: Customer | undefined; // Placeholder for selected customer
 
-  displayedColumns = ['name', 'actions'];
-  customerDataSource = new MatTableDataSource([]);
-
+  displayedColumns = ['name', 'status', 'startedTime', 'endTime','actions'];
+  formsDataSource = new MatTableDataSource([]);
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
@@ -62,6 +63,7 @@ export class AssignmentDetailsComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.fetchCurrentAssignment(this.currentAssignmentId);
+    this.fetchForms(this.currentAssignmentId);
     this.fetchUserData();
     this.fetchCustomerData();
   }
@@ -76,14 +78,14 @@ export class AssignmentDetailsComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.customerDataSource.sort = this.sort;
-    this.customerDataSource.paginator = this.paginator;
+    this.formsDataSource.sort = this.sort;
+    this.formsDataSource.paginator = this.paginator;
   }
 
   fetchCurrentAssignment(id: any) {
     this.assignmentService.findAssignmentById(id).subscribe({
         next: response => {
-          this.customerDataSource.data = response.customers;
+          // this.customerDataSource.data = response.customers;
           this.currentAssignment = response;
 
           this.selectedUser = response.user;
@@ -127,13 +129,6 @@ export class AssignmentDetailsComponent implements OnInit, AfterViewInit {
 
   displayCustomer(customer: Customer): string {
     return customer ? `${customer.name}` : '';
-  }
-
-
-  openCustomerDetails(id: bigint) {
-    this.router.navigate(['/customers', id]).then(() => {
-      this.matDialogRef.close();
-    });
   }
 
 
@@ -212,6 +207,23 @@ export class AssignmentDetailsComponent implements OnInit, AfterViewInit {
     console.log("FILTERING", filterValue);
 
     this.filteredCustomers = this.customerData.filter(option => option.name.toLowerCase().includes(filterValue));
+  }
+
+  fetchForms(currentAssignmentId: bigint) {
+    this.assignmentService.fetchAssignmentForms(currentAssignmentId).subscribe({
+        next: response => {
+          console.log(response);
+          this.formsData = response;
+          this.formsDataSource.data = response;
+          //  console.log("Test",this.formsData);
+
+          console.log("DATASOURCE", this.formsDataSource);
+        },
+        error: error => {
+          console.error('Error fetching forms data:', error);
+        }
+      }
+    );
   }
 }
 

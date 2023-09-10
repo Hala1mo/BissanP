@@ -65,7 +65,7 @@ export class DefinitionDetailsComponent implements OnInit {
     console.log("OPENING ASSIGNMENT", assignmentId);
 
     this.matDialog.open(AssignmentDetailsComponent, {
-      width: '40%',
+      width: '50%',
       data: {
         assignmentId: assignmentId,
         locationId: this.currentDefinition?.location.id
