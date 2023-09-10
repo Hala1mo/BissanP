@@ -8,6 +8,7 @@ import {HttpClient} from "@angular/common/http";
 export class DashboardService {
 
   private dashUrl = link.urlIP + '/dash';
+  private authUrl = link.urlIP + '/auth';
 
   constructor(private httpClient: HttpClient) {
 
@@ -19,5 +20,17 @@ export class DashboardService {
 
   fetchGraphs() {
     return this.httpClient.get<any>(`${this.dashUrl}/graph`).pipe();
+  }
+
+  fetchTables() {
+    return this.httpClient.get<any>(`${this.authUrl}/reset_password`).pipe();
+  }
+
+  acceptPasswordResetRequest(requestId: bigint) {
+    return this.httpClient.put<any>(`${this.authUrl}/reset_password/${requestId}`, '').pipe();
+  }
+
+  rejectPasswordResetRequest(requestId: bigint) {
+    return this.httpClient.delete<any>(`${this.authUrl}/reset_password/${requestId}`).pipe();
   }
 }

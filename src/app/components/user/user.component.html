@@ -25,16 +25,16 @@
       <div class="d-flex gap-1 justify-content-between">
         <mat-form-field>
           <mat-label>Show Active Users</mat-label>
-          <mat-select>
-            <mat-option (click)="resetFilters()">
+          <mat-select [(value)]="selectedActiveFilter">
+            <mat-option (click)="resetFilters()" value="All Users">
               <mat-icon>star</mat-icon>
               <span>All Users</span>
             </mat-option>
-            <mat-option (click)="showEnabledUsers()">
+            <mat-option (click)="showEnabledUsers()" value="Active Users">
               <mat-icon>toggle_on</mat-icon>
               <span>Active Users</span>
             </mat-option>
-            <mat-option (click)="showDisabledUsers()">
+            <mat-option (click)="showDisabledUsers()" value="Inactive Users">
               <mat-icon>toggle_off</mat-icon>
               <span>Inactive Users</span>
             </mat-option>
@@ -42,16 +42,16 @@
         </mat-form-field>
         <mat-form-field>
           <mat-label>Access Level</mat-label>
-          <mat-select>
-            <mat-option (click)="resetFilters()">
+          <mat-select [(value)]="selectedRoleFilter">
+            <mat-option (click)="resetFilters()" value="All Users">
               <mat-icon>star</mat-icon>
               <span>All Users</span>
             </mat-option>
-            <mat-option (click)="showAdminUsers()">
+            <mat-option (click)="showAdminUsers()" value="Supervisors">
               <mat-icon>supervised_user_circle</mat-icon>
               <span>Supervisors</span>
             </mat-option>
-            <mat-option (click)="showEmployeeUsers()">
+            <mat-option (click)="showEmployeeUsers()" value="Employees">
               <mat-icon>account_circle</mat-icon>
               <span>Employees</span>
             </mat-option>
