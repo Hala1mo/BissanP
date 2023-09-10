@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {MatTableDataSource} from "@angular/material/table";
 import {User} from "../../models/User";
@@ -18,7 +18,7 @@ import {Router} from "@angular/router";
   styleUrls: ['./user.component.css'],
 })
 
-export class UserComponent implements OnInit, AfterViewInit {
+export class UserComponent implements OnInit {
   isTableLoaded: boolean = false;
   userData: User[] = [];
   originalUserData: User[] = [];
@@ -49,11 +49,6 @@ export class UserComponent implements OnInit, AfterViewInit {
     this.dataSource.filterPredicate = function (user, filter) {
       return user.username.toLocaleLowerCase().includes(filter.toLocaleLowerCase()) || user.firstName.toLocaleLowerCase().includes(filter.toLocaleLowerCase()) || user.lastName.toLocaleLowerCase().includes(filter.toLocaleLowerCase());
     }
-  }
-
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.userPaginator;
-    this.dataSource.sort = this.userSort;
   }
 
   fetchAllUserData() {
@@ -115,11 +110,9 @@ export class UserComponent implements OnInit, AfterViewInit {
       response => {
         if (response === undefined) return;
 
-        if (response.firstName && response.lastName && response.accessLevel) {
-          user.firstName = response.firstName;
-          user.lastName = response.lastName;
-          user.accessLevel = response.accessLevel;
-        }
+        user.firstName = response.firstName;
+        user.lastName = response.lastName;
+        user.accessLevel = response.accessLevel;
       })
   }
 
@@ -159,4 +152,12 @@ export class UserComponent implements OnInit, AfterViewInit {
 
   protected readonly Customer = Customer;
 
+  displayUserRole(user: User) {
+    if (user.accessLevel == 0)
+      return "Employee"
+    if (user.accessLevel == 1)
+      return "Supervisor"
+
+    return "";
+  }
 }

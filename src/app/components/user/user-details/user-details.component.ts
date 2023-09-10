@@ -57,7 +57,7 @@ export class UserDetailsComponent implements OnInit {
         next: response => {
           this.isUserLoaded = true;
 
-          if (response.percentages.length === 0){
+          if (response.percentages.length === 0) {
             this.noReportsAvailable = true;
             return;
           }
@@ -114,19 +114,21 @@ export class UserDetailsComponent implements OnInit {
   }
 
   openEditUserDialog() {
+    console.log(this.currentUser);
+
     this.matDialog.open(EditUserComponent, {
       width: '40%',
       data: this.currentUser
     }).afterClosed().subscribe(
       response => {
+        console.log("AFTER EDIT CLOSED", response);
+
         if (response === undefined) return;
         if (!this.currentUser) return;
 
-        if (response.firstName && response.lastName && response.accessLevel) {
-          this.currentUser.firstName = response.firstName;
-          this.currentUser.lastName = response.lastName;
-          this.currentUser.accessLevel = response.accessLevel;
-        }
+        this.currentUser.firstName = response.firstName;
+        this.currentUser.lastName = response.lastName;
+        this.currentUser.accessLevel = response.accessLevel;
       })
   }
 }
