@@ -1,0 +1,26 @@
+<h1 mat-dialog-title>Login</h1>
+<mat-dialog-content>
+  <form>
+    <div class="row mb-1">
+      <mat-form-field>
+        <mat-label>Username</mat-label>
+        <input matInput type="text" formControlName="username" required>
+      </mat-form-field>
+    </div>
+    <div class="row mb-1">
+      <mat-form-field>
+        <mat-label>Password</mat-label>
+        <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password" required>
+        <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" [attr.aria-label]="'Hide password'"
+                [attr.aria-pressed]="hidePassword">
+          <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+        </button>
+      </mat-form-field>
+    </div>
+  </form>
+  <mat-dialog-actions>
+    <button mat-raised-button color="primary" (click)="signIn()" [disabled]="isSigningIn">
+      {{isSigningIn ? 'Signing In' : 'Sign In'}}
+    </button>
+  </mat-dialog-actions>
+</mat-dialog-content>
