@@ -11,6 +11,7 @@ export class LineGraphComponent implements OnInit, OnChanges {
   @Input() graphTitle: string = '';
   @Input() graphYTitle: string = ''
   @Input() graphBackground: string = '#FFFFFF';
+  @Input() lineColor: string = '#f3f3f3'
   @Input() graphType: string = 'column';
 
   chart: any;
@@ -22,22 +23,22 @@ export class LineGraphComponent implements OnInit, OnChanges {
       animationEnabled: true,
       exportEnabled: false,
       axisY: {
-        lineColor: '#f3f3f3',
+        lineColor: this.lineColor,
+        labelFontColor: this.lineColor,
         gridColor: 'rgba(204,204,204,0.5)',
-        labelFontColor: '#FFFFFF',
         tickLength: 0,
       },
       axisX: {
-        lineColor: '#f3f3f3',
-        labelFontColor: '#FFFFFF',
+        lineColor: this.lineColor,
+        labelFontColor: this.lineColor,
         tickLength: 0,
       },
       toolTip: {
-        fontColor: this.graphBackground
+        fontColor: this.graphBackground === '#FFFFFF' ? this.lineColor : this.graphBackground
       },
       data: [{
         type: this.graphType,
-        color: '#FFFFFF',
+        color: this.lineColor,
         dataPoints: this.graphData,
       }]
     }

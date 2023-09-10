@@ -12,13 +12,24 @@ export class UserPerformanceComponent implements OnInit {
   rows: any[] = [];
   fileName = 'ExcelSheet.xlsx';
 
+
+  graphDataPoints: [{ label: string, y: number }] = [{label: '', y: 0}];
+
   constructor(
     private sharedService: SharedService,
   ) {
+    console.log(this.graphDataPoints);
   }
+
 
   ngOnInit(): void {
     this.rows = this.sharedService.getUserPerformanceReportsAsList();
+    this.graphDataPoints.pop();
+
+    for (const row of this.rows) {
+      this.graphDataPoints.push({label: row.user.username, y: row.completedForms});
+    }
+    console.log(this.rows);
   }
 
 
@@ -28,9 +39,9 @@ export class UserPerformanceComponent implements OnInit {
 
   exportTable() {
     const excelHeaders: string[] = ["Username", "Full Name", "Total Assignments #", "Not Started Assignments #", "Undergoing Assignments #",
-    "Completed Assignments #", "Total Forms #", "Not Started Forms #", "Undergoing Forms #", "Canceled Forms #", "Completed Forms #",
-    "Not Started Forms %", "Undergoing Forms %", "Canceled Forms %", "Completed Forms %", "AVG. Time To Complete Forms",
-    "Late Forms #"];
+      "Completed Assignments #", "Total Forms #", "Not Started Forms #", "Undergoing Forms #", "Canceled Forms #", "Completed Forms #",
+      "Not Started Forms %", "Undergoing Forms %", "Canceled Forms %", "Completed Forms %", "AVG. Time To Complete Forms",
+      "Late Forms #"];
 
     let element = document.getElementById('report-bot-bar');
 
