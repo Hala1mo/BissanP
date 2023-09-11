@@ -89,7 +89,6 @@ username:string='';
   generateUserDetailedReport(data: any, fromDateString: string, toDateString: string) {
 
     this.username=data.username;
-    console.log("gffffffffffffff",this.username);
     const url = `${this.reportsBaseUrl}/user_detailed/${(this.username)}?from=${fromDateString}&to=${toDateString}`
 
     return this._http.get<any>(url).pipe();
