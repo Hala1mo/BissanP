@@ -1,7 +1,5 @@
 import {Component, OnInit} from '@angular/core';
 import {SharedService} from "./services/shared.service";
-import {RegistrationService} from "./services/registration.service";
-import {City} from "./models/City";
 
 
 @Component({
@@ -11,11 +9,9 @@ import {City} from "./models/City";
 })
 export class AppComponent implements OnInit {
 
-    private cities: City[] = [];
 
     constructor(
         private sharedService: SharedService,
-        private customerService: RegistrationService,
     ) {
 
     }
