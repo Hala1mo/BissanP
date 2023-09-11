@@ -1,7 +1,8 @@
 import {Injectable} from '@angular/core';
 import {Observable} from "rxjs";
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpParams} from "@angular/common/http";
 import {link} from "../models/link";
+import {User} from "../models/User";
 
 
 export interface addCustomerTDO {
@@ -12,7 +13,6 @@ export interface addCustomerTDO {
   confirmPassword: string;
   accessLevel: string;
 }
-
 
 export interface editCustomerDTO {
   firstName: string;
@@ -84,5 +84,23 @@ export class UserService {
     return this._http.get<any>(_urlDetails);
   }
 
+  searchUsers(name?: string, role?: string, enabled?: string) {
+    // Create a new HttpParams object to build the query parameters
+    let params = new HttpParams();
+
+    // Add parameters only if they are defined
+    if (name) {
+      params = params.set('name', name);
+    }
+    if (role) {
+      params = params.set('role', role);
+    }
+    if (enabled !== undefined) {
+      params = params.set('enabled', enabled);
+    }
+
+    return this._http.get<User[]>(`${this.usersUrl}/search`, {params}).pipe();
+  }
 
 }
+

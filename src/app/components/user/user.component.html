@@ -9,49 +9,53 @@
     </div>
   </div>
   <div class="row border-bottom mb-3">
-    <div class="col-8">
+    <div class="col-6">
       <form>
         <mat-form-field [style.width.%]="100">
           <mat-label>What are you looking for?</mat-label>
           <input matInput matNativeControl placeholder="search for username, first name, or last name"
                  [(ngModel)]="searchInput"
                  [ngModelOptions]="{standalone: true}"
-                 (input)="applyFilter($event)">
-          <mat-icon matSuffix>search</mat-icon>
+                 (input)="searchUsers()">
+          <mat-icon matPrefix>search</mat-icon>
+          <button mat-icon-button matSuffix (click)="resetFilters()" [attr.aria-label]="'Reset Filters'"
+                  matTooltip="Reset all filters">
+            <mat-icon>restart_alt</mat-icon>
+          </button>
         </mat-form-field>
       </form>
     </div>
-    <div class="col-4">
+    <div class="col-6">
       <div class="d-flex gap-1 justify-content-between">
-        <mat-form-field>
+        <mat-form-field [style.width.%]="100">
           <mat-label>Show Active Users</mat-label>
-          <mat-select [(value)]="selectedActiveFilter">
-            <mat-option (click)="resetFilters()" value="All Users">
+          <mat-select [(value)]="selectedActiveFilter" (selectionChange)="searchUsers()">
+            <mat-option value="">
               <mat-icon>star</mat-icon>
               <span>All Users</span>
             </mat-option>
-            <mat-option (click)="showEnabledUsers()" value="Active Users">
+            <mat-option value="true">
               <mat-icon>toggle_on</mat-icon>
               <span>Active Users</span>
             </mat-option>
-            <mat-option (click)="showDisabledUsers()" value="Inactive Users">
+            <mat-option value="false">
               <mat-icon>toggle_off</mat-icon>
               <span>Inactive Users</span>
             </mat-option>
           </mat-select>
         </mat-form-field>
-        <mat-form-field>
+        <mat-form-field [style.width.%]="100">
           <mat-label>Access Level</mat-label>
-          <mat-select [(value)]="selectedRoleFilter">
-            <mat-option (click)="resetFilters()" value="All Users">
+          <mat-select [(value)]="selectedRoleFilter"  (selectionChange)="searchUsers()">
+            <mat-option value="">
               <mat-icon>star</mat-icon>
               <span>All Users</span>
             </mat-option>
-            <mat-option (click)="showAdminUsers()" value="Supervisors">
+            <mat-option value="1">
               <mat-icon>supervised_user_circle</mat-icon>
               <span>Supervisors</span>
             </mat-option>
-            <mat-option (click)="showEmployeeUsers()" value="Employees">
+            <mat-option value="0">
               <mat-icon>account_circle</mat-icon>
               <span>Employees</span>
             </mat-option>

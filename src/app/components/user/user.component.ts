@@ -24,8 +24,8 @@ export class UserComponent implements OnInit {
   originalUserData: User[] = [];
 
   searchInput: string = "";
-  selectedActiveFilter = 'All Users';
-  selectedRoleFilter = 'All Users';
+  selectedActiveFilter = '';
+  selectedRoleFilter = '';
 
 
   displayedColumns: string[] = ['username', 'name', 'accessLevel', 'enabled', 'actions']
@@ -142,6 +142,9 @@ export class UserComponent implements OnInit {
   }
 
   resetFilters() {
+    this.searchInput = '';
+    this.selectedRoleFilter = '';
+    this.selectedActiveFilter = '';
     this.userData = this.originalUserData;
     this.dataSource.data = this.userData;
   }
@@ -160,4 +163,25 @@ export class UserComponent implements OnInit {
 
     return "";
   }
-}
+
+  searchUsers() {
+
+    let name = this.searchInput || undefined;
+    let role = this.selectedRoleFilter || undefined;
+    let enabled = this.selectedActiveFilter || undefined;
+
+    if (!name && !role && !enabled){
+      this.resetFilters();
+    }
+
+    this.userService.searchUsers(name, role, enabled).subscribe({
+      next: value => {
+        this.userData = value;
+        this.dataSource.data = this.userData;
+      }
+    })
+
+    }
+
+  }
+
