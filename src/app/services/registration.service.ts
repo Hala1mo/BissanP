@@ -12,7 +12,6 @@ interface CustomerDTO {
   longitude: number | null;
 }
 
-
 interface ContactDTO {
   firstName: string;
   lastName: string;
