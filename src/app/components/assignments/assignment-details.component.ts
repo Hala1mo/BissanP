@@ -138,6 +138,8 @@ export class AssignmentDetailsComponent implements OnInit, AfterViewInit {
     this.assignmentService.assignCustomer(this.currentAssignmentId, customerId).subscribe({
         next: response => {
           this.fetchCurrentAssignment(this.currentAssignmentId);
+          this.fetchCustomerData();
+          this.fetchForms(this.currentAssignmentId);
           console.log('Customer assigned successfully:', response);
         },
         error: error => {
@@ -162,6 +164,7 @@ export class AssignmentDetailsComponent implements OnInit, AfterViewInit {
     this.assignmentService.deleteCustomer(this.currentAssignmentId, customerId).subscribe({
       next: () => {
         this.fetchCurrentAssignment(this.currentAssignmentId);
+        this.fetchForms(this.currentAssignmentId);
       },
       error: error => {
         console.error(error)

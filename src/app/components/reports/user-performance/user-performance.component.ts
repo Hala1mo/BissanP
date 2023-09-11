@@ -13,6 +13,8 @@ export class UserPerformanceComponent implements OnInit {
   fileName = 'ExcelSheet.xlsx';
   chartOptions: any;
 
+
+
   graphDataPoints1: { label: string, y: number }[] = [{ label: '', y: 0 }];
   graphDataPoints2: { label: string, y: number }[] = [{ label: '', y: 0 }];
 
@@ -44,7 +46,7 @@ export class UserPerformanceComponent implements OnInit {
       "Not Started Forms %", "Undergoing Forms %", "Canceled Forms %", "Completed Forms %", "AVG. Time To Complete Forms",
       "Late Forms #"];
 
-    let element = document.getElementById('report-bot-bar');
+    let element = document.getElementById('report-table');
 
     const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(element);
     const wb: XLSX.WorkBook = XLSX.utils.book_new();

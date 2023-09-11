@@ -177,6 +177,7 @@ export class ReportsComponent implements OnInit {
           this.isDateDataEmpty = true;
         } else {
           this.isDateDataEmpty = false;
+          this.sharedService.setUserDetailedReports(data);
           this.router.navigate(['/reports/user-detailed']);
         }
       },

@@ -1,1 +1,84 @@
-<p>specific-user works!</p>
+<div class="container">
+  <div class="row mb-3 pb-3 border-bottom">
+    <!--    ACTIONS   -->
+    <div class="col-12">
+      <button mat-raised-button color="primary" (click)="exportTable()">
+        <mat-icon>cloud_download</mat-icon>
+        Export Report
+      </button>
+    </div>
+  </div>
+  <div class="row overflow-x-auto">
+    <h2  class="mb-3 h5 text-capitalize">{{report.performance.user.username}} performance</h2>
+    <table class="table table-bordered" id="report-table">
+
+      <thead>
+      <tr>
+      <th>Full Name</th>
+      <th>TOT. ASSIG #</th>
+      <th>NST. ASSIG #</th>
+      <th>UND. ASSIG #</th>
+      <th>COM. ASSIG #</th>
+      <th>TOT. FORMS #</th>
+      <th>NST. FORMS #</th>
+      <th>UND. FORMS #</th>
+      <th>CAN. FORMS #</th>
+      <th>COM. FORMS #</th>
+      <th>NST. FORMS %</th>
+      <th>UND. FORMS %</th>
+      <th>CAN. FORMS %</th>
+      <th>COM. FORMS %</th>
+      <th>AVG. TIME (s)</th>
+      <th>LATE FORMS #</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <td>{{report.performance.user.firstName}} {{report.performance.user.lastName}}</td>
+        <td>{{report.performance.totalAssignments}}</td>
+        <td>{{report.performance.notStartedAssignments}}</td>
+        <td>{{report.performance.undergoingAssignments}}</td>
+        <td>{{report.performance.completedAssignments}}</td>
+        <td>{{report.performance.totalForms}}</td>
+        <td>{{report.performance.notStartedForms}}</td>
+        <td>{{report.performance.undergoingForms}}</td>
+        <td>{{report.performance.canceledForms}}</td>
+        <td>{{report.performance.completedForms}}</td>
+        <td>{{formatDec(report.performance.notStartedFormsPer)}}%</td>
+        <td>{{formatDec(report.performance.undergoingFormsPer)}}%</td>
+        <td>{{formatDec(report.performance.canceledFormsPer)}}%</td>
+        <td>{{formatDec(report.performance.completedFormsPer)}}%</td>
+        <td>{{formatDec(report.performance.averageCompletionTime)}} s</td>
+        <td>{{report.performance.lateFormsCount}}</td>
+      </tr>
+      </tbody>
+    </table>
+    <h2  class="mb-3 h5 text-capitalize">{{report.performance.user.username}} interaction</h2>
+    <table class="table table-bordered" id="report2-table">
+      <thead>
+      <tr>
+        <th>Name</th>
+        <th>Address</th>
+        <th>latitude</th>
+        <th>longitude</th>
+        <th>Due Date</th>
+        <th>Duration</th>
+        <th>Status</th>
+        <th>Type</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let row of report.interaction">
+        <td>{{ row.customerName }}</td>
+        <td>{{ row.customerAddress }}</td>
+        <td>{{ row.latitude }}</td>
+        <td>{{ row.longitude }}</td>
+        <td>{{ row.formDueDate }}</td>
+        <td>{{ row.formDuration }}</td>
+        <td>{{ row.formStatus }}</td>
+        <td>{{ row.formType }}</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

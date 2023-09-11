@@ -1,12 +1,11 @@
-<div class="dialog-content">
-  <h2>Customer List</h2>
-  <ul>
-    <li *ngFor="let customer of data">
-      <div>
-        <button (click)="openCustomerDetailDialog(customer.id)">
-          {{ customer.name }}
-        </button>
-      </div>
-    </li>
-  </ul>
-</div>
+<h1 mat-dialog-title>Customer List</h1>
+<mat-dialog-content>
+  <div *ngFor="let customer of data">
+    <div>
+      <button mat-button (click)="openCustomerDetailDialog(customer.id)">
+        <mat-icon>perm_identity</mat-icon>
+        {{ customer.name }}
+      </button>
+    </div>
+  </div>
+</mat-dialog-content>
