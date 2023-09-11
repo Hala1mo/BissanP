@@ -85,19 +85,15 @@ export class UserService {
   }
 
   searchUsers(name?: string, role?: string, enabled?: string) {
-    // Create a new HttpParams object to build the query parameters
     let params = new HttpParams();
 
-    // Add parameters only if they are defined
-    if (name) {
+    if (name)
       params = params.set('name', name);
-    }
-    if (role) {
+    if (role)
       params = params.set('role', role);
-    }
-    if (enabled !== undefined) {
+    if (enabled !== undefined)
       params = params.set('enabled', enabled);
-    }
+
 
     return this._http.get<User[]>(`${this.usersUrl}/search`, {params}).pipe();
   }

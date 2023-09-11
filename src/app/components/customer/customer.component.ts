@@ -10,6 +10,8 @@ import {CustomerDialogComponent} from "./customer-dialog/customer-dialog.compone
 import {VisitAssignment} from "../../models/VisitAssignment";
 import {AssignNewCustomerDialogComponent} from "./assign-new-customer-dialog/assign-new-customer-dialog.component";
 import {SharedService} from "../../services/shared.service";
+import {City} from "../../models/City";
+import {Location} from "../../models/Location";
 
 
 @Component({
@@ -21,7 +23,15 @@ import {SharedService} from "../../services/shared.service";
 export class CustomerComponent implements OnInit {
   isTableLoaded: boolean = false;
 
-  selectedEnabledOption = "All Customers"
+  selectedEnabledOption = "";
+  selectedCityOption = "";
+  selectedLocationOption = "";
+
+  cities: City[] = [];
+  selectedCity: City | null = null;
+  selectedCityLocations: Location[] | any = [];
+
+
   displayedColumns: string[] = ['name', 'city', 'location', 'enabled', 'actions']
   customerData: Customer[] = [];
   originalCustomerData: Customer[] = [];
@@ -43,6 +53,16 @@ export class CustomerComponent implements OnInit {
 
   ngOnInit() {
     this.fetchCustomerData();
+
+    this.cities = this.sharedService.getCitiesAsList();
+
+    if (this.cities.length < 1) {
+      this.sharedService.fetchCities().subscribe({
+        next: value => {
+          this.cities = value;
+        }
+      });
+    }
 
     this.dataSource.filterPredicate = function (customer, filter) {
       const name = customer.name ? customer.name.toLocaleLowerCase() : '';
@@ -97,25 +117,13 @@ export class CustomerComponent implements OnInit {
 
   protected readonly Customer = Customer;
 
-
-  showEnabledCustomers() {
-    this.customerData = this.customerData.filter(customer => customer.enabled);
-    this.dataSource.data = this.customerData;
-  }
-
-  showDisabledCustomers() {
-    this.customerData = this.customerData.filter(customer => !customer.enabled);
-    this.dataSource.data = this.customerData;
-  }
-
   resetFilters() {
+    this.selectedEnabledOption = "";
+    this.selectedCityOption = "";
+    this.selectedLocationOption = "";
+
     this.customerData = this.originalCustomerData;
     this.dataSource.data = this.customerData;
-  }
-
-  applySearchFilter($event: Event) {
-    const filterValue = ($event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
   openAddDialog() {
@@ -166,4 +174,24 @@ export class CustomerComponent implements OnInit {
     })
   }
 
+  searchCustomers() {
+    let name = this.searchInput || undefined;
+    let enabled = this.selectedEnabledOption || undefined;
+    let city = this.selectedCityOption || undefined;
+    let location = this.selectedLocationOption || undefined;
+
+    console.log(name, enabled, city, location);
+
+    this.customerService.searchCustomers(name, enabled, city, location).subscribe({
+      next: value => {
+        this.customerData = value;
+        this.dataSource.data = this.customerData;
+      }
+    })
+  }
+
+  changeSelectedCity(city: City) {
+    this.selectedCity = city;
+    this.selectedCityLocations = [...this.selectedCity.locations];
+  }
 }

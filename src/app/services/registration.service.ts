@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {link} from "../models/link";
 import {Customer} from "../models/Customer";
@@ -138,11 +138,20 @@ export class RegistrationService {
     return this._http.get<any>(_urlDetails);
   }
 
-  searchCustomers(query: string): Observable<any> {
-    const _urlDetails = `${this._customers_url}/search?query=${query}`;
-    return this._http.get<any>(_urlDetails);
-  }
+  searchCustomers(name?: string, enabled?: string, city?: string, location?: string) {
+    let params = new HttpParams();
 
+    if (name)
+      params = params.set('name', name);
+    if (city)
+      params = params.set('city', city);
+    if (location)
+      params = params.set('location', location);
+    if (enabled !== undefined)
+      params = params.set('enabled', enabled);
+
+    return this._http.get<Customer[]>(`${this._customers_url}/search`, {params}).pipe();
+  }
 
 
 }

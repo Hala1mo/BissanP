@@ -165,7 +165,6 @@ export class UserComponent implements OnInit {
   }
 
   searchUsers() {
-
     let name = this.searchInput || undefined;
     let role = this.selectedRoleFilter || undefined;
     let enabled = this.selectedActiveFilter || undefined;
