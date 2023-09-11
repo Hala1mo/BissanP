@@ -24,7 +24,7 @@
               <input matStartDate placeholder="Start date" [(ngModel)]="userFromDate">
               <input matEndDate placeholder="End date" [(ngModel)]="userToDate">
             </mat-date-range-input>
-            <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+
             <mat-datepicker-toggle matIconSuffix [for]="userRangePicker"></mat-datepicker-toggle>
             <mat-date-range-picker #userRangePicker></mat-date-range-picker>
           </mat-form-field>
@@ -56,7 +56,7 @@
               <input matStartDate placeholder="Start date" [(ngModel)]="fromDate">
               <input matEndDate placeholder="End date" [(ngModel)]="toDate">
             </mat-date-range-input>
-            <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+
             <mat-datepicker-toggle matIconSuffix [for]="assignmentRangePicker"></mat-datepicker-toggle>
             <mat-date-range-picker #assignmentRangePicker></mat-date-range-picker>
           </mat-form-field>
@@ -110,7 +110,6 @@
               <input matStartDate placeholder="Start date" [(ngModel)]="specificUserfromDate">
               <input matEndDate placeholder="End date" [(ngModel)]="specificUsertoDate">
             </mat-date-range-input>
-            <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
             <mat-datepicker-toggle matIconSuffix [for]="userSpecRangePicker"></mat-datepicker-toggle>
             <mat-date-range-picker #userSpecRangePicker></mat-date-range-picker>
           </mat-form-field>
