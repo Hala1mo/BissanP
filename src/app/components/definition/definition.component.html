@@ -15,65 +15,104 @@
       </div>
     </div>
   </div>
-  <div class="row border-bottom mb-5">
+  <div class="row">
     <div class="col-6">
-      <form>
-        <mat-form-field [style.width.%]="100">
-          <mat-label>What are you looking for?</mat-label>
-          <input matInput matNativeControl placeholder="search for username, first name, or last name"
-                 [(ngModel)]="searchInput"
-                 [ngModelOptions]="{standalone: true}"
-                 (input)="applyFilter($event)">
-          <mat-icon matSuffix>search</mat-icon>
-        </mat-form-field>
-      </form>
+      <mat-form-field [style.width.%]="100">
+        <mat-label>What are you looking for?</mat-label>
+        <input matInput matNativeControl placeholder="search for name, or description"
+               [(ngModel)]="searchInput"
+               [ngModelOptions]="{standalone: true}"
+               (input)="searchDefinitions()">
+        <mat-icon matPrefix>search</mat-icon>
+        <button mat-icon-button matSuffix (click)="resetFilters()" [attr.aria-label]="'Reset Filters'"
+                matTooltip="Reset all filters">
+          <mat-icon>restart_alt</mat-icon>
+        </button>
+      </mat-form-field>
     </div>
     <div class="col-6">
       <div class="d-flex gap-1 justify-content-between">
-        <mat-form-field>
+        <mat-form-field [style.width.%]="100">
           <mat-label>Show Active Definitions</mat-label>
-          <mat-select [(value)]="selectedActive">
-            <mat-option (click)="resetFilters()" value="All Definitions">
+          <mat-select [(value)]="selectedEnabledOption" (selectionChange)="searchDefinitions()">
+            <mat-option value="">
               <mat-icon>star</mat-icon>
               <span>All Definitions</span>
             </mat-option>
-            <mat-option (click)="showEnabledDefinitions()" value="Active Definitions">
+            <mat-option value="true">
               <mat-icon>toggle_on</mat-icon>
               <span>Active Definitions</span>
             </mat-option>
-            <mat-option (click)="showDisabledDefinitions()" value="Inactive Definitions">
+            <mat-option value="false">
               <mat-icon>toggle_off</mat-icon>
               <span>Inactive Definitions</span>
             </mat-option>
           </mat-select>
         </mat-form-field>
-        <mat-form-field>
-          <mat-label>Visit Type</mat-label>
-          <mat-select [(value)]="selectedType">
-            <mat-option (click)="resetFilters()" value="All Definitions">
+        <mat-form-field [style.width.%]="100">
+          <mat-label>City</mat-label>
+          <mat-select [(value)]="selectedCityOption" (selectionChange)="searchDefinitions()">
+            <mat-option value="">
               <mat-icon>star</mat-icon>
-              <span>All Definitions</span>
+              <span>All Cities</span>
+            </mat-option>
+            <mat-option *ngFor="let city of cities"
+                        [value]="city.id"
+                        (click)="changeSelectedCity(city)"
+            >
+              {{ city.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field [style.width.%]="100">
+          <mat-label>Location</mat-label>
+          <mat-select [(value)]="selectedLocationOption" (selectionChange)="searchDefinitions()">
+            <mat-option value="">
+              <mat-icon>star</mat-icon>
+              <span>All Locations</span>
+            </mat-option>
+            <div *ngIf="selectedCity !== null">
+              <mat-option *ngFor="let location of selectedCityLocations"
+                          [value]="location.id"
+              >
+                {{location.address}}</mat-option>
+            </div>
+
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+  <div class="row border-bottom mb-5">
+    <div class="col-6"></div>
+    <div class="col-6">
+      <div class="d-flex gap-1 justify-content-between">
+        <mat-form-field [style.width.%]="100">
+          <mat-label>Visit Type</mat-label>
+          <mat-select [(value)]="selectedTypeOption" (selectionChange)="searchDefinitions()">
+            <mat-option value="">
+              <mat-icon>star</mat-icon>
+              <span>All Types</span>
             </mat-option>
             <mat-option *ngFor="let type of visitTypesData"
-                        value="{{type.name}}"
-                        (click)="showTypeDefinitions(type.id)"
+                        value="{{type.id}}"
             >
               {{type.name}}
             </mat-option>
           </mat-select>
         </mat-form-field>
-        <mat-form-field>
+        <mat-form-field [style.width.%]="100">
           <mat-label>Is Reoccurring</mat-label>
-          <mat-select [(value)]="selectedRecurring">
-            <mat-option (click)="resetFilters()" value="All Definitions">
+          <mat-select [(value)]="selectedRecurringOption" (selectionChange)="searchDefinitions()">
+            <mat-option value="">
               <mat-icon>star</mat-icon>
               <span>All Definitions</span>
             </mat-option>
-            <mat-option (click)="showRecurringDefinitions()" value="Reoccurring Definitions">
+            <mat-option value="true">
               <mat-icon>update</mat-icon>
               <span>Reoccurring Definitions</span>
             </mat-option>
-            <mat-option (click)="showNonRecurringDefinitions()" value="Non Reoccurring Definitions">
+            <mat-option value="false">
               <mat-icon>update_disabled</mat-icon>
               <span>Non Reoccurring Definitions</span>
             </mat-option>

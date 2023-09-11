@@ -10,8 +10,9 @@ import {MatSort} from "@angular/material/sort";
 import {DefinitionDialogComponent} from "./definition-dialog/definition-dialog.component";
 import {Router} from "@angular/router";
 import {TypeDialogComponent} from "./type-dialog/type-dialog.component";
-import {CityDialogComponent} from "./city-dialog/city-dialog.component";
 import {SharedService} from "../../services/shared.service";
+import {City} from "../../models/City";
+import {Location} from "../../models/Location";
 
 @Component({
   selector: 'app-definition',
@@ -31,9 +32,14 @@ export class DefinitionComponent implements OnInit, AfterViewInit {
   @ViewChild('definitionTablePaginator') paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  selectedActive = 'All Definitions';
-  selectedType = 'All Definitions';
-  selectedRecurring = 'All Definitions';
+  cities: City[] = [];
+  selectedEnabledOption = '';
+  selectedTypeOption = '';
+  selectedRecurringOption = '';
+  selectedCityOption = '';
+  selectedLocationOption = '';
+  selectedCity: City | null = null;
+  selectedCityLocations: Location[] = [];
 
 
   constructor(
@@ -49,11 +55,23 @@ export class DefinitionComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     this.fetchAllDefinitions();
 
-    this.sharedService.fetchVisitTypes().pipe().subscribe({
-      next: response => {
-        this.visitTypesData = response;
-      }
-    });
+    this.cities = this.sharedService.getCitiesAsList();
+    this.visitTypesData = this.sharedService.getVisitTypesAsList();
+
+    if (this.cities.length < 1) {
+      this.sharedService.fetchCities().subscribe({
+        next: value => {
+          this.cities = value;
+        }
+      });
+    }
+    if (this.visitTypesData.length < 1) {
+      this.sharedService.fetchVisitTypes().subscribe({
+        next: value => {
+          this.visitTypesData = value;
+        }
+      });
+    }
 
     this.dataSource.filterPredicate = function (definition, filter) {
       return definition.name.toLocaleLowerCase().includes(filter.toLocaleLowerCase()) || definition.description.toLocaleLowerCase().includes(filter.toLocaleLowerCase());
@@ -132,41 +150,18 @@ export class DefinitionComponent implements OnInit, AfterViewInit {
     );
   }
 
-  applyFilter($event: Event) {
-    const filterValue = ($event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-  }
-
   resetFilters() {
+    this.searchInput = "";
+    this.selectedRecurringOption = "";
+    this.selectedTypeOption = "";
+    this.selectedEnabledOption = "";
+    this.selectedCityOption = "";
+    this.selectedLocationOption = "";
+    this.selectedCity = null;
+
     this.visitDefinitionData = this.originalVisitDefinitionData;
     this.dataSource.data = this.visitDefinitionData;
   }
-
-  showEnabledDefinitions() {
-    this.visitDefinitionData = this.visitDefinitionData.filter(definition => definition.enabled);
-    this.dataSource.data = this.visitDefinitionData;
-  }
-
-  showDisabledDefinitions() {
-    this.visitDefinitionData = this.visitDefinitionData.filter(definition => !definition.enabled);
-    this.dataSource.data = this.visitDefinitionData;
-  }
-
-  showTypeDefinitions(typeId: bigint) {
-    this.visitDefinitionData = this.visitDefinitionData.filter(def => def.visitType.id == typeId);
-    this.dataSource.data = this.visitDefinitionData;
-  }
-
-  showRecurringDefinitions() {
-    this.visitDefinitionData = this.visitDefinitionData.filter(def => def.allowRecurring);
-    this.dataSource.data = this.visitDefinitionData;
-  }
-
-  showNonRecurringDefinitions() {
-    this.visitDefinitionData = this.visitDefinitionData.filter(def => !def.allowRecurring);
-    this.dataSource.data = this.visitDefinitionData;
-  }
-
 
   openDetailsPage(definition: any) {
     this.router.navigate(['/definitions', definition.id])
@@ -179,4 +174,35 @@ export class DefinitionComponent implements OnInit, AfterViewInit {
       this.sharedService.updateVisitTypes();
     });
   }
+
+  searchDefinitions() {
+    let name = this.searchInput || undefined;
+    let enabled = this.selectedEnabledOption || undefined;
+    let recurring = this.selectedRecurringOption || undefined;
+    let type = this.selectedTypeOption || undefined;
+    let city = this.selectedCityOption || undefined;
+    let location = this.selectedLocationOption || undefined;
+
+    if (!city){
+      this.selectedCity = null;
+      this.selectedLocationOption = '';
+      location = undefined;
+    }
+    if (!name && !enabled && !city && !location && !recurring && !type)
+      this.resetFilters();
+
+    this.definitionService.searchDefinitions(name, enabled, recurring, type, city, location).subscribe({
+      next: value => {
+        this.visitDefinitionData = value;
+        this.dataSource.data = this.visitDefinitionData;
+      }
+    })
+
+  }
+
+  changeSelectedCity(city: City) {
+    this.selectedCity = city;
+    this.selectedCityLocations = [...this.selectedCity.locations];
+  }
+
 }

@@ -1,8 +1,9 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {Observable, throwError} from 'rxjs';
 import {catchError} from 'rxjs/operators';
 import {link} from "../models/link";
+import {VisitDefinition} from "../models/VisitDefinition";
 
 
 export interface DefinitionForm {
@@ -112,7 +113,7 @@ export class DefinitionService {
     );
   }
 
-  saveNewLocation(cityId: bigint, locationForm: any){
+  saveNewLocation(cityId: bigint, locationForm: any) {
     const addPayload: simpleNameDTO = {
       name: locationForm.name
     }
@@ -128,5 +129,25 @@ export class DefinitionService {
     return this.http.post<any>(this.visitTypesURL, addPayload).pipe(
       catchError(this.handleError)
     );
+  }
+
+  searchDefinitions(name?: string, enabled?: string, recurring?: string, type?: string, city?: string, location?: string) {
+    let params = new HttpParams();
+
+    if (name)
+      params = params.set('name', name);
+    if (recurring)
+      params = params.set('recurring', recurring);
+    if (type)
+      params = params.set('type', type);
+    if (city)
+      params = params.set('city', city);
+    if (location)
+      params = params.set('location', location);
+    if (enabled !== undefined)
+      params = params.set('enabled', enabled);
+
+    return this.http.get<VisitDefinition[]>(`${this.visitDefinitionsURL}/search`, {params}).pipe();
+
   }
 }

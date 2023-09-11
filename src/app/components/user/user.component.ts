@@ -169,9 +169,9 @@ export class UserComponent implements OnInit {
     let role = this.selectedRoleFilter || undefined;
     let enabled = this.selectedActiveFilter || undefined;
 
-    if (!name && !role && !enabled){
+    if (!name && !role && !enabled)
       this.resetFilters();
-    }
+
 
     this.userService.searchUsers(name, role, enabled).subscribe({
       next: value => {

@@ -118,9 +118,11 @@ export class CustomerComponent implements OnInit {
   protected readonly Customer = Customer;
 
   resetFilters() {
+    this.searchInput = "";
     this.selectedEnabledOption = "";
     this.selectedCityOption = "";
     this.selectedLocationOption = "";
+    this.selectedCity = null;
 
     this.customerData = this.originalCustomerData;
     this.dataSource.data = this.customerData;
@@ -180,7 +182,13 @@ export class CustomerComponent implements OnInit {
     let city = this.selectedCityOption || undefined;
     let location = this.selectedLocationOption || undefined;
 
-    console.log(name, enabled, city, location);
+    if (!city){
+      this.selectedCity = null;
+      this.selectedLocationOption = '';
+      location = undefined;
+    }
+    if (!name && !enabled && !city && !location)
+      this.resetFilters();
 
     this.customerService.searchCustomers(name, enabled, city, location).subscribe({
       next: value => {
