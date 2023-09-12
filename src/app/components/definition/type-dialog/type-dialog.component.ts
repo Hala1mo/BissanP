@@ -26,7 +26,7 @@ export class TypeDialogComponent {
       name: ['', [Validators.required,
         Validators.minLength(3),
         Validators.maxLength(30)]],
-
+      i:['0', Validators.required]
     });
   }
 

@@ -13,6 +13,9 @@ export interface DefinitionForm {
   allowRecurring: boolean;
   typeId: bigint;
   locationId: bigint;
+  question1?:string;
+  question2?:string;
+  question3?:string;
 }
 
 interface AssignmentDTO {
@@ -21,10 +24,14 @@ interface AssignmentDTO {
   username: string;
 }
 
+interface typeDTO {
+  name: string;
+  i:number,
+}
+
 interface simpleNameDTO {
   name: string;
 }
-
 @Injectable({
   providedIn: 'root'
 })
@@ -79,6 +86,9 @@ export class DefinitionService {
       allowRecurring: visitDefinition.allowRecurring,
       typeId: visitDefinition.typeId,
       locationId: visitDefinition.locationId,
+      question1:visitDefinition.question1,
+      question2:visitDefinition.question2,
+      question3:visitDefinition.question3,
 
     };
     return this.http.post<any>(this.visitDefinitionsURL, addDefinitionPayload).pipe(
@@ -122,8 +132,9 @@ export class DefinitionService {
   }
 
   saveNewType(typeForm: any) {
-    const addPayload: simpleNameDTO = {
+    const addPayload: typeDTO = {
       name: typeForm.name,
+      i:typeForm.i,
     };
 
     return this.http.post<any>(this.visitTypesURL, addPayload).pipe(

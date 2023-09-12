@@ -70,6 +70,8 @@ import {SpecificUserComponent} from './components/reports/specific-user/specific
 import {ErrorInterceptor} from "./interceptors/error-interceptor.service";
 import {MatTooltipModule} from "@angular/material/tooltip";
 import { CustomerPerformanceComponent } from './components/reports/customer-performance/customer-performance.component';
+import {MatButtonToggleModule} from "@angular/material/button-toggle";
+import {MatRadioModule} from "@angular/material/radio";
 
 @NgModule({
   declarations: [
@@ -150,6 +152,8 @@ import { CustomerPerformanceComponent } from './components/reports/customer-perf
     MatLineModule,
     GoogleMapsModule,
     MatTooltipModule,
+    MatButtonToggleModule,
+    MatRadioModule,
   ],
   providers: [
     {provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {}},

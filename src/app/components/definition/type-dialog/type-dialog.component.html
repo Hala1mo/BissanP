@@ -8,6 +8,12 @@
         <input matInput type="text" formControlName="name" required>
       </mat-form-field>
     </div>
+        <mat-label>Choose Base</mat-label>
+        <mat-radio-group formControlName="i">
+          <mat-radio-button value="0">Question Based</mat-radio-button>
+          <mat-radio-button value="1">Payment Based</mat-radio-button>
+        </mat-radio-group>
+
     <mat-dialog-actions>
       <button mat-raised-button color="primary" (click)="saveNewType()">Add</button>
     </mat-dialog-actions>

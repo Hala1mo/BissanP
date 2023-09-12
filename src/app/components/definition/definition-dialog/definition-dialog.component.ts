@@ -1,5 +1,5 @@
-import {Component, Inject, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {Component, Inject, OnInit, Type} from '@angular/core';
+import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {VisitType} from "../../../models/VisitType";
@@ -22,8 +22,10 @@ export class DefinitionDialogComponent implements OnInit {
   cities: City[];
   selectedDefinition: VisitDefinition;
   selectedCity: City | null = null;
+  selectedType:VisitType| null=null;
   selectedCityLocations: Location[] = [];
   isSaving: boolean = false;
+  isQuestionTypeSelected: boolean = false;
 
   constructor(
     formBuilder: FormBuilder,
@@ -105,6 +107,7 @@ export class DefinitionDialogComponent implements OnInit {
   private saveNewDefinition(formJson: any) {
     this.definitionService.saveNewDefinition(formJson).subscribe({
       next: response => {
+        console.log(response);
         this.matDialogRef.close(response);
       },
       error: error => {
@@ -123,5 +126,20 @@ export class DefinitionDialogComponent implements OnInit {
     this.selectedCity = city;
     this.selectedCityLocations = [...this.selectedCity.locations];
   }
-
+  changeSelectedType(type: VisitType) {
+    this.selectedType = type;
+    console.log("hhhhhhhhhhhhhhh",this.selectedType);
+    console.log("hhhhhhhhhhhhhhh",this.selectedType.base);
+    this.isQuestionTypeSelected = this.selectedType.base=== 'QUESTION';
+    if (this.isQuestionTypeSelected) {
+      this.definitionForm.addControl('question1', new FormControl('', [Validators.required]));
+      this.definitionForm.addControl('question2', new FormControl('', [Validators.required]));
+      this.definitionForm.addControl('question3', new FormControl('', [Validators.required]));
+    } else {
+      // If it's not a question type, you may want to remove the controls.
+      this.definitionForm.removeControl('question1');
+      this.definitionForm.removeControl('question2');
+      this.definitionForm.removeControl('question3');
+    }
+  }
 }
