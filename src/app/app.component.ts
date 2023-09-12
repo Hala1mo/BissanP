@@ -3,22 +3,22 @@ import {SharedService} from "./services/shared.service";
 
 
 @Component({
-    selector: 'app-root',
-    templateUrl: './app.component.html',
-    styleUrls: ['./app.component.css']
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
 
 
-    constructor(
-        private sharedService: SharedService,
-    ) {
+  constructor(
+    private sharedService: SharedService,
+  ) {
 
-    }
+  }
 
-    ngOnInit(): void {
-        this.sharedService.updateCities();
-        this.sharedService.updateVisitTypes();
-    }
+  ngOnInit(): void {
+    this.sharedService.updateCities();
+    this.sharedService.updateVisitTypes();
+  }
 
 }
