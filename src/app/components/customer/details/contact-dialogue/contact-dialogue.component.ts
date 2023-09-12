@@ -190,12 +190,8 @@ export class ContactDialogueComponent implements OnInit {
       next: response => {
         this.matDialogRef.close(response);
       },
-      error: error => {
-        if (error.error && error.error.message) { // Check if 'message' property exists
-          this._snackBar.open(error.error.message, '', {
-            duration: 3000
-          });
-        }
+      error: () => {
+        this.isSaving = false
       }
 
     })

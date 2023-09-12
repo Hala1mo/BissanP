@@ -228,5 +228,12 @@ export class AssignmentDetailsComponent implements OnInit, AfterViewInit {
       }
     );
   }
+
+  closeDialog() {
+    this.matDialogRef.close();
+
+  }
+
 }
+
 

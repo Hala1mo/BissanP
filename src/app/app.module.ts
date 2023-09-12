@@ -69,7 +69,7 @@ import {BotBarComponent} from './components/home/bot-bar/bot-bar.component';
 import {SpecificUserComponent} from './components/reports/specific-user/specific-user.component';
 import {ErrorInterceptor} from "./interceptors/error-interceptor.service";
 import {MatTooltipModule} from "@angular/material/tooltip";
-import { SpecificCustomerComponent } from './components/reports/specific-customer/specific-customer.component';
+import { CustomerPerformanceComponent } from './components/reports/customer-performance/customer-performance.component';
 
 @NgModule({
   declarations: [
@@ -107,7 +107,7 @@ import { SpecificCustomerComponent } from './components/reports/specific-custome
     LoginComponent,
     BotBarComponent,
     SpecificUserComponent,
-    SpecificCustomerComponent,
+    CustomerPerformanceComponent,
   ],
     imports: [
         BrowserModule,

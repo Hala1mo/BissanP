@@ -18,7 +18,15 @@ export class ErrorInterceptor implements HttpInterceptor {
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     return next.handle(request).pipe(
       catchError(error => {
-        this.snackBar.open(error.error.message, 'close', {duration: 2000, panelClass: 'errorSnack'});
+        if (error.error && error.error.message) { // Check if 'message' property exists
+          this.snackBar.open(error.error.message, 'close', {
+            duration: 3000, panelClass: 'errorSnack'
+          });
+        }else if (error.message) {
+          this.snackBar.open(error.message, 'close', {
+            duration: 3000, panelClass: 'errorSnack'
+          });
+        }
         return throwError(error);
       })
     );

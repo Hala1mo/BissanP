@@ -70,8 +70,8 @@ export class DefinitionDetailsComponent implements OnInit {
         assignmentId: assignmentId,
         locationId: this.currentDefinition?.location.id
       }
-    }).afterClosed().subscribe(response => {
-      console.log(response);
+    }).afterClosed().subscribe(() => {
+      this.fetchDefinitionDetails(this.id);
     })
 
   }

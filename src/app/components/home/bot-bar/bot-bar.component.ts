@@ -49,7 +49,12 @@ export class BotBarComponent implements OnInit {
 
     this.dashService.acceptPasswordResetRequest(requestId).subscribe({
       next: response => {
-
+        this.dashService.fetchTables().subscribe({
+          next: response => {
+            this.passwordRequestsData = response;
+            this.dataSource.data = this.passwordRequestsData;
+          }
+        })
       },
       error: error => {
 
@@ -62,7 +67,12 @@ export class BotBarComponent implements OnInit {
 
     this.dashService.rejectPasswordResetRequest(requestId).subscribe({
       next: response => {
-
+            this.dashService.fetchTables().subscribe({
+              next: response => {
+                this.passwordRequestsData = response;
+                this.dataSource.data = this.passwordRequestsData;
+              }
+            })
       },
       error: error => {
 

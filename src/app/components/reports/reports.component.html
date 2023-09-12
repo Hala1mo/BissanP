@@ -126,51 +126,30 @@
   <div class="row">
     <div class="container">
       <div class="row">
-        <h1>Specific user Reports</h1>
+          <h1>Customer Performance</h1>
       </div>
       <div class="row">
         <div class="col-8">
           <p>
-            This Reports will show us the performance metrics for a user, such as their average completion time,
-            the number of assignments completed, and the percentage of forms not yet started.
-            Additionally, it contains a list of interactions with customers or entities, including details like customer names,
-            addresses, form due dates, and completion statuses.
-
-
+            This Report will show multiple sets of performance metrics for different customers
+            in a specific period of time,and provides a detailed overview of customer's form completion statistics,
+            including completion time, completion status, late forms, and more.
           </p>
         </div>
         <div class="col-4">
-          <form [formGroup]="selectedUserForm">
-            <mat-form-field [style.width.%]="100">
-              <mat-label>Select Customer</mat-label>
-              <input #userInput
-                     type="text"
-                     matInput
-                     [formControl]="userSelectControl"
-                     [matAutocomplete]="autoUser"
-                     (input)="filterUsers()"
-                     (focus)="filterUsers()"
-              >
-              <mat-autocomplete #autoUser="matAutocomplete" (optionSelected)="selectUser($event)" [displayWith]="displayUser" >
-                <mat-option *ngFor="let option of filteredUsers" [value]="option">
-                  {{displayUser(option)}}
-                </mat-option>
-              </mat-autocomplete>
-            </mat-form-field>
-          </form>
           <mat-form-field [style.width.px]="400">
             <mat-label>Enter a date range</mat-label>
-            <mat-date-range-input [rangePicker]="userSpecRangePicker">
-              <input matStartDate placeholder="Start date" [(ngModel)]="specificUserfromDate">
-              <input matEndDate placeholder="End date" [(ngModel)]="specificUsertoDate">
+            <mat-date-range-input [rangePicker]="customerRangePicker">
+              <input matStartDate placeholder="Start date" [(ngModel)]="customerFromDate">
+              <input matEndDate placeholder="End date" [(ngModel)]="customerToDate">
             </mat-date-range-input>
-            <mat-datepicker-toggle matIconSuffix [for]="userSpecRangePicker"></mat-datepicker-toggle>
-            <mat-date-range-picker #userSpecRangePicker></mat-date-range-picker>
+
+            <mat-datepicker-toggle matIconSuffix [for]="customerRangePicker"></mat-datepicker-toggle>
+            <mat-date-range-picker #customerRangePicker></mat-date-range-picker>
           </mat-form-field>
-          <button [style.width.px]="400" mat-raised-button color="primary" (click)="generateSpecificUserReport()">
+          <button [style.width.px]="400" mat-raised-button color="primary" (click)="generateCustomerPerformanceReport()">
             Generate Report
           </button>
-
         </div>
       </div>
     </div>

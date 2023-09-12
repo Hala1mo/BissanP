@@ -32,6 +32,9 @@ export class ReportsComponent implements OnInit {
   userFromDate: any;
   userToDate: any;
 
+  customerFromDate: any;
+  customerToDate: any;
+
   specificUserfromDate: any;
   specificUsertoDate: any;
 
@@ -185,5 +188,22 @@ export class ReportsComponent implements OnInit {
         console.error('Error fetching Date data:', error);
       }
     );
+  }
+
+  generateCustomerPerformanceReport() {
+    const fromDateString = formatDate(this.customerFromDate, 'yyyy-MM-dd', 'en');
+    const toDateString = formatDate(this.customerToDate, 'yyyy-MM-dd', 'en');
+
+    this._reportsService.generateCustomerPerformanceReport(fromDateString, toDateString).subscribe({
+      next: response => {
+        console.log('Fetched customer data:', response);
+        this.sharedService.setCustomerPerformanceReports(response);
+        this.router.navigate(['/reports/customer-performance'])
+      },
+      error: error => {
+
+      }
+    })
+
   }
 }

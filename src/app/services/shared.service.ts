@@ -26,6 +26,7 @@ export class SharedService {
   private citiesSubject = new BehaviorSubject<City[]>([]);
   private visitTypesSubject = new BehaviorSubject<VisitType[]>([]);
   private userReport = new BehaviorSubject<any[]>([]);
+  private customerReport = new BehaviorSubject<any[]>([]);
   private userDetailedReport = new BehaviorSubject<any[]>([]);
   updateDateData(dateData: any[]) {
     this.dateDataSubject.next(dateData);
@@ -85,4 +86,13 @@ export class SharedService {
   getUserPerformanceReportsAsList(){
     return this.userReport.getValue();
   }
+
+  setCustomerPerformanceReports(response: any) {
+    this.customerReport.next(response);
+  }
+
+  getCustomerPerformanceReportsAsList(){
+    return this.customerReport.getValue();
+  }
+
 }

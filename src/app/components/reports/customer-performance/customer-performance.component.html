@@ -1,0 +1,51 @@
+<div class="container">
+  <div class="row mb-3 pb-3 border-bottom">
+    <!--    ACTIONS   -->
+    <div class="col-12">
+      <button mat-raised-button color="primary" (click)="exportTable()">
+        <mat-icon>cloud_download</mat-icon>
+        Export Report
+      </button>
+    </div>
+  </div>
+  <div class="row overflow-x-auto">
+    <h2  class="mb-3 h5 text-capitalize">Customer performance</h2>
+
+    <table class="table table-bordered" id="report-table">
+
+      <thead>
+      <th>Name</th>
+      <th>TOT. FORMS #</th>
+      <th>NST. FORMS #</th>
+      <th>UND. FORMS #</th>
+      <th>CAN. FORMS #</th>
+      <th>COM. FORMS #</th>
+      <th>NST. FORMS %</th>
+      <th>UND. FORMS %</th>
+      <th>CAN. FORMS %</th>
+      <th>COM. FORMS %</th>
+      <th>AVG. TIME (s)</th>
+      <th>LATE FORMS #</th>
+      </thead>
+      <tbody>
+      <tr *ngFor="let row of rows">
+        <td>{{row.customer.name}}</td>
+        <td>{{row.totalForms}}</td>
+        <td>{{row.notStartedForms}}</td>
+        <td>{{row.undergoingForms}}</td>
+        <td>{{row.canceledForms}}</td>
+        <td>{{row.completedForms}}</td>
+        <td>{{formatDec(row.notStartedFormsPer)}}%</td>
+        <td>{{formatDec(row.undergoingFormsPer)}}%</td>
+        <td>{{formatDec(row.canceledFormsPer)}}%</td>
+        <td>{{formatDec(row.completedFormsPer)}}%</td>
+        <td>{{formatDec(row.averageCompletionTime)}} s</td>
+        <td>{{row.lateFormsCount}}</td>
+      </tr>
+      </tbody>
+    </table>
+
+  </div>
+
+</div>
+
