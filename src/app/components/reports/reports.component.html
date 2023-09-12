@@ -5,16 +5,17 @@
       <div></div>
     </div>
   </div>
-  <div class="row">
+  <div class="row border-bottom py-3">
     <div class="container">
       <div class="row">
-        <h1>Users Performance</h1>
+        <h1>User's Performance</h1>
       </div>
       <div class="row">
         <div class="col-8">
           <p>
             This Report will show multiple sets of performance metrics for different users
-            in a specific period of time, offering insights into how efficiently they complete assignments and interact with forms.
+            in a specific period of time, offering insights into how efficiently they complete assignments and interact
+            with forms.
           </p>
         </div>
         <div class="col-4">
@@ -35,18 +36,68 @@
       </div>
     </div>
   </div>
-
-  <div class="row">
+  <div class="row border-bottom py-3">
     <div class="container">
       <div class="row">
-        <h1>Users Assignments</h1>
+        <h1>User's Interactions</h1>
       </div>
       <div class="row">
         <div class="col-8">
-<p>
-  This Report will show Assignments in a specific period of time, and the user assigned for that assignment.
+          <p>
+            This Reports will show us the performance metrics for a user, such as their average completion time,
+            the number of assignments completed, and the percentage of forms not yet started.
+            Additionally, it contains a list of interactions with customers, including details like customer
+            names, addresses, form due dates, and completion statuses.
+          </p>
+        </div>
+        <div class="col-4">
+          <form [formGroup]="selectedUserForm">
+            <mat-form-field [style.width.%]="100">
+              <mat-label>Select User</mat-label>
+              <input #userInput
+                     type="text"
+                     matInput
+                     [formControl]="userSelectControl"
+                     [matAutocomplete]="autoUser"
+                     (input)="filterUsers()"
+                     (focus)="filterUsers()"
+              >
+              <mat-autocomplete #autoUser="matAutocomplete" (optionSelected)="selectUser($event)"
+                                [displayWith]="displayUser">
+                <mat-option *ngFor="let option of filteredUsers" [value]="option">
+                  {{displayUser(option)}}
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+          </form>
+          <mat-form-field [style.width.px]="400">
+            <mat-label>Enter a date range</mat-label>
+            <mat-date-range-input [rangePicker]="userSpecRangePicker">
+              <input matStartDate placeholder="Start date" [(ngModel)]="specificUserfromDate">
+              <input matEndDate placeholder="End date" [(ngModel)]="specificUsertoDate">
+            </mat-date-range-input>
+            <mat-datepicker-toggle matIconSuffix [for]="userSpecRangePicker"></mat-datepicker-toggle>
+            <mat-date-range-picker #userSpecRangePicker></mat-date-range-picker>
+          </mat-form-field>
+          <button [style.width.px]="400" mat-raised-button color="primary" (click)="generateSpecificUserReport()">
+            Generate Report
+          </button>
 
-</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row border-bottom py-3">
+    <div class="container">
+      <div class="row">
+        <h1>User's Assignments</h1>
+      </div>
+      <div class="row">
+        <div class="col-8">
+          <p>
+            This Report will show Assignments in a specific period of time, and the user assigned for that assignment.
+
+          </p>
         </div>
 
         <div class="col-4">
@@ -63,60 +114,6 @@
           <button [style.width.px]="400" mat-raised-button color="primary" (click)="generateAssignmentReport()">
             Generate Report
           </button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-
-  <div class="row">
-    <div class="container">
-      <div class="row">
-        <h1>Specific user Reports</h1>
-      </div>
-      <div class="row">
-        <div class="col-8">
-          <p>
-            This Reports will show us the performance metrics for a user, such as their average completion time,
-            the number of assignments completed, and the percentage of forms not yet started.
-            Additionally, it contains a list of interactions with customers or entities, including details like customer names,
-            addresses, form due dates, and completion statuses.
-
-
-          </p>
-        </div>
-        <div class="col-4">
-          <form [formGroup]="selectedUserForm">
-            <mat-form-field [style.width.%]="100">
-              <mat-label>Select User</mat-label>
-              <input #userInput
-                     type="text"
-                     matInput
-                     [formControl]="userSelectControl"
-                     [matAutocomplete]="autoUser"
-                     (input)="filterUsers()"
-                     (focus)="filterUsers()"
-              >
-              <mat-autocomplete #autoUser="matAutocomplete" (optionSelected)="selectUser($event)" [displayWith]="displayUser" >
-                <mat-option *ngFor="let option of filteredUsers" [value]="option">
-                  {{displayUser(option)}}
-                </mat-option>
-              </mat-autocomplete>
-            </mat-form-field>
-            </form>
-          <mat-form-field [style.width.px]="400">
-            <mat-label>Enter a date range</mat-label>
-            <mat-date-range-input [rangePicker]="userSpecRangePicker">
-              <input matStartDate placeholder="Start date" [(ngModel)]="specificUserfromDate">
-              <input matEndDate placeholder="End date" [(ngModel)]="specificUsertoDate">
-            </mat-date-range-input>
-            <mat-datepicker-toggle matIconSuffix [for]="userSpecRangePicker"></mat-datepicker-toggle>
-            <mat-date-range-picker #userSpecRangePicker></mat-date-range-picker>
-          </mat-form-field>
-          <button [style.width.px]="400" mat-raised-button color="primary" (click)="generateSpecificUserReport()">
-            Generate Report
-          </button>
-
         </div>
       </div>
     </div>
@@ -154,6 +151,7 @@
       </div>
     </div>
   </div>
+
 
   <div class="row">
     <h1>Forms</h1>
