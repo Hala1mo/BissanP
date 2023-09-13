@@ -1,5 +1,4 @@
 import {AfterViewInit, Component, ElementRef, Inject, OnInit, ViewChild} from '@angular/core';
-import {Router} from "@angular/router";
 import {RegistrationService} from "../../services/registration.service";
 import {AssignmentService} from "../../services/assignment.service";
 import {Customer} from "../../models/Customer";
@@ -10,7 +9,6 @@ import {VisitAssignment} from "../../models/VisitAssignment";
 import {MatTableDataSource} from "@angular/material/table";
 import {MatPaginator} from "@angular/material/paginator";
 import {MatSort} from "@angular/material/sort";
-import {MatSnackBar} from "@angular/material/snack-bar";
 import {MatAutocompleteSelectedEvent} from "@angular/material/autocomplete";
 import {UserService} from "../../services/user.service";
 import {visitForms} from "../../models/visitForms";
@@ -41,18 +39,16 @@ export class AssignmentDetailsComponent implements OnInit, AfterViewInit {
   selectedUser: User | undefined; // Placeholder for selected user
   selectedCustomer: Customer | undefined; // Placeholder for selected customer
 
-  displayedColumns = ['name', 'status', 'startedTime', 'endTime','actions'];
+  displayedColumns = ['name', 'status', 'startedTime', 'endTime', 'actions'];
   formsDataSource = new MatTableDataSource([]);
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
 
   constructor(
-    private router: Router,
     private assignmentService: AssignmentService,
     private registrationService: RegistrationService,
     private userService: UserService,
-    private snackBar: MatSnackBar,
     public matDialogRef: MatDialogRef<AssignmentDetailsComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
   ) {
@@ -90,9 +86,6 @@ export class AssignmentDetailsComponent implements OnInit, AfterViewInit {
 
           this.selectedUser = response.user;
           this.userSelectControl.setValue(this.selectedUser);
-        },
-        error: error => {
-          console.error('Error fetching Assignment data:', error);
         }
       }
     );
@@ -101,11 +94,7 @@ export class AssignmentDetailsComponent implements OnInit, AfterViewInit {
   fetchCustomerData() {
     this.registrationService.fetchCustomersInLocation(this.currentAssignmentLocationId).subscribe({
       next: response => {
-        console.log("CUSTOMERS ==> ", response)
         this.customerData = response;
-      },
-      error: error => {
-        console.error('Error fetching customer data:', error);
       }
     });
   }
@@ -115,9 +104,6 @@ export class AssignmentDetailsComponent implements OnInit, AfterViewInit {
     this.userService.fetchEmployees().subscribe({
         next: response => {
           this.userData = response;
-        },
-        error: error => {
-          console.error('Error fetching user data: ', error);
         }
       }
     );
@@ -136,25 +122,10 @@ export class AssignmentDetailsComponent implements OnInit, AfterViewInit {
     if (!customerId) return;
 
     this.assignmentService.assignCustomer(this.currentAssignmentId, customerId).subscribe({
-        next: response => {
+        next: () => {
           this.fetchCurrentAssignment(this.currentAssignmentId);
           this.fetchCustomerData();
           this.fetchForms(this.currentAssignmentId);
-          console.log('Customer assigned successfully:', response);
-        },
-        error: error => {
-          console.error('Customer not assigned successfully:', error);
-
-          if (error.error && error.error.message) { // Check if 'message' property exists
-            const errorMessage = error.error.message;
-            console.log('Error message:', errorMessage);
-
-            this.snackBar.open(errorMessage, '', {
-              duration: 3000
-            });
-          } else {
-            console.log('Unknown error occurred.');
-          }
         }
       }
     );
@@ -165,9 +136,6 @@ export class AssignmentDetailsComponent implements OnInit, AfterViewInit {
       next: () => {
         this.fetchCurrentAssignment(this.currentAssignmentId);
         this.fetchForms(this.currentAssignmentId);
-      },
-      error: error => {
-        console.error(error)
       }
     })
   }
@@ -177,22 +145,8 @@ export class AssignmentDetailsComponent implements OnInit, AfterViewInit {
     if (!username) return;
 
     this.assignmentService.assignUser(this.currentAssignmentId, username).subscribe({
-        next: response => {
+        next: () => {
           this.fetchCurrentAssignment(this.currentAssignmentId);
-          console.log('Customer assigned successfully:', response);
-
-        },
-        error: error => {
-          console.error('Customer not assigned successfully:', error);
-          if (error.error && error.error.message) { // Check if 'message' property exists
-            const errorMessage = error.error.message;
-            console.log('Error message:', errorMessage);
-            this.snackBar.open(errorMessage, '', {
-              duration: 3000
-            });
-          } else {
-            console.log('Unknown error occurred.');
-          }
         }
       }
     );
@@ -207,7 +161,6 @@ export class AssignmentDetailsComponent implements OnInit, AfterViewInit {
 
   filterCustomers() {
     const filterValue = this.customerInput.nativeElement.value.toLowerCase();
-    console.log("FILTERING", filterValue);
 
     this.filteredCustomers = this.customerData.filter(option => option.name.toLowerCase().includes(filterValue));
   }
@@ -215,15 +168,8 @@ export class AssignmentDetailsComponent implements OnInit, AfterViewInit {
   fetchForms(currentAssignmentId: bigint) {
     this.assignmentService.fetchAssignmentForms(currentAssignmentId).subscribe({
         next: response => {
-          console.log(response);
           this.formsData = response;
           this.formsDataSource.data = response;
-          //  console.log("Test",this.formsData);
-
-          console.log("DATASOURCE", this.formsDataSource);
-        },
-        error: error => {
-          console.error('Error fetching forms data:', error);
         }
       }
     );
@@ -231,7 +177,6 @@ export class AssignmentDetailsComponent implements OnInit, AfterViewInit {
 
   closeDialog() {
     this.matDialogRef.close();
-
   }
 
 }

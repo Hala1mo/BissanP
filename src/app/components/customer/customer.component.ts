@@ -53,9 +53,7 @@ export class CustomerComponent implements OnInit {
 
   ngOnInit() {
     this.fetchCustomerData();
-
     this.cities = this.sharedService.getCitiesAsList();
-
     if (this.cities.length < 1) {
       this.sharedService.fetchCities().subscribe({
         next: value => {
@@ -86,18 +84,14 @@ export class CustomerComponent implements OnInit {
           setTimeout(() => {
             this.dataSource.sort = this.sort;
             this.dataSource.paginator = this.paginator;
-          })
-
-        },
-        error: error => {
-          console.error('Error fetching customer data:', error);
+          }, 10);
         }
       }
     );
   }
 
   openCustomerDetails(id: bigint) {
-    this.router.navigate(['/customers', id]);
+    void this.router.navigate(['/customers', id]);
   }
 
   updateEnabled(customer: Customer) {
@@ -106,16 +100,12 @@ export class CustomerComponent implements OnInit {
         next: response => {
           customer.enabled = response.enabled;
         },
-        error: error => {
-          console.error(error)
+        error: () => {
           customer.enabled = !customer.enabled;
         }
       }
     );
   }
-
-
-  protected readonly Customer = Customer;
 
   resetFilters() {
     this.searchInput = "";
@@ -182,7 +172,7 @@ export class CustomerComponent implements OnInit {
     let city = this.selectedCityOption || undefined;
     let location = this.selectedLocationOption || undefined;
 
-    if (!city){
+    if (!city) {
       this.selectedCity = null;
       this.selectedLocationOption = '';
       location = undefined;

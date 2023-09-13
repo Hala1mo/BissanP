@@ -2,7 +2,6 @@ import {Component, ElementRef, Inject, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {DefinitionService} from "../../../services/definition.service";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
-import {MatSnackBar} from "@angular/material/snack-bar";
 import {User} from "../../../models/User";
 import {MatAutocompleteSelectedEvent} from "@angular/material/autocomplete";
 import {UserService} from "../../../services/user.service";
@@ -25,7 +24,6 @@ export class CreateAssignmentDialogComponent implements OnInit {
 
   constructor(
     formBuilder: FormBuilder,
-    private snackBar: MatSnackBar,
     private definitionService: DefinitionService,
     private userService: UserService,
     public matDialogRef: MatDialogRef<CreateAssignmentDialogComponent>,
@@ -64,24 +62,16 @@ export class CreateAssignmentDialogComponent implements OnInit {
   }
 
   submitForm() {
-    console.log("FORM VALUE", this.assignmentForm.value)
-
     if (this.assignmentForm.invalid) return;
     if (this.isSaving) return;
 
     this.isSaving = true;
-
     this.definitionService.saveNewAssignmentToDefinition(this.assignmentForm.value, this.currentDefinitionId).subscribe({
       next: response => {
         this.matDialogRef.close(response);
       },
-      error: error => {
-        if (error.error && error.error.message) { // Check if 'message' property exists
-          const errorMessage = error.error.message;
-          this.snackBar.open(errorMessage, '', {
-            duration: 3000
-          });
-        }
+      error: () => {
+        this.isSaving = false;
       }
     })
   }

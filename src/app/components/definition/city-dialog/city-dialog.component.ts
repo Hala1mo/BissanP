@@ -50,15 +50,7 @@ export class CityDialogComponent {
       next: () => {
         this.matDialogRef.close();
       },
-      error: error => {
-        if (error.error && error.error.message) { // Check if 'message' property exists
-          const errorMessage = error.error.message;
-          this.snackBar.open(errorMessage, '', {
-            duration: 3000
-          });
-        } else {
-          console.error('Unknown error occurred.', error);
-        }
+      error: () => {
         this.isSaving = false;
       }
     })
@@ -76,15 +68,7 @@ export class CityDialogComponent {
       next: () => {
         this.matDialogRef.close();
       },
-      error: error => {
-        if (error.error && error.error.message) { // Check if 'message' property exists
-          const errorMessage = error.error.message;
-          this.snackBar.open(errorMessage, '', {
-            duration: 3000
-          });
-        } else {
-          console.error('Unknown error occurred.', error);
-        }
+      error: () => {
         this.isSaving = false;
       }
     });

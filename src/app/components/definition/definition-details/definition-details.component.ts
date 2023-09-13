@@ -1,5 +1,4 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {MatSnackBar} from "@angular/material/snack-bar";
 import {ActivatedRoute} from "@angular/router";
 import {VisitDefinition} from "../../../models/VisitDefinition";
 import {MatDialog} from "@angular/material/dialog";
@@ -14,7 +13,6 @@ import {AssignmentDetailsComponent} from "../../assignments/assignment-details.c
 import {ReportsService} from "../../../services/reports.service";
 import {CanvasJS} from "@canvasjs/angular-charts";
 import {SharedService} from "../../../services/shared.service";
-import {MatTabChangeEvent} from "@angular/material/tabs";
 
 @Component({
   selector: 'app-details-def',
@@ -40,7 +38,6 @@ export class DefinitionDetailsComponent implements OnInit {
   id!: bigint;
 
   constructor(
-    private snackBar: MatSnackBar,
     private activatedRoute: ActivatedRoute,
     private sharedService: SharedService,
     private definitionService: DefinitionService,
@@ -62,8 +59,6 @@ export class DefinitionDetailsComponent implements OnInit {
 
 
   openAssignmentDetails(assignmentId: bigint) {
-    console.log("OPENING ASSIGNMENT", assignmentId);
-
     this.matDialog.open(AssignmentDetailsComponent, {
       width: '50%',
       data: {
@@ -78,7 +73,6 @@ export class DefinitionDetailsComponent implements OnInit {
 
   openCreateAssignmentDialog() {
     if (this.currentDefinition === undefined) return;
-
     this.matDialog.open(CreateAssignmentDialogComponent, {
       width: '40%',
       data: {
@@ -122,9 +116,6 @@ export class DefinitionDetailsComponent implements OnInit {
             this.dataSource.sort = this.assignmentSort;
             this.dataSource.paginator = this.assignmentPaginator;
           }, 20)
-        },
-        error: error => {
-          console.error(error);
         }
       }
     );
@@ -135,10 +126,6 @@ export class DefinitionDetailsComponent implements OnInit {
         next: response => {
           this.dataColChar = response.count;
           this.dataPieChart = response.percentages;
-        },
-        error: error => {
-          console.error('Error fetching Visit Definition reports:', error);
-
         }
       }
     );
@@ -185,10 +172,5 @@ export class DefinitionDetailsComponent implements OnInit {
 
     // Render the chart
     chart.render();
-  }
-
-  tabChanged($event: MatTabChangeEvent) {
-    this.renderChart();
-    this.renderPieChart();
   }
 }

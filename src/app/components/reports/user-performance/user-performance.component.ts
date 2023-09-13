@@ -32,7 +32,6 @@ export class UserPerformanceComponent implements OnInit {
       this.graphDataPoints1.push({ label: row.user.username, y: row.completedForms });
       this.graphDataPoints2.push({ label: row.user.username, y: row.completedAssignments });
     }
-    console.log(this.rows);
     this.renderChart(); // Call the renderChart method
   }
 
@@ -41,11 +40,6 @@ export class UserPerformanceComponent implements OnInit {
   }
 
   exportTable() {
-    const excelHeaders: string[] = ["Username", "Full Name", "Total Assignments #", "Not Started Assignments #", "Undergoing Assignments #",
-      "Completed Assignments #", "Total Forms #", "Not Started Forms #", "Undergoing Forms #", "Canceled Forms #", "Completed Forms #",
-      "Not Started Forms %", "Undergoing Forms %", "Canceled Forms %", "Completed Forms %", "AVG. Time To Complete Forms",
-      "Late Forms #"];
-
     let element = document.getElementById('report-table');
 
     const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(element);
@@ -72,14 +66,6 @@ export class UserPerformanceComponent implements OnInit {
       },
       legend: {
         cursor: "pointer",
-        itemclick: function (e: any) {
-          if (typeof (e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
-            e.dataSeries.visible = false;
-          } else {
-            e.dataSeries.visible = true;
-          }
-          e.chart.render();
-        }
       },
       data: [{
         type: "column",

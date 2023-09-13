@@ -7,11 +7,6 @@ import {Component, OnInit} from '@angular/core';
 })
 export class HomeComponent implements OnInit{
 
-  topBarLoaded: boolean = true;
-  midBarLoaded: boolean = false;
-  botBarLoaded: boolean = false;
-
-
   ngOnInit(): void {
 
   }

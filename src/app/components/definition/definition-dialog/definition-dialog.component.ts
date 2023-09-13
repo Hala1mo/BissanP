@@ -81,7 +81,7 @@ export class DefinitionDialogComponent implements OnInit {
     if (this.definitionForm.invalid) return;
     if (this.isSaving) return;
 
-    this.isSaving = false;
+    this.isSaving = true;
     if (this.editMode)
       this.updateDefinition(this.selectedDefinition, this.definitionForm.value);
     else
@@ -93,32 +93,16 @@ export class DefinitionDialogComponent implements OnInit {
       next: response => {
         this.matDialogRef.close(response);
       },
-      error: error => {
-        if (error.error && error.error.message) { // Check if 'message' property exists
-          const errorMessage = error.error.message;
-          this.snackBar.open(errorMessage, '', {
-            duration: 3000
-          });
-        }
-      }
+      error: () => this.isSaving = false,
     })
   }
 
   private saveNewDefinition(formJson: any) {
     this.definitionService.saveNewDefinition(formJson).subscribe({
       next: response => {
-        console.log(response);
         this.matDialogRef.close(response);
       },
-      error: error => {
-        if (error.error && error.error.message) { // Check if 'message' property exists
-          const errorMessage = error.error.message;
-
-          this.snackBar.open(errorMessage, '', {
-            duration: 3000
-          });
-        }
-      }
+      error: () => this.isSaving = false,
     })
   }
 
@@ -135,7 +119,6 @@ export class DefinitionDialogComponent implements OnInit {
       this.definitionForm.addControl('question2', new FormControl('', [Validators.required]));
       this.definitionForm.addControl('question3', new FormControl('', [Validators.required]));
     } else {
-      // If it's not a question type, you may want to remove the controls.
       this.definitionForm.removeControl('question1');
       this.definitionForm.removeControl('question2');
       this.definitionForm.removeControl('question3');

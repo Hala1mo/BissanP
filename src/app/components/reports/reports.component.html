@@ -73,8 +73,8 @@
           <mat-form-field [style.width.px]="400">
             <mat-label>Enter a date range</mat-label>
             <mat-date-range-input [rangePicker]="userSpecRangePicker">
-              <input matStartDate placeholder="Start date" [(ngModel)]="specificUserfromDate">
-              <input matEndDate placeholder="End date" [(ngModel)]="specificUsertoDate">
+              <input matStartDate placeholder="Start date" [(ngModel)]="specificUserFromDate">
+              <input matEndDate placeholder="End date" [(ngModel)]="specificUserToDate">
             </mat-date-range-input>
             <mat-datepicker-toggle matIconSuffix [for]="userSpecRangePicker"></mat-datepicker-toggle>
             <mat-date-range-picker #userSpecRangePicker></mat-date-range-picker>
@@ -164,8 +164,6 @@
               [routerLink]="['/reports/types-chart']">
         Show by Types
       </button>
-
-
     </div>
   </div>
 

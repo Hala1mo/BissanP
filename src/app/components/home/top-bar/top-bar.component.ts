@@ -32,9 +32,6 @@ export class TopBarComponent implements OnInit {
         this.canceledForms = response.canceledFormsThisWeek;
         this.customersThisMonth = response.newCustomersThisMonth;
         this.undergoingForms = response.currentlyUndergoing;
-      },
-      error: error => {
-        console.error(error);
       }
     })
   }

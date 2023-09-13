@@ -10,12 +10,6 @@ export class CustomerPerformanceComponent implements OnInit {
 
   rows: any[] = [];
   fileName = 'ExcelSheet.xlsx';
-  chartOptions: any;
-
-
-
-  graphDataPoints1: { label: string, y: number }[] = [{ label: '', y: 0 }];
-  graphDataPoints2: { label: string, y: number }[] = [{ label: '', y: 0 }];
 
   constructor(
     private sharedService: SharedService,

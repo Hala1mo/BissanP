@@ -1,8 +1,7 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {ActivatedRoute} from '@angular/router'; // Import ActivatedRoute
+import {ActivatedRoute} from '@angular/router';
 import {RegistrationService} from '../../../services/registration.service';
 import {Customer} from '../../../models/Customer';
-import {DefinitionService} from "../../../services/definition.service";
 import {ContactDialogueComponent} from "./contact-dialogue/contact-dialogue.component";
 import {MatDialog} from "@angular/material/dialog";
 import {Contact} from "../../../models/Contact";
@@ -44,7 +43,6 @@ export class CustomerDetailsComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private definitionService: DefinitionService,
     private sharedService: SharedService,
     private reportsService: ReportsService,
     private customerService: RegistrationService,
@@ -77,9 +75,6 @@ export class CustomerDetailsComponent implements OnInit {
             this.contactDataSource.sort = this.sort;
             this.contactDataSource.paginator = this.paginator;
           }, 10);
-        },
-        error: error => {
-          console.error('Error fetching customer data:', error);
         }
       }
     );
@@ -98,9 +93,6 @@ export class CustomerDetailsComponent implements OnInit {
           this.renderPieChart();
           this.renderPieChart2();
 
-        },
-        error: error => {
-          console.error('Error fetching VisitAssignment data:', error);
         }
       }
     );
@@ -108,13 +100,13 @@ export class CustomerDetailsComponent implements OnInit {
 
   updateEnabled(contact: Contact) {
     contact.enabled = !contact.enabled;
-    this.customerService.updateEnabledStatusContact(contact.id).subscribe(
-      (res: any) => {
-        console.log('Enabled status updated successfully:', res);
-        this.fetchCustomerDetails(this.customerId);
-      },
-      (error) => {
-        console.error('Error updating enabled status:', error);
+    this.customerService.updateEnabledStatusContact(contact.id).subscribe({
+        next: () => {
+          this.fetchCustomerDetails(this.customerId);
+        },
+        error: () => {
+          contact.enabled = !contact.enabled;
+        }
       }
     );
   }

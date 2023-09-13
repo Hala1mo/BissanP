@@ -11,7 +11,7 @@ import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 })
 export class TypeDialogComponent {
 
- addForm: FormGroup;
+  addForm: FormGroup;
 
 
   constructor(
@@ -26,31 +26,16 @@ export class TypeDialogComponent {
       name: ['', [Validators.required,
         Validators.minLength(3),
         Validators.maxLength(30)]],
-      i:['0', Validators.required]
+      i: ['0', Validators.required]
     });
   }
 
 
-
   saveNewType() {
     this.definitionService.saveNewType(this.addForm.value).subscribe({
-      next: response => {
-        console.log("Added new Type: ", response)
+      next: () => {
         this.matDialogRef.close();
-      },
-      error: error => {
-
-        if (error.error && error.error.message) { // Check if 'message' property exists
-          const errorMessage = error.error.message;
-          console.log('Error message:', errorMessage);
-
-          this.snackBar.open(errorMessage, '', {
-            duration: 3000
-          });
-        } else {
-          console.log('Unknown error occurred.');
-        }
       }
     })
   }
-  }
+}

@@ -1,5 +1,5 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialog} from "@angular/material/dialog";
+import {MAT_DIALOG_DATA} from "@angular/material/dialog";
 import {Router} from "@angular/router";
 
 @Component({
@@ -7,14 +7,14 @@ import {Router} from "@angular/router";
   templateUrl: './details-cus.component.html',
   styleUrls: ['./details-cus.component.css']
 })
-export class DetailsCusComponent implements OnInit{
+export class DetailsCusComponent implements OnInit {
   ngOnInit() {
 
 
   }
-  constructor( private matDialog: MatDialog ,private router: Router,
-  @Inject(MAT_DIALOG_DATA) public data: bigint){
-    this.router.navigate(['/customers', data]);
 
+  constructor(private router: Router,
+              @Inject(MAT_DIALOG_DATA) public data: bigint) {
+    void this.router.navigate(['/customers', data]);
   }
 }

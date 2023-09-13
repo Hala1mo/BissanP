@@ -26,10 +26,6 @@ export class MidBarComponent implements OnInit {
         this.totalDailyForms = response.total;
         this.completedDailyForms = response.completed;
         this.popularLocations = response.locations;
-
-        console.log(response);
-      }, error: error => {
-        console.error(error)
       }
     })
   }

@@ -2,7 +2,6 @@ import {Component, Inject, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Customer} from "../../../models/Customer";
 import {City} from "../../../models/City";
-import {MatSnackBar} from "@angular/material/snack-bar";
 import {RegistrationService} from "../../../services/registration.service";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {Location} from "../../../models/Location";
@@ -39,7 +38,6 @@ export class CustomerDialogComponent implements OnInit {
   };
 
   constructor(
-    private snackBar: MatSnackBar,
     private customerService: RegistrationService,
     private fb: FormBuilder,
     public matDialogRef: MatDialogRef<CustomerDialogComponent>,
@@ -102,19 +100,7 @@ export class CustomerDialogComponent implements OnInit {
   fetchCustomerData() {
     this.customerService.fetchCustomers().subscribe(
       data => {
-        console.log('Fetched customer data:', data);
         this.customerData = data;
-      },
-      error => {
-        console.error('Error fetching visit types:', error);
-        if (error.message) {
-          let errorMessage = error.message;
-          console.log('Error message:', errorMessage);
-
-          this.snackBar.open(errorMessage, '', {
-            duration: 3000
-          });
-        }
       }
     );
   }
@@ -137,15 +123,8 @@ export class CustomerDialogComponent implements OnInit {
         next: response => {
           this.matDialogRef.close(response);
         },
-        error: error => {
+        error: () => {
           this.isSaving = false;
-
-          if (error.error && error.error.message) { // Check if 'message' property exists
-            const errorMessage = error.error.message;
-            this.snackBar.open(errorMessage, '', {
-              duration: 3000
-            });
-          }
         }
       }
     );
@@ -153,28 +132,14 @@ export class CustomerDialogComponent implements OnInit {
 
   saveNewCustomer() {
     if (this.customerForm.valid) {
-      console.log(this.customerForm.value);
-
-      this.customerService.registerCustomer(this.customerForm.value).subscribe(
-        (res) => {
-          console.log('Registration successful:', res);
-          this.customerForm.reset();
-          this.fetchCustomerData();
-          this.matDialogRef.close(res);
-        },
-        (error) => {
-          this.isSaving = false;
-          console.error('Registration failed:', error);
-
-          if (error.error && error.error.message) { // Check if 'message' property exists
-            const errorMessage = error.error.message;
-            console.log('Error message:', errorMessage);
-
-            this.snackBar.open(errorMessage, '', {
-              duration: 3000
-            });
-          } else {
-            console.log('Unknown error occurred.');
+      this.customerService.registerCustomer(this.customerForm.value).subscribe({
+          next: response => {
+            this.customerForm.reset();
+            this.fetchCustomerData();
+            this.matDialogRef.close(response);
+          },
+          error: () => {
+            this.isSaving = false
           }
         }
       );

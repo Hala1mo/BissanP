@@ -26,7 +26,6 @@ export class BotBarComponent implements OnInit {
     this.dashService.fetchTables().subscribe({
       next: response => {
         this.isLoaded = true;
-        console.log(response);
         this.passwordRequestsData = response;
         this.dataSource.data = this.passwordRequestsData;
 
@@ -34,10 +33,6 @@ export class BotBarComponent implements OnInit {
           this.dataSource.sort = this.sort;
           this.dataSource.paginator = this.paginator;
         }, 50);
-
-      },
-      error: error => {
-        console.error(error)
       }
 
     })
@@ -45,37 +40,27 @@ export class BotBarComponent implements OnInit {
 
 
   acceptPasswordReset(requestId: bigint) {
-    console.log("ACCEPTING REQUEST " + requestId)
-
     this.dashService.acceptPasswordResetRequest(requestId).subscribe({
-      next: response => {
+      next: () => {
         this.dashService.fetchTables().subscribe({
           next: response => {
             this.passwordRequestsData = response;
             this.dataSource.data = this.passwordRequestsData;
           }
         })
-      },
-      error: error => {
-
       }
     });
   }
 
   rejectPasswordReset(requestId: bigint) {
-    console.log("REJECTING REQUEST " + requestId)
-
     this.dashService.rejectPasswordResetRequest(requestId).subscribe({
-      next: response => {
+      next: () => {
             this.dashService.fetchTables().subscribe({
               next: response => {
                 this.passwordRequestsData = response;
                 this.dataSource.data = this.passwordRequestsData;
               }
             })
-      },
-      error: error => {
-
       }
     });
 
