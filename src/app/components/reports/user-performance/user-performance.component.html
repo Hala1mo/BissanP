@@ -8,53 +8,81 @@
       </button>
     </div>
   </div>
-  <div class="row overflow-x-auto">
+  <div class="row">
     <h2 class="mb-3 h5 text-capitalize">User performance</h2>
-
-    <table class="table table-bordered" id="report-table">
-
-      <thead>
-      <th>Username</th>
-      <th>Full Name</th>
-      <th>TOT. ASSIG #</th>
-      <th>NST. ASSIG #</th>
-      <th>UND. ASSIG #</th>
-      <th>COM. ASSIG #</th>
-      <th>TOT. FORMS #</th>
-      <th>NST. FORMS #</th>
-      <th>UND. FORMS #</th>
-      <th>CAN. FORMS #</th>
-      <th>COM. FORMS #</th>
-      <th>NST. FORMS %</th>
-      <th>UND. FORMS %</th>
-      <th>CAN. FORMS %</th>
-      <th>COM. FORMS %</th>
-      <th>AVG. TIME (s)</th>
-      <th>LATE FORMS #</th>
-      </thead>
-      <tbody>
-      <tr *ngFor="let row of rows">
-        <td>{{row.user.username}}</td>
-        <td>{{row.user.firstName}} {{row.user.lastName}}</td>
-        <td>{{row.totalAssignments}}</td>
-        <td>{{row.notStartedAssignments}}</td>
-        <td>{{row.undergoingAssignments}}</td>
-        <td>{{row.completedAssignments}}</td>
-        <td>{{row.totalForms}}</td>
-        <td>{{row.notStartedForms}}</td>
-        <td>{{row.undergoingForms}}</td>
-        <td>{{row.canceledForms}}</td>
-        <td>{{row.completedForms}}</td>
-        <td>{{formatDec(row.notStartedFormsPer)}}%</td>
-        <td>{{formatDec(row.undergoingFormsPer)}}%</td>
-        <td>{{formatDec(row.canceledFormsPer)}}%</td>
-        <td>{{formatDec(row.completedFormsPer)}}%</td>
-        <td>{{formatDec(row.averageCompletionTime)}} s</td>
-        <td>{{row.lateFormsCount}}</td>
-      </tr>
-      </tbody>
-    </table>
-
+    <div class="overflow-x-auto">
+      <table id="report-table" mat-table [dataSource]="rows">
+        <ng-container matColumnDef="username">
+          <th mat-header-cell *matHeaderCellDef>USERNAME</th>
+          <td mat-cell *matCellDef="let row"> {{row.user.username}} </td>
+        </ng-container>
+        <ng-container matColumnDef="totA">
+          <th mat-header-cell *matHeaderCellDef>TOT. ASSIGNMENTS #</th>
+          <td mat-cell *matCellDef="let row"> {{row.totalAssignments}} </td>
+        </ng-container>
+        <ng-container matColumnDef="nstA">
+          <th mat-header-cell *matHeaderCellDef>NST. ASSIGNMENTS #</th>
+          <td mat-cell *matCellDef="let row"> {{row.notStartedAssignments}} </td>
+        </ng-container>
+        <ng-container matColumnDef="undA">
+          <th mat-header-cell *matHeaderCellDef>UND. ASSIGNMENTS #</th>
+          <td mat-cell *matCellDef="let row"> {{row.undergoingAssignments}} </td>
+        </ng-container>
+        <ng-container matColumnDef="comA">
+          <th mat-header-cell *matHeaderCellDef>COM. ASSIGNMENTS #</th>
+          <td mat-cell *matCellDef="let row"> {{row.completedAssignments}} </td>
+        </ng-container>
+        <ng-container matColumnDef="totF">
+          <th mat-header-cell *matHeaderCellDef>TOT. FORMS #</th>
+          <td mat-cell *matCellDef="let row"> {{row.totalForms}} </td>
+        </ng-container>
+        <ng-container matColumnDef="nstF">
+          <th mat-header-cell *matHeaderCellDef>NST. FORMS #</th>
+          <td mat-cell *matCellDef="let row"> {{row.notStartedForms}} </td>
+        </ng-container>
+        <ng-container matColumnDef="undF">
+          <th mat-header-cell *matHeaderCellDef>UND. FORMS #</th>
+          <td mat-cell *matCellDef="let row"> {{row.undergoingForms}} </td>
+        </ng-container>
+        <ng-container matColumnDef="cnlF">
+          <th mat-header-cell *matHeaderCellDef>CNL. FORMS #</th>
+          <td mat-cell *matCellDef="let row"> {{row.canceledForms}} </td>
+        </ng-container>
+        <ng-container matColumnDef="comF">
+          <th mat-header-cell *matHeaderCellDef>COM. FORMS #</th>
+          <td mat-cell *matCellDef="let row"> {{row.completedForms}} </td>
+        </ng-container>
+        <ng-container matColumnDef="nstFP">
+          <th mat-header-cell *matHeaderCellDef>NST. FORMS %</th>
+          <td mat-cell *matCellDef="let row"> {{formatDec(row.notStartedFormsPer)}}%</td>
+        </ng-container>
+        <ng-container matColumnDef="undFP">
+          <th mat-header-cell *matHeaderCellDef>UND. FORMS %</th>
+          <td mat-cell *matCellDef="let row"> {{formatDec(row.undergoingFormsPer)}}%</td>
+        </ng-container>
+        <ng-container matColumnDef="cnlFP">
+          <th mat-header-cell *matHeaderCellDef>CNL. FORMS %</th>
+          <td mat-cell *matCellDef="let row"> {{formatDec(row.canceledFormsPer)}}%</td>
+        </ng-container>
+        <ng-container matColumnDef="comFP">
+          <th mat-header-cell *matHeaderCellDef>COM. FORMS %</th>
+          <td mat-cell *matCellDef="let row"> {{formatDec(row.completedFormsPer)}}%</td>
+        </ng-container>
+        <ng-container matColumnDef="avgT">
+          <th mat-header-cell *matHeaderCellDef>AVG. DURATION</th>
+          <td mat-cell *matCellDef="let row"> {{formatTime(row.averageCompletionTime)}} </td>
+        </ng-container>
+        <ng-container matColumnDef="lateF">
+          <th mat-header-cell *matHeaderCellDef>LATE FORMS #</th>
+          <td mat-cell *matCellDef="let row"> {{row.lateFormsCount}} </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell" colspan="4">No data matching the filter</td>
+        </tr>
+      </table>
+    </div>
   </div>
   <div class="row mt-5">
     <h2 class="mb-3 h5 text-capitalize">No. Completed forms & assignments</h2>
