@@ -34,33 +34,12 @@
           <mat-option *ngFor="let type of visitTypes"
                       [value]="type.id"
                       (click)="changeSelectedType(type)"
-                      >
+          >
             {{type.name}}
           </mat-option>
         </mat-select>
       </mat-form-field>
     </div>
-    <div *ngIf="isQuestionTypeSelected">
-      <div class="row mb-1">
-      <mat-form-field>
-        <mat-label>Question 1</mat-label>
-        <input matInput formControlName="question1" required>
-      </mat-form-field>
-      </div>
-      <div class="row mb-1">
-      <mat-form-field>
-        <mat-label>Question 2</mat-label>
-        <input matInput formControlName="question2" required>
-      </mat-form-field>
-      </div>
-      <div class="row mb-1">
-      <mat-form-field>
-        <mat-label>Question 3</mat-label>
-        <input matInput formControlName="question3" required>
-      </mat-form-field>
-      </div>
-    </div>
-
     <div class="row mb-1">
       <div class="col-6">
         <mat-form-field [style.width.%]="100">
@@ -84,6 +63,29 @@
                           [value]="location.id">{{location.address}}</mat-option>
             </div>
           </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+    <div *ngIf="isQuestionTypeSelected">
+      <div class="row mb-1">
+        <h3 class="px-3">Questions</h3>
+      </div>
+      <div class="row mb-1">
+        <mat-form-field>
+          <mat-label>Question 1</mat-label>
+          <input matInput formControlName="question1" required>
+        </mat-form-field>
+      </div>
+      <div class="row mb-1">
+        <mat-form-field>
+          <mat-label>Question 2</mat-label>
+          <input matInput formControlName="question2" required>
+        </mat-form-field>
+      </div>
+      <div class="row mb-1">
+        <mat-form-field>
+          <mat-label>Question 3</mat-label>
+          <input matInput formControlName="question3" required>
         </mat-form-field>
       </div>
     </div>

@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit, Type} from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
@@ -22,7 +22,7 @@ export class DefinitionDialogComponent implements OnInit {
   cities: City[];
   selectedDefinition: VisitDefinition;
   selectedCity: City | null = null;
-  selectedType:VisitType| null=null;
+  selectedType: VisitType | null = null;
   selectedCityLocations: Location[] = [];
   isSaving: boolean = false;
   isQuestionTypeSelected: boolean = false;
@@ -126,12 +126,11 @@ export class DefinitionDialogComponent implements OnInit {
     this.selectedCity = city;
     this.selectedCityLocations = [...this.selectedCity.locations];
   }
+
   changeSelectedType(type: VisitType) {
     this.selectedType = type;
-    console.log("hhhhhhhhhhhhhhh",this.selectedType);
-    console.log("hhhhhhhhhhhhhhh",this.selectedType.base);
-    this.isQuestionTypeSelected = this.selectedType.base=== 'QUESTION';
-    if (this.isQuestionTypeSelected) {
+    this.isQuestionTypeSelected = this.selectedType.base === 'QUESTION';
+    if (this.isQuestionTypeSelected && !this.editMode) {
       this.definitionForm.addControl('question1', new FormControl('', [Validators.required]));
       this.definitionForm.addControl('question2', new FormControl('', [Validators.required]));
       this.definitionForm.addControl('question3', new FormControl('', [Validators.required]));
