@@ -1,70 +1,63 @@
 <div class="container">
-    <div class="row border-bottom mb-5">
-        <div class="d-flex justify-content-between">
-            <h1>Assignments Reports</h1>
-        </div>
+  <div class="row border-bottom mb-5">
+    <div class="d-flex justify-content-between">
+      <h1>Assignments Reports</h1>
     </div>
-    <div class="row mb-3">
-        <div class="mat-elevation-z0">
-            <mat-paginator [pageSizeOptions]="[5,10,20]"
-                           #reportsTablePaginator
-                           showFirstLastButtons
-                           aria-label="Select page of reports">
-            </mat-paginator>
-            <table mat-table [dataSource]="dataSource" matSort>
+  </div>
+  <div class="row mb-3">
+    <div class="mat-elevation-z0">
+      <mat-paginator [pageSizeOptions]="[5,10,20]"
+                     #reportsTablePaginator
+                     showFirstLastButtons
+                     aria-label="Select page of reports">
+      </mat-paginator>
+      <table mat-table [dataSource]="dataSource" matSort>
 
-                   class="mat-elevation-z8">
-                <ng-container matColumnDef="Date">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by date">
-                        Date
-                    </th>
-                    <td mat-cell *matCellDef="let element"> {{element.date}} </td>
-                </ng-container>
+        class="mat-elevation-z8">
+        <ng-container matColumnDef="Date">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by date">
+            Date
+          </th>
+          <td mat-cell *matCellDef="let element"> {{element.date}} </td>
+        </ng-container>
 
-                <ng-container matColumnDef="userName">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by userName">
-                        User Name
-                    </th>
-                    <td mat-cell *matCellDef="let element"> {{element.username}} </td>
-                </ng-container>
+        <ng-container matColumnDef="userName">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by userName">
+            User Name
+          </th>
+          <td mat-cell *matCellDef="let element"> {{element.username}} </td>
+        </ng-container>
+        <ng-container matColumnDef="FullName">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by FullName">
+            FullName
+          </th>
+          <td mat-cell *matCellDef="let element"> {{element.firstName + ' ' + element.lastName}}</td>
+        </ng-container>
+        <ng-container matColumnDef="Comment">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by type">
+            Comment
+          </th>
+          <td mat-cell *matCellDef="let element"> {{element.comment}} </td>
+        </ng-container>
+        <ng-container matColumnDef="Customer">
+          <th mat-header-cell *matHeaderCellDef>
+            Actions
+          </th>
+          <td mat-cell *matCellDef="let element">
+            <div class="d-flex justify-content-between align-items-center">
 
-                <ng-container matColumnDef="FullName">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by FullName">
-                      FullName
-                    </th>
-                    <td mat-cell *matCellDef="let element"> {{element.firstName +' ' + element.lastName}}</td>
-                </ng-container>
+              <button mat-icon-button color="primary"
+                      (click)="openDialog(element.customer)">
+                <mat-icon>perm_identity</mat-icon>
+              </button>
+            </div>
 
-
-                <ng-container matColumnDef="Comment">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by type">
-                        Comment
-                    </th>
-                    <td mat-cell *matCellDef="let element"> {{element.comment}} </td>
-                </ng-container>
-
-              <ng-container matColumnDef="Customer">
-                <th mat-header-cell *matHeaderCellDef>
-                  Actions
-                </th>
-                <td mat-cell *matCellDef="let element">
-                  <div class="d-flex justify-content-between align-items-center">
-
-                    <button mat-icon-button color="primary"
-                            (click)="openDialog(element.customer)">
-                      <mat-icon>perm_identity</mat-icon>
-                    </button>
-                  </div>
-
-                </td>
-              </ng-container>
-
-
-
-                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                <tr mat-row  (click)="console.log('clicked on ', row.username)" *matRowDef="let row; columns: displayedColumns;"></tr>
-            </table>
-        </div>
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
     </div>
+  </div>
 </div>
 
