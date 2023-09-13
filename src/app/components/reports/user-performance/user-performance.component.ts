@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { SharedService } from "../../../services/shared.service";
+import {Component, OnInit} from '@angular/core';
+import {SharedService} from "../../../services/shared.service";
 import * as XLSX from 'xlsx';
 
 @Component({
@@ -14,9 +14,14 @@ export class UserPerformanceComponent implements OnInit {
   chartOptions: any;
 
 
-
-  graphDataPoints1: { label: string, y: number }[] = [{ label: '', y: 0 }];
-  graphDataPoints2: { label: string, y: number }[] = [{ label: '', y: 0 }];
+  graphDataPoints1: { label: string, y: number }[] = [{label: '', y: 0}];
+  graphDataPoints2: { label: string, y: number }[] = [{label: '', y: 0}];
+  displayedColumns = [
+    'username', 'totA', 'nstA', 'undA', 'comA',
+    'totF', 'nstF', 'undF', 'cnlF', 'comF',
+    'nstFP', 'undFP', 'cnlFP', 'comFP',
+    'avgT', 'lateF'
+  ];
 
   constructor(
     private sharedService: SharedService,
@@ -29,14 +34,18 @@ export class UserPerformanceComponent implements OnInit {
     this.graphDataPoints2.pop();
 
     for (const row of this.rows) {
-      this.graphDataPoints1.push({ label: row.user.username, y: row.completedForms });
-      this.graphDataPoints2.push({ label: row.user.username, y: row.completedAssignments });
+      this.graphDataPoints1.push({label: row.user.username, y: row.completedForms});
+      this.graphDataPoints2.push({label: row.user.username, y: row.completedAssignments});
     }
     this.renderChart(); // Call the renderChart method
   }
 
   formatDec(num: any) {
     return (Math.round(num * 100) / 100).toFixed(2);
+  }
+
+  formatTime(seconds: number) {
+    return new Date(seconds * 1000).toISOString().substr(11, 8);
   }
 
   exportTable() {
@@ -83,4 +92,6 @@ export class UserPerformanceComponent implements OnInit {
       }]
     }
   }
+
+
 }
