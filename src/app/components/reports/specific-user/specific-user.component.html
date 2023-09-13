@@ -8,52 +8,142 @@
       </button>
     </div>
   </div>
-  <div class="row overflow-x-auto">
-    <h2  class="mb-3 h5 text-capitalize">{{report.performance.user.username}} performance</h2>
-    <table class="table table-bordered" id="report-table">
-
-      <thead>
-      <tr>
-      <th>Full Name</th>
-      <th>TOT. ASSIG #</th>
-      <th>NST. ASSIG #</th>
-      <th>UND. ASSIG #</th>
-      <th>COM. ASSIG #</th>
-      <th>TOT. FORMS #</th>
-      <th>NST. FORMS #</th>
-      <th>UND. FORMS #</th>
-      <th>CAN. FORMS #</th>
-      <th>COM. FORMS #</th>
-      <th>NST. FORMS %</th>
-      <th>UND. FORMS %</th>
-      <th>CAN. FORMS %</th>
-      <th>COM. FORMS %</th>
-      <th>AVG. TIME (s)</th>
-      <th>LATE FORMS #</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr>
-        <td>{{report.performance.user.firstName}} {{report.performance.user.lastName}}</td>
-        <td>{{report.performance.totalAssignments}}</td>
-        <td>{{report.performance.notStartedAssignments}}</td>
-        <td>{{report.performance.undergoingAssignments}}</td>
-        <td>{{report.performance.completedAssignments}}</td>
-        <td>{{report.performance.totalForms}}</td>
-        <td>{{report.performance.notStartedForms}}</td>
-        <td>{{report.performance.undergoingForms}}</td>
-        <td>{{report.performance.canceledForms}}</td>
-        <td>{{report.performance.completedForms}}</td>
-        <td>{{formatDec(report.performance.notStartedFormsPer)}}%</td>
-        <td>{{formatDec(report.performance.undergoingFormsPer)}}%</td>
-        <td>{{formatDec(report.performance.canceledFormsPer)}}%</td>
-        <td>{{formatDec(report.performance.completedFormsPer)}}%</td>
-        <td>{{formatDec(report.performance.averageCompletionTime)}} s</td>
-        <td>{{report.performance.lateFormsCount}}</td>
-      </tr>
-      </tbody>
-    </table>
-    <h2  class="mb-3 h5 text-capitalize">{{report.performance.user.username}} interaction</h2>
+  <div class="row mb-3">
+    <h2 class="mb-3 h5 text-capitalize">
+      {{report.performance.user.firstName}} {{report.performance.user.lastName}} performance
+    </h2>
+    <div class="overflow-x-auto">
+      <table id="performance-report" mat-table [dataSource]="reportPerformance">
+        <ng-container matColumnDef="username">
+          <th mat-header-cell *matHeaderCellDef>USERNAME</th>
+          <td mat-cell *matCellDef="let row"> {{row.user.username}} </td>
+        </ng-container>
+        <ng-container matColumnDef="totA">
+          <th mat-header-cell *matHeaderCellDef>TOT. ASSIGNMENTS #</th>
+          <td mat-cell *matCellDef="let row"> {{row.totalAssignments}} </td>
+        </ng-container>
+        <ng-container matColumnDef="nstA">
+          <th mat-header-cell *matHeaderCellDef>NST. ASSIGNMENTS #</th>
+          <td mat-cell *matCellDef="let row"> {{row.notStartedAssignments}} </td>
+        </ng-container>
+        <ng-container matColumnDef="undA">
+          <th mat-header-cell *matHeaderCellDef>UND. ASSIGNMENTS #</th>
+          <td mat-cell *matCellDef="let row"> {{row.undergoingAssignments}} </td>
+        </ng-container>
+        <ng-container matColumnDef="comA">
+          <th mat-header-cell *matHeaderCellDef>COM. ASSIGNMENTS #</th>
+          <td mat-cell *matCellDef="let row"> {{row.completedAssignments}} </td>
+        </ng-container>
+        <ng-container matColumnDef="totF">
+          <th mat-header-cell *matHeaderCellDef>TOT. FORMS #</th>
+          <td mat-cell *matCellDef="let row"> {{row.totalForms}} </td>
+        </ng-container>
+        <ng-container matColumnDef="nstF">
+          <th mat-header-cell *matHeaderCellDef>NST. FORMS #</th>
+          <td mat-cell *matCellDef="let row"> {{row.notStartedForms}} </td>
+        </ng-container>
+        <ng-container matColumnDef="undF">
+          <th mat-header-cell *matHeaderCellDef>UND. FORMS #</th>
+          <td mat-cell *matCellDef="let row"> {{row.undergoingForms}} </td>
+        </ng-container>
+        <ng-container matColumnDef="cnlF">
+          <th mat-header-cell *matHeaderCellDef>CNL. FORMS #</th>
+          <td mat-cell *matCellDef="let row"> {{row.canceledForms}} </td>
+        </ng-container>
+        <ng-container matColumnDef="comF">
+          <th mat-header-cell *matHeaderCellDef>COM. FORMS #</th>
+          <td mat-cell *matCellDef="let row"> {{row.completedForms}} </td>
+        </ng-container>
+        <ng-container matColumnDef="nstFP">
+          <th mat-header-cell *matHeaderCellDef>NST. FORMS %</th>
+          <td mat-cell *matCellDef="let row"> {{formatDec(row.notStartedFormsPer)}}%</td>
+        </ng-container>
+        <ng-container matColumnDef="undFP">
+          <th mat-header-cell *matHeaderCellDef>UND. FORMS %</th>
+          <td mat-cell *matCellDef="let row"> {{formatDec(row.undergoingFormsPer)}}%</td>
+        </ng-container>
+        <ng-container matColumnDef="cnlFP">
+          <th mat-header-cell *matHeaderCellDef>CNL. FORMS %</th>
+          <td mat-cell *matCellDef="let row"> {{formatDec(row.canceledFormsPer)}}%</td>
+        </ng-container>
+        <ng-container matColumnDef="comFP">
+          <th mat-header-cell *matHeaderCellDef>COM. FORMS %</th>
+          <td mat-cell *matCellDef="let row"> {{formatDec(row.completedFormsPer)}}%</td>
+        </ng-container>
+        <ng-container matColumnDef="avgT">
+          <th mat-header-cell *matHeaderCellDef>AVG. DURATION</th>
+          <td mat-cell *matCellDef="let row"> {{formatTime(row.averageCompletionTime)}} </td>
+        </ng-container>
+        <ng-container matColumnDef="lateF">
+          <th mat-header-cell *matHeaderCellDef>LATE FORMS #</th>
+          <td mat-cell *matCellDef="let row"> {{row.lateFormsCount}} </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedPerformanceColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedPerformanceColumns;"></tr>
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell" colspan="4">No data matching the filter</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+  <div class="row mb-3">
+    <h2 class="mb-3 h5 text-capitalize">
+      {{report.performance.user.firstName}} {{report.performance.user.lastName}} interaction</h2>
+    <div class="overflow-x-auto">
+      <table id="interaction-report" mat-table [dataSource]="report.interaction">
+        <ng-container matColumnDef="customerName">
+          <th mat-header-cell *matHeaderCellDef>CUSTOMER NAME</th>
+          <td mat-cell *matCellDef="let row"> {{row.customerName}} </td>
+        </ng-container>
+        <ng-container matColumnDef="customerAddress">
+          <th mat-header-cell *matHeaderCellDef>CUSTOMER ADDRESS</th>
+          <td mat-cell *matCellDef="let row"> {{row.customerAddress}} </td>
+        </ng-container>
+        <ng-container matColumnDef="formLocation">
+          <th mat-header-cell *matHeaderCellDef>LAST LOCATION</th>
+          <td mat-cell *matCellDef="let row">
+            {{row.latitude}}, {{row.longitude}}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="formDueDate">
+          <th mat-header-cell *matHeaderCellDef>EXPECTED DATE</th>
+          <td mat-cell *matCellDef="let row"> {{row.formDueDate}} </td>
+        </ng-container>
+        <ng-container matColumnDef="formDuration">
+          <th mat-header-cell *matHeaderCellDef>DURATION</th>
+          <td mat-cell *matCellDef="let row"> {{formatTime(row.formDuration)}} </td>
+        </ng-container>
+        <ng-container matColumnDef="formStatus">
+          <th mat-header-cell *matHeaderCellDef>STATUS</th>
+          <td mat-cell *matCellDef="let row">
+            <span *ngIf="row.formStatus.toLowerCase()==='not started'" class="ch-badge bg-yellow">
+              {{row.formStatus}}
+            </span>
+            <span *ngIf="row.formStatus.toLowerCase()==='undergoing'" class="ch-badge bg-blue">
+              {{row.formStatus}}
+            </span>
+            <span *ngIf="row.formStatus.toLowerCase()==='canceled' " class="ch-badge bg-red">
+              {{row.formStatus}}
+            </span>
+            <span *ngIf="row.formStatus.toLowerCase()==='completed'" class="ch-badge bg-green">
+              {{row.formStatus}}
+            </span>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="formType">
+          <th mat-header-cell *matHeaderCellDef>VISIT TYPE</th>
+          <td mat-cell *matCellDef="let row"> {{row.formType}} </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedInteractionColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedInteractionColumns;"></tr>
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell" colspan="4">No data matching the filter</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+  <div class="row mb-3">
+    <h2 class="mb-3 h5 text-capitalize">{{report.performance.user.username}} interaction</h2>
     <table class="table table-bordered" id="report2-table">
       <thead>
       <tr>

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import {SharedService} from "../../../services/shared.service";
 import * as XLSX from "xlsx";
 
@@ -11,22 +11,56 @@ export class SpecificUserComponent {
 
   report: any;
   fileName = 'ExcelSheet.xlsx';
-  name:string="";
+  name: string = '';
+
+  displayedPerformanceColumns = [
+    'username', 'totA', 'nstA', 'undA', 'comA',
+    'totF', 'nstF', 'undF', 'cnlF', 'comF',
+    'nstFP', 'undFP', 'cnlFP', 'comFP',
+    'avgT', 'lateF'
+  ];
+  displayedInteractionColumns = [
+    'customerName', 'customerAddress', 'formLocation',
+    'formDueDate', 'formDuration', 'formStatus', 'formType'
+  ];
+
+  reportPerformance: any[];
 
   constructor(
     private sharedService: SharedService,
   ) {
+    this.report = this.sharedService.getUserDetailedReportsAsList();
+
+    this.reportPerformance = [
+      {
+        user: this.report.performance.user,
+        totalAssignments: this.report.performance.totalAssignments,
+        notStartedAssignments: this.report.performance.notStartedAssignments,
+        undergoingAssignments: this.report.performance.undergoingAssignments,
+        completedAssignments: this.report.performance.completedAssignments,
+        totalForms: this.report.performance.totalForms,
+        notStartedForms: this.report.performance.notStartedForms,
+        undergoingForms: this.report.performance.undergoingForms,
+        canceledForms: this.report.performance.canceledForms,
+        completedForms: this.report.performance.completedForms,
+        notStartedFormsPer: this.report.performance.notStartedFormsPer,
+        undergoingFormsPer: this.report.performance.undergoingFormsPer,
+        canceledFormsPer: this.report.performance.canceledFormsPer,
+        completedFormsPer: this.report.performance.completedFormsPer,
+        averageCompletionTime: this.report.performance.averageCompletionTime,
+        lateFormsCount: this.report.performance.lateFormsCount
+      },
+    ]
   }
 
   ngOnInit(): void {
-    this.report = this.sharedService.getUserDetailedReportsAsList();
   }
 
 
   exportTable() {
-   // Get references to the two tables by their IDs
-    let element1 = document.getElementById('report-table');
-    let element2 = document.getElementById('report2-table');
+    // Get references to the two tables by their IDs
+    let element1 = document.getElementById('performance-report');
+    let element2 = document.getElementById('interaction-report');
 
     // Convert each table to worksheets
     const ws1: XLSX.WorkSheet = XLSX.utils.table_to_sheet(element1);
@@ -48,4 +82,7 @@ export class SpecificUserComponent {
     return (Math.round(num * 100) / 100).toFixed(2);
   }
 
+  formatTime(seconds: number) {
+    return new Date(seconds * 1000).toISOString().substr(11, 8);
+  }
 }

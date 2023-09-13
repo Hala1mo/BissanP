@@ -27,7 +27,7 @@ export class SharedService {
   private visitTypesSubject = new BehaviorSubject<VisitType[]>([]);
   private userReport = new BehaviorSubject<any[]>([]);
   private customerReport = new BehaviorSubject<any[]>([]);
-  private userDetailedReport = new BehaviorSubject<any[]>([]);
+  private userDetailedReport = new BehaviorSubject<any>([]);
   updateDateData(dateData: any[]) {
     this.dateDataSubject.next(dateData);
   }
