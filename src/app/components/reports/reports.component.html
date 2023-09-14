@@ -19,7 +19,7 @@
           </p>
         </div>
         <div class="col-4">
-          <mat-form-field [style.width.px]="400">
+          <mat-form-field [style.width.%]="100">
             <mat-label>Enter a date range</mat-label>
             <mat-date-range-input [rangePicker]="userRangePicker">
               <input matStartDate placeholder="Start date" [(ngModel)]="userFromDate">
@@ -29,7 +29,7 @@
             <mat-datepicker-toggle matIconSuffix [for]="userRangePicker"></mat-datepicker-toggle>
             <mat-date-range-picker #userRangePicker></mat-date-range-picker>
           </mat-form-field>
-          <button [style.width.px]="400" mat-raised-button color="primary" (click)="generateUserPerformanceReport()">
+          <button [style.width.%]="100" mat-raised-button color="primary" (click)="generateUserPerformanceReport()">
             Generate Report
           </button>
         </div>
@@ -51,26 +51,24 @@
           </p>
         </div>
         <div class="col-4">
-          <form [formGroup]="selectedUserForm">
-            <mat-form-field [style.width.%]="100">
-              <mat-label>Select User</mat-label>
-              <input #userInput
-                     type="text"
-                     matInput
-                     [formControl]="userSelectControl"
-                     [matAutocomplete]="autoUser"
-                     (input)="filterUsers()"
-                     (focus)="filterUsers()"
-              >
-              <mat-autocomplete #autoUser="matAutocomplete" (optionSelected)="selectUser($event)"
-                                [displayWith]="displayUser">
-                <mat-option *ngFor="let option of filteredUsers" [value]="option">
-                  {{displayUser(option)}}
-                </mat-option>
-              </mat-autocomplete>
-            </mat-form-field>
-          </form>
-          <mat-form-field [style.width.px]="400">
+          <mat-form-field [style.width.%]="100">
+            <mat-label>Select User</mat-label>
+            <input #userInput
+                   type="text"
+                   matInput
+                   [formControl]="userSelectControl"
+                   [matAutocomplete]="autoUser"
+                   (input)="filterUsers()"
+                   (focus)="filterUsers()"
+            >
+            <mat-autocomplete #autoUser="matAutocomplete" (optionSelected)="selectUser($event)"
+                              [displayWith]="displayUser">
+              <mat-option *ngFor="let option of filteredUsers" [value]="option">
+                {{displayUser(option)}}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+          <mat-form-field [style.width.%]="100">
             <mat-label>Enter a date range</mat-label>
             <mat-date-range-input [rangePicker]="userSpecRangePicker">
               <input matStartDate placeholder="Start date" [(ngModel)]="specificUserFromDate">
@@ -79,10 +77,9 @@
             <mat-datepicker-toggle matIconSuffix [for]="userSpecRangePicker"></mat-datepicker-toggle>
             <mat-date-range-picker #userSpecRangePicker></mat-date-range-picker>
           </mat-form-field>
-          <button [style.width.px]="400" mat-raised-button color="primary" (click)="generateSpecificUserReport()">
+          <button [style.width.%]="100" mat-raised-button color="primary" (click)="generateSpecificUserReport()">
             Generate Report
           </button>
-
         </div>
       </div>
     </div>
@@ -96,12 +93,11 @@
         <div class="col-8">
           <p>
             This Report will show Assignments in a specific period of time, and the user assigned for that assignment.
-
           </p>
         </div>
 
         <div class="col-4">
-          <mat-form-field [style.width.px]="400">
+          <mat-form-field [style.width.%]="100">
             <mat-label>Enter a date range</mat-label>
             <mat-date-range-input [rangePicker]="assignmentRangePicker">
               <input matStartDate placeholder="Start date" [(ngModel)]="fromDate">
@@ -111,19 +107,17 @@
             <mat-datepicker-toggle matIconSuffix [for]="assignmentRangePicker"></mat-datepicker-toggle>
             <mat-date-range-picker #assignmentRangePicker></mat-date-range-picker>
           </mat-form-field>
-          <button [style.width.px]="400" mat-raised-button color="primary" (click)="generateAssignmentReport()">
+          <button [style.width.%]="100" mat-raised-button color="primary" (click)="generateAssignmentReport()">
             Generate Report
           </button>
         </div>
       </div>
     </div>
   </div>
-
-
-  <div class="row">
+  <div class="row border-bottom py-3">
     <div class="container">
       <div class="row">
-          <h1>Customer Performance</h1>
+        <h1>Customer Performance</h1>
       </div>
       <div class="row">
         <div class="col-8">
@@ -134,7 +128,7 @@
           </p>
         </div>
         <div class="col-4">
-          <mat-form-field [style.width.px]="400">
+          <mat-form-field [style.width.%]="100">
             <mat-label>Enter a date range</mat-label>
             <mat-date-range-input [rangePicker]="customerRangePicker">
               <input matStartDate placeholder="Start date" [(ngModel)]="customerFromDate">
@@ -144,15 +138,14 @@
             <mat-datepicker-toggle matIconSuffix [for]="customerRangePicker"></mat-datepicker-toggle>
             <mat-date-range-picker #customerRangePicker></mat-date-range-picker>
           </mat-form-field>
-          <button [style.width.px]="400" mat-raised-button color="primary" (click)="generateCustomerPerformanceReport()">
+          <button [style.width.%]="100" mat-raised-button color="primary"
+                  (click)="generateCustomerPerformanceReport()">
             Generate Report
           </button>
         </div>
       </div>
     </div>
   </div>
-
-
   <div class="row">
     <h1>Forms</h1>
     <div class="row mb-5">

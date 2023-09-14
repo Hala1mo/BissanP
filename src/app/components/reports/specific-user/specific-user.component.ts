@@ -1,6 +1,8 @@
 import {Component} from '@angular/core';
 import {SharedService} from "../../../services/shared.service";
 import * as XLSX from "xlsx";
+import {MatDialog} from "@angular/material/dialog";
+import {MapDialogComponent} from "../../../shared/map-dialog/map-dialog.component";
 
 @Component({
   selector: 'app-specific-user',
@@ -28,6 +30,7 @@ export class SpecificUserComponent {
 
   constructor(
     private sharedService: SharedService,
+    private matDialog: MatDialog,
   ) {
     this.report = this.sharedService.getUserDetailedReportsAsList();
 
@@ -84,5 +87,25 @@ export class SpecificUserComponent {
 
   formatTime(seconds: number) {
     return new Date(seconds * 1000).toISOString().substr(11, 8);
+  }
+
+  openLocationOnMap(row: any) {
+    console.log(row);
+    this.matDialog.open(MapDialogComponent, {
+      width: '40%',
+      data: {
+        cusLat: row.customer.latitude,
+        cusLng: row.customer.longitude,
+        userLat: row.latitude,
+        userLng: row.longitude,
+      }
+    }).afterClosed().subscribe(() => {
+      console.log("CLOSED MAP")
+    })
+  }
+
+  hasLngLat(latitude: number, longitude: number): boolean {
+    return !(latitude === 0 || longitude === 0);
+
   }
 }

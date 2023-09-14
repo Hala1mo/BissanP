@@ -14,7 +14,7 @@ export class TopBarComponent implements OnInit {
   totalForms: number = 0;
   canceledForms: number = 0;
   customersThisMonth: number = 0;
-  undergoingForms: number = 0;
+  revenue: number = 0;
 
   constructor(
     private dashService: DashboardService,
@@ -31,7 +31,7 @@ export class TopBarComponent implements OnInit {
         this.totalForms = response.totalToday;
         this.canceledForms = response.canceledFormsThisWeek;
         this.customersThisMonth = response.newCustomersThisMonth;
-        this.undergoingForms = response.currentlyUndergoing;
+        this.revenue = response.revenue;
       }
     })
   }

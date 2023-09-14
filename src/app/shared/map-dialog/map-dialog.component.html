@@ -1,0 +1,26 @@
+<mat-dialog-content>
+  <div *ngIf="apiLoaded">
+    <google-map
+      height="250px"
+      width="100%"
+      [center]="initialCenter"
+      [zoom]="initialZoom"
+    >
+      <map-marker
+        label="User"
+        [position]="userPosition"
+        [options]="markerOptions">
+      </map-marker>
+      <map-marker
+        label="Customer"
+        [position]="customerPosition"
+        [options]="markerOptions">
+      </map-marker>
+    </google-map>
+  </div>
+  <mat-dialog-actions>
+    <button mat-raised-button color="warn" (click)="closeDialog()">
+      Close
+    </button>
+  </mat-dialog-actions>
+</mat-dialog-content>
