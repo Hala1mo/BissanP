@@ -22,7 +22,6 @@ export class PaymentDetailsComponent implements OnInit, AfterViewInit {
   rows: any[] = [];
   dataSource: any[] = [];
   searchInput: string = "";
-  selectedCustomer: Customer | undefined; // Placeholder for selected customer
   filteredUsers: User[] | undefined;
   userData: User [] = [];
   selectedUserForm: FormGroup;
@@ -141,25 +140,26 @@ export class PaymentDetailsComponent implements OnInit, AfterViewInit {
   }
 
   searchPayments() {
-    let username='';
-    let customerId='';
-    let fromDateString='';
-    let toDateString='';
+    let username = '';
+    let customerId = '';
+    let fromDateString = '';
+    let toDateString = '';
 
-    if(this.userSelectControl.value){
-    username = this.userSelectControl.value.username;}
-  if(this.customerSelectControl.value) {
-    customerId = this.customerSelectControl.value.id || undefined;
-  }
+    if (this.userSelectControl.value) {
+      username = this.userSelectControl.value.username;
+    }
+    if (this.customerSelectControl.value) {
+      customerId = this.customerSelectControl.value.id || undefined;
+    }
 
-    if(this.fromDate && this.toDate ) {
-       fromDateString = formatDate(this.fromDate, 'yyyy-MM-dd', 'en');
-       toDateString = formatDate(this.toDate, 'yyyy-MM-dd', 'en');
+    if (this.fromDate && this.toDate) {
+      fromDateString = formatDate(this.fromDate, 'yyyy-MM-dd', 'en');
+      toDateString = formatDate(this.toDate, 'yyyy-MM-dd', 'en');
     }
     console.log("CUS", customerId);
     if (!username && !customerId)
       this.resetFilters();
-    this.documentService.searchPayments(customerId, username,fromDateString,toDateString).subscribe({
+    this.documentService.searchPayments(customerId, username, fromDateString, toDateString).subscribe({
       next: value => {
         this.rows = value;
       }

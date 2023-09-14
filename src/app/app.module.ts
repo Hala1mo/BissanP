@@ -69,11 +69,12 @@ import {BotBarComponent} from './components/home/bot-bar/bot-bar.component';
 import {SpecificUserComponent} from './components/reports/specific-user/specific-user.component';
 import {ErrorInterceptor} from "./interceptors/error-interceptor.service";
 import {MatTooltipModule} from "@angular/material/tooltip";
-import { CustomerPerformanceComponent } from './components/reports/customer-performance/customer-performance.component';
+import {CustomerPerformanceComponent} from './components/reports/customer-performance/customer-performance.component';
 import {MatButtonToggleModule} from "@angular/material/button-toggle";
 import {MatRadioModule} from "@angular/material/radio";
-import { PaymentDetailsComponent } from './components/payment-details/payment-details.component';
-import { QuestionTemplatesComponent } from './components/question-templates/question-templates.component';
+import {PaymentDetailsComponent} from './components/payment-details/payment-details.component';
+import {QuestionTemplatesComponent} from './components/question-templates/question-templates.component';
+import {MapDialogComponent} from './shared/map-dialog/map-dialog.component';
 
 @NgModule({
   declarations: [
@@ -114,6 +115,7 @@ import { QuestionTemplatesComponent } from './components/question-templates/ques
     CustomerPerformanceComponent,
     PaymentDetailsComponent,
     QuestionTemplatesComponent,
+    MapDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -160,7 +162,11 @@ import { QuestionTemplatesComponent } from './components/question-templates/ques
     MatRadioModule,
   ],
   providers: [
-    {provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {}},
+    {
+      provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {
+        width: '40%'
+      }
+    },
     {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},
 
   ],
