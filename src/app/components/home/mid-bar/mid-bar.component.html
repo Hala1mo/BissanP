@@ -1,25 +1,6 @@
 <div *ngIf="isLoaded" class="row mt-5">
   <div class="col-4">
     <div class="card mat-elevation-z4 p-3">
-      <div class="card bg-blue graph-offset">
-        <app-line-graph
-          [graphData]="popularLocations"
-          [graphBackground]="'#4FAFC5'"
-        />
-      </div>
-      <div class="row text-start" style="margin-top: 50%">
-        <p class="text-body h4 fw-light">Locations</p>
-        <p class="text-body-secondary h5 fw-light">Top 5 most popular locations</p>
-      </div>
-      <hr>
-      <div class="d-flex align-items-center gap-1 mb-3">
-        <mat-icon>calendar_today</mat-icon>
-        <span> Last 2 Weeks </span>
-      </div>
-    </div>
-  </div>
-  <div class="col-4">
-    <div class="card mat-elevation-z4 p-3">
       <div class="card bg-yellow graph-offset">
         <app-line-graph
           [graphData]="totalDailyForms"
@@ -40,23 +21,41 @@
   </div>
   <div class="col-4">
     <div class="card mat-elevation-z4 p-3">
+      <div class="card bg-blue graph-offset">
+        <app-line-graph
+          [graphData]="popularLocations"
+          [graphBackground]="'#4FAFC5'"
+        />
+      </div>
+      <div class="row text-start" style="margin-top: 50%">
+        <p class="text-body h4 fw-light">Locations</p>
+        <p class="text-body-secondary h5 fw-light">Top 5 most popular locations</p>
+      </div>
+      <hr>
+      <div class="d-flex align-items-center gap-1 mb-3">
+        <mat-icon>calendar_today</mat-icon>
+        <span> Last 2 Weeks </span>
+      </div>
+    </div>
+  </div>
+  <div class="col-4">
+    <div class="card mat-elevation-z4 p-3">
       <div class="card bg-green graph-offset">
         <app-line-graph
           [graphData]="completedDailyForms"
           [graphBackground]="'#67A75F'"
-          [graphType]="'column'"
+          [graphType]="'line'"
         />
       </div>
       <div class="row text-start" style="margin-top: 50%">
-        <p class="text-body h4 fw-light">Completed Forms</p>
+        <p class="text-body h4 fw-light">Daily Revenue</p>
         <p class="text-body-secondary h5 fw-light"> No. of completed forms</p>
       </div>
       <hr>
       <div class="d-flex align-items-center gap-1 mb-3">
         <mat-icon>calendar_today</mat-icon>
-        <span> Last 7 days </span>
+        <span> Last 14 days </span>
       </div>
     </div>
   </div>
-
 </div>
