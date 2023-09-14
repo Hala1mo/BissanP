@@ -25,7 +25,7 @@ export class PaymentDetailsComponent implements OnInit, AfterViewInit {
   filteredUsers: User[] | undefined;
   userData: User [] = [];
   selectedUserForm: FormGroup;
-  displayedColumns: string[] = ['Customer', 'User', 'Date', 'Amount','type'];
+  displayedColumns: string[] = ['customerName', 'userFullName', 'paymentDate', 'amount', 'paymentType', 'visitType'];
   fileName = 'ExcelSheet.xlsx';
   filteredCustomers: Customer[] | undefined;
   userSelectControl = new FormControl();
@@ -33,25 +33,28 @@ export class PaymentDetailsComponent implements OnInit, AfterViewInit {
   @ViewChild('customerInput') customerInput!: ElementRef<HTMLInputElement>;
   @ViewChild('userInput') userInput!: ElementRef<HTMLInputElement>;
   isSaving: boolean = false;
+
   constructor(
     formBuilder: FormBuilder,
     private documentService: DocumentService,
-    private registrationService:RegistrationService,
+    private registrationService: RegistrationService,
     private userService: UserService,
     private router: Router,
     private matDialog: MatDialog,
     private snackBar: MatSnackBar,
-
-  ) {this.selectedUserForm = formBuilder.group({
-    username: ['', [Validators.required]]
-  })
+  ) {
+    this.selectedUserForm = formBuilder.group({
+      username: ['', [Validators.required]]
+    })
   }
+
   ngOnInit() {
     this.fetchAllDefinitions();
     this.fetchUserData();
     this.fetchCustomerData();
 
   }
+
   filterUsers() {
     const filterValue = this.userInput.nativeElement.value.toLowerCase();
     this.filteredUsers = this.userData.filter(option => option.username.toLowerCase().includes(filterValue)
@@ -63,12 +66,11 @@ export class PaymentDetailsComponent implements OnInit, AfterViewInit {
   }
 
 
-
   fetchAllDefinitions() {
     this.documentService.fetchPaymentDetails().subscribe({
       next: response => {
-     console.log(response);
-     this.rows=response;
+        console.log(response);
+        this.rows = response;
       },
       error: error => {
         if (error.message) {
@@ -108,14 +110,17 @@ export class PaymentDetailsComponent implements OnInit, AfterViewInit {
       }
     );
   }
+
   selectUser(event: MatAutocompleteSelectedEvent): void {
     this.selectedUserForm.patchValue({
       username: event.option.value.username,
     })
   }
+
   selectCustomer(event: MatAutocompleteSelectedEvent): void {
     this.selectedCustomer = event.option.value;
   }
+
   displayCustomer(customer: Customer): string {
     return customer ? `${customer.name}` : '';
   }
@@ -133,8 +138,6 @@ export class PaymentDetailsComponent implements OnInit, AfterViewInit {
     const filterValue = this.customerInput.nativeElement.value.toLowerCase();
     this.filteredCustomers = this.customerData.filter(option => option.name.toLowerCase().includes(filterValue));
   }
-
-
 
 
 }
