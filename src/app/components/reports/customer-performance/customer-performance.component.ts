@@ -11,6 +11,9 @@ export class CustomerPerformanceComponent implements OnInit {
   rows: any[] = [];
   fileName = 'ExcelSheet.xlsx';
 
+  displayedColumns: string[] = ['name','totForms','nstForms','undForms','canForms','compForms','nstFormPer','undFormPer','canFormPer',
+    'compFormPer','avg','late'];
+
   constructor(
     private sharedService: SharedService,
   ) {
