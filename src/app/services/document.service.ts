@@ -41,9 +41,12 @@ export class DocumentService {
   }
 
 
-  searchQuestions(username?: string,from?:string,to?:string) {
+  searchQuestions(text?:string,username?: string,from?:string,to?:string) {
     let params = new HttpParams();
 
+
+    if(text)
+      params=params.set('comment',text)
     if (username)
       params = params.set('user', username);
     if (from && to) {

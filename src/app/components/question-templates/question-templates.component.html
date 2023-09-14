@@ -3,73 +3,124 @@
     <h2 class="mb-3 h5 text-capitalize">Receipt Document</h2>
   </div>
 
+  <div class="row">
+    <div class="col-4">
+      <form>
+        <mat-form-field [style.width.%]="100">
+          <mat-label>What are you looking for?</mat-label>
+          <input matInput matNativeControl placeholder="search for comment"
+                 [(ngModel)]="searchInput"
+                 [ngModelOptions]="{standalone: true}"
+                 (input)="searchQuestion()">
+          <mat-icon matPrefix>search</mat-icon>
+          <button mat-icon-button matSuffix (click)="resetFilters()" [attr.aria-label]="'Reset Filters'"
+                  matTooltip="Reset all filters">
+            <mat-icon>restart_alt</mat-icon>
+          </button>
+        </mat-form-field>
+      </form>
+    </div>
+    <div class="col-4">
+      <mat-form-field [style.width.%]="100">
+        <mat-label>Select User</mat-label>
+        <input #userInput
+               type="text"
+               matInput
+               [formControl]="userSelectControl"
+               [matAutocomplete]="autoUser"
+               (input)="filterUsers()"
+               (focus)="filterUsers()"
+        >
+        <mat-autocomplete #autoUser="matAutocomplete"
+                          (optionSelected)="searchQuestion()"
+                          [displayWith]="displayUser">
+          <mat-option *ngFor="let option of filteredUsers" [value]="option">
+            {{displayUser(option)}}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+    </div>
+
+    <div class="col-4">
+      <mat-form-field [style.width.%]="100">
+        <mat-label>Enter a date range</mat-label>
+        <mat-date-range-input [rangePicker]="userRangePicker">
+          <input matStartDate placeholder="Start date" [(ngModel)]="fromDate">
+          <input matEndDate placeholder="End date" [(ngModel)]="toDate">
+        </mat-date-range-input>
+        <mat-datepicker-toggle matIconSuffix [for]="userRangePicker"></mat-datepicker-toggle>
+        <mat-date-range-picker (closed)="searchQuestion()" #userRangePicker></mat-date-range-picker>
+      </mat-form-field>
+    </div>
+  </div>
+
   <div class="row overflow-x-auto">
-      <table mat-table [dataSource]="visitAssignments" >
-        <ng-container matColumnDef="date">
-          <th mat-header-cell *matHeaderCellDef>
-            Date
-          </th>
-          <td mat-cell *matCellDef="let assignment"> {{assignment.date}} </td>
-        </ng-container>
-        <ng-container matColumnDef="comment">
-          <th mat-header-cell *matHeaderCellDef>Comment</th>
-          <td class="text-capitalize" mat-cell
-              *matCellDef="let assignment"> {{assignment.comment}} </td>
-        </ng-container>
-        <ng-container matColumnDef="user">
-          <th mat-header-cell *matHeaderCellDef >
-            Assigned User
-          </th>
-          <td mat-cell *matCellDef="let assignment">
-                  <span *ngIf="assignment.user" >
+    <table mat-table [dataSource]="visitAssignments">
+      <ng-container matColumnDef="date">
+        <th mat-header-cell *matHeaderCellDef>
+          Date
+        </th>
+        <td mat-cell *matCellDef="let assignment"> {{assignment.date}} </td>
+      </ng-container>
+      <ng-container matColumnDef="comment">
+        <th mat-header-cell *matHeaderCellDef>Comment</th>
+        <td class="text-capitalize" mat-cell
+            *matCellDef="let assignment"> {{assignment.comment}} </td>
+      </ng-container>
+      <ng-container matColumnDef="user">
+        <th mat-header-cell *matHeaderCellDef>
+          Assigned User
+        </th>
+        <td mat-cell *matCellDef="let assignment">
+                  <span *ngIf="assignment.user">
                     {{assignment.user.username}}
                   </span>
-            <span *ngIf="!assignment.user" class="imp-mat-warn">
+          <span *ngIf="!assignment.user" class="imp-mat-warn">
                     Not Assigned
                   </span>
-          </td>
-        </ng-container>
+        </td>
+      </ng-container>
 
-        <ng-container matColumnDef="visitType">
-          <th mat-header-cell *matHeaderCellDef>Visit Type</th>
-          <td class="text-capitalize" mat-cell
-              *matCellDef="let assignment"> {{assignment.visitType.name}} </td>
-        </ng-container>
+      <ng-container matColumnDef="visitType">
+        <th mat-header-cell *matHeaderCellDef>Visit Type</th>
+        <td class="text-capitalize" mat-cell
+            *matCellDef="let assignment"> {{assignment.visitType.name}} </td>
+      </ng-container>
 
-        <ng-container matColumnDef="status">
-          <th mat-header-cell *matHeaderCellDef>
-            Status
-          </th>
-          <td mat-cell *matCellDef="let assignment">
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef>
+          Status
+        </th>
+        <td mat-cell *matCellDef="let assignment">
                   <span *ngIf="assignment.status.toLowerCase()==='not started'" class="ch-badge bg-yellow">
                     {{assignment.status}}
                   </span>
-            <span *ngIf="assignment.status.toLowerCase()==='undergoing'" class="ch-badge bg-blue">
+          <span *ngIf="assignment.status.toLowerCase()==='undergoing'" class="ch-badge bg-blue">
                     {{assignment.status}}
                   </span>
-            <span *ngIf="assignment.status.toLowerCase()==='canceled' " class="ch-badge bg-red">
+          <span *ngIf="assignment.status.toLowerCase()==='canceled' " class="ch-badge bg-red">
                     {{assignment.status}}
                   </span>
-            <span *ngIf="assignment.status.toLowerCase()==='completed'" class="ch-badge bg-green">
+          <span *ngIf="assignment.status.toLowerCase()==='completed'" class="ch-badge bg-green">
                     {{assignment.status}}
                   </span>
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="actions">
-          <th mat-header-cell *matHeaderCellDef>
-            Actions
-          </th>
-          <td mat-cell *matCellDef="let assignment">
-            <button mat-icon-button color="primary"
-                    (click)="openAssignmentDetails(assignment.id)">
-              <mat-icon>open_in_new</mat-icon>
-            </button>
-          </td>
-        </ng-container>
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-      </table>
-    </div>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>
+          Actions
+        </th>
+        <td mat-cell *matCellDef="let assignment">
+          <button mat-icon-button color="primary"
+                  (click)="openAssignmentDetails(assignment.id)">
+            <mat-icon>open_in_new</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
   </div>
+</div>
 
 

@@ -72,7 +72,7 @@ import {MatTooltipModule} from "@angular/material/tooltip";
 import {CustomerPerformanceComponent} from './components/reports/customer-performance/customer-performance.component';
 import {MatButtonToggleModule} from "@angular/material/button-toggle";
 import {MatRadioModule} from "@angular/material/radio";
-import { DetailsComponent } from './components/question-templates/details/details.component';
+import {DetailsComponent} from './components/question-templates/details/details.component';
 import {PaymentDetailsComponent} from './components/payment-details/payment-details.component';
 import {QuestionTemplatesComponent} from './components/question-templates/question-templates.component';
 import {MapDialogComponent} from './shared/map-dialog/map-dialog.component';
