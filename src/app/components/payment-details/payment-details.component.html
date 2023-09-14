@@ -8,52 +8,62 @@
       </button>
     </div>
   </div>
-  <div class="row overflow-x-auto">
+  <div class="row">
     <h2 class="mb-3 h5 text-capitalize">Receipt Document</h2>
-
-    <div class="col-6">
-      <form [formGroup]="selectedUserForm">
-        <mat-form-field [style.width.%]="100">
-          <mat-label>Select User</mat-label>
-          <input #userInput
-                 type="text"
-                 matInput
-                 [formControl]="userSelectControl"
-                 [matAutocomplete]="autoUser"
-                 (input)="filterUsers()"
-                 (focus)="filterUsers()"
-          >
-          <mat-autocomplete #autoUser="matAutocomplete" (optionSelected)="selectUser($event)"
-                            [displayWith]="displayUser">
-            <mat-option *ngFor="let option of filteredUsers" [value]="option">
-              {{displayUser(option)}}
-            </mat-option>
-          </mat-autocomplete>
-        </mat-form-field>
-      </form>
+  </div>
+  <div class="row">
+    <div class="col-4">
+      <mat-form-field [style.width.%]="100">
+        <mat-label>Select User</mat-label>
+        <input #userInput
+               type="text"
+               matInput
+               [formControl]="userSelectControl"
+               [matAutocomplete]="autoUser"
+               (input)="filterUsers()"
+               (focus)="filterUsers()"
+        >
+        <mat-autocomplete #autoUser="matAutocomplete"
+                          (optionSelected)="searchPayments()"
+                          [displayWith]="displayUser">
+          <mat-option *ngFor="let option of filteredUsers" [value]="option">
+            {{displayUser(option)}}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
     </div>
-
-    <div class="col-6">
-      <form>
-        <mat-form-field [style.width.%]="100">
-          <mat-label>Select Customer</mat-label>
-          <input #customerInput
-                 type="text"
-                 matInput
-                 [formControl]="customerSelectControl"
-                 [matAutocomplete]="autoCustomer"
-                 (input)="filterCustomers()"
-                 (focus)="filterCustomers()">
-          <mat-autocomplete #autoCustomer="matAutocomplete" [displayWith]="displayCustomer"
-                            (optionSelected)="selectCustomer($event)">
-            <mat-option *ngFor="let customer of filteredCustomers" [value]="customer">
-              {{displayCustomer(customer)}}
-            </mat-option>
-          </mat-autocomplete>
-
-        </mat-form-field>
-      </form>
+    <div class="col-4">
+      <mat-form-field [style.width.%]="100">
+        <mat-label>Select Customer</mat-label>
+        <input #customerInput
+               type="text"
+               matInput
+               [formControl]="customerSelectControl"
+               [matAutocomplete]="autoCustomer"
+               (input)="filterCustomers()"
+               (focus)="filterCustomers()">
+        <mat-autocomplete #autoCustomer="matAutocomplete"
+                          (optionSelected)="searchPayments()"
+                          [displayWith]="displayCustomer">
+          <mat-option *ngFor="let customer of filteredCustomers" [value]="customer">
+            {{displayCustomer(customer)}}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
     </div>
+    <div class="col-4">
+      <mat-form-field [style.width.px]="400">
+        <mat-label>Enter a date range</mat-label>
+        <mat-date-range-input [rangePicker]="userRangePicker">
+          <input matStartDate placeholder="Start date" [(ngModel)]="fromDate">
+          <input matEndDate placeholder="End date" [(ngModel)]="toDate">
+        </mat-date-range-input>
+        <mat-datepicker-toggle matIconSuffix [for]="userRangePicker"></mat-datepicker-toggle>
+        <mat-date-range-picker (closed)="searchPayments()" #userRangePicker></mat-date-range-picker>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="row overflow-x-auto">
     <table mat-table [dataSource]="rows" class="mat-elevation-z8" id="report-table">
       <ng-container matColumnDef="customerName">
         <th mat-header-cell *matHeaderCellDef> CUSTOMER NAME</th>

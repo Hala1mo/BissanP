@@ -8,9 +8,9 @@ import * as XLSX from "xlsx";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {User} from "../../models/User";
 import {UserService} from "../../services/user.service";
-import {MatAutocompleteSelectedEvent} from "@angular/material/autocomplete";
 import {Customer} from "../../models/Customer";
 import {RegistrationService} from "../../services/registration.service";
+import {formatDate} from "@angular/common";
 
 @Component({
   selector: 'app-payment-details',
@@ -20,6 +20,7 @@ import {RegistrationService} from "../../services/registration.service";
 export class PaymentDetailsComponent implements OnInit, AfterViewInit {
   customerData: Customer[] = [];
   rows: any[] = [];
+  dataSource: any[] = [];
   searchInput: string = "";
   selectedCustomer: Customer | undefined; // Placeholder for selected customer
   filteredUsers: User[] | undefined;
@@ -28,8 +29,15 @@ export class PaymentDetailsComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = ['customerName', 'userFullName', 'paymentDate', 'amount', 'paymentType', 'visitType'];
   fileName = 'ExcelSheet.xlsx';
   filteredCustomers: Customer[] | undefined;
+  originalUserData: User[] = [];
+  originalCustomerData: Customer[] = []
+
+  fromDate: any;
+  toDate: any;
+
   userSelectControl = new FormControl();
   customerSelectControl = new FormControl();
+
   @ViewChild('customerInput') customerInput!: ElementRef<HTMLInputElement>;
   @ViewChild('userInput') userInput!: ElementRef<HTMLInputElement>;
   isSaving: boolean = false;
@@ -103,6 +111,7 @@ export class PaymentDetailsComponent implements OnInit, AfterViewInit {
     this.userService.fetchEmployees().subscribe({
         next: response => {
           this.userData = response;
+          this.originalUserData = response;
         },
         error: error => {
           console.error('Error fetching user data:', error);
@@ -111,15 +120,6 @@ export class PaymentDetailsComponent implements OnInit, AfterViewInit {
     );
   }
 
-  selectUser(event: MatAutocompleteSelectedEvent): void {
-    this.selectedUserForm.patchValue({
-      username: event.option.value.username,
-    })
-  }
-
-  selectCustomer(event: MatAutocompleteSelectedEvent): void {
-    this.selectedCustomer = event.option.value;
-  }
 
   displayCustomer(customer: Customer): string {
     return customer ? `${customer.name}` : '';
@@ -129,6 +129,7 @@ export class PaymentDetailsComponent implements OnInit, AfterViewInit {
     this.registrationService.fetchCustomers().subscribe({
       next: response => {
         this.customerData = response;
+        this.originalCustomerData = response;
       }
     });
   }
@@ -139,5 +140,39 @@ export class PaymentDetailsComponent implements OnInit, AfterViewInit {
     this.filteredCustomers = this.customerData.filter(option => option.name.toLowerCase().includes(filterValue));
   }
 
+  searchPayments() {
+    let username='';
+    let customerId='';
+    let fromDateString='';
+    let toDateString='';
+
+    if(this.userSelectControl.value){
+    username = this.userSelectControl.value.username;}
+  if(this.customerSelectControl.value) {
+    customerId = this.customerSelectControl.value.id || undefined;
+  }
+
+    if(this.fromDate && this.toDate ) {
+       fromDateString = formatDate(this.fromDate, 'yyyy-MM-dd', 'en');
+       toDateString = formatDate(this.toDate, 'yyyy-MM-dd', 'en');
+    }
+    console.log("CUS", customerId);
+    if (!username && !customerId)
+      this.resetFilters();
+    this.documentService.searchPayments(customerId, username,fromDateString,toDateString).subscribe({
+      next: value => {
+        this.rows = value;
+      }
+    })
+  }
+
+  resetFilters() {
+    this.searchInput = '';
+    this.userSelectControl.setValue('');
+    this.customerSelectControl.setValue('');
+
+    this.userData = this.originalUserData;
+    this.rows = this.dataSource;
+  }
 
 }

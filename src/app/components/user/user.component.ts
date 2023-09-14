@@ -145,6 +145,7 @@ export class UserComponent implements OnInit {
     this.searchInput = '';
     this.selectedRoleFilter = '';
     this.selectedActiveFilter = '';
+
     this.userData = this.originalUserData;
     this.dataSource.data = this.userData;
   }
