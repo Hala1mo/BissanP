@@ -5,29 +5,13 @@
         <mat-icon>task</mat-icon>
       </div>
       <div class="row text-end">
-        <p class="text-body-tertiary h4 fw-light">Tasks</p>
-        <p class="text-body h2 fw-light"> {{completedForms}}/{{totalForms}} Completed</p>
+        <p class="text-body-tertiary h4 fw-light">Completed</p>
+        <p class="text-body h2 fw-light"> {{completedForms}}/{{totalForms}}</p>
       </div>
       <hr>
       <div class="d-flex align-items-center gap-1">
         <mat-icon>calendar_today</mat-icon>
         <span> Today </span>
-      </div>
-    </div>
-  </div>
-  <div class="col-3">
-    <div class="card mat-elevation-z4 p-3" style="height: 200px">
-      <div class="card bg-yellow dash-icon">
-        <mat-icon>pending_actions</mat-icon>
-      </div>
-      <div class="row text-end">
-        <p class="text-body-tertiary h4 fw-light">Undergoing</p>
-        <p class="text-body h2 fw-light"> {{undergoingForms}}</p>
-      </div>
-      <hr>
-      <div class="d-flex align-items-center gap-1">
-        <mat-icon>calendar_today</mat-icon>
-        <span> Now </span>
       </div>
     </div>
   </div>
@@ -47,6 +31,23 @@
       </div>
     </div>
   </div>
+  <div class="col-3">
+    <div class="card mat-elevation-z4 p-3" style="height: 200px">
+      <div class="card bg-yellow dash-icon">
+        <mat-icon>payments</mat-icon>
+      </div>
+      <div class="row text-end">
+        <p class="text-body-tertiary h4 fw-light">Revenue</p>
+        <p class="text-body h2 fw-light">$ {{revenue.toLocaleString("en-US")}}</p>
+      </div>
+      <hr>
+      <div class="d-flex align-items-center gap-1">
+        <mat-icon>calendar_today</mat-icon>
+        <span> Last 2 Weeks </span>
+      </div>
+    </div>
+  </div>
+
   <div class="col-3">
     <div class="card mat-elevation-z4 p-3" style="height: 200px">
       <div class="card bg-blue dash-icon">
