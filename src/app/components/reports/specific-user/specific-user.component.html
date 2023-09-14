@@ -97,7 +97,7 @@
         </ng-container>
         <ng-container matColumnDef="customerAddress">
           <th mat-header-cell *matHeaderCellDef>CUSTOMER ADDRESS</th>
-          <td mat-cell *matCellDef="let row"> {{row.customer.address}} </td>
+          <td mat-cell *matCellDef="let row"> {{row.customer.location.cityName}}, {{row.customer.location.address}} </td>
         </ng-container>
         <ng-container matColumnDef="formLocation">
           <th mat-header-cell *matHeaderCellDef>LAST LOCATION</th>

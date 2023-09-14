@@ -13,6 +13,7 @@ export class LineGraphComponent implements OnInit, OnChanges {
   @Input() graphBackground: string = '#FFFFFF';
   @Input() lineColor: string = '#f3f3f3'
   @Input() graphType: string = 'column';
+  @Input() formatY: string = '';
 
   chart: any;
   chartOptions: any;
@@ -40,6 +41,7 @@ export class LineGraphComponent implements OnInit, OnChanges {
         type: this.graphType,
         color: this.lineColor,
         dataPoints: this.graphData,
+        yValueFormatString: this.formatY
       }]
     }
   }
