@@ -17,6 +17,7 @@ import {UserPerformanceComponent} from "./components/reports/user-performance/us
 import {CustomerPerformanceComponent} from "./components/reports/customer-performance/customer-performance.component";
 import {PaymentDetailsComponent} from "./components/payment-details/payment-details.component";
 import {QuestionTemplatesComponent} from "./components/question-templates/question-templates.component";
+import {DetailsComponent} from "./components/question-templates/details/details.component";
 
 const routes: Routes = [
   {path: '', redirectTo: '/dashboard', pathMatch: 'full'},
@@ -40,8 +41,9 @@ const routes: Routes = [
   {path: 'reports/customer-performance',component:CustomerPerformanceComponent},
 
   {path: 'documents/payment',component:PaymentDetailsComponent},
-  {path: 'documents/question-templates',component:QuestionTemplatesComponent}
+  {path: 'documents/question-templates',component:QuestionTemplatesComponent},
 
+  {path: 'documents/question-templates/:id',component:DetailsComponent}
 
 ];
 

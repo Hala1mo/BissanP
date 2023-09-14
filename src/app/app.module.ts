@@ -74,6 +74,7 @@ import {MatButtonToggleModule} from "@angular/material/button-toggle";
 import {MatRadioModule} from "@angular/material/radio";
 import { PaymentDetailsComponent } from './components/payment-details/payment-details.component';
 import { QuestionTemplatesComponent } from './components/question-templates/question-templates.component';
+import { DetailsComponent } from './components/question-templates/details/details.component';
 
 @NgModule({
   declarations: [
@@ -114,6 +115,7 @@ import { QuestionTemplatesComponent } from './components/question-templates/ques
     CustomerPerformanceComponent,
     PaymentDetailsComponent,
     QuestionTemplatesComponent,
+    DetailsComponent,
   ],
   imports: [
     BrowserModule,

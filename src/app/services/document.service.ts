@@ -17,6 +17,10 @@ export class DocumentService {
     return this._http.get<any>(_urlDetails);
   }
 
+  fetchAllQuestionAssignments(): Observable<any> {
+    const _urlDetails = `${this.documents}/question_assignments`;
+    return this._http.get<any>(_urlDetails);
+  }
   searchPayments(customerId?: string, username?: string,from?:string,to?:string) {
     let params = new HttpParams();
 
@@ -30,5 +34,24 @@ export class DocumentService {
     }
     return this._http.get<any>(`${this.documents}/receipts/search`, {params}).pipe();
   }
+
+  fetchQuestionAssignment(id: bigint): Observable<any> {
+    const url = `${this.documents}/question_assignments/${id}`;
+    return this._http.get<any>(url);
+  }
+
+
+  searchQuestions(username?: string,from?:string,to?:string) {
+    let params = new HttpParams();
+
+    if (username)
+      params = params.set('user', username);
+    if (from && to) {
+      params = params.set('from', from);
+      params = params.set('to', to);
+    }
+    return this._http.get<any>(`${this.documents}/question_assignments/search`, {params}).pipe();
+  }
+
 
 }
