@@ -3,7 +3,7 @@
     <mat-toolbar-row>
       <div class="w-100 d-flex justify-content-between">
         <span class="me-3"><a [routerLink]="['/dashboard']" class="text-decoration-none h2">Visit Manager</a></span>
-        <div class="d-flex gap-3">
+        <div *ngIf="isAuthed" class="d-flex gap-3">
           <button mat-button [routerLink]="['/dashboard']">
             <mat-icon>dashboard</mat-icon>
             <span class="fs-6">Dashboard</span>

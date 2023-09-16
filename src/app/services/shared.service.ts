@@ -4,7 +4,6 @@ import {City} from "../models/City";
 import {VisitType} from "../models/VisitType";
 import {link} from "../models/link";
 import {HttpClient} from "@angular/common/http";
-import {animate} from "@angular/animations";
 
 @Injectable({
   providedIn: 'root'
@@ -36,9 +35,6 @@ export class SharedService {
     this.fetchCities().subscribe({
       next: response => {
         this.citiesSubject.next(response)
-      },
-      error: error => {
-        console.error("Shared Service 'Cities' Error", error);
       }
     });
   }
@@ -51,9 +47,6 @@ export class SharedService {
     this.fetchVisitTypes().subscribe({
       next: response => {
         this.visitTypesSubject.next(response)
-      },
-      error: error => {
-        console.error("Shared Service 'VisitTypes' Error", error);
       }
     });
   }

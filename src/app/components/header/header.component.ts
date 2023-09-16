@@ -3,6 +3,8 @@ import {CityDialogComponent} from "../definition/city-dialog/city-dialog.compone
 import {MatDialog} from "@angular/material/dialog";
 import {SharedService} from "../../services/shared.service";
 import {Router} from "@angular/router";
+import {AuthService} from "../../services/auth.service";
+import {LoginComponent} from "../../auth/login/login.component";
 
 @Component({
   selector: 'app-header',
@@ -11,11 +13,23 @@ import {Router} from "@angular/router";
 })
 export class HeaderComponent {
 
+  isAuthed: boolean = false;
+
   constructor(
     private matDialog: MatDialog,
     private router: Router,
-    private sharedService: SharedService) {
+    private sharedService: SharedService,
+    authService: AuthService,
+  ) {
+    authService.isAuthenticated.subscribe((isAuth) => {
+      this.isAuthed = isAuth;
 
+      if (!isAuth) {
+        this.matDialog.open(LoginComponent, {
+          width: '40%',
+        })
+      }
+    })
   }
 
   openCityDialog() {
@@ -41,9 +55,9 @@ export class HeaderComponent {
   }
 
   openPaymentPage() {
-    this.router.navigate(['/documents/payment']);
+    void this.router.navigate(['/documents/payment']);
   }
   openQuestionPage() {
-    this.router.navigate(['/documents/question-templates']);
+    void this.router.navigate(['/documents/question-templates']);
   }
 }

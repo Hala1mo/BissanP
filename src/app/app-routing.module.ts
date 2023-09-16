@@ -1,5 +1,5 @@
-import {NgModule} from '@angular/core';
-import {RouterModule, Routes} from '@angular/router';
+import {inject, NgModule} from '@angular/core';
+import {Router, RouterModule, Routes} from '@angular/router';
 import {UserComponent} from './components/user/user.component'; // Import your UserComponent
 import {CustomerComponent} from "./components/customer/customer.component";
 import {CustomerDetailsComponent} from "./components/customer/details/customer-details.component";
@@ -18,38 +18,159 @@ import {CustomerPerformanceComponent} from "./components/reports/customer-perfor
 import {PaymentDetailsComponent} from "./components/payment-details/payment-details.component";
 import {QuestionTemplatesComponent} from "./components/question-templates/question-templates.component";
 import {DetailsComponent} from "./components/question-templates/details/details.component";
+import {AuthService} from "./services/auth.service";
+import {map} from "rxjs";
+
+
 
 const routes: Routes = [
-  {path: '', redirectTo: '/dashboard', pathMatch: 'full'},
-  {path: 'dashboard', component: HomeComponent},
+  {
+    path: '',
+    redirectTo: '/dashboard',
+    pathMatch: 'full'
+  },
+  {
+    path: 'dashboard',
+    component: HomeComponent,
+    canActivate: [
+      () => inject(AuthService).isAuthenticated.pipe(map((isAuth) => isAuth))
+    ]
+  },
+  {
+    path: 'users',
+    component: UserComponent,
+    canActivate: [
+      () => inject(AuthService).isAuthenticated.pipe(map((isAuth) => isAuth))
+    ]
+  },
+  {
+    path: 'customers',
+    component: CustomerComponent,
+    canActivate: [
+      () => inject(AuthService).isAuthenticated.pipe(map((isAuth) => isAuth))
+    ]
+  },
+  {
+    path: 'definitions',
+    component: DefinitionComponent,
+    canActivate: [
+      () => inject(AuthService).isAuthenticated.pipe(map((isAuth) => isAuth))
+    ]
+  },
+  {
+    path: 'users/:username',
+    component: UserDetailsComponent,
+    canActivate: [
+      () => inject(AuthService).isAuthenticated.pipe(map((isAuth) => isAuth))
+    ]
+  },
+  {
+    path: 'customers/:id',
+    component: CustomerDetailsComponent,
+    canActivate: [
+      () => inject(AuthService).isAuthenticated.pipe(map((isAuth) => isAuth))
+    ]
+  },
+  {
+    path: 'definitions/:id',
+    component: DefinitionDetailsComponent,
+    canActivate: [
+      () => inject(AuthService).isAuthenticated.pipe(map((isAuth) => isAuth))
+    ]
+  },
+  {
+    path: 'assignments/:id',
+    component: AssignmentDetailsComponent,
+    canActivate: [
+      () => inject(AuthService).isAuthenticated.pipe(map((isAuth) => isAuth))
+    ]
+  },
 
-  {path: 'users', component: UserComponent},
-  {path: 'customers', component: CustomerComponent},
-  {path: 'definitions', component: DefinitionComponent},
-
-  {path: 'users/:username', component: UserDetailsComponent},
-  {path: 'customers/:id', component: CustomerDetailsComponent},
-  {path: 'definitions/:id', component: DefinitionDetailsComponent},
-  {path: 'assignments/:id', component: AssignmentDetailsComponent},
-
-  {path: 'reports', component: ReportsComponent},
-  {path: 'reports/status', component: StatusComponent},
-  {path: 'reports/types-chart', component: TypesChartComponent},
-  {path: 'reports/date', component: DateComponent},
-  {path: 'reports/user-performance', component: UserPerformanceComponent},
-  {path: 'reports/user-detailed', component: SpecificUserComponent},
-  {path: 'reports/customer-performance',component:CustomerPerformanceComponent},
-
-  {path: 'documents/payment',component:PaymentDetailsComponent},
-  {path: 'documents/question-templates',component:QuestionTemplatesComponent},
-
-  {path: 'documents/question-templates/:id',component:DetailsComponent}
-
+  {
+    path: 'reports',
+    component: ReportsComponent,
+    canActivate: [
+      () => inject(AuthService).isAuthenticated.pipe(map((isAuth) => isAuth))
+    ]
+  },
+  {
+    path: 'reports/status',
+    component: StatusComponent,
+    canActivate: [
+      () => inject(AuthService).isAuthenticated.pipe(map((isAuth) => isAuth))
+    ]
+  },
+  {
+    path: 'reports/types-chart',
+    component: TypesChartComponent,
+    canActivate: [
+      () => inject(AuthService).isAuthenticated.pipe(map((isAuth) => isAuth))
+    ]
+  },
+  {
+    path: 'reports/date',
+    component: DateComponent,
+    canActivate: [
+      () => inject(AuthService).isAuthenticated.pipe(map((isAuth) => isAuth))
+    ]
+  },
+  {
+    path: 'reports/user-performance',
+    component: UserPerformanceComponent,
+    canActivate: [
+      () => inject(AuthService).isAuthenticated.pipe(map((isAuth) => isAuth))
+    ]
+  },
+  {
+    path: 'reports/user-detailed',
+    component: SpecificUserComponent,
+    canActivate: [
+      () => inject(AuthService).isAuthenticated.pipe(map((isAuth) => isAuth))
+    ]
+  },
+  {
+    path: 'reports/customer-performance',
+    component: CustomerPerformanceComponent,
+    canActivate: [
+      () => inject(AuthService).isAuthenticated.pipe(map((isAuth) => isAuth))
+    ]
+  },
+  {
+    path: 'documents/payment',
+    component: PaymentDetailsComponent,
+    canActivate: [
+      () => inject(AuthService).isAuthenticated.pipe(map((isAuth) => isAuth))
+    ]
+  },
+  {
+    path: 'documents/question-templates',
+    component: QuestionTemplatesComponent,
+    canActivate: [
+      () => inject(AuthService).isAuthenticated.pipe(map((isAuth) => isAuth))
+    ]
+  },
+  {
+    path: 'documents/question-templates/:id',
+    component: DetailsComponent,
+    canActivate: [
+      () => inject(AuthService).isAuthenticated.pipe(map((isAuth) => isAuth))
+    ]
+  }
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
+
 export class AppRoutingModule {
+
+  constructor(
+    private router: Router,
+  ) {
+  }
+
+  navigateToLogin(){
+    void this.router.navigate(['/login'])
+  }
 }
