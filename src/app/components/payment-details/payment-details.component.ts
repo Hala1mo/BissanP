@@ -1,8 +1,4 @@
-import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-
-import {Router} from "@angular/router";
-import {MatDialog} from "@angular/material/dialog";
-import {MatSnackBar} from "@angular/material/snack-bar";
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {DocumentService} from "../../services/document.service";
 import * as XLSX from "xlsx";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
@@ -17,19 +13,21 @@ import {formatDate} from "@angular/common";
   templateUrl: './payment-details.component.html',
   styleUrls: ['./payment-details.component.css']
 })
-export class PaymentDetailsComponent implements OnInit, AfterViewInit {
+export class PaymentDetailsComponent implements OnInit {
   customerData: Customer[] = [];
-  rows: any[] = [];
-  dataSource: any[] = [];
-  searchInput: string = "";
-  filteredUsers: User[] | undefined;
+  filteredCustomers: Customer[] | undefined;
+
   userData: User [] = [];
+  filteredUsers: User[] | undefined;
+
+  receipts: any[] = [];
+  originalReceipts: any[] = [];
+
+  searchInput: string = "";
   selectedUserForm: FormGroup;
   displayedColumns: string[] = ['customerName', 'userFullName', 'paymentDate', 'amount', 'paymentType', 'visitType'];
   fileName = 'ExcelSheet.xlsx';
-  filteredCustomers: Customer[] | undefined;
-  originalUserData: User[] = [];
-  originalCustomerData: Customer[] = []
+
 
   fromDate: any;
   toDate: any;
@@ -46,9 +44,6 @@ export class PaymentDetailsComponent implements OnInit, AfterViewInit {
     private documentService: DocumentService,
     private registrationService: RegistrationService,
     private userService: UserService,
-    private router: Router,
-    private matDialog: MatDialog,
-    private snackBar: MatSnackBar,
   ) {
     this.selectedUserForm = formBuilder.group({
       username: ['', [Validators.required]]
@@ -56,7 +51,7 @@ export class PaymentDetailsComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-    this.fetchAllDefinitions();
+    this.fetchAllPayments();
     this.fetchUserData();
     this.fetchCustomerData();
 
@@ -69,23 +64,12 @@ export class PaymentDetailsComponent implements OnInit, AfterViewInit {
       || option.lastName.toLowerCase().includes(filterValue));
   }
 
-  ngAfterViewInit(): void {
-  }
 
-
-  fetchAllDefinitions() {
+  fetchAllPayments() {
     this.documentService.fetchPaymentDetails().subscribe({
       next: response => {
-        console.log(response);
-        this.rows = response;
-      },
-      error: error => {
-        if (error.message) {
-          let errorMessage = error.message;
-          this.snackBar.open(errorMessage, '', {
-            duration: 3000
-          });
-        }
+        this.originalReceipts = response;
+        this.receipts = response;
       }
     });
   }
@@ -110,7 +94,6 @@ export class PaymentDetailsComponent implements OnInit, AfterViewInit {
     this.userService.fetchEmployees().subscribe({
         next: response => {
           this.userData = response;
-          this.originalUserData = response;
         },
         error: error => {
           console.error('Error fetching user data:', error);
@@ -128,7 +111,6 @@ export class PaymentDetailsComponent implements OnInit, AfterViewInit {
     this.registrationService.fetchCustomers().subscribe({
       next: response => {
         this.customerData = response;
-        this.originalCustomerData = response;
       }
     });
   }
@@ -140,28 +122,37 @@ export class PaymentDetailsComponent implements OnInit, AfterViewInit {
   }
 
   searchPayments() {
-    let username = '';
-    let customerId = '';
-    let fromDateString = '';
-    let toDateString = '';
+    let username: string | undefined;
+    let customerId: string | undefined;
+    let fromDateString: string | undefined;
+    let toDateString: string | undefined;
 
-    if (this.userSelectControl.value) {
-      username = this.userSelectControl.value.username;
-    }
-    if (this.customerSelectControl.value) {
+    if (this.userSelectControl.value)
+      username = this.userSelectControl.value.username || undefined;
+    else
+      username = undefined;
+
+    if (this.customerSelectControl.value)
       customerId = this.customerSelectControl.value.id || undefined;
-    }
+    else
+      customerId = undefined
 
     if (this.fromDate && this.toDate) {
       fromDateString = formatDate(this.fromDate, 'yyyy-MM-dd', 'en');
       toDateString = formatDate(this.toDate, 'yyyy-MM-dd', 'en');
+    }else {
+      fromDateString = undefined;
+      toDateString = undefined;
     }
-    console.log("CUS", customerId);
-    if (!username && !customerId)
+
+    console.log(username, customerId, fromDateString, toDateString)
+
+    if (!username && !customerId && !fromDateString && !toDateString)
       this.resetFilters();
+
     this.documentService.searchPayments(customerId, username, fromDateString, toDateString).subscribe({
       next: value => {
-        this.rows = value;
+        this.receipts = value;
       }
     })
   }
@@ -170,9 +161,10 @@ export class PaymentDetailsComponent implements OnInit, AfterViewInit {
     this.searchInput = '';
     this.userSelectControl.setValue('');
     this.customerSelectControl.setValue('');
+    this.fromDate = ''
+    this.toDate = ''
 
-    this.userData = this.originalUserData;
-    this.rows = this.dataSource;
+    this.receipts = this.originalReceipts;
   }
 
 }
