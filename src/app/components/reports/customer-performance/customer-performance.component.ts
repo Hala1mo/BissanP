@@ -29,6 +29,12 @@ export class CustomerPerformanceComponent implements OnInit {
     return (Math.round(num * 100) / 100).toFixed(2);
   }
 
+  formatTime(seconds: any) {
+    if (isNaN(seconds)) return '00:00:00'
+
+    return new Date(seconds * 1000).toISOString().substr(11, 8);
+  }
+
   exportTable() {
 
     let element = document.getElementById('report-table');

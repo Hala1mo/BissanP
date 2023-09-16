@@ -9,34 +9,22 @@
     </div>
   </div>
   <div class="row overflow-x-auto">
-    <h2  class="mb-3 h5 text-capitalize">Customer performance</h2>
-
+    <h2 class="mb-3 h5 text-capitalize">Customer performance</h2>
     <table mat-table [dataSource]="rows" class="mat-elevation-z8" id="report-table">
-
-
-
-
-
       <ng-container matColumnDef="name">
-        <th mat-header-cell *matHeaderCellDef> Name </th>
+        <th mat-header-cell *matHeaderCellDef> Name</th>
         <td mat-cell *matCellDef="let row"> {{row.customer.name}} </td>
       </ng-container>
-
-      <!-- Name Column -->
       <ng-container matColumnDef="totForms">
-        <th mat-header-cell *matHeaderCellDef> TOT. FORMS # </th>
+        <th mat-header-cell *matHeaderCellDef> TOT. FORMS #</th>
         <td mat-cell *matCellDef="let element"> {{element.totalForms}}  </td>
       </ng-container>
-
-      <!-- Weight Column -->
       <ng-container matColumnDef="nstForms">
-        <th mat-header-cell *matHeaderCellDef> NST. FORMS # </th>
+        <th mat-header-cell *matHeaderCellDef> NST. FORMS #</th>
         <td mat-cell *matCellDef="let element"> {{element.notStartedForms}} </td>
       </ng-container>
-
-      <!-- Symbol Column -->
       <ng-container matColumnDef="undForms">
-        <th mat-header-cell *matHeaderCellDef> UND. FORMS # </th>
+        <th mat-header-cell *matHeaderCellDef> UND. FORMS #</th>
         <td mat-cell *matCellDef="let element"> {{element.undergoingForms}} </td>
       </ng-container>
       <ng-container matColumnDef="canForms">
@@ -47,56 +35,33 @@
         <th mat-header-cell *matHeaderCellDef> COM. FORMS #</th>
         <td mat-cell *matCellDef="let element"> {{element.completedForms}} </td>
       </ng-container>
-
       <ng-container matColumnDef="nstFormPer">
-        <th mat-header-cell *matHeaderCellDef> NST. FORMS % </th>
+        <th mat-header-cell *matHeaderCellDef> NST. FORMS %</th>
         <td mat-cell *matCellDef="let element"> {{ (element.notStartedFormsPer).toFixed(2) }} </td>
       </ng-container>
-
-
       <ng-container matColumnDef="undFormPer">
         <th mat-header-cell *matHeaderCellDef> UND. FORMS %</th>
         <td mat-cell *matCellDef="let element"> {{ (element.undergoingFormsPer).toFixed(2)}} </td>
       </ng-container>
-
-
       <ng-container matColumnDef="canFormPer">
         <th mat-header-cell *matHeaderCellDef>CAN. FORMS %</th>
         <td mat-cell *matCellDef="let element"> {{(element.canceledFormsPer).toFixed(2)}} </td>
       </ng-container>
-
       <ng-container matColumnDef="compFormPer">
         <th mat-header-cell *matHeaderCellDef>COM. FORMS %</th>
         <td mat-cell *matCellDef="let element"> {{ (element.completedFormsPer).toFixed(2)}} </td>
       </ng-container>
-
       <ng-container matColumnDef="avg">
         <th mat-header-cell *matHeaderCellDef>AVG. TIME (s)</th>
-        <td mat-cell *matCellDef="let element"> {{formatDec(element.averageCompletionTime)}} s </td>
+        <td mat-cell *matCellDef="let element"> {{formatTime(element.averageCompletionTime)}}</td>
       </ng-container>
-
-
       <ng-container matColumnDef="late">
         <th mat-header-cell *matHeaderCellDef>LATE FORMS #</th>
-        <td mat-cell *matCellDef="let element"> {{formatDec(element.lateFormsCount)}} s </td>
+        <td mat-cell *matCellDef="let element"> {{element.lateFormsCount}}</td>
       </ng-container>
-
-
-
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
-
-
-
-
-
-
-
-
-
-
   </div>
-
 </div>
 

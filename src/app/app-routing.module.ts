@@ -20,6 +20,7 @@ import {QuestionTemplatesComponent} from "./components/question-templates/questi
 import {DetailsComponent} from "./components/question-templates/details/details.component";
 import {AuthService} from "./services/auth.service";
 import {map} from "rxjs";
+import {LocationCustomersComponent} from "./components/reports/location-customers/location-customers.component";
 
 
 
@@ -155,6 +156,13 @@ const routes: Routes = [
     canActivate: [
       () => inject(AuthService).isAuthenticated.pipe(map((isAuth) => isAuth))
     ]
+  },
+  {
+    path: 'reports/location-customers',
+    component: LocationCustomersComponent,
+    // canActivate: [
+    //   () => inject(AuthService).isAuthenticated.pipe(map((isAuth) => isAuth))
+    // ]
   }
 ];
 

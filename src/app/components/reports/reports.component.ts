@@ -33,6 +33,9 @@ export class ReportsComponent implements OnInit {
   specificUserFromDate: any;
   specificUserToDate: any;
 
+  locationFromDate: any;
+  locationToDate: any;
+
   @ViewChild('userInput') userInput!: ElementRef<HTMLInputElement>;
   isSaving: boolean = false;
 
@@ -160,6 +163,17 @@ export class ReportsComponent implements OnInit {
         void this.router.navigate(['/reports/customer-performance'])
       }
     })
+  }
 
+  generateLocationCustomersReport() {
+    const fromDateString = formatDate(this.locationFromDate, 'yyyy-MM-dd', 'en');
+    const toDateString = formatDate(this.locationToDate, 'yyyy-MM-dd', 'en');
+
+    this.reportsService.generateLocationCustomersReport(fromDateString, toDateString).subscribe({
+      next: response => {
+        this.sharedService.setLocationCustomersReport(response);
+        void this.router.navigate(['/reports/location-customers'])
+      }
+    })
   }
 }

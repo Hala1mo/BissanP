@@ -76,6 +76,7 @@ import {DetailsComponent} from './components/question-templates/details/details.
 import {PaymentDetailsComponent} from './components/payment-details/payment-details.component';
 import {QuestionTemplatesComponent} from './components/question-templates/question-templates.component';
 import {MapDialogComponent} from './shared/map-dialog/map-dialog.component';
+import { LocationCustomersComponent } from './components/reports/location-customers/location-customers.component';
 
 @NgModule({
   declarations: [
@@ -118,6 +119,7 @@ import {MapDialogComponent} from './shared/map-dialog/map-dialog.component';
     QuestionTemplatesComponent,
     DetailsComponent,
     MapDialogComponent,
+    LocationCustomersComponent,
   ],
   imports: [
     BrowserModule,
@@ -162,6 +164,7 @@ import {MapDialogComponent} from './shared/map-dialog/map-dialog.component';
     MatTooltipModule,
     MatButtonToggleModule,
     MatRadioModule,
+
   ],
   providers: [
     {
