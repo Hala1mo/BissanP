@@ -30,7 +30,6 @@ export class AssignNewCustomerDialogComponent {
 
   onSubmitAssignment(assignment: VisitAssignment) {
     if (this.assignedTypes.includes(assignment.visitType.id)) {
-      console.log("HAS CONTACT TYPE => ", assignment.visitType, "IN =>", this.assignedTypes);
       this.assignmentService.assignCustomer(assignment.id, this.customer.id);
       this.matSnackbar.open(`Successfully assigned to ${assignment.comment}`, '', {
         duration: 3000,
