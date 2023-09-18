@@ -46,7 +46,6 @@ import {MatBadgeModule} from "@angular/material/badge";
 import {MatTabsModule} from "@angular/material/tabs";
 import {ContactDialogueComponent} from './components/customer/details/contact-dialogue/contact-dialogue.component';
 import {CanvasJSAngularChartsModule} from '@canvasjs/angular-charts';
-import {TypesChartComponent} from './components/reports/types-chart/types-chart.component';
 import {MatLegacyChipsModule} from "@angular/material/legacy-chips";
 import {CreateAssignmentDialogComponent} from './components/assignments/create/create-assignment-dialog.component';
 import {UserDetailsComponent} from './components/user/user-details/user-details.component';
@@ -99,7 +98,6 @@ import { LocationCustomersComponent } from './components/reports/location-custom
     CusComponent,
     DetailsCusComponent,
     CustomerDialogComponent,
-    TypesChartComponent,
     ContactDialogueComponent,
     CreateAssignmentDialogComponent,
     UserDetailsComponent,

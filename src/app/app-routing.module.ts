@@ -1,6 +1,6 @@
 import {inject, NgModule} from '@angular/core';
-import {Router, RouterModule, Routes} from '@angular/router';
-import {UserComponent} from './components/user/user.component'; // Import your UserComponent
+import {RouterModule, Routes} from '@angular/router';
+import {UserComponent} from './components/user/user.component';
 import {CustomerComponent} from "./components/customer/customer.component";
 import {CustomerDetailsComponent} from "./components/customer/details/customer-details.component";
 import {DefinitionComponent} from "./components/definition/definition.component";
@@ -9,7 +9,6 @@ import {AssignmentDetailsComponent} from "./components/assignments/assignment-de
 import {ReportsComponent} from "./components/reports/reports.component";
 import {StatusComponent} from "./components/reports/status/status.component";
 import {DateComponent} from "./components/reports/date/date.component";
-import {TypesChartComponent} from "./components/reports/types-chart/types-chart.component";
 import {UserDetailsComponent} from "./components/user/user-details/user-details.component";
 import {HomeComponent} from "./components/home/home.component";
 import {SpecificUserComponent} from "./components/reports/specific-user/specific-user.component";
@@ -21,7 +20,6 @@ import {DetailsComponent} from "./components/question-templates/details/details.
 import {AuthService} from "./services/auth.service";
 import {map} from "rxjs";
 import {LocationCustomersComponent} from "./components/reports/location-customers/location-customers.component";
-
 
 
 const routes: Routes = [
@@ -102,13 +100,6 @@ const routes: Routes = [
     ]
   },
   {
-    path: 'reports/types-chart',
-    component: TypesChartComponent,
-    canActivate: [
-      () => inject(AuthService).isAuthenticated.pipe(map((isAuth) => isAuth))
-    ]
-  },
-  {
     path: 'reports/date',
     component: DateComponent,
     canActivate: [
@@ -173,12 +164,4 @@ const routes: Routes = [
 
 export class AppRoutingModule {
 
-  constructor(
-    private router: Router,
-  ) {
-  }
-
-  navigateToLogin(){
-    void this.router.navigate(['/login'])
-  }
 }

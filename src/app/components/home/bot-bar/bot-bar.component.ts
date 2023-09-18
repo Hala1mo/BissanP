@@ -3,6 +3,8 @@ import {MatTableDataSource} from "@angular/material/table";
 import {MatPaginator} from "@angular/material/paginator";
 import {MatSort} from "@angular/material/sort";
 import {DashboardService} from "../../../services/dashboard.service";
+import {ReportsService} from "../../../services/reports.service";
+import {CanvasJS} from "@canvasjs/angular-charts";
 
 @Component({
   selector: 'app-bot-bar',
@@ -16,10 +18,15 @@ export class BotBarComponent implements OnInit {
 
   displayedColumns: string[] = ['username', 'date', 'actions']
   dataSource = new MatTableDataSource(this.passwordRequestsData);
+
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor(private dashService: DashboardService) {
+  constructor(
+    private dashService: DashboardService,
+    private reportService: ReportsService
+  ) {
+
   }
 
   ngOnInit(): void {
@@ -35,6 +42,11 @@ export class BotBarComponent implements OnInit {
         }, 50);
       }
 
+    })
+    this.reportService.fetchTypeChart().subscribe({
+      next: value => {
+        this.renderChart(value);
+      }
     })
   }
 
@@ -55,15 +67,29 @@ export class BotBarComponent implements OnInit {
   rejectPasswordReset(requestId: bigint) {
     this.dashService.rejectPasswordResetRequest(requestId).subscribe({
       next: () => {
-            this.dashService.fetchTables().subscribe({
-              next: response => {
-                this.passwordRequestsData = response;
-                this.dataSource.data = this.passwordRequestsData;
-              }
-            })
+        this.dashService.fetchTables().subscribe({
+          next: response => {
+            this.passwordRequestsData = response;
+            this.dataSource.data = this.passwordRequestsData;
+          }
+        })
       }
     });
 
 
   }
+
+  renderChart(dataP: any[]) {
+    let chart = new CanvasJS.Chart("type-chart", {
+      animationEnabled: false,
+      data: [{
+        type: "pie",
+        startAngle: -90,
+        yValueFormatString: "##.#'%'",
+        dataPoints: dataP
+      }]
+    });
+    chart.render();
+  }
+
 }

@@ -9,7 +9,7 @@ import {User} from "../models/User";
 })
 export class AuthService {
 
-  private currentAuthenticatedSubject = new BehaviorSubject<boolean>(false);
+  private currentAuthenticatedSubject = new BehaviorSubject<boolean>(true);
   public currentAuth = this.currentAuthenticatedSubject
     .asObservable()
     .pipe(distinctUntilChanged());

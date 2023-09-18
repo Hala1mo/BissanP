@@ -1,6 +1,6 @@
 <div *ngIf="isLoaded" class="row mt-5">
   <div class="col-6">
-    <div class="card mat-elevation-z4 p-3 pt-4">
+    <div class="card mat-elevation-z4 p-3 pt-4 h-100">
       <div class="card bg-yellow table-offset">
         <div class="d-flex gap-2 text-white align-items-center justify-content-between px-1">
           <p class="h2 fw-light m-0">Password Reset Requests</p>
@@ -48,8 +48,27 @@
     </div>
   </div>
   <div class="col-6">
-    <div class="card mat-elevation-z4 p-3">
+    <div class="card mat-elevation-z4 p-3 h-100">
+      <div class="card bg-green table-offset">
+        <div class="d-flex gap-2 text-white align-items-center justify-content-between px-1">
+          <p class="h2 fw-light m-0">Visit Types</p>
+          <mat-icon>pie_chart</mat-icon>
+        </div>
 
+      </div>
+      <div class="mt-4 row">
+        <div class="col-6">
+          <div id="type-chart" style="width: 300px; height: 300px">
+
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="row text-start d-flex flex-column gap-1 w-100">
+            <p class="text-body h4 fw-light">Popular Types</p>
+            <p class="text-body-secondary h5 fw-light">Most Visit</p>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
