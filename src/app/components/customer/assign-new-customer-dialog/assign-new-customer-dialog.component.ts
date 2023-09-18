@@ -29,32 +29,33 @@ export class AssignNewCustomerDialogComponent {
   }
 
   onSubmitAssignment(assignment: VisitAssignment) {
-    if (this.assignedTypes.includes(assignment.visitType.id)){
+    if (this.assignedTypes.includes(assignment.visitType.id)) {
+      console.log("HAS CONTACT TYPE => ", assignment.visitType, "IN =>", this.assignedTypes);
       this.assignmentService.assignCustomer(assignment.id, this.customer.id);
       this.matSnackbar.open(`Successfully assigned to ${assignment.comment}`, '', {
         duration: 3000,
       })
       this.assignments = this.assignments.filter(v => v.id != assignment.id);
+    } else {
+      let types = assignment.visitType.id;
+
+      this.matDialog.open(ContactDialogueComponent, {
+        data: {
+          'mode': 2,
+          'typesData': this.sharedService.getVisitTypesAsList(),
+          'assignmentId': assignment.id,
+          'customerId': this.customer.id,
+          'checkedTypes': [types]
+        }
+      }).afterClosed().subscribe({
+        next: (value: VisitAssignment) => {
+          this.matSnackbar.open(`Successfully assigned to ${value.comment}`, '', {
+            duration: 3000,
+          })
+          this.assignedTypes.push(types);
+          this.assignments = this.assignments.filter(v => v.id != value.id);
+        }
+      });
     }
-
-    let types = assignment.visitType.id;
-
-    this.matDialog.open(ContactDialogueComponent, {
-      data: {
-        'mode': 2,
-        'typesData': this.sharedService.getVisitTypesAsList(),
-        'assignmentId': assignment.id,
-        'customerId': this.customer.id,
-        'checkedTypes': [types]
-      }
-    }).afterClosed().subscribe({
-      next: (value: VisitAssignment) => {
-        this.matSnackbar.open(`Successfully assigned to ${value.comment}`, '', {
-          duration: 3000,
-        })
-        this.assignedTypes.push(types);
-        this.assignments = this.assignments.filter(v => v.id != value.id);
-      }
-    });
   }
 }
