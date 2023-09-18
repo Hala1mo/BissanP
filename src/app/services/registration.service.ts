@@ -102,7 +102,7 @@ export class RegistrationService {
       visitTypes: contactDetails.visitTypes
     };
 
-    return this._http.post(url, newContact);
+    return this._http.post<any>(url, newContact);
   }
 
   updateContactData(conId: bigint, updatedContactData: any): Observable<any> {

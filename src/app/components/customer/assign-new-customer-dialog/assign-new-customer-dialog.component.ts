@@ -4,6 +4,7 @@ import {MAT_DIALOG_DATA, MatDialog} from "@angular/material/dialog";
 import {VisitAssignment} from "../../../models/VisitAssignment";
 import {ContactDialogueComponent} from "../details/contact-dialogue/contact-dialogue.component";
 import {SharedService} from "../../../services/shared.service";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-assign-new-customer-dialog',
@@ -16,6 +17,7 @@ export class AssignNewCustomerDialogComponent {
 
   constructor(
     private matDialog: MatDialog,
+    private matSnackbar: MatSnackBar,
     private sharedService: SharedService,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
@@ -32,7 +34,14 @@ export class AssignNewCustomerDialogComponent {
         'typesData': this.sharedService.getVisitTypesAsList(),
         'assignmentId': assignment.id,
         'customerId': this.customer.id,
-        'checkedTypes' : [types]
+        'checkedTypes': [types]
+      }
+    }).afterClosed().subscribe({
+      next: (value: VisitAssignment) => {
+        this.matSnackbar.open(`Successfully assigned to ${value.comment}`, '', {
+          duration: 3000,
+        })
+        this.assignments = this.assignments.filter(v => v.id != value.id);
       }
     });
   }
